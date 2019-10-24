@@ -1,40 +1,23 @@
 import http from 'http'
-import morgan from 'koa-morgan'
-import bodyParser from 'koa-bodyparser'
+import morgan from 'morgan'
+import bodyParser from 'body-parser'
 import chalk from 'chalk'
-import Koa from 'koa'
-import jwt from 'koa-jwt'
+import express, {Request, Response, NextFunction} from 'express'
+import noop from 'express-noop'
+import jwt from 'express-jwt'
 import jwks from 'jwks-rsa'
-import Router, {IMiddleware} from 'koa-router'
-import playground from 'graphql-playground-middleware-koa'
+import playground from 'graphql-playground-middleware-express'
 import {PostGraphileOptions, postgraphile} from 'postgraphile'
 
 import {Auth, Database, Server, Environment} from './Config'
 import Plugins from './Plugins'
 
-export const catchErrors: Koa.Middleware = async (ctx, next) => {
-  try {
-    await next()
-  } catch (err) {
-    ctx.status = err.status || 500
-    ctx.body =
-      err.publicMessage ||
-      '{"error": "An error has occurred. Please try your request again later."}'
-    ctx.app.emit('error', err, ctx)
-  }
-}
-
 export async function create() {
-  const app = new Koa()
-  const router = new Router()
-
-  app.on('error', (err: Error, _ctx: Koa.Context) => {
-    console.error(err)
-  })
+  const app = express()
 
   const jwtCheck = jwt({
     // @ts-ignore jwks-rsa types are inaccurate - it returns a SecretLoader
-    secret: jwks.koaJwtSecret({
+    secret: jwks.expressJwtSecret({
       cache: true,
       rateLimit: true,
       jwksRequestsPerMinute: 5,
@@ -43,7 +26,7 @@ export async function create() {
     audience: Auth.audience,
     issuer: Auth.issuer,
     algorithms: ['RS256'],
-    passthrough: true,
+    credentialsRequired: false,
   })
 
   const options: PostGraphileOptions = {
@@ -57,7 +40,7 @@ export async function create() {
     retryOnInitFail: true,
   }
 
-  const playgroundMiddleware: IMiddleware = playground({
+  const playgroundMiddleware = playground({
     endpoint: '/graphql',
     settings: {
       // @ts-ignore - incomplete type
@@ -65,29 +48,28 @@ export async function create() {
     },
   })
 
-  app.use(morgan(Environment.isDev ? 'dev' : 'combined'))
-  app.use(catchErrors)
-  app.use(jwtCheck)
-  app.use(bodyParser())
+  app
+    .disable('x-powered-by')
+    .use(morgan(Environment.isDev ? 'dev' : 'combined'))
+    .get('/', (_req, res) => {
+      res.send('ok')
+    })
+    .get('/graphql', noop(Environment.isDev, playgroundMiddleware))
+    .use(jwtCheck)
+    .use(bodyParser.json())
+    .use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+      console.error(err)
 
-  router.get('/', async (ctx, _next) => {
-    ctx.body = 'ok'
-  })
-
-  if (Environment.isDev) {
-    router.get('/graphql', playgroundMiddleware)
-  }
-
-  router.post('/graphql', postgraphile(Database.url, 'public', options))
-
-  app.use(router.routes()).use(router.allowedMethods())
+      res.status(400).send('{}')
+    })
+    .use(postgraphile(Database.url, 'public', options))
 
   return app
 }
 
 export async function run() {
   const app = await create()
-  const server = http.createServer(app.callback())
+  const server = http.createServer(app)
 
   server.listen(Server.port, () => {
     console.log(
