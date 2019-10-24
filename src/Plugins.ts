@@ -1,30 +1,23 @@
 import Debug from 'debug'
-import Http from 'http'
-import Koa from 'koa'
 import {GraphQLError, formatError} from 'graphql'
 import {GraphQLErrorExtended} from 'postgraphile'
 
-import {Environment} from './Config'
-
-export interface IncomingMessage extends Http.IncomingMessage {
-  _koaCtx?: Koa.Context
-}
-
-export interface AdditionalContext {}
+import {Environment, IncomingMessage} from './Config'
 
 const debug = Debug('storyverse-api:Plugins')
 
-export async function pgSettings(_req: IncomingMessage) {
+export async function pgSettings(req: IncomingMessage) {
+  const sub = req.user && req.user.sub
+
   return {
+    'jwt.claims.sub': sub,
     role: 'storyverse_user',
   }
 }
 
-export const getGraphQLContext = async (
-  _req: IncomingMessage
-): Promise<AdditionalContext> => {
-  return {}
-}
+export const getGraphQLContext = async (req: IncomingMessage) => ({
+  user: req.user,
+})
 
 export const plugins = []
 

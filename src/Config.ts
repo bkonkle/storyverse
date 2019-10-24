@@ -1,5 +1,27 @@
 import dotenv from 'dotenv'
+import Http from 'http'
 import parseDbUrl from 'ts-parse-database-url'
+import {PostGraphileUtils} from '@graft/server'
+
+export interface User {
+  iss: string
+  sub: string
+  aud: string[]
+  iat: number
+  exp: number
+  azp: string
+  scope: string
+}
+
+export interface IncomingMessage extends Http.IncomingMessage {
+  user?: User
+}
+
+export interface Context extends PostGraphileUtils.PostGraphileContext {
+  user?: User
+}
+
+export type AppRequest = PostGraphileUtils.GraphileRequest<Context>
 
 dotenv.config()
 
