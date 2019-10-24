@@ -1,7 +1,17 @@
 import dotenv from 'dotenv'
-import parseDbUrl from 'parse-database-url'
+import parseDbUrl from 'ts-parse-database-url'
 
 dotenv.config()
+
+export namespace Auth {
+  export const jwksUri =
+    process.env.AUTH0_JWKS_URI ||
+    'https://storyverse.auth0.com/.well-known/jwks.json'
+  export const audience =
+    process.env.AUTH0_AUDIENCE || 'https://storyverse.konkle.us'
+  export const issuer =
+    process.env.AUTH0_ISSUER || 'https://storyverse.auth0.com/'
+}
 
 export namespace Database {
   const _url =
@@ -23,26 +33,6 @@ export namespace Database {
   export const url = `postgres://${user}:${password}@${host}:${port}/${database}`
 }
 
-export namespace Knex {
-  export const config = {
-    client: 'postgresql',
-    connection: {
-      host: Database.host,
-      database: Database.database,
-      user: Database.user,
-      password: Database.password,
-      port: Database.port,
-    },
-    pool: {
-      min: Database.poolMin,
-      max: Database.poolMax,
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-    },
-  }
-}
-
 export namespace Server {
   export const port = Number(process.env.PORT || '4000')
   export const bodyLimit = '100kb'
@@ -53,4 +43,4 @@ export namespace Environment {
   export const isDev = process.env.NODE_ENV === 'development'
 }
 
-export default {Database, Server, Environment}
+export default {Auth, Database, Server, Environment}

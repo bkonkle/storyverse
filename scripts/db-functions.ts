@@ -11,7 +11,7 @@ export const main = async () => {
 
   // Find all SQL files in the `src` folder
   const files = (await readdir(path.join(__dirname, '..', 'src'))).filter(
-    filename => '.sql'.endsWith(filename)
+    filename => filename.endsWith('.sql')
   )
 
   files.forEach(filename => {

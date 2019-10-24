@@ -1,11 +1,12 @@
 require('ts-node/register/transpile-only')
 
-const parseDbUrl = require('parse-database-url')
+const parseDbUrl = require('ts-parse-database-url').default
 const dotenv = require('dotenv')
 
 dotenv.config()
 
-const DEFAULT_URL = 'postgres://storyverse_root:password@localhost:5432/storyverse'
+const DEFAULT_URL =
+  'postgres://storyverse_root:password@localhost:5432/storyverse'
 
 const EnvironmentMap = {
   local: DEFAULT_URL,

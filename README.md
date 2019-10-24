@@ -8,12 +8,16 @@ This is a Koa application server written in TypeScript. It uses GraphQL via [Pos
 
 Install dependencies with [Yarn](http://yarnpkg.com):
 
-    yarn
+```sh
+yarn
+```
 
 Create a `.env` file:
 
 ```ini
-DATABASE_URL=postgres://storyverse_root:password@localhost:5432/storyverse
+AUTH0_JWKS_URI=https://storyverse-dev.auth0.com/.well-known/jwks.json
+AUTH0_AUDIENCE=localhost
+AUTH0_ISSUER=https://storyverse-dev.auth0.com/
 ```
 
 ### Local Database
