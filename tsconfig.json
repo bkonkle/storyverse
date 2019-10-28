@@ -40,8 +40,8 @@
     }
   },
   "include": [
-    "src",
-    "migrations"
+    "packages/*/src",
+    "packages/*/migrations",
   ],
   "exclude": [
     "node_modules",
