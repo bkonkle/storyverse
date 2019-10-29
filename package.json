@@ -21,7 +21,7 @@
     "build": "tsc --pretty --skipLibCheck",
     "check.types": "yarn build --noEmit",
     "format": "prettier --write",
-    "format.all": "yarn format \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format.all": "yarn format \"{src,packages}/**/*.{js,jsx,ts,tsx}\"",
     "test": "NODE_ENV=test jest",
     "test.watch": "NODE_ENV=test jest --watch"
   },

@@ -8,7 +8,6 @@ generates:
       - typescript-operations
       - typescript-urql
     config:
-      namingConvention: change-case#pascalCase
       withHOC: false
       withComponent: false
       withMutationFn: false
