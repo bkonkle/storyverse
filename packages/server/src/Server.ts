@@ -2,6 +2,7 @@ import http from 'http'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import chalk from 'chalk'
+import cors from 'cors'
 import express, {Request, Response, NextFunction} from 'express'
 import noop from 'express-noop'
 import jwt from 'express-jwt'
@@ -56,6 +57,7 @@ export async function create() {
     })
     .get('/graphql', noop(Environment.isDev, playgroundMiddleware))
     .use(jwtCheck)
+    .use(cors())
     .use(bodyParser.json())
     .use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
       console.error(err)

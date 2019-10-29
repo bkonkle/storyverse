@@ -1,0 +1,9 @@
+mutation GetCurrentUser($input: GetCurrentUserInput!) {
+  getCurrentUser(input: $input) {
+    user {
+      id
+      username
+      isActive
+    }
+  }
+}

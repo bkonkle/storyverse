@@ -2,6 +2,7 @@ import Debug from 'debug'
 import {GraphQLError, formatError} from 'graphql'
 import {GraphQLErrorExtended} from 'postgraphile'
 
+import UserResolvers from './users/UserResolvers'
 import {Environment, IncomingMessage} from './Config'
 
 const debug = Debug('storyverse-api:Plugins')
@@ -19,10 +20,10 @@ export const getGraphQLContext = async (req: IncomingMessage) => ({
   user: req.user,
 })
 
-export const plugins = []
+export const plugins = [...UserResolvers]
 
-export const handleErrors = (errors: GraphQLError[]) =>
-  errors.map((error: GraphQLError) => {
+export const handleErrors = (errors: GraphQLError[]) => {
+  return errors.map((error: GraphQLError) => {
     const formattedError = formatError(error) as GraphQLErrorExtended
 
     // If this is dev, add the stack to the formatted error.
@@ -38,6 +39,7 @@ export const handleErrors = (errors: GraphQLError[]) =>
 
     return formattedError
   })
+}
 
 export default {
   pgSettings,

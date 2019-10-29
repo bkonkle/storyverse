@@ -1,10 +1,24 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Button, Icon} from 'react-native-elements'
-import {NavigationInjectedProps, withNavigation} from 'react-navigation'
+import {useGetCurrentUserMutation} from '../../Schema'
 
-export interface Props extends NavigationInjectedProps<{}> {}
+export interface Props {}
 
 export const NavIcon = (_props: Props) => {
+  const [{error, fetching, data}, getCurrentUser] = useGetCurrentUserMutation()
+
+  useEffect(() => {
+    getCurrentUser({input: {}})
+  }, [])
+
+  if (error) {
+    console.error(error)
+  }
+
+  if (fetching || !data) {
+    return null
+  }
+
   return (
     <Button
       title="Login"
@@ -15,4 +29,4 @@ export const NavIcon = (_props: Props) => {
   )
 }
 
-export default withNavigation(NavIcon)
+export default NavIcon
