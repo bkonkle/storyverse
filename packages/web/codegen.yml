@@ -1,5 +1,5 @@
 schema: 'http://localhost:4000/graphql'
-documents: ./src/**/*.graphql
+# documents: ./src/**/*.graphql
 generates:
   src/Schema.ts:
     plugins:
@@ -8,7 +8,5 @@ generates:
       - typescript-operations
       - typescript-urql
     config:
-      namingConvention: change-case#pascalCase
       withHOC: false
-      withComponent: false
       withMutationFn: false

@@ -58,5 +58,12 @@
     "pg": "^7.12.1",
     "postgraphile": "^4.4.4",
     "ts-parse-database-url": "^1.0.3"
+  },
+  "devDependencies": {
+    "@graphql-codegen/add": "^1.8.2",
+    "@graphql-codegen/cli": "^1.8.2",
+    "@graphql-codegen/typescript": "^1.8.2",
+    "@graphql-codegen/typescript-operations": "^1.8.2",
+    "@graphql-codegen/typescript-urql": "^1.8.2"
   }
 }
