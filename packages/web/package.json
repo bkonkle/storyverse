@@ -1,0 +1,34 @@
+{
+  "name": "@bkonkle/storyverse-web",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
+  "scripts": {
+    "dev": "expo start --web --non-interactive",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject",
+    "postinstall": "scripts/clear-mjs"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^10.0.6",
+    "expo": "^35.0.0",
+    "graphql": "14.5.8",
+    "monadism": "^5.0.1",
+    "ramda": "^0.26.1",
+    "react": "16.8.3",
+    "react-dom": "^16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
+    "react-native-elements": "^1.2.6",
+    "react-native-gesture-handler": "^1.4.1",
+    "react-native-screens": "^1.0.0-alpha.23",
+    "react-native-web": "^0.11.7",
+    "react-navigation": "^3.11.0",
+    "webpack-modules": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "babel-preset-expo": "^7.1.0"
+  }
+}

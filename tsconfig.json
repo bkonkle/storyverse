@@ -22,9 +22,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "es2015",
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
     "lib": [
       "dom",
       "esnext.asynciterable",
@@ -40,11 +37,13 @@
     }
   },
   "include": [
+    "src",
     "packages/*/src",
     "packages/*/migrations",
   ],
   "exclude": [
     "node_modules",
+    "packages/*/node_modules",
     "build"
   ]
 }
