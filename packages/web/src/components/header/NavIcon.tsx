@@ -1,17 +1,15 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {Icon} from 'react-native-elements'
 import {NavigationInjectedProps, withNavigation} from 'react-navigation'
 
 export interface Props extends NavigationInjectedProps<{}> {}
 
-export class NavIcon extends Component<Props> {
-  render() {
-    return <Icon name="menu" color="white" onPress={this.handleNav} />
+export const NavIcon = (props: Props) => {
+  const handleNav = () => {
+    props.navigation.toggleDrawer()
   }
 
-  private handleNav = () => {
-    this.props.navigation.toggleDrawer()
-  }
+  return <Icon name="menu" color="white" onPress={handleNav} />
 }
 
 export default withNavigation(NavIcon)

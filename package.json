@@ -14,9 +14,7 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/@expo/**",
-      "**/react-native",
-      "**/react-native/**"
+      "**/*"
     ]
   },
   "scripts": {
