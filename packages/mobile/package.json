@@ -1,10 +1,9 @@
 {
-  "name": "@bkonkle/storyverse-app",
+  "name": "@bkonkle/storyverse-mobile",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
   "scripts": {
-    "dev": "expo start --web --non-interactive",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",

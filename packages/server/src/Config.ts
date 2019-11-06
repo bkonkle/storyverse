@@ -1,9 +1,7 @@
 import dotenv from 'dotenv'
 import Http from 'http'
-import jwks from 'jwks-rsa'
 import parseDbUrl from 'ts-parse-database-url'
-import {GraphileUtils, PostGraphileOptions} from '@graft/server'
-import {MiddlewareOptions} from 'graphql-playground-html'
+import {GraphileUtils, GraftConfig} from '@graft/server'
 
 import Plugins from './Plugins'
 
@@ -61,40 +59,32 @@ export namespace Database {
 
 export namespace Server {
   export const port = Number(process.env.PORT || '4000')
-  export const bodyLimit = '100kb'
   export const corsHeaders = ['Link']
 }
 
-export namespace PostGraphile {
-  export const jwt = {
-    // @ts-ignore jwks-rsa types are inaccurate - it returns a SecretLoader
-    secret: jwks.expressJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: Auth.jwksUri,
-    }),
-    audience: Auth.audience,
-    issuer: Auth.issuer,
-    algorithms: ['RS256'],
-    credentialsRequired: false,
-  }
-
-  export const playground: MiddlewareOptions = {
-    endpoint: '/graphql',
-    settings: {
-      // @ts-ignore - incomplete type
-      'schema.polling.enable': false,
+export namespace Graft {
+  export const config: GraftConfig = {
+    postgraphile: {
+      appendPlugins: Plugins.plugins,
+      additionalGraphQLContextFromRequest: Plugins.getGraphQLContext,
+      pgSettings: Plugins.pgSettings,
+      retryOnInitFail: true,
     },
-  }
-
-  export const config: PostGraphileOptions = {
-    appendPlugins: Plugins.plugins,
-    additionalGraphQLContextFromRequest: Plugins.getGraphQLContext,
-    pgSettings: Plugins.pgSettings,
-    dynamicJson: true,
-    setofFunctionsContainNulls: false,
-    retryOnInitFail: true,
+    jwt: {
+      audience: Auth.audience,
+      issuer: Auth.issuer,
+      algorithms: ['RS256'],
+      credentialsRequired: false,
+    },
+    jwks: {
+      jwksUri: Auth.jwksUri,
+    },
+    cors: {
+      allowedHeaders: Server.corsHeaders,
+    },
+    database: {
+      url: Database.url,
+    },
   }
 }
 
@@ -102,4 +92,4 @@ export namespace Environment {
   export const isDev = process.env.NODE_ENV === 'development'
 }
 
-export default {Auth, Database, Server, PostGraphile, Environment}
+export default {Auth, Database, Server, Graft, Environment}

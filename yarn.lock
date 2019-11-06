@@ -881,16 +881,22 @@
     pouchdb-collections "^1.0.1"
     tiny-queue "^0.2.1"
 
-"@graft/server@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@graft/server/-/server-4.0.0.tgz#83306e5f8413cd25b400902f42bbfacf14b579b0"
-  integrity sha512-5GuIjqHcBsxFVAUQ0ZTedF/db5l72r/nl1FopqvcTdBsQplMge1gDxv7p9zCQw4K5wcq9ixJTgwUnLxxlBiDkA==
+"@graft/server@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@graft/server/-/server-4.1.1.tgz#01110ecd6254831d493b8179711417313aab9cd7"
+  integrity sha512-WhnYOo4BW68aj4nyl8BHxMLiotf0bFtdUFHZnP8TOcuaxdNODDJSQFBbB4NrOrgSwtTV8AKyER+hmJ+N45B2Gw==
   dependencies:
+    chalk "^2.4.2"
+    cors "^2.8.5"
     debug "^4.1.1"
+    express-jwt "^5.3.1"
+    express-noop "^1.1.0"
     graphile-build "^4.4.5"
     graphile-build-pg "^4.4.5"
     graphile-utils "^4.4.5"
+    graphql-playground-middleware-express "^1.7.12"
     graphql-tag "^2.10.1"
+    jwks-rsa "^1.6.0"
     pg "^7.12.1"
     postgraphile "^4.4.4"
     ramda "^0.26.1"
