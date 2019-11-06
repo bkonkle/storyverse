@@ -1,11 +1,9 @@
 /* tslint:disable await-promise */
-import Knex from 'knex'
-
-import {KnexUtils} from '@graft/server'
+import {knex as Knex, primaryUuid, updateTimestamp} from '@graft/knex'
 
 export async function up(knex: Knex) {
   await knex.schema.createTable('users', table => {
-    KnexUtils.primaryUuid(knex, table)
+    primaryUuid(knex, table)
 
     table.timestamps(true, true)
 
@@ -22,7 +20,7 @@ export async function up(knex: Knex) {
       .defaultTo(true)
   })
 
-  await KnexUtils.updateTimestamp(knex, 'users')
+  await updateTimestamp(knex, 'users')
 
   await knex.raw(
     `GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO storyverse_user;`

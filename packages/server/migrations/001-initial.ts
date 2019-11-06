@@ -1,5 +1,5 @@
 /* tslint:disable await-promise */
-import Knex from 'knex'
+import {knex as Knex} from '@graft/knex'
 
 export async function up(knex: Knex) {
   await knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')

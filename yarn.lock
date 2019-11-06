@@ -881,6 +881,14 @@
     pouchdb-collections "^1.0.1"
     tiny-queue "^0.2.1"
 
+"@graft/knex@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@graft/knex/-/knex-1.0.1.tgz#903bede1b072959ce3b33b453ba6dbb4096f6022"
+  integrity sha512-g5Mf3OLX60Jg9kPXe0j3lKTpqbhrTx6Ar1Nl4p2IT2MSnyXnTpahZ9GaBaMOEfdHymcvgz2moIz4XBxbssAfEQ==
+  dependencies:
+    knex "^0.20.1"
+    pg "^7.12.1"
+
 "@graft/server@^4.1.1":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@graft/server/-/server-4.1.1.tgz#01110ecd6254831d493b8179711417313aab9cd7"
