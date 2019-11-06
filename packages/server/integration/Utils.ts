@@ -1,8 +1,8 @@
-import Knex from 'knex'
+import {knex as Knex} from '@graft/knex'
 
-import * as Config from '../src/Config'
+import config from '../knexfile'
 
-const dbName = `${Config.Knex.config.connection.database}_test`
+const dbName = `${config.connection.database}_test`
 
 // A module-scoped pointer to Knex so that it's only initialized once
 let _knex: Knex | undefined = undefined
@@ -13,9 +13,9 @@ export const testEndpoint = 'http://localhost:4001/graphql'
 export const getDb = () => {
   if (!_knex) {
     _knex = Knex({
-      ...Config.Knex.config,
+      ...config,
       connection: {
-        ...Config.Knex.config.connection,
+        ...config.connection,
         database: dbName,
       },
     })
@@ -27,7 +27,7 @@ export const getDb = () => {
 // Wipe out and re-create the test db
 export const initTestDb = async () => {
   // Use the primary config to manage the test database
-  const db = Knex(Config.Knex.config)
+  const db = Knex(config)
 
   await db.raw(`DROP DATABASE IF EXISTS ${dbName};`)
   await db.raw(`CREATE DATABASE ${dbName};`)

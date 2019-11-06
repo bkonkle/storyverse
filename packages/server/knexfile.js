@@ -24,7 +24,7 @@ const dbConfig = parseDbUrl(dbUrl)
 
 const tunnel = !!process.env.TUNNEL
 const host = tunnel ? 'localhost' : dbConfig.host
-const port = tunnel ? process.env.PORT || 1701 : dbConfig.port
+const port = tunnel ? Number(process.env.PORT) || 1701 : dbConfig.port
 
 module.exports = {
   client: 'postgresql',
