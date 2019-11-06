@@ -1,4 +1,4 @@
-import {makeWrapResolversPlugin} from 'graphile-utils'
+import {makeWrapResolversPlugin} from '@graft/server'
 import {Context} from '../Config'
 
 export const anonymousGetCurrentUser = makeWrapResolversPlugin({

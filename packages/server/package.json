@@ -9,6 +9,7 @@
   "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
   "license": "MIT",
   "scripts": {
+    "check.types": "cd ../../ && yarn check.types",
     "db.backup": "ts-node --transpile-only scripts/backup-db.ts",
     "db.backup.dev": "ENVIRONMENT=dev yarn db.backup",
     "db.functions": "ts-node --transpile-only scripts/db-functions.ts",
@@ -23,12 +24,12 @@
     "db.tunnel.dev": "ENVIRONMENT=dev yarn db.tunnel",
     "dev": "yarn dev.watch",
     "dev.run": "NODE_ENV=development ts-node --transpile-only src/Server.ts",
-    "dev.debug": "DEBUG=storyverse-api:*,graphile-build-pg:* yarn dev.watch",
+    "dev.debug": "DEBUG=storyverse-server:*,graphile-build-pg:* yarn dev.watch",
     "dev.watch": "nodemon --exec yarn dev.run",
     "ecr.login": "eval $(aws ecr get-login --no-include-email --region us-west-2)",
-    "ecr.build": "DOCKER_BUILDKIT=1 docker build -t storyverse-api .",
-    "ecr.tag": "docker tag storyverse-api ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/storyverse-api:${TAG:-latest}",
-    "ecr.push": "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/storyverse-api:${TAG:-latest}",
+    "ecr.build": "DOCKER_BUILDKIT=1 docker build -t storyverse-server .",
+    "ecr.tag": "docker tag storyverse-server ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/storyverse-server:${TAG:-latest}",
+    "ecr.push": "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/storyverse-server:${TAG:-latest}",
     "ecr.upload": "yarn ecr.tag && yarn ecr.push",
     "generate.schema": "graphql-codegen",
     "start": "node build/src/Server.js",
@@ -37,7 +38,7 @@
     "test.integration.server": "NODE_ENV=development yarn test.reset.db && ts-node --transpile-only scripts/run-test-server.ts"
   },
   "dependencies": {
-    "@graft/server": "^3.3.0",
+    "@graft/server": "^4.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
     "cors": "^2.8.5",
@@ -46,29 +47,23 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
     "express-noop": "^1.1.0",
-    "graphile-build": "^4.4.5",
-    "graphile-build-pg": "^4.4.5",
-    "graphile-utils": "^4.4.5",
     "graphql": "14.5.8",
     "graphql-playground-middleware-express": "^1.7.12",
     "graphql-tag": "^2.10.1",
     "jwks-rsa": "^1.6.0",
-    "knex": "0.19.5",
+    "knex": "^0.20.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
-    "pg": "^7.12.1",
-    "postgraphile": "^4.4.4",
     "ts-parse-database-url": "^1.0.3"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^1.8.2",
-    "@graphql-codegen/cli": "^1.8.2",
-    "@graphql-codegen/typescript": "^1.8.2",
-    "@graphql-codegen/typescript-operations": "^1.8.2",
-    "@graphql-codegen/typescript-urql": "^1.8.2"
+    "@graphql-codegen/add": "^1.8.3",
+    "@graphql-codegen/cli": "^1.8.3",
+    "@graphql-codegen/typescript": "^1.8.3",
+    "@graphql-codegen/typescript-operations": "^1.8.3",
+    "@graphql-codegen/typescript-urql": "^1.8.3"
   },
   "resolutions": {
-    "graphql": "14.5.8",
     "mem": "^4.0.0"
   }
 }

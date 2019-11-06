@@ -1,7 +1,11 @@
 import dotenv from 'dotenv'
 import Http from 'http'
+import jwks from 'jwks-rsa'
 import parseDbUrl from 'ts-parse-database-url'
-import {PostGraphileUtils} from '@graft/server'
+import {GraphileUtils, PostGraphileOptions} from '@graft/server'
+import {MiddlewareOptions} from 'graphql-playground-html'
+
+import Plugins from './Plugins'
 
 export interface User {
   iss: string
@@ -17,11 +21,11 @@ export interface IncomingMessage extends Http.IncomingMessage {
   user?: User
 }
 
-export interface Context extends PostGraphileUtils.PostGraphileContext {
+export interface Context extends GraphileUtils.PostGraphileContext {
   user?: User
 }
 
-export type AppRequest = PostGraphileUtils.GraphileRequest<Context>
+export type AppRequest = GraphileUtils.GraphileRequest<Context>
 
 dotenv.config()
 
@@ -61,8 +65,41 @@ export namespace Server {
   export const corsHeaders = ['Link']
 }
 
+export namespace PostGraphile {
+  export const jwt = {
+    // @ts-ignore jwks-rsa types are inaccurate - it returns a SecretLoader
+    secret: jwks.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: Auth.jwksUri,
+    }),
+    audience: Auth.audience,
+    issuer: Auth.issuer,
+    algorithms: ['RS256'],
+    credentialsRequired: false,
+  }
+
+  export const playground: MiddlewareOptions = {
+    endpoint: '/graphql',
+    settings: {
+      // @ts-ignore - incomplete type
+      'schema.polling.enable': false,
+    },
+  }
+
+  export const config: PostGraphileOptions = {
+    appendPlugins: Plugins.plugins,
+    additionalGraphQLContextFromRequest: Plugins.getGraphQLContext,
+    pgSettings: Plugins.pgSettings,
+    dynamicJson: true,
+    setofFunctionsContainNulls: false,
+    retryOnInitFail: true,
+  }
+}
+
 export namespace Environment {
   export const isDev = process.env.NODE_ENV === 'development'
 }
 
-export default {Auth, Database, Server, Environment}
+export default {Auth, Database, Server, PostGraphile, Environment}

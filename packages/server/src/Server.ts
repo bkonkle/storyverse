@@ -1,53 +1,22 @@
-import http from 'http'
-import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import chalk from 'chalk'
 import cors from 'cors'
-import express, {Request, Response, NextFunction} from 'express'
-import noop from 'express-noop'
+import express from 'express'
+import http from 'http'
 import jwt from 'express-jwt'
-import jwks from 'jwks-rsa'
+import morgan from 'morgan'
+import noop from 'express-noop'
 import playground from 'graphql-playground-middleware-express'
-import {PostGraphileOptions, postgraphile} from 'postgraphile'
+import {postgraphile} from '@graft/server'
 
-import {Auth, Database, Server, Environment} from './Config'
-import Plugins from './Plugins'
+import {Database, Server, PostGraphile, Environment} from './Config'
 
 export async function create() {
   const app = express()
 
-  const jwtCheck = jwt({
-    // @ts-ignore jwks-rsa types are inaccurate - it returns a SecretLoader
-    secret: jwks.expressJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: Auth.jwksUri,
-    }),
-    audience: Auth.audience,
-    issuer: Auth.issuer,
-    algorithms: ['RS256'],
-    credentialsRequired: false,
-  })
-
-  const options: PostGraphileOptions = {
-    appendPlugins: Plugins.plugins,
-    additionalGraphQLContextFromRequest: Plugins.getGraphQLContext,
-    // @ts-ignore - error type mismatch
-    handleErrors: Plugins.handleErrors,
-    pgSettings: Plugins.pgSettings,
-    dynamicJson: true,
-    setofFunctionsContainNulls: false,
-    retryOnInitFail: true,
-  }
-
-  const playgroundMiddleware = playground({
-    endpoint: '/graphql',
-    settings: {
-      // @ts-ignore - incomplete type
-      'schema.polling.enable': false,
-    },
-  })
+  const jwtCheck = jwt(PostGraphile.jwt)
+  const playgroundMiddleware = playground(PostGraphile.playground)
+  const pgMiddleware = postgraphile(Database.url, 'public', PostGraphile.config)
 
   app
     .disable('x-powered-by')
@@ -59,12 +28,7 @@ export async function create() {
     .use(jwtCheck)
     .use(cors())
     .use(bodyParser.json())
-    .use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-      console.error(err)
-
-      res.status(400).send('{}')
-    })
-    .use(postgraphile(Database.url, 'public', options))
+    .use(pgMiddleware)
 
   return app
 }

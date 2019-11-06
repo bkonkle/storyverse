@@ -9,6 +9,12 @@ const Config = {
     Api: {
       endpoint: 'http://localhost:8000/graphql',
     },
+
+    Auth: {
+      clientId: 'vfhJeW5WSu4Rbc5b6SUJ4t0ICp62361o',
+      domain: 'https://storyverse-dev.auth0.com',
+      audience: 'localhost',
+    },
   },
   dev: {
     Env: {
@@ -18,6 +24,12 @@ const Config = {
     Api: {
       endpoint: 'https://storyverse-dev-api.konkle.us/graphql',
     },
+
+    Auth: {
+      clientId: 'vfhJeW5WSu4Rbc5b6SUJ4t0ICp62361o',
+      domain: 'https://storyverse-dev.auth0.com',
+      audience: 'dev',
+    },
   },
   prod: {
     Env: {
@@ -26,6 +38,12 @@ const Config = {
 
     Api: {
       endpoint: 'https://storyverse-prod-api.konkle.us/graphql',
+    },
+
+    Auth: {
+      clientId: 'FIXME',
+      domain: 'https://storyverse.auth0.com',
+      audience: 'prod',
     },
   },
 }
