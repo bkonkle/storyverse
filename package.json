@@ -9,9 +9,15 @@
   "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@graphql-codegen",
+      "**/@graphql-codegen/**"
+    ]
+  },
   "scripts": {
     "build": "tsc --pretty --skipLibCheck",
     "check.types": "yarn build --noEmit",
