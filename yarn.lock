@@ -889,10 +889,10 @@
     knex "^0.20.1"
     pg "^7.12.1"
 
-"@graft/server@^4.1.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@graft/server/-/server-4.1.1.tgz#01110ecd6254831d493b8179711417313aab9cd7"
-  integrity sha512-WhnYOo4BW68aj4nyl8BHxMLiotf0bFtdUFHZnP8TOcuaxdNODDJSQFBbB4NrOrgSwtTV8AKyER+hmJ+N45B2Gw==
+"@graft/server@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@graft/server/-/server-5.0.0.tgz#631fc5990a57cbe9128019ee3c85d473de932d95"
+  integrity sha512-oMYsJ2KkLTezhpDOJl0o7EYtKiq0rvcZjS71VxbRn2zjqSLS1kmywBZ/VUGue78vG/l4WOa+w7GvTwpbN75gVg==
   dependencies:
     chalk "^2.4.2"
     cors "^2.8.5"
@@ -2408,7 +2408,7 @@ blueimp-md5@^2.10.0:
   resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.12.0.tgz#be7367938a889dec3ffbb71138617c117e9c130a"
   integrity sha512-zo+HIdIhzojv6F1siQPqPFROyVy7C50KzHv/k/Iz+BtvtVzSHXiMXOpq2wCfNkeBqdCv+V8XOV96tsEt2W/3rQ==
 
-body-parser@1.19.0, body-parser@^1.15.2, body-parser@^1.19.0:
+body-parser@1.19.0, body-parser@^1.15.2:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.19.0.tgz#96b2709e57c9c4e09a6fd66a8fd979844f69f08a"
   integrity sha512-dhEPs72UPbDnAQJ9ZKMNTP6ptJaionhP5cBb541nXPlW60Jepo9RV/a4fX4XWW9CuFNK22krhrj1+rgzifNCsw==

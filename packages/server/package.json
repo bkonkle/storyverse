@@ -38,7 +38,7 @@
     "test.integration.server": "NODE_ENV=development yarn test.reset.db && ts-node --transpile-only scripts/run-test-server.ts"
   },
   "dependencies": {
-    "@graft/server": "^4.1.1",
+    "@graft/server": "^5.0.0",
     "@graft/knex": "^1.0.1",
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
