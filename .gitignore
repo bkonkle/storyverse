@@ -61,6 +61,7 @@ build/Release
 
 # Compiled files
 build
+.cache
 
 # Dependencies
 node_modules
