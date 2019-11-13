@@ -1,16 +1,16 @@
 module.exports = {
   siteMetadata: {
     title: 'Storyverse',
+    description: 'The Storyverse web client',
     author: '@bkonkle',
   },
   plugins: [
-    'gatsby-plugin-typescript',
     'gatsby-plugin-react-helmet',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'images',
-        path: 'src/images',
+        path: `${__dirname}/src/images`,
       },
     },
     'gatsby-transformer-sharp',
@@ -27,5 +27,7 @@ module.exports = {
         icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
       },
     },
+    'gatsby-plugin-offline',
+    'gatsby-plugin-typescript',
   ],
 }

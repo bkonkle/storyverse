@@ -32,14 +32,14 @@ bower_components
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
+# Dependency directories
+node_modules/
+
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
-
-# @std/esm cache
-.esm-cache
 
 # Optional REPL history
 .node_repl_history
@@ -47,21 +47,15 @@ build/Release
 # Output of 'npm pack'
 *.tgz
 
+# dotenv environment variable files
+.env*
+
+# Mac files
+.DS_Store
+
+# Yarn
+yarn-error.log
+.pnp/
+.pnp.js
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
-
-# Yeoman local state
-.yo-rc.json
-
-# Ocaml / Reason
-.merlin
-
-# Compiled files
-build
-.cache
-
-# Dependencies
-node_modules
