@@ -7,12 +7,12 @@ const Config = {
     },
 
     Api: {
-      endpoint: 'http://localhost:8000/graphql',
+      endpoint: 'http://localhost:4000/graphql',
     },
 
     Auth: {
       clientId: 'vfhJeW5WSu4Rbc5b6SUJ4t0ICp62361o',
-      domain: 'https://storyverse-dev.auth0.com',
+      domain: 'storyverse-dev.auth0.com',
       audience: 'localhost',
     },
   },
@@ -27,7 +27,7 @@ const Config = {
 
     Auth: {
       clientId: 'vfhJeW5WSu4Rbc5b6SUJ4t0ICp62361o',
-      domain: 'https://storyverse-dev.auth0.com',
+      domain: 'storyverse-dev.auth0.com',
       audience: 'dev',
     },
   },
@@ -42,7 +42,7 @@ const Config = {
 
     Auth: {
       clientId: 'FIXME',
-      domain: 'https://storyverse.auth0.com',
+      domain: 'storyverse.auth0.com',
       audience: 'prod',
     },
   },

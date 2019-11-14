@@ -8,7 +8,9 @@ interface Props {
 }
 
 const client = createClient({
-  url: 'http://localhost:4000',
+  url:
+    process.env.GATSBY_API_URL ||
+    'https://storyverse-prod-api.konkle.us/graphql',
   fetch,
   exchanges: [dedupExchange, cacheExchange(), fetchExchange],
 })
