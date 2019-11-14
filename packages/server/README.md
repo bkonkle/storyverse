@@ -1,6 +1,6 @@
 # Storyverse API
 
-This is a Koa application server written in TypeScript. It uses GraphQL via [Postgraphile](https://www.graphile.org/postgraphile/) to communicate with the client.
+This is an Express application server written in TypeScript. It uses GraphQL via [Postgraphile](https://www.graphile.org/postgraphile/) to communicate with the client.
 
 ## Installation
 
