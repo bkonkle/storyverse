@@ -39,6 +39,7 @@
     "babel-preset-expo": "^7.1.0"
   },
   "resolutions": {
+    "react": "16.8.3",
     "mem": "^4.0.0"
   }
 }

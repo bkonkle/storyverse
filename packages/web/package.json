@@ -19,10 +19,10 @@
     "url": "https://github.com/gatsbyjs/gatsby/issues"
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.5.0",
     "@material-ui/core": "^4.6.1",
     "@material-ui/icons": "^4.5.1",
     "@urql/exchange-graphcache": "^1.1.2",
-    "auth0-lock": "^11.18.1",
     "graphql": "14.5.8",
     "isomorphic-fetch": "^2.2.1",
     "react": "16.8.3",
@@ -36,7 +36,6 @@
     "@graphql-codegen/typescript": "^1.8.3",
     "@graphql-codegen/typescript-operations": "^1.8.3",
     "@graphql-codegen/typescript-urql": "^1.8.3",
-    "@types/auth0-lock": "^11.4.12",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/react-helmet": "^5.0.14",
     "gatsby": "^2.17.13",
@@ -51,6 +50,7 @@
     "gatsby-transformer-sharp": "^2.3.4"
   },
   "resolutions": {
+    "react": "16.8.3",
     "mem": "^4.0.0"
   }
 }

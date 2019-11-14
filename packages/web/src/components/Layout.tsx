@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {FC} from 'react'
 import {useStaticQuery, graphql} from 'gatsby'
 import {Helmet} from 'react-helmet'
 
@@ -9,7 +9,7 @@ interface Props {
   children?: React.ReactNode
 }
 
-const Layout = ({children}: Props) => {
+const Layout: FC<Props> = ({children}) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {

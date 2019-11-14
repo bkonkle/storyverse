@@ -5,12 +5,10 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import MenuIcon from '@material-ui/icons/Menu'
-import AccountCircle from '@material-ui/icons/AccountCircle'
 
-import {login} from '../data/AuthClient'
+import {useAuth0} from '../data/AuthClient'
+import UserIcon from './UserIcon'
 
 interface Props {
   siteTitle: string
@@ -29,14 +27,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Header: FC<Props> = ({siteTitle}) => {
-  const auth = false
+  const {isAuthenticated, loginWithRedirect, logout} = useAuth0()
   const classes = useStyles()
-  const [anchorEl, setAnchorEl] = React.useState()
-  const open = Boolean(anchorEl)
-
-  const handleClose = () => {
-    setAnchorEl(undefined)
-  }
 
   return (
     <header>
@@ -53,42 +45,12 @@ const Header: FC<Props> = ({siteTitle}) => {
           <Typography variant="h6" className={classes.title}>
             {siteTitle}
           </Typography>
-          {!auth && (
-            <Button color="inherit" onClick={login}>
+          {!isAuthenticated && (
+            <Button color="inherit" onClick={loginWithRedirect}>
               Login
             </Button>
           )}
-          {auth && (
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={event => setAnchorEl(event.currentTarget)}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+          {isAuthenticated && <UserIcon onLogout={logout} />}
         </Toolbar>
       </AppBar>
     </header>
