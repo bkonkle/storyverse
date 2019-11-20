@@ -3,7 +3,7 @@ import {navigate} from 'gatsby'
 
 import {isAuthenticated} from '../data/AuthClient'
 import {useGetCurrentUserMutation} from '../data/Schema'
-import Layout from '../components/Layout'
+import App from '../components/App'
 import SEO from '../components/Seo'
 
 const RedirectLogin = () => {
@@ -28,12 +28,12 @@ const RedirectLogin = () => {
 
 const SecondPage = () => {
   return (
-    <Layout>
+    <App>
       <SEO title="App" />
       <RedirectLogin />
       <h1>Hi from the App!</h1>
       <p>Welcome to the App!</p>
-    </Layout>
+    </App>
   )
 }
 

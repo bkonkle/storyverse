@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {navigate} from 'gatsby'
 
 import {isAuthenticated, handleAuthentication} from '../data/AuthClient'
-import Layout from '../components/Layout'
+import App from '../components/App'
 import SEO from '../components/Seo'
 
 const IndexPage = () => {
@@ -17,9 +17,9 @@ const IndexPage = () => {
   }, [])
 
   return (
-    <Layout>
+    <App>
       <SEO title="Home" />
-    </Layout>
+    </App>
   )
 }
 

@@ -3,7 +3,6 @@ import {useStaticQuery, graphql} from 'gatsby'
 import {Helmet} from 'react-helmet'
 
 import Header from './Header'
-import App from './App'
 
 interface Props {
   children?: React.ReactNode
@@ -21,7 +20,7 @@ const Layout: FC<Props> = ({children}) => {
   `)
 
   return (
-    <App>
+    <>
       <Helmet>
         <link
           rel="stylesheet"
@@ -30,7 +29,7 @@ const Layout: FC<Props> = ({children}) => {
       </Helmet>
       <Header siteTitle={data.site.siteMetadata.title} />
       <main>{children}</main>
-    </App>
+    </>
   )
 }
 
