@@ -1,27 +1,26 @@
 import React, {useEffect} from 'react'
 import {navigate} from 'gatsby'
 
-import {useAuth0} from '../data/AuthClient'
+import {isAuthenticated, handleAuthentication} from '../data/AuthClient'
 import Layout from '../components/Layout'
 import SEO from '../components/Seo'
 
-const RedirectApp = () => {
-  const {isAuthenticated} = useAuth0()
-
+const IndexPage = () => {
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       navigate('/app')
+
+      return
     }
-  }, [isAuthenticated])
 
-  return null
+    handleAuthentication()
+  }, [])
+
+  return (
+    <Layout>
+      <SEO title="Home" />
+    </Layout>
+  )
 }
-
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <RedirectApp />
-  </Layout>
-)
 
 export default IndexPage

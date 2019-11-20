@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 
 interface Props {
-  onLogout(options?: LogoutOptions): void
+  onLogout(): void
 }
 
 const UserIcon: FC<Props> = ({onLogout}) => {
@@ -14,10 +14,6 @@ const UserIcon: FC<Props> = ({onLogout}) => {
 
   const handleClose = () => {
     setAnchorEl(undefined)
-  }
-
-  const handleLogout = () => {
-    onLogout()
   }
 
   return (
@@ -48,7 +44,7 @@ const UserIcon: FC<Props> = ({onLogout}) => {
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+        <MenuItem onClick={onLogout}>Log Out</MenuItem>
       </Menu>
     </div>
   )

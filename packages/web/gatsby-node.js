@@ -1,4 +1,4 @@
-exports.onCreateWebpackConfig = ({actions}) => {
+exports.onCreateWebpackConfig = ({stage, actions, loaders}) => {
   actions.setWebpackConfig({
     module: {
       rules: [
@@ -10,4 +10,17 @@ exports.onCreateWebpackConfig = ({actions}) => {
       ],
     },
   })
+
+  if (stage === 'build-html') {
+    actions.setWebpackConfig({
+      module: {
+        rules: [
+          {
+            test: /auth0-js/,
+            use: loaders.null(),
+          },
+        ],
+      },
+    })
+  }
 }

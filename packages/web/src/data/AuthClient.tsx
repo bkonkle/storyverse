@@ -1,124 +1,94 @@
-import React, {FC, createContext, useState, useEffect, useContext} from 'react'
-import createAuth0Client from '@auth0/auth0-spa-js'
-import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client'
+import auth0 from 'auth0-js'
+import {navigate} from 'gatsby'
 
-export interface AuthUser {}
-
-interface Props extends Auth0ClientOptions {
-  onRedirectCallback?<S>(appState: S): void
+interface AuthTokens {
+  accessToken?: string
+  idToken?: string
+  expiresAt?: number
 }
 
-interface Auth0Context {
-  isAuthenticated: boolean
-  user?: AuthUser
-  loading: boolean
-  popupOpen: boolean
-  loginWithPopup: (params?: {}) => Promise<void>
-  handleRedirectCallback: () => Promise<void>
-  getIdTokenClaims: Auth0Client['getIdTokenClaims']
-  loginWithRedirect: Auth0Client['loginWithRedirect']
-  getTokenSilently: Auth0Client['getTokenSilently']
-  getTokenWithPopup: Auth0Client['getTokenWithPopup']
-  logout: Auth0Client['logout']
+const IS_AUTHENTICATED_KEY = 'storyverse:isAuthenticated'
+
+const isBrowser = typeof window !== 'undefined'
+const clientID = process.env.GATSBY_AUTH0_CLIENT_ID
+const domain = process.env.GATSBY_AUTH0_DOMAIN
+
+const auth: auth0.WebAuth | undefined =
+  isBrowser && clientID && domain
+    ? new auth0.WebAuth({
+        clientID,
+        domain,
+        audience: process.env.GATSBY_AUTH0_AUDIENCE,
+        redirectUri: window.location.origin,
+        responseType: 'token id_token',
+        scope: 'openid profile email',
+      })
+    : undefined
+
+export const tokens: AuthTokens = {
+  accessToken: undefined,
+  idToken: undefined,
+  expiresAt: undefined,
 }
 
-const DEFAULT_REDIRECT_CALLBACK = (appState: {targetUrl?: string}) => {
-  window.history.replaceState(
-    {},
-    document.title,
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : window.location.pathname
-  )
+export let user: auth0.Auth0UserProfile | undefined
+
+export const isAuthenticated = () => {
+  if (!auth) {
+    return
+  }
+
+  return localStorage.getItem(IS_AUTHENTICATED_KEY) === 'true'
 }
 
-export const Auth0Context = createContext<Auth0Context>({
-  isAuthenticated: false,
-  user: undefined,
-  loading: false,
-  popupOpen: false,
-} as Auth0Context)
-export const useAuth0 = () => useContext(Auth0Context)
-
-export const Auth0Provider: FC<Props> = ({
-  children,
-  onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
-  ...initOptions
-}) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState()
-  const [auth0Client, setAuth0] = useState<Auth0Client>()
-  const [loading, setLoading] = useState(true)
-  const [popupOpen, setPopupOpen] = useState(false)
-
-  useEffect(() => {
-    const initAuth0 = async () => {
-      const auth0FromHook = await createAuth0Client(initOptions)
-      setAuth0(auth0FromHook)
-
-      if (window.location.search.includes('code=')) {
-        const {appState} = await auth0FromHook.handleRedirectCallback()
-        onRedirectCallback(appState)
-      }
-
-      const isAuthenticated = await auth0FromHook.isAuthenticated()
-
-      setIsAuthenticated(isAuthenticated)
-
-      if (isAuthenticated) {
-        const user = await auth0FromHook.getUser()
-        setUser(user)
-      }
-
-      setLoading(false)
-    }
-    initAuth0()
-  }, [])
-
-  if (!auth0Client) {
-    return null
+export const login = () => {
+  if (!auth) {
+    return
   }
 
-  const loginWithPopup = async (params = {}) => {
-    setPopupOpen(true)
-    try {
-      await auth0Client.loginWithPopup(params)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setPopupOpen(false)
-    }
-    const user = await auth0Client.getUser()
-    setUser(user)
-    setIsAuthenticated(true)
+  auth.authorize()
+}
+
+const setSession = (cb = () => {}) => (
+  err: auth0.Auth0Error | null,
+  authResult: auth0.Auth0DecodedHash | null
+) => {
+  if (err) {
+    navigate('/')
+    cb()
+    return
   }
 
-  const handleRedirectCallback = async () => {
-    setLoading(true)
-    await auth0Client.handleRedirectCallback()
-    const user = await auth0Client.getUser()
-    setLoading(false)
-    setIsAuthenticated(true)
-    setUser(user)
+  if (authResult && authResult.accessToken && authResult.idToken) {
+    let expiresAt = (authResult.expiresIn || 0) * 1000 + new Date().getTime()
+    tokens.accessToken = authResult.accessToken
+    tokens.idToken = authResult.idToken
+    tokens.expiresAt = expiresAt
+    user = authResult.idTokenPayload
+    localStorage.setItem(IS_AUTHENTICATED_KEY, 'true')
+    cb()
+  }
+}
+
+export const silentAuth = (callback: () => void) => {
+  if (!isAuthenticated() || !auth) return callback()
+  auth.checkSession({}, setSession(callback))
+}
+
+export const handleAuthentication = () => {
+  if (!auth) {
+    return
   }
 
-  return (
-    <Auth0Context.Provider
-      value={{
-        isAuthenticated,
-        user,
-        loading,
-        popupOpen,
-        loginWithPopup,
-        handleRedirectCallback,
-        getIdTokenClaims: auth0Client.getIdTokenClaims.bind(auth0Client),
-        loginWithRedirect: auth0Client.loginWithRedirect.bind(auth0Client),
-        getTokenSilently: auth0Client.getTokenSilently.bind(auth0Client),
-        getTokenWithPopup: auth0Client.getTokenWithPopup.bind(auth0Client),
-        logout: auth0Client.logout.bind(auth0Client),
-      }}
-    >
-      {children}
-    </Auth0Context.Provider>
-  )
+  auth.parseHash(setSession())
+}
+
+export const logout = () => {
+  if (!auth) {
+    return
+  }
+
+  localStorage.removeItem(IS_AUTHENTICATED_KEY)
+
+  auth.logout({returnTo: window.location.origin})
 }

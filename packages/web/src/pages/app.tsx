@@ -1,26 +1,27 @@
 import React, {useEffect} from 'react'
 import {navigate} from 'gatsby'
 
-import {useAuth0} from '../data/AuthClient'
+import {isAuthenticated} from '../data/AuthClient'
 import {useGetCurrentUserMutation} from '../data/Schema'
 import Layout from '../components/Layout'
 import SEO from '../components/Seo'
 
 const RedirectLogin = () => {
-  const {isAuthenticated} = useAuth0()
   const [{data}, getCurrentUser] = useGetCurrentUserMutation()
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       getCurrentUser({input: {}}).catch(err => {
         throw err
       })
+
+      return
     }
 
-    if (!isAuthenticated) {
-      navigate('/')
-    }
-  }, [isAuthenticated])
+    navigate('/')
+  }, [])
+
+  console.log(`>- data ->`, data)
 
   return null
 }

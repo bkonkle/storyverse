@@ -20,10 +20,11 @@
     "url": "https://github.com/gatsbyjs/gatsby/issues"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.5.0",
     "@material-ui/core": "^4.6.1",
     "@material-ui/icons": "^4.5.1",
-    "@urql/exchange-graphcache": "^1.1.2",
+    "@reach/router": "^1.2.1",
+    "@urql/exchange-graphcache": "^1.2.1",
+    "auth0-js": "^9.11.3",
     "graphql": "14.5.8",
     "isomorphic-fetch": "^2.2.1",
     "react": "16.8.3",
@@ -37,21 +38,22 @@
     "@graphql-codegen/typescript": "^1.8.3",
     "@graphql-codegen/typescript-operations": "^1.8.3",
     "@graphql-codegen/typescript-urql": "^1.8.3",
+    "@types/auth0-js": "^9.10.6",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/react-helmet": "^5.0.14",
-    "gatsby": "^2.17.13",
-    "gatsby-image": "^2.2.32",
-    "gatsby-plugin-create-client-paths": "^2.1.16",
-    "gatsby-plugin-manifest": "^2.2.27",
-    "gatsby-plugin-offline": "^3.0.20",
-    "gatsby-plugin-react-helmet": "^3.1.14",
-    "gatsby-plugin-sharp": "^2.2.38",
-    "gatsby-plugin-typescript": "^2.1.17",
-    "gatsby-source-filesystem": "^2.1.36",
-    "gatsby-transformer-sharp": "^2.3.4"
+    "gatsby": "^2.18.1",
+    "gatsby-image": "^2.2.33",
+    "gatsby-plugin-create-client-paths": "^2.1.17",
+    "gatsby-plugin-manifest": "^2.2.29",
+    "gatsby-plugin-offline": "^3.0.22",
+    "gatsby-plugin-react-helmet": "^3.1.15",
+    "gatsby-plugin-sharp": "^2.3.2",
+    "gatsby-plugin-typescript": "^2.1.19",
+    "gatsby-source-filesystem": "^2.1.38",
+    "gatsby-transformer-sharp": "^2.3.5"
   },
   "resolutions": {
-    "react": "16.8.3",
+    "react": "16.12.0",
     "mem": "^4.0.0"
   }
 }

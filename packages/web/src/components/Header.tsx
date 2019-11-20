@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 
-import {useAuth0} from '../data/AuthClient'
+import {isAuthenticated, login, logout} from '../data/AuthClient'
 import UserIcon from './UserIcon'
 
 interface Props {
@@ -28,7 +28,6 @@ const useStyles = makeStyles(theme => ({
 
 const Header: FC<Props> = ({siteTitle}) => {
   const classes = useStyles()
-  const {isAuthenticated, loginWithRedirect, logout} = useAuth0()
 
   return (
     <header>
@@ -45,12 +44,12 @@ const Header: FC<Props> = ({siteTitle}) => {
           <Typography variant="h6" className={classes.title}>
             {siteTitle}
           </Typography>
-          {!isAuthenticated && (
-            <Button color="inherit" onClick={loginWithRedirect}>
+          {!isAuthenticated() && (
+            <Button color="inherit" onClick={login}>
               Login
             </Button>
           )}
-          {isAuthenticated && <UserIcon onLogout={logout} />}
+          {isAuthenticated() && <UserIcon onLogout={logout} />}
         </Toolbar>
       </AppBar>
     </header>
