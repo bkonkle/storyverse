@@ -1,12 +1,19 @@
 import React, {FC} from 'react'
 import {useStaticQuery, graphql} from 'gatsby'
 import {Helmet} from 'react-helmet'
+import {makeStyles} from '@material-ui/core'
 
 import Header from './Header'
 
 interface Props {
   children?: React.ReactNode
 }
+
+const useStyles = makeStyles(theme => ({
+  main: {
+    marginTop: theme.spacing(10),
+  },
+}))
 
 const Layout: FC<Props> = ({children}) => {
   const data = useStaticQuery(graphql`
@@ -19,6 +26,8 @@ const Layout: FC<Props> = ({children}) => {
     }
   `)
 
+  const classes = useStyles()
+
   return (
     <>
       <Helmet>
@@ -28,7 +37,7 @@ const Layout: FC<Props> = ({children}) => {
         />
       </Helmet>
       <Header siteTitle={data.site.siteMetadata.title} />
-      <main>{children}</main>
+      <main className={classes.main}>{children}</main>
     </>
   )
 }

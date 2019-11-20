@@ -30,29 +30,27 @@ const Header: FC<Props> = ({siteTitle}) => {
   const classes = useStyles()
 
   return (
-    <header>
-      <AppBar>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            {siteTitle}
-          </Typography>
-          {!isAuthenticated() && (
-            <Button color="inherit" onClick={login}>
-              Login
-            </Button>
-          )}
-          {isAuthenticated() && <UserIcon onLogout={logout} />}
-        </Toolbar>
-      </AppBar>
-    </header>
+    <AppBar>
+      <Toolbar>
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" className={classes.title}>
+          {siteTitle}
+        </Typography>
+        {!isAuthenticated() && (
+          <Button color="inherit" onClick={login}>
+            Login
+          </Button>
+        )}
+        {isAuthenticated() && <UserIcon onLogout={logout} />}
+      </Toolbar>
+    </AppBar>
   )
 }
 

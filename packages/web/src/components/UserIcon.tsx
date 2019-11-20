@@ -1,19 +1,25 @@
-import React, {FC} from 'react'
+import React, {FC, useContext, useState} from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import CurrentUser from './CurrentUser'
 
 interface Props {
   onLogout(): void
 }
 
 const UserIcon: FC<Props> = ({onLogout}) => {
-  const [anchorEl, setAnchorEl] = React.useState()
+  const [anchorEl, setAnchorEl] = useState()
   const open = Boolean(anchorEl)
 
   const handleClose = () => {
     setAnchorEl(undefined)
+  }
+
+  const user = useContext(CurrentUser.Context)
+  if (!user) {
+    return null
   }
 
   return (

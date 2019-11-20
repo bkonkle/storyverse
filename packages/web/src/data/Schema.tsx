@@ -366,6 +366,11 @@ export enum UsersOrderBy {
   IsActiveDesc = 'IS_ACTIVE_DESC',
 }
 
+export type CurrentUserFragment = {__typename?: 'User'} & Pick<
+  User,
+  'id' | 'username' | 'isActive'
+>
+
 export type GetCurrentUserMutationVariables = {
   input: GetCurrentUserInput
 }
@@ -373,23 +378,27 @@ export type GetCurrentUserMutationVariables = {
 export type GetCurrentUserMutation = {__typename?: 'Mutation'} & {
   getCurrentUser: Maybe<
     {__typename?: 'GetCurrentUserPayload'} & {
-      user: Maybe<
-        {__typename?: 'User'} & Pick<User, 'id' | 'username' | 'isActive'>
-      >
+      user: Maybe<{__typename?: 'User'} & CurrentUserFragment>
     }
   >
 }
 
+export const CurrentUserFragmentDoc = gql`
+  fragment CurrentUser on User {
+    id
+    username
+    isActive
+  }
+`
 export const GetCurrentUserDocument = gql`
   mutation GetCurrentUser($input: GetCurrentUserInput!) {
     getCurrentUser(input: $input) {
       user {
-        id
-        username
-        isActive
+        ...CurrentUser
       }
     }
   }
+  ${CurrentUserFragmentDoc}
 `
 
 export function useGetCurrentUserMutation() {

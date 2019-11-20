@@ -1,40 +1,14 @@
-import React, {useEffect} from 'react'
-import {navigate} from 'gatsby'
+import React from 'react'
 
-import {isAuthenticated} from '../data/AuthClient'
-import {useGetCurrentUserMutation} from '../data/Schema'
 import App from '../components/App'
 import SEO from '../components/Seo'
 
-const RedirectLogin = () => {
-  const [{data}, getCurrentUser] = useGetCurrentUserMutation()
+const AppPage = () => (
+  <App>
+    <SEO title="App" />
+    <h1>Hi from the App!</h1>
+    <p>Welcome to the App!</p>
+  </App>
+)
 
-  useEffect(() => {
-    if (isAuthenticated()) {
-      getCurrentUser({input: {}}).catch(err => {
-        throw err
-      })
-
-      return
-    }
-
-    navigate('/')
-  }, [])
-
-  console.log(`>- data ->`, data)
-
-  return null
-}
-
-const SecondPage = () => {
-  return (
-    <App>
-      <SEO title="App" />
-      <RedirectLogin />
-      <h1>Hi from the App!</h1>
-      <p>Welcome to the App!</p>
-    </App>
-  )
-}
-
-export default SecondPage
+export default AppPage
