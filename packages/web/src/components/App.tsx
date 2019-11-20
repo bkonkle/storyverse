@@ -2,6 +2,8 @@ import React, {FC} from 'react'
 import {createClient, Provider, dedupExchange, fetchExchange} from 'urql'
 import {cacheExchange} from '@urql/exchange-graphcache'
 import fetch from 'isomorphic-fetch'
+
+import schema from '../../../../schema.json'
 import {Auth0Provider} from '../data/AuthClient'
 
 interface Props {
@@ -13,7 +15,22 @@ const client = createClient({
     process.env.GATSBY_API_URL ||
     'https://storyverse-prod-api.konkle.us/graphql',
   fetch,
-  exchanges: [dedupExchange, cacheExchange(), fetchExchange],
+  fetchOptions: () => {
+    if (typeof localStorage !== 'undefined') {
+      return {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('test')}`,
+        },
+      }
+    }
+
+    return {}
+  },
+  exchanges: [
+    dedupExchange,
+    cacheExchange({schema: schema.data}),
+    fetchExchange,
+  ],
 })
 
 const App: FC<Props> = ({children}) => (

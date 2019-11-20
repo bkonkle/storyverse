@@ -27,8 +27,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Header: FC<Props> = ({siteTitle}) => {
-  const {isAuthenticated, loginWithRedirect, logout} = useAuth0()
   const classes = useStyles()
+  const {isAuthenticated, loginWithRedirect, logout} = useAuth0()
 
   return (
     <header>

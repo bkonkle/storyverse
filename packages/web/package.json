@@ -9,7 +9,8 @@
     "dev": "gatsby develop",
     "serve": "gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "check.types": "cd ../../ && yarn check.types"
+    "check.types": "cd ../../ && yarn check.types",
+    "generate.schema": "graphql-codegen"
   },
   "repository": {
     "type": "git",

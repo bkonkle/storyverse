@@ -59,3 +59,6 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# GraphQL Schema
+schema.json

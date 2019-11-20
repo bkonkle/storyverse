@@ -59,7 +59,10 @@ export namespace Database {
 
 export namespace Server {
   export const port = Number(process.env.PORT || '4000')
-  export const corsHeaders = ['Link']
+}
+
+export namespace Environment {
+  export const isDev = process.env.NODE_ENV === 'development'
 }
 
 export namespace Graft {
@@ -69,6 +72,9 @@ export namespace Graft {
       additionalGraphQLContextFromRequest: Plugins.getGraphQLContext,
       pgSettings: Plugins.pgSettings,
       retryOnInitFail: true,
+      exportJsonSchemaPath: Environment.isDev
+        ? `${__dirname}/../../../schema.json`
+        : undefined,
     },
     jwt: {
       audience: Auth.audience,
@@ -79,17 +85,10 @@ export namespace Graft {
     jwks: {
       jwksUri: Auth.jwksUri,
     },
-    cors: {
-      allowedHeaders: Server.corsHeaders,
-    },
     database: {
       url: Database.url,
     },
   }
-}
-
-export namespace Environment {
-  export const isDev = process.env.NODE_ENV === 'development'
 }
 
 export default {Auth, Database, Server, Graft, Environment}
