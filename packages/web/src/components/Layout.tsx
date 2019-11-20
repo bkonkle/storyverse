@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import {useStaticQuery, graphql} from 'gatsby'
 import {Helmet} from 'react-helmet'
-import {makeStyles} from '@material-ui/core'
+import {makeStyles} from '@material-ui/core/styles'
 
 import Header from './Header'
 

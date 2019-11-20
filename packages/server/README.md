@@ -15,6 +15,8 @@ yarn
 Create a `.env` file:
 
 ```ini
+NODE_ENV=development
+
 AUTH0_JWKS_URI=https://storyverse-dev.auth0.com/.well-known/jwks.json
 AUTH0_AUDIENCE=localhost
 AUTH0_ISSUER=https://storyverse-dev.auth0.com/

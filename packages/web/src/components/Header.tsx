@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 
 import {isAuthenticated, login, logout} from '../data/AuthClient'
-import UserIcon from './UserIcon'
+import UserIcon from './profile/UserIcon'
 
 interface Props {
   siteTitle: string

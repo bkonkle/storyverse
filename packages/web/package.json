@@ -5,9 +5,9 @@
   "author": "Brandon Konkle <brandon@konkle.us>",
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
-    "dev": "gatsby develop",
-    "serve": "gatsby serve",
+    "build": "yarn generate.schema && gatsby build",
+    "dev": "concurrently \"yarn generate.schema -w\" \"gatsby develop\"",
+    "serve": "yarn generate.schema && gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
     "check.types": "cd ../../ && yarn check.types",
     "generate.schema": "graphql-codegen"
@@ -40,7 +40,9 @@
     "@graphql-codegen/typescript-urql": "^1.8.3",
     "@types/auth0-js": "^9.10.6",
     "@types/isomorphic-fetch": "^0.0.35",
+    "@types/reach__router": "^1.2.6",
     "@types/react-helmet": "^5.0.14",
+    "concurrently": "^5.0.0",
     "gatsby": "^2.18.1",
     "gatsby-image": "^2.2.33",
     "gatsby-plugin-create-client-paths": "^2.1.17",

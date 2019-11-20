@@ -1,0 +1,6 @@
+fragment CurrentProfile on Profile {
+  id
+  displayName
+  email
+  picture
+}

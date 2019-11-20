@@ -1,13 +1,20 @@
 import React from 'react'
+import {Router, Location} from '@reach/router'
 
 import App from '../components/App'
-import SEO from '../components/Seo'
+import Welcome from '../components/welcome/Welcome'
+import Profile from '../components/profile/Profile'
 
 const AppPage = () => (
   <App>
-    <SEO title="App" />
-    <h1>Hi from the App!</h1>
-    <p>Welcome to the App!</p>
+    <Location>
+      {({location}) => (
+        <Router location={location}>
+          <Welcome path="/app" />
+          <Profile path="/app/profile" />
+        </Router>
+      )}
+    </Location>
   </App>
 )
 

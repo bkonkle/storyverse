@@ -88,6 +88,7 @@ export namespace Graft {
     database: {
       url: Database.url,
     },
+    dev: Environment.isDev,
   }
 }
 
