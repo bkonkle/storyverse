@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import {RouteComponentProps} from '@reach/router'
 
-import SEO from '../Seo'
+import SEO from '../components/Seo'
 
 export const Welcome: FC<RouteComponentProps> = () => (
   <>

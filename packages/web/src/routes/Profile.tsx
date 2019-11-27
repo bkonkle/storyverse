@@ -2,7 +2,7 @@ import React, {FC} from 'react'
 import {RouteComponentProps} from '@reach/router'
 import Typography from '@material-ui/core/Typography'
 
-import SEO from '../Seo'
+import SEO from '../components/Seo'
 
 export const Profile: FC<RouteComponentProps> = () => (
   <>

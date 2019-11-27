@@ -3,12 +3,12 @@ import {makeStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 
-import {isAuthenticated, login, logout} from '../data/AuthClient'
-import UserIcon from './profile/UserIcon'
+import {isAuthenticated} from '../data/AuthClient'
+import UserIcon from './UserIcon'
+import LoginButton from './LoginButton'
 
 interface Props {
   siteTitle: string
@@ -43,12 +43,8 @@ const Header: FC<Props> = ({siteTitle}) => {
         <Typography variant="h6" className={classes.title}>
           {siteTitle}
         </Typography>
-        {!isAuthenticated() && (
-          <Button color="inherit" onClick={login}>
-            Login
-          </Button>
-        )}
-        {isAuthenticated() && <UserIcon onLogout={logout} />}
+        {!isAuthenticated() && <LoginButton />}
+        {isAuthenticated() && <UserIcon />}
       </Toolbar>
     </AppBar>
   )

@@ -9,8 +9,14 @@ fragment CurrentUser on User {
   }
 }
 
-mutation GetCurrentUser($input: GetCurrentUserInput!) {
-  getCurrentUser(input: $input) {
+query GetCurrentUser {
+  getCurrentUser {
+    ...CurrentUser
+  }
+}
+
+mutation createUser($input: CreateUserInput!) {
+  createUser(input: $input) {
     user {
       ...CurrentUser
     }

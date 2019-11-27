@@ -4,3 +4,11 @@ fragment CurrentProfile on Profile {
   email
   picture
 }
+
+mutation createProfile($input: CreateProfileInput!) {
+  createProfile(input: $input) {
+    profile {
+      ...CurrentProfile
+    }
+  }
+}

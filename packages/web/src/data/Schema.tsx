@@ -65,6 +65,7 @@ export type CreateUserInput = {
   clientMutationId?: Maybe<Scalars['String']>
   /** The `User` to be created by this mutation. */
   user: UserInput
+  profile?: Maybe<ProfileInput>
 }
 
 /** The output of our create `User` mutation. */
@@ -81,6 +82,7 @@ export type CreateUserPayload = {
   query?: Maybe<Query>
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>
+  profile?: Maybe<Profile>
 }
 
 /** The output of our create `User` mutation. */
@@ -165,35 +167,6 @@ export type DeleteUserPayloadUserEdgeArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>
 }
 
-/** All input for the `getCurrentUser` mutation. */
-export type GetCurrentUserInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   **/
-  clientMutationId?: Maybe<Scalars['String']>
-}
-
-/** The output of our `getCurrentUser` mutation. */
-export type GetCurrentUserPayload = {
-  __typename?: 'GetCurrentUserPayload'
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   **/
-  clientMutationId?: Maybe<Scalars['String']>
-  user?: Maybe<User>
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>
-  /** An edge for our `User`. May be used by Relay 1. */
-  userEdge?: Maybe<UsersEdge>
-}
-
-/** The output of our `getCurrentUser` mutation. */
-export type GetCurrentUserPayloadUserEdgeArgs = {
-  orderBy?: Maybe<Array<UsersOrderBy>>
-}
-
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation'
@@ -213,8 +186,6 @@ export type Mutation = {
   deleteUserById?: Maybe<DeleteUserPayload>
   /** Deletes a single `User` using a unique key. */
   deleteUserByUsername?: Maybe<DeleteUserPayload>
-  /** Get or create a user based on the logged-in JWT claims. */
-  getCurrentUser?: Maybe<GetCurrentUserPayload>
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -255,11 +226,6 @@ export type MutationDeleteUserByIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUsernameArgs = {
   input: DeleteUserByUsernameInput
-}
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationGetCurrentUserArgs = {
-  input: GetCurrentUserInput
 }
 
 /** An object with a globally unique `ID`. */
@@ -406,6 +372,8 @@ export type Query = Node & {
   profileById?: Maybe<Profile>
   userById?: Maybe<User>
   userByUsername?: Maybe<User>
+  /** Get a user based on the logged-in JWT claims. */
+  getCurrentUser?: Maybe<User>
 }
 
 /** The root query type which gives access points into the data universe. */
@@ -632,6 +600,18 @@ export type CurrentProfileFragment = {__typename?: 'Profile'} & Pick<
   'id' | 'displayName' | 'email' | 'picture'
 >
 
+export type CreateProfileMutationVariables = {
+  input: CreateProfileInput
+}
+
+export type CreateProfileMutation = {__typename?: 'Mutation'} & {
+  createProfile: Maybe<
+    {__typename?: 'CreateProfilePayload'} & {
+      profile: Maybe<{__typename?: 'Profile'} & CurrentProfileFragment>
+    }
+  >
+}
+
 export type CurrentUserFragment = {__typename?: 'User'} & Pick<
   User,
   'id' | 'username' | 'isActive'
@@ -641,13 +621,19 @@ export type CurrentUserFragment = {__typename?: 'User'} & Pick<
     }
   }
 
-export type GetCurrentUserMutationVariables = {
-  input: GetCurrentUserInput
+export type GetCurrentUserQueryVariables = {}
+
+export type GetCurrentUserQuery = {__typename?: 'Query'} & {
+  getCurrentUser: Maybe<{__typename?: 'User'} & CurrentUserFragment>
 }
 
-export type GetCurrentUserMutation = {__typename?: 'Mutation'} & {
-  getCurrentUser: Maybe<
-    {__typename?: 'GetCurrentUserPayload'} & {
+export type CreateUserMutationVariables = {
+  input: CreateUserInput
+}
+
+export type CreateUserMutation = {__typename?: 'Mutation'} & {
+  createUser: Maybe<
+    {__typename?: 'CreateUserPayload'} & {
       user: Maybe<{__typename?: 'User'} & CurrentUserFragment>
     }
   >
@@ -674,9 +660,43 @@ export const CurrentUserFragmentDoc = gql`
   }
   ${CurrentProfileFragmentDoc}
 `
+export const CreateProfileDocument = gql`
+  mutation createProfile($input: CreateProfileInput!) {
+    createProfile(input: $input) {
+      profile {
+        ...CurrentProfile
+      }
+    }
+  }
+  ${CurrentProfileFragmentDoc}
+`
+
+export function useCreateProfileMutation() {
+  return Urql.useMutation<
+    CreateProfileMutation,
+    CreateProfileMutationVariables
+  >(CreateProfileDocument)
+}
 export const GetCurrentUserDocument = gql`
-  mutation GetCurrentUser($input: GetCurrentUserInput!) {
-    getCurrentUser(input: $input) {
+  query GetCurrentUser {
+    getCurrentUser {
+      ...CurrentUser
+    }
+  }
+  ${CurrentUserFragmentDoc}
+`
+
+export function useGetCurrentUserQuery(
+  options: Omit<Urql.UseQueryArgs<GetCurrentUserQueryVariables>, 'query'> = {}
+) {
+  return Urql.useQuery<GetCurrentUserQuery>({
+    query: GetCurrentUserDocument,
+    ...options,
+  })
+}
+export const CreateUserDocument = gql`
+  mutation createUser($input: CreateUserInput!) {
+    createUser(input: $input) {
       user {
         ...CurrentUser
       }
@@ -685,9 +705,8 @@ export const GetCurrentUserDocument = gql`
   ${CurrentUserFragmentDoc}
 `
 
-export function useGetCurrentUserMutation() {
-  return Urql.useMutation<
-    GetCurrentUserMutation,
-    GetCurrentUserMutationVariables
-  >(GetCurrentUserDocument)
+export function useCreateUserMutation() {
+  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(
+    CreateUserDocument
+  )
 }

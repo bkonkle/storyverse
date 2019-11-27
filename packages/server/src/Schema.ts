@@ -21,6 +21,40 @@ export type Scalars = {
   Datetime: any
 }
 
+/** All input for the create `Profile` mutation. */
+export type CreateProfileInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Profile` to be created by this mutation. */
+  profile: ProfileInput
+}
+
+/** The output of our create `Profile` mutation. */
+export type CreateProfilePayload = {
+  __typename?: 'CreateProfilePayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Profile` that was created by this mutation. */
+  profile?: Maybe<Profile>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `User` that is related to this `Profile`. */
+  userByUserId?: Maybe<User>
+  /** An edge for our `Profile`. May be used by Relay 1. */
+  profileEdge?: Maybe<ProfilesEdge>
+}
+
+/** The output of our create `Profile` mutation. */
+export type CreateProfilePayloadProfileEdgeArgs = {
+  orderBy?: Maybe<Array<ProfilesOrderBy>>
+}
+
 /** All input for the create `User` mutation. */
 export type CreateUserInput = {
   /**
@@ -30,6 +64,7 @@ export type CreateUserInput = {
   clientMutationId?: Maybe<Scalars['String']>
   /** The `User` to be created by this mutation. */
   user: UserInput
+  profile?: Maybe<ProfileInput>
 }
 
 /** The output of our create `User` mutation. */
@@ -46,11 +81,46 @@ export type CreateUserPayload = {
   query?: Maybe<Query>
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>
+  profile?: Maybe<Profile>
 }
 
 /** The output of our create `User` mutation. */
 export type CreateUserPayloadUserEdgeArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>
+}
+
+/** All input for the `deleteProfileById` mutation. */
+export type DeleteProfileByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  id: Scalars['UUID']
+}
+
+/** The output of our delete `Profile` mutation. */
+export type DeleteProfilePayload = {
+  __typename?: 'DeleteProfilePayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Profile` that was deleted by this mutation. */
+  profile?: Maybe<Profile>
+  deletedProfileId?: Maybe<Scalars['ID']>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `User` that is related to this `Profile`. */
+  userByUserId?: Maybe<User>
+  /** An edge for our `Profile`. May be used by Relay 1. */
+  profileEdge?: Maybe<ProfilesEdge>
+}
+
+/** The output of our delete `Profile` mutation. */
+export type DeleteProfilePayloadProfileEdgeArgs = {
+  orderBy?: Maybe<Array<ProfilesOrderBy>>
 }
 
 /** All input for the `deleteUserById` mutation. */
@@ -96,55 +166,40 @@ export type DeleteUserPayloadUserEdgeArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>
 }
 
-/** All input for the `getCurrentUser` mutation. */
-export type GetCurrentUserInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   **/
-  clientMutationId?: Maybe<Scalars['String']>
-}
-
-/** The output of our `getCurrentUser` mutation. */
-export type GetCurrentUserPayload = {
-  __typename?: 'GetCurrentUserPayload'
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   **/
-  clientMutationId?: Maybe<Scalars['String']>
-  user?: Maybe<User>
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>
-  /** An edge for our `User`. May be used by Relay 1. */
-  userEdge?: Maybe<UsersEdge>
-}
-
-/** The output of our `getCurrentUser` mutation. */
-export type GetCurrentUserPayloadUserEdgeArgs = {
-  orderBy?: Maybe<Array<UsersOrderBy>>
-}
-
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation'
+  /** Creates a single `Profile`. */
+  createProfile?: Maybe<CreateProfilePayload>
   /** Creates a single `User`. */
   createUser?: Maybe<CreateUserPayload>
+  /** Updates a single `Profile` using a unique key and a patch. */
+  updateProfileById?: Maybe<UpdateProfilePayload>
   /** Updates a single `User` using a unique key and a patch. */
   updateUserById?: Maybe<UpdateUserPayload>
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUsername?: Maybe<UpdateUserPayload>
+  /** Deletes a single `Profile` using a unique key. */
+  deleteProfileById?: Maybe<DeleteProfilePayload>
   /** Deletes a single `User` using a unique key. */
   deleteUserById?: Maybe<DeleteUserPayload>
   /** Deletes a single `User` using a unique key. */
   deleteUserByUsername?: Maybe<DeleteUserPayload>
-  /** Get or create a user based on the logged-in JWT claims. */
-  getCurrentUser?: Maybe<GetCurrentUserPayload>
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateProfileArgs = {
+  input: CreateProfileInput
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserArgs = {
   input: CreateUserInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateProfileByIdArgs = {
+  input: UpdateProfileByIdInput
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -158,6 +213,11 @@ export type MutationUpdateUserByUsernameArgs = {
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteProfileByIdArgs = {
+  input: DeleteProfileByIdInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByIdArgs = {
   input: DeleteUserByIdInput
 }
@@ -165,11 +225,6 @@ export type MutationDeleteUserByIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUsernameArgs = {
   input: DeleteUserByUsernameInput
-}
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationGetCurrentUserArgs = {
-  input: GetCurrentUserInput
 }
 
 /** An object with a globally unique `ID`. */
@@ -191,6 +246,112 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['Cursor']>
 }
 
+export type Profile = {
+  __typename?: 'Profile'
+  id: Scalars['UUID']
+  createdAt: Scalars['Datetime']
+  updatedAt: Scalars['Datetime']
+  /** A display name */
+  displayName?: Maybe<Scalars['String']>
+  /** An email address */
+  email?: Maybe<Scalars['String']>
+  /** A Profile photo */
+  picture?: Maybe<Scalars['String']>
+  /** The User that created the Profile. */
+  userId: Scalars['UUID']
+  /** Reads a single `User` that is related to this `Profile`. */
+  userByUserId?: Maybe<User>
+}
+
+/** A condition to be used against `Profile` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type ProfileCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['UUID']>
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>
+  /** Checks for equality with the object’s `updatedAt` field. */
+  updatedAt?: Maybe<Scalars['Datetime']>
+  /** Checks for equality with the object’s `displayName` field. */
+  displayName?: Maybe<Scalars['String']>
+  /** Checks for equality with the object’s `email` field. */
+  email?: Maybe<Scalars['String']>
+  /** Checks for equality with the object’s `picture` field. */
+  picture?: Maybe<Scalars['String']>
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['UUID']>
+}
+
+/** An input for mutations affecting `Profile` */
+export type ProfileInput = {
+  id?: Maybe<Scalars['UUID']>
+  createdAt?: Maybe<Scalars['Datetime']>
+  updatedAt?: Maybe<Scalars['Datetime']>
+  /** A display name */
+  displayName?: Maybe<Scalars['String']>
+  /** An email address */
+  email?: Maybe<Scalars['String']>
+  /** A Profile photo */
+  picture?: Maybe<Scalars['String']>
+  /** The User that created the Profile. */
+  userId: Scalars['UUID']
+}
+
+/** Represents an update to a `Profile`. Fields that are set will be updated. */
+export type ProfilePatch = {
+  id?: Maybe<Scalars['UUID']>
+  createdAt?: Maybe<Scalars['Datetime']>
+  updatedAt?: Maybe<Scalars['Datetime']>
+  /** A display name */
+  displayName?: Maybe<Scalars['String']>
+  /** An email address */
+  email?: Maybe<Scalars['String']>
+  /** A Profile photo */
+  picture?: Maybe<Scalars['String']>
+  /** The User that created the Profile. */
+  userId?: Maybe<Scalars['UUID']>
+}
+
+/** A connection to a list of `Profile` values. */
+export type ProfilesConnection = {
+  __typename?: 'ProfilesConnection'
+  /** A list of `Profile` objects. */
+  nodes: Array<Profile>
+  /** A list of edges which contains the `Profile` and cursor to aid in pagination. */
+  edges: Array<ProfilesEdge>
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** The count of *all* `Profile` you could get from the connection. */
+  totalCount: Scalars['Int']
+}
+
+/** A `Profile` edge in the connection. */
+export type ProfilesEdge = {
+  __typename?: 'ProfilesEdge'
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>
+  /** The `Profile` at the end of the edge. */
+  node: Profile
+}
+
+/** Methods to use when ordering `Profile`. */
+export enum ProfilesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  UpdatedAtAsc = 'UPDATED_AT_ASC',
+  UpdatedAtDesc = 'UPDATED_AT_DESC',
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  EmailAsc = 'EMAIL_ASC',
+  EmailDesc = 'EMAIL_DESC',
+  PictureAsc = 'PICTURE_ASC',
+  PictureDesc = 'PICTURE_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+}
+
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
   __typename?: 'Query'
@@ -203,15 +364,31 @@ export type Query = Node & {
   nodeId: Scalars['ID']
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>
+  /** Reads and enables pagination through a set of `Profile`. */
+  allProfiles?: Maybe<ProfilesConnection>
   /** Reads and enables pagination through a set of `User`. */
   allUsers?: Maybe<UsersConnection>
+  profileById?: Maybe<Profile>
   userById?: Maybe<User>
   userByUsername?: Maybe<User>
+  /** Get a user based on the logged-in JWT claims. */
+  getCurrentUser?: Maybe<User>
 }
 
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID']
+}
+
+/** The root query type which gives access points into the data universe. */
+export type QueryAllProfilesArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<ProfilesOrderBy>>
+  condition?: Maybe<ProfileCondition>
 }
 
 /** The root query type which gives access points into the data universe. */
@@ -226,6 +403,11 @@ export type QueryAllUsersArgs = {
 }
 
 /** The root query type which gives access points into the data universe. */
+export type QueryProfileByIdArgs = {
+  id: Scalars['UUID']
+}
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserByIdArgs = {
   id: Scalars['UUID']
 }
@@ -233,6 +415,41 @@ export type QueryUserByIdArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByUsernameArgs = {
   username: Scalars['String']
+}
+
+/** All input for the `updateProfileById` mutation. */
+export type UpdateProfileByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** An object where the defined keys will be set on the `Profile` being updated. */
+  profilePatch: ProfilePatch
+  id: Scalars['UUID']
+}
+
+/** The output of our update `Profile` mutation. */
+export type UpdateProfilePayload = {
+  __typename?: 'UpdateProfilePayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Profile` that was updated by this mutation. */
+  profile?: Maybe<Profile>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `User` that is related to this `Profile`. */
+  userByUserId?: Maybe<User>
+  /** An edge for our `Profile`. May be used by Relay 1. */
+  profileEdge?: Maybe<ProfilesEdge>
+}
+
+/** The output of our update `Profile` mutation. */
+export type UpdateProfilePayloadProfileEdgeArgs = {
+  orderBy?: Maybe<Array<ProfilesOrderBy>>
 }
 
 /** All input for the `updateUserById` mutation. */
@@ -290,6 +507,18 @@ export type User = {
   username: Scalars['String']
   /** If false, the User is suspended. */
   isActive?: Maybe<Scalars['Boolean']>
+  /** Reads and enables pagination through a set of `Profile`. */
+  profilesByUserId: ProfilesConnection
+}
+
+export type UserProfilesByUserIdArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<ProfilesOrderBy>>
+  condition?: Maybe<ProfileCondition>
 }
 
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -365,9 +594,60 @@ export enum UsersOrderBy {
   IsActiveDesc = 'IS_ACTIVE_DESC',
 }
 
+export type ProfileDataFragment = {__typename?: 'Profile'} & Pick<
+  Profile,
+  'id' | 'displayName' | 'email' | 'picture' | 'createdAt' | 'updatedAt'
+>
+
+export type AllProfilesQueryVariables = {
+  condition?: Maybe<ProfileCondition>
+}
+
+export type AllProfilesQuery = {__typename?: 'Query'} & {
+  allProfiles: Maybe<
+    {__typename?: 'ProfilesConnection'} & {
+      nodes: Array<{__typename?: 'Profile'} & ProfileDataFragment>
+    }
+  >
+}
+
+export type ProfileByIdQueryVariables = {
+  id: Scalars['UUID']
+}
+
+export type ProfileByIdQuery = {__typename?: 'Query'} & {
+  profileById: Maybe<{__typename?: 'Profile'} & ProfileDataFragment>
+}
+
+export type CreateProfileMutationVariables = {
+  input: CreateProfileInput
+}
+
+export type CreateProfileMutation = {__typename?: 'Mutation'} & {
+  createProfile: Maybe<
+    {__typename?: 'CreateProfilePayload'} & Pick<
+      CreateProfilePayload,
+      'clientMutationId'
+    > & {profile: Maybe<{__typename?: 'Profile'} & ProfileDataFragment>}
+  >
+}
+
+export type UpdateProfileByIdMutationVariables = {
+  input: UpdateProfileByIdInput
+}
+
+export type UpdateProfileByIdMutation = {__typename?: 'Mutation'} & {
+  updateProfileById: Maybe<
+    {__typename?: 'UpdateProfilePayload'} & Pick<
+      UpdateProfilePayload,
+      'clientMutationId'
+    > & {profile: Maybe<{__typename?: 'Profile'} & ProfileDataFragment>}
+  >
+}
+
 export type UserDataFragment = {__typename?: 'User'} & Pick<
   User,
-  'id' | 'username' | 'isActive' | 'createdAt' | 'updatedAt'
+  'id' | 'username' | 'createdAt' | 'updatedAt'
 >
 
 export type AllUsersQueryVariables = {
@@ -416,14 +696,63 @@ export type UpdateUserByIdMutation = {__typename?: 'Mutation'} & {
   >
 }
 
+export const ProfileDataFragmentDoc = gql`
+  fragment ProfileData on Profile {
+    id
+    displayName
+    email
+    picture
+    createdAt
+    updatedAt
+  }
+`
 export const UserDataFragmentDoc = gql`
   fragment UserData on User {
     id
     username
-    isActive
     createdAt
     updatedAt
   }
+`
+export const AllProfilesDocument = gql`
+  query allProfiles($condition: ProfileCondition) {
+    allProfiles(condition: $condition) {
+      nodes {
+        ...ProfileData
+      }
+    }
+  }
+  ${ProfileDataFragmentDoc}
+`
+export const ProfileByIdDocument = gql`
+  query profileById($id: UUID!) {
+    profileById(id: $id) {
+      ...ProfileData
+    }
+  }
+  ${ProfileDataFragmentDoc}
+`
+export const CreateProfileDocument = gql`
+  mutation createProfile($input: CreateProfileInput!) {
+    createProfile(input: $input) {
+      clientMutationId
+      profile {
+        ...ProfileData
+      }
+    }
+  }
+  ${ProfileDataFragmentDoc}
+`
+export const UpdateProfileByIdDocument = gql`
+  mutation updateProfileById($input: UpdateProfileByIdInput!) {
+    updateProfileById(input: $input) {
+      clientMutationId
+      profile {
+        ...ProfileData
+      }
+    }
+  }
+  ${ProfileDataFragmentDoc}
 `
 export const AllUsersDocument = gql`
   query allUsers($condition: UserCondition) {

@@ -1,7 +1,6 @@
 fragment UserData on User {
   id
   username
-  isActive
   createdAt
   updatedAt
 }

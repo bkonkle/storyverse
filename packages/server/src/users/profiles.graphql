@@ -1,0 +1,40 @@
+fragment ProfileData on Profile {
+  id
+  displayName
+  email
+  picture
+  createdAt
+  updatedAt
+}
+
+query allProfiles($condition: ProfileCondition) {
+  allProfiles(condition: $condition) {
+    nodes {
+      ...ProfileData
+    }
+  }
+}
+
+query profileById($id: UUID!) {
+  profileById(id: $id) {
+    ...ProfileData
+  }
+}
+
+mutation createProfile($input: CreateProfileInput!) {
+  createProfile(input: $input) {
+    clientMutationId
+    profile {
+      ...ProfileData
+    }
+  }
+}
+
+mutation updateProfileById($input: UpdateProfileByIdInput!) {
+  updateProfileById(input: $input) {
+    clientMutationId
+    profile {
+      ...ProfileData
+    }
+  }
+}

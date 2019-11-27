@@ -7,7 +7,9 @@ interface AuthTokens {
   expiresAt?: number
 }
 
-const IS_AUTHENTICATED_KEY = 'storyverse:isAuthenticated'
+enum Keys {
+  isAuthenticated = 'storyverse:isAuthenticated',
+}
 
 const isBrowser = typeof window !== 'undefined'
 const clientID = process.env.GATSBY_AUTH0_CLIENT_ID
@@ -33,12 +35,15 @@ export const tokens: AuthTokens = {
 
 export let user: auth0.Auth0UserProfile | undefined
 
-export const isAuthenticated = () => {
-  if (!auth) {
-    return
-  }
+export const isAuthenticated = () =>
+  localStorage.getItem(Keys.isAuthenticated) === 'true'
 
-  return localStorage.getItem(IS_AUTHENTICATED_KEY) === 'true'
+export const setIsAuthenticated = (value: boolean) => {
+  if (value) {
+    localStorage.setItem(Keys.isAuthenticated, 'true')
+  } else {
+    localStorage.removeItem(Keys.isAuthenticated)
+  }
 }
 
 export const login = () => {
@@ -54,24 +59,29 @@ const setSession = (cb = () => {}) => (
   authResult: auth0.Auth0DecodedHash | null
 ) => {
   if (err) {
+    setIsAuthenticated(false)
     navigate('/')
     cb()
     return
   }
 
-  if (authResult && authResult.accessToken && authResult.idToken) {
+  if (authResult?.accessToken && authResult.idToken) {
     let expiresAt = (authResult.expiresIn || 0) * 1000 + new Date().getTime()
     tokens.accessToken = authResult.accessToken
     tokens.idToken = authResult.idToken
     tokens.expiresAt = expiresAt
     user = authResult.idTokenPayload
-    localStorage.setItem(IS_AUTHENTICATED_KEY, 'true')
+
+    setIsAuthenticated(true)
     cb()
   }
 }
 
 export const silentAuth = (callback: () => void) => {
-  if (!isAuthenticated() || !auth) return callback()
+  if (!auth || !isAuthenticated()) {
+    return callback()
+  }
+
   auth.checkSession({}, setSession(callback))
 }
 
@@ -80,7 +90,11 @@ export const handleAuthentication = () => {
     return
   }
 
-  auth.parseHash(setSession())
+  auth.parseHash(
+    setSession(() => {
+      navigate('/app')
+    })
+  )
 }
 
 export const logout = () => {
@@ -88,7 +102,6 @@ export const logout = () => {
     return
   }
 
-  localStorage.removeItem(IS_AUTHENTICATED_KEY)
-
+  setIsAuthenticated(false)
   auth.logout({returnTo: window.location.origin})
 }

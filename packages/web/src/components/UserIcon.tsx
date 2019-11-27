@@ -1,4 +1,4 @@
-import React, {FC, useContext, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {navigate} from 'gatsby'
 import {makeStyles} from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
@@ -8,11 +8,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 
-import CurrentUser from '../CurrentUser'
-
-interface Props {
-  onLogout(): void
-}
+import {logout} from '../data/AuthClient'
+import {useGetCurrentUserQuery, useCreateUserMutation} from '../data/Schema'
 
 const useStyles = makeStyles(theme => ({
   avatarMenu: {
@@ -28,10 +25,28 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const UserIcon: FC<Props> = ({onLogout}) => {
+const UserIcon: FC = () => {
   const classes = useStyles()
-
+  const [{data, fetching}] = useGetCurrentUserQuery()
+  const [, createUser] = useCreateUserMutation()
   const [anchorEl, setAnchorEl] = useState()
+
+  useEffect(() => {
+    if (data?.getCurrentUser === null) {
+      // The user doesn't exist in the database yet
+      console.log("You don't exist!")
+    }
+  }, [data])
+
+  if (fetching || !data) {
+    return null
+  }
+
+  const user = data.getCurrentUser
+  const profile = user?.profilesByUserId.nodes[0]
+  const displayName = profile?.displayName || 'New User'
+  const picture = profile?.picture || undefined
+
   const open = Boolean(anchorEl)
 
   const handleClose = () => {
@@ -42,15 +57,6 @@ const UserIcon: FC<Props> = ({onLogout}) => {
     navigate('/app/profile')
     handleClose()
   }
-
-  const user = useContext(CurrentUser.Context)
-  if (!user) {
-    return null
-  }
-
-  const profile = user.profilesByUserId.nodes[0]
-  const displayName = (profile && profile.displayName) || 'New User'
-  const picture = (profile && profile.picture) || undefined
 
   return (
     <div>
@@ -85,7 +91,7 @@ const UserIcon: FC<Props> = ({onLogout}) => {
           <Typography align="center">{displayName}</Typography>
         </MenuItem>
         <MenuItem></MenuItem>
-        <MenuItem onClick={onLogout}>Log Out</MenuItem>
+        <MenuItem onClick={logout}>Log Out</MenuItem>
       </Menu>
     </div>
   )

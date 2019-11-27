@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn generate.schema && gatsby build",
-    "dev": "concurrently \"yarn generate.schema -w\" \"gatsby develop\"",
+    "dev": "concurrently -r \"yarn generate.schema -w\" \"gatsby develop\"",
     "serve": "yarn generate.schema && gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
     "check.types": "cd ../../ && yarn check.types",
