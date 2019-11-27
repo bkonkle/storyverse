@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 
 import {logout} from '../data/AuthClient'
+import {handleUserData, getProfile} from '../data/UserData'
 import {useGetCurrentUserQuery, useCreateUserMutation} from '../data/Schema'
 
 const useStyles = makeStyles(theme => ({
@@ -31,19 +32,13 @@ const UserIcon: FC = () => {
   const [, createUser] = useCreateUserMutation()
   const [anchorEl, setAnchorEl] = useState()
 
-  useEffect(() => {
-    if (data?.getCurrentUser === null) {
-      // The user doesn't exist in the database yet
-      console.log("You don't exist!")
-    }
-  }, [data])
+  useEffect(handleUserData(createUser, data), [data])
 
   if (fetching || !data) {
     return null
   }
 
-  const user = data.getCurrentUser
-  const profile = user?.profilesByUserId.nodes[0]
+  const profile = getProfile(data.getCurrentUser)
   const displayName = profile?.displayName || 'New User'
   const picture = profile?.picture || undefined
 

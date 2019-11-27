@@ -1,24 +1,24 @@
-fragment CurrentUser on User {
+fragment UserData on User {
   id
   username
   isActive
   profilesByUserId(first: 1) {
     nodes {
-      ...CurrentProfile
+      ...ProfileData
     }
   }
 }
 
 query GetCurrentUser {
   getCurrentUser {
-    ...CurrentUser
+    ...UserData
   }
 }
 
 mutation createUser($input: CreateUserInput!) {
   createUser(input: $input) {
     user {
-      ...CurrentUser
+      ...UserData
     }
   }
 }

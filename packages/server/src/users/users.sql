@@ -4,7 +4,7 @@
 DROP FUNCTION IF EXISTS get_current_user;
 
 CREATE FUNCTION get_current_user() RETURNS users AS $$
-  SELECT * FROM users WHERE username = current_setting('jwt.claims.sub');
+  SELECT * FROM users WHERE users.username = current_setting('jwt.claims.sub');
 $$ LANGUAGE sql STABLE;
 
 COMMENT ON FUNCTION get_current_user IS E'Get a user based on the logged-in JWT claims.';

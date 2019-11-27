@@ -14,7 +14,7 @@ export const createProfileWithUser = makePluginByCombiningPlugins(
   makeExtendSchemaPlugin({
     typeDefs: gql`
       extend input CreateUserInput {
-        profile: ProfileInput
+        profile: ProfilePatch
       }
 
       extend type CreateUserPayload {

@@ -65,7 +65,7 @@ export type CreateUserInput = {
   clientMutationId?: Maybe<Scalars['String']>
   /** The `User` to be created by this mutation. */
   user: UserInput
-  profile?: Maybe<ProfileInput>
+  profile?: Maybe<ProfilePatch>
 }
 
 /** The output of our create `User` mutation. */
@@ -595,7 +595,7 @@ export enum UsersOrderBy {
   IsActiveDesc = 'IS_ACTIVE_DESC',
 }
 
-export type CurrentProfileFragment = {__typename?: 'Profile'} & Pick<
+export type ProfileDataFragment = {__typename?: 'Profile'} & Pick<
   Profile,
   'id' | 'displayName' | 'email' | 'picture'
 >
@@ -607,24 +607,24 @@ export type CreateProfileMutationVariables = {
 export type CreateProfileMutation = {__typename?: 'Mutation'} & {
   createProfile: Maybe<
     {__typename?: 'CreateProfilePayload'} & {
-      profile: Maybe<{__typename?: 'Profile'} & CurrentProfileFragment>
+      profile: Maybe<{__typename?: 'Profile'} & ProfileDataFragment>
     }
   >
 }
 
-export type CurrentUserFragment = {__typename?: 'User'} & Pick<
+export type UserDataFragment = {__typename?: 'User'} & Pick<
   User,
   'id' | 'username' | 'isActive'
 > & {
     profilesByUserId: {__typename?: 'ProfilesConnection'} & {
-      nodes: Array<{__typename?: 'Profile'} & CurrentProfileFragment>
+      nodes: Array<{__typename?: 'Profile'} & ProfileDataFragment>
     }
   }
 
 export type GetCurrentUserQueryVariables = {}
 
 export type GetCurrentUserQuery = {__typename?: 'Query'} & {
-  getCurrentUser: Maybe<{__typename?: 'User'} & CurrentUserFragment>
+  getCurrentUser: Maybe<{__typename?: 'User'} & UserDataFragment>
 }
 
 export type CreateUserMutationVariables = {
@@ -634,41 +634,41 @@ export type CreateUserMutationVariables = {
 export type CreateUserMutation = {__typename?: 'Mutation'} & {
   createUser: Maybe<
     {__typename?: 'CreateUserPayload'} & {
-      user: Maybe<{__typename?: 'User'} & CurrentUserFragment>
+      user: Maybe<{__typename?: 'User'} & UserDataFragment>
     }
   >
 }
 
-export const CurrentProfileFragmentDoc = gql`
-  fragment CurrentProfile on Profile {
+export const ProfileDataFragmentDoc = gql`
+  fragment ProfileData on Profile {
     id
     displayName
     email
     picture
   }
 `
-export const CurrentUserFragmentDoc = gql`
-  fragment CurrentUser on User {
+export const UserDataFragmentDoc = gql`
+  fragment UserData on User {
     id
     username
     isActive
     profilesByUserId(first: 1) {
       nodes {
-        ...CurrentProfile
+        ...ProfileData
       }
     }
   }
-  ${CurrentProfileFragmentDoc}
+  ${ProfileDataFragmentDoc}
 `
 export const CreateProfileDocument = gql`
   mutation createProfile($input: CreateProfileInput!) {
     createProfile(input: $input) {
       profile {
-        ...CurrentProfile
+        ...ProfileData
       }
     }
   }
-  ${CurrentProfileFragmentDoc}
+  ${ProfileDataFragmentDoc}
 `
 
 export function useCreateProfileMutation() {
@@ -680,10 +680,10 @@ export function useCreateProfileMutation() {
 export const GetCurrentUserDocument = gql`
   query GetCurrentUser {
     getCurrentUser {
-      ...CurrentUser
+      ...UserData
     }
   }
-  ${CurrentUserFragmentDoc}
+  ${UserDataFragmentDoc}
 `
 
 export function useGetCurrentUserQuery(
@@ -698,11 +698,11 @@ export const CreateUserDocument = gql`
   mutation createUser($input: CreateUserInput!) {
     createUser(input: $input) {
       user {
-        ...CurrentUser
+        ...UserData
       }
     }
   }
-  ${CurrentUserFragmentDoc}
+  ${UserDataFragmentDoc}
 `
 
 export function useCreateUserMutation() {

@@ -1,4 +1,4 @@
-fragment CurrentProfile on Profile {
+fragment ProfileData on Profile {
   id
   displayName
   email
@@ -8,7 +8,7 @@ fragment CurrentProfile on Profile {
 mutation createProfile($input: CreateProfileInput!) {
   createProfile(input: $input) {
     profile {
-      ...CurrentProfile
+      ...ProfileData
     }
   }
 }
