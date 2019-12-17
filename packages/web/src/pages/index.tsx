@@ -4,6 +4,8 @@ import {navigate} from 'gatsby'
 import {isAuthenticated, handleAuthentication} from '../data/AuthClient'
 import App from '../components/App'
 import SEO from '../components/Seo'
+import Hero from '../components/welcome/Hero'
+import Footer from '../components/welcome/Footer'
 
 const IndexPage = () => {
   useEffect(() => {
@@ -18,7 +20,9 @@ const IndexPage = () => {
 
   return (
     <App>
-      <SEO title="Home" />
+      <SEO title="Welcome" />
+      <Hero />
+      <Footer />
     </App>
   )
 }

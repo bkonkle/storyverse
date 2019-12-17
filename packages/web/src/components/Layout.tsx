@@ -21,6 +21,7 @@ const Layout: FC<Props> = ({children}) => {
       site {
         siteMetadata {
           title
+          description
         }
       }
     }
@@ -36,7 +37,10 @@ const Layout: FC<Props> = ({children}) => {
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
         />
       </Helmet>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Header
+        siteTitle={data.site.siteMetadata.title}
+        siteDescription={data.site.siteMetadata.description}
+      />
       <main className={classes.main}>{children}</main>
     </>
   )

@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: 'Storyverse',
-    description: 'The Storyverse web client',
+    description: 'Collaborative Story Universes',
     author: '@bkonkle',
   },
   plugins: [

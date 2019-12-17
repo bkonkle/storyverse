@@ -12,6 +12,7 @@ import LoginButton from './LoginButton'
 
 interface Props {
   siteTitle: string
+  siteDescription?: string
 }
 
 const useStyles = makeStyles(theme => ({
@@ -24,10 +25,14 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  subtitle: {
+    marginLeft: theme.spacing(2),
+  },
 }))
 
-const Header: FC<Props> = ({siteTitle}) => {
+const Header: FC<Props> = ({siteTitle, siteDescription}) => {
   const classes = useStyles()
+  const isAuth = isAuthenticated()
 
   return (
     <AppBar>
@@ -38,13 +43,22 @@ const Header: FC<Props> = ({siteTitle}) => {
           color="inherit"
           aria-label="menu"
         >
-          <MenuIcon />
+          {isAuth && <MenuIcon />}
         </IconButton>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h5" className={classes.title}>
           {siteTitle}
+          {siteDescription && (
+            <Typography
+              variant="subtitle1"
+              display="inline"
+              className={classes.subtitle}
+            >
+              {siteDescription}
+            </Typography>
+          )}
         </Typography>
-        {!isAuthenticated() && <LoginButton />}
-        {isAuthenticated() && <UserIcon />}
+        {!isAuth && <LoginButton />}
+        {isAuth && <UserIcon />}
       </Toolbar>
     </AppBar>
   )
