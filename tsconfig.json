@@ -13,7 +13,7 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "build",
+    "outDir": ".build",
     "preserveConstEnums": true,
     "removeComments": true,
     "resolveJsonModule": true,
@@ -22,12 +22,22 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "es2018",
+    "target": "es2017",
     "lib": ["dom", "es2017"],
     "paths": {
       "*": ["*", "src/bindings/*"]
     }
   },
-  "include": ["src", "packages/*/src", "packages/*/migrations"],
-  "exclude": ["node_modules", "packages/*/node_modules", "packages/*/build"]
+  "include": [
+    "src",
+    "packages/*/src",
+    "packages/*/migrations",
+    "packages/**/__tests__/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "packages/*/node_modules",
+    "packages/*/.build",
+    "packages/**/*.gen.tsx"
+  ]
 }

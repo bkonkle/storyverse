@@ -1,17 +1,12 @@
 module.exports = {
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-  },
-  testRegex: '(/(test|__tests__)/.*(\\.|/)(test|spec))\\.(jsx?|tsx?)$',
-  testURL: 'http://localhost',
-  roots: ['<rootDir>/src/'],
-  testPathIgnorePatterns: ['/node_modules/', '/build/'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  collectCoverageFrom: ['src/**/*.{ts,tsx.js,jsx,mjs}'],
+  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,mjs}'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
+  roots: ['<rootDir>/src'],
   setupFilesAfterEnv: ['<rootDir>/src/utils/TestSetup.ts'],
-  globals: {
-    'ts-jest': {
-      diagnostics: false,
-    },
+  testPathIgnorePatterns: ['/node_modules/', '/lib/', '/.build/'],
+  testRegex: '(/(test|__tests__)/.*(\\.|/)(test|spec))\\.[j|t]sx?$',
+  testURL: 'http://localhost',
+  transform: {
+    '^.+\\.(js|ts)x?$': 'babel-jest',
   },
 }

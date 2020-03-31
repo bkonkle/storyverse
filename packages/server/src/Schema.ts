@@ -64,7 +64,7 @@ export type CreateUserInput = {
   clientMutationId?: Maybe<Scalars['String']>
   /** The `User` to be created by this mutation. */
   user: UserInput
-  profile?: Maybe<ProfileInput>
+  profile?: Maybe<ProfilePatch>
 }
 
 /** The output of our create `User` mutation. */

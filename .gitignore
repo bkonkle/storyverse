@@ -49,6 +49,7 @@ node_modules/
 
 # dotenv environment variable files
 .env*
+!.env.example
 
 # Mac files
 .DS_Store

@@ -4,6 +4,7 @@
   "description": "The Storyverse web client",
   "author": "Brandon Konkle <brandon@konkle.us>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "yarn generate.schema && gatsby build",
     "dev": "concurrently -r \"yarn generate.schema -w\" \"gatsby develop\"",
