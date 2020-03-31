@@ -1,4 +1,4 @@
-require('@babel/register')
+require('ts-node/register/transpile-only')
 
 const parseDbUrl = require('ts-parse-database-url').default
 const dotenv = require('dotenv')

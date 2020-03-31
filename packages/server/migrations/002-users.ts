@@ -25,12 +25,11 @@ export async function up(knex: Knex) {
   await knex.raw(
     `GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO storyverse_user;`
   )
-  await knex.raw(`ALTER TABLE users ENABLE ROW LEVEL SECURITY;`)
 
+  await knex.raw(`ALTER TABLE users ENABLE ROW LEVEL SECURITY;`)
   await knex.raw(`
     CREATE POLICY user_same_user_policy ON users
-      USING (username = current_setting('jwt.claims.sub'))
-      WITH CHECK (username = current_setting('jwt.claims.sub'));
+      USING (username = current_setting('jwt.claims.sub'));
   `)
 }
 

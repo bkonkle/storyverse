@@ -19,6 +19,12 @@ export async function up(knex: Knex) {
 
     table.string('picture').comment('A Profile photo')
 
+    table.jsonb('content').comment('Editor json profile content')
+
+    table.string('city').comment("The User''s city")
+
+    table.string('state_province').comment("The User''s state or province")
+
     // relationships
     foreignUuid(
       table,
@@ -36,20 +42,21 @@ export async function up(knex: Knex) {
   await knex.raw(
     `GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE profiles TO storyverse_user;`
   )
+
   await knex.raw(`ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;`)
 
+  // Open read policy
   await knex.raw(`
-    CREATE POLICY profiles_same_user_policy ON "profiles"
+    CREATE POLICY profiles_select_policy ON profiles
+      FOR SELECT
+      USING (true);
+  `)
+
+  // Same-user policy for everything else
+  await knex.raw(`
+    CREATE POLICY profiles_same_user_policy ON profiles
       USING (
-        (
-          SELECT true AS bool FROM (
-            SELECT id FROM users u
-            WHERE u.username = current_setting('jwt.claims.sub')
-          ) AS user_using
-        ) = true
-      )
-      WITH CHECK (
-        profiles.user_id IN (
+        user_id IN (
           SELECT id FROM users u
           WHERE u.username = current_setting('jwt.claims.sub')
         )
