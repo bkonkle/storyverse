@@ -33,9 +33,9 @@
     "ecr.upload": "yarn ecr.tag && yarn ecr.push",
     "generate.schema": "graphql-codegen",
     "start": "node .build/src/Server.js",
-    "test.reset.db": "ts-node --transpile-only scripts/reset-test-db.ts",
-    "test.integration": "NODE_ENV=test jest --config=jest.integration.js --forceExit",
-    "test.integration.server": "NODE_ENV=development yarn test.reset.db && ts-node --transpile-only scripts/run-test-server.ts"
+    "test": "NODE_ENV=test jest",
+    "test.watch": "yarn test --watch",
+    "test.e2e": "NODE_ENV=test jest -c ./jest.e2e.config.js --forceExit"
   },
   "dependencies": {
     "@graft/knex": "^1.0.1",
@@ -54,7 +54,8 @@
     "@graphql-codegen/cli": "^1.8.3",
     "@graphql-codegen/typescript": "^1.8.3",
     "@graphql-codegen/typescript-operations": "^1.8.3",
-    "@graphql-codegen/typescript-urql": "^1.8.3"
+    "@graphql-codegen/typescript-urql": "^1.8.3",
+    "supertest": "^4.0.2"
   },
   "resolutions": {
     "graphql": "14.5.8",

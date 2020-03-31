@@ -1,12 +1,14 @@
+const path = require('path')
+
+const babelConfig = path.resolve(__dirname, 'babel.config.js')
+
 module.exports = {
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,mjs}'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
-  roots: ['<rootDir>/src'],
-  setupFilesAfterEnv: ['<rootDir>/src/utils/TestSetup.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/lib/', '/.build/'],
   testRegex: '(/(test|__tests__)/.*(\\.|/)(test|spec))\\.[j|t]sx?$',
   testURL: 'http://localhost',
   transform: {
-    '^.+\\.(js|ts)x?$': 'babel-jest',
+    '^.+\\.(js|ts)x?$': ['babel-jest', {configFile: babelConfig}],
   },
 }

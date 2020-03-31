@@ -4,7 +4,7 @@ import {withGraft, run} from '@graft/server'
 
 import {Server, Graft, Environment} from './Config'
 
-export function start() {
+export function init() {
   const app = express()
     .disable('x-powered-by')
     .use(morgan(Environment.isDev ? 'dev' : 'combined'))
@@ -12,7 +12,11 @@ export function start() {
       res.send('ok')
     })
 
-  run(withGraft(app, Graft.config), Server.port)
+  return withGraft(app, Graft.config)
+}
+
+export function start() {
+  run(init(), Server.port)
 }
 
 if (require.main === module) {
