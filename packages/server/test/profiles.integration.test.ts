@@ -1,20 +1,12 @@
-import {Application, Handler} from 'express'
+import {Application} from 'express'
 import request from 'supertest'
 import faker from 'faker'
 import jwt from 'jsonwebtoken'
-import expressJwtOrig from 'express-jwt'
-import {knex as Knex} from '@graft/knex'
 
-import config from '../knexfile'
+import {getDb, dbCleaner} from './lib/db'
+import {mockJwt} from './lib/jwt'
 import {init} from '../src/Server'
-import {User} from '../src/Schema'
-import {IncomingMessage, User as TokenUser} from '../src/Config'
-
-jest.mock('express-jwt')
-
-const expressJwt = (expressJwtOrig as unknown) as jest.Mock<
-  typeof expressJwtOrig
->
+import {User as TokenUser} from '../src/Config'
 
 describe('[Integration] Profiles', () => {
   let app: Application
@@ -23,7 +15,7 @@ describe('[Integration] Profiles', () => {
   const token: TokenUser = {
     sub: faker.random.alphaNumeric(),
     iat: faker.random.number(),
-    aud: ['test'],
+    aud: ['localhost'],
     iss: faker.random.alphaNumeric(),
     exp: faker.random.number(),
     azp: faker.random.alphaNumeric(),
@@ -31,28 +23,23 @@ describe('[Integration] Profiles', () => {
   }
   const tokenEncoded = jwt.sign(token, tokenSecret, {algorithm: 'HS256'})
 
-  expressJwt.mockImplementation(
-    // @ts-ignore
-    (): expressJwt.RequestHandler => (req: IncomingMessage, res, next) => {
-      req.user = token
+  const _authn = mockJwt(token)
 
-      next()
-    }
-  )
+  const db = getDb()
 
   beforeAll(() => {
     app = init()
   })
 
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.clearAllMocks()
+
+    await dbCleaner()
   })
 
   describe('Mutation: createProfile', () => {
-    it('passes', async () => {
-      const knex = Knex(config)
-
-      const user = await knex<User>('users')
+    it('creates a profile', async () => {
+      const user = await db('users')
         .insert({username: token.sub})
         .returning('*')
 
@@ -91,8 +78,93 @@ describe('[Integration] Profiles', () => {
           email: profile.email,
         })
       )
+    })
 
-      await new Promise(resolve => setTimeout(resolve, 100))
+    it('requires the token sub to match the username', async () => {
+      const [user] = await db('users')
+        .insert({username: faker.random.alphaNumeric()})
+        .returning('*')
+
+      const query = `
+        mutation createProfile($input: CreateProfileInput!) {
+          createProfile(input: $input) {
+            profile {
+              id
+              displayName
+              email
+            }
+          }
+        }
+      `
+
+      const profile = {
+        userId: user.id,
+        displayName: faker.name.findName(),
+        email: faker.internet.email(),
+      }
+
+      const variables = {
+        input: {profile},
+      }
+
+      const {body} = await request(app)
+        .post('/graphql')
+        .set('Authorization', `Bearer ${tokenEncoded}`)
+        .send({query, variables})
+        .expect(200)
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message:
+            'new row violates row-level security policy for table "profiles"',
+        }),
+      ])
+    })
+  })
+
+  describe('Mutation: updateProfileById', () => {
+    it('updates an existing profile', async () => {
+      const [user] = await db('users')
+        .insert({username: token.sub})
+        .returning('*')
+
+      const [profile] = await db('profiles')
+        .insert({
+          user_id: user.id,
+          display_name: faker.name.findName(),
+          email: faker.internet.email(),
+        })
+        .returning('*')
+
+      const query = `
+        mutation updateProfileById($input: UpdateProfileByIdInput!) {
+          updateProfileById(input: $input) {
+            profile {
+              id
+              displayName
+              email
+            }
+          }
+        }
+      `
+
+      const input = {email: faker.internet.email()}
+
+      const variables = {
+        input: {id: profile.id, profilePatch: input},
+      }
+
+      const {body} = await request(app)
+        .post('/graphql')
+        .set('Authorization', `Bearer ${tokenEncoded}`)
+        .send({query, variables})
+        .expect(200)
+
+      expect(body.data.updateProfileById).toHaveProperty('profile', {
+        id: profile.id,
+        displayName: profile.display_name,
+        email: input.email,
+      })
     })
   })
 })
