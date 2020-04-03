@@ -1,29 +1,16 @@
 import {Application} from 'express'
 import request from 'supertest'
 import faker from 'faker'
-import jwt from 'jsonwebtoken'
 
 import {getDb, dbCleaner} from './lib/db'
-import {mockJwt} from './lib/jwt'
+import {mockJwt, getToken} from './lib/jwt'
 import {init} from '../src/Server'
-import {User as TokenUser} from '../src/Config'
 
 describe('[Integration] Profiles', () => {
   let app: Application
 
-  const tokenSecret = 'test-secret'
-  const token: TokenUser = {
-    sub: faker.random.alphaNumeric(),
-    iat: faker.random.number(),
-    aud: ['localhost'],
-    iss: faker.random.alphaNumeric(),
-    exp: faker.random.number(),
-    azp: faker.random.alphaNumeric(),
-    scope: faker.random.alphaNumeric(),
-  }
-  const tokenEncoded = jwt.sign(token, tokenSecret, {algorithm: 'HS256'})
-
-  const _authn = mockJwt(token)
+  const [token, tokenEncoded] = getToken()
+  mockJwt(token)
 
   const db = getDb()
 
