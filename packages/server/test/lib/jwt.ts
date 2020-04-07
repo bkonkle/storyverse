@@ -22,18 +22,15 @@ export const mockJwt = (token: User) => {
   return eJwt
 }
 
-export const getToken = (): [User, string] => {
-  const tokenSecret = 'test-secret'
-  const token: User = {
-    sub: faker.random.alphaNumeric(),
-    iat: faker.random.number(),
-    aud: ['localhost'],
-    iss: faker.random.alphaNumeric(),
-    exp: faker.random.number(),
-    azp: faker.random.alphaNumeric(),
-    scope: faker.random.alphaNumeric(),
-  }
-  const tokenEncoded = jwt.sign(token, tokenSecret, {algorithm: 'HS256'})
+export const getToken = (): User => ({
+  sub: faker.random.alphaNumeric(10),
+  iat: faker.random.number(10),
+  aud: ['localhost'],
+  iss: faker.random.alphaNumeric(10),
+  exp: faker.random.number(10),
+  azp: faker.random.alphaNumeric(10),
+  scope: faker.random.alphaNumeric(10),
+})
 
-  return [token, tokenEncoded]
-}
+export const encodeToken = (token: User) =>
+  jwt.sign(token, 'test-secret', {algorithm: 'HS256'})

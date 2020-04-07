@@ -27,6 +27,11 @@ export type AppRequest = GraphileUtils.GraphileRequest<Context>
 
 dotenv.config()
 
+export namespace Environment {
+  export const isDev = process.env.NODE_ENV === 'development'
+  export const isTest = process.env.NODE_ENV === 'test'
+}
+
 export namespace Auth {
   export const jwksUri =
     process.env.AUTH0_JWKS_URI ||
@@ -44,11 +49,13 @@ export namespace Database {
 
   const _config = parseDbUrl(_url)
 
+  const dbName = process.env.DATABASE_NAME || _config.database
+
   export const user = process.env.DATABASE_USERNAME || _config.user
   export const password = process.env.DATABASE_PASSWORD || _config.password
   export const host = process.env.DATABASE_HOSTNAME || _config.host
   export const port = Number(process.env.DATABASE_PORT || _config.port)
-  export const database = process.env.DATABASE_NAME || _config.database
+  export const database = Environment.isTest ? `${dbName}_test` : dbName
 
   export const poolMin = Number(process.env.DATABASE_POOL_MIN || '0')
   export const poolMax = Number(process.env.DATABASE_POOL_MAX || '10')
@@ -59,10 +66,6 @@ export namespace Database {
 
 export namespace Server {
   export const port = Number(process.env.PORT || '4000')
-}
-
-export namespace Environment {
-  export const isDev = process.env.NODE_ENV === 'development'
 }
 
 export namespace Graft {

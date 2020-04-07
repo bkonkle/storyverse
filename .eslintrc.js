@@ -18,5 +18,6 @@ module.exports = {
       'error',
       {varsIgnorePattern: '^_', argsIgnorePattern: '^_'},
     ],
+    '@typescript-eslint/no-namespace': ['off'],
   },
 }

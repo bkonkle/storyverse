@@ -10,9 +10,9 @@ export const main = async () => {
   const {connection} = config
 
   // Find all SQL files in the `src` folder
-  const files = (await readdir(path.join(__dirname, '..', 'src'))).filter(
-    filename => filename.endsWith('.sql')
-  )
+  const files = (
+    await readdir(path.join(__dirname, '..', 'src'))
+  ).filter(filename => filename.endsWith('.sql'))
 
   files.forEach(filename => {
     console.log(new Date(), `Loading ${path.basename(filename)}...`)

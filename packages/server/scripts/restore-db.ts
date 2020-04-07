@@ -3,16 +3,12 @@ import {execSync} from 'child_process'
 import config from '../knexfile'
 
 const main = async () => {
-  const environment = process.env.ENVIRONMENT || 'local'
   const sqlFile = process.argv[2]
-  const {connection} = config
+  const {connection, name} = config
 
   if (!sqlFile) throw new Error('No filename was provided to restore from.')
 
-  console.log(
-    new Date(),
-    `Beginning ${environment.toUpperCase()} database restore...`
-  )
+  console.log(new Date(), `Beginning ${name} database restore...`)
 
   execSync(
     `PGPASSWORD=${connection.password} dropdb --if-exists -h ${connection.host} -p ${connection.port} -U ${connection.user} ${connection.database}`,
@@ -33,10 +29,7 @@ const main = async () => {
     // Skip errors here because of the "must be owner of extension uuid-ossp" issue
   }
 
-  console.log(
-    new Date(),
-    `${environment.toUpperCase()} database restore complete!`
-  )
+  console.log(new Date(), `${name} database restore complete!`)
 }
 
 if (require.main === module) {

@@ -12,26 +12,19 @@ export const slugify = (text: string) =>
     .replace(/-+$/, '') // Trim - from end of text
 
 const main = async () => {
-  const environment = process.env.ENVIRONMENT || 'local'
   const timestamp = slugify(new Date().toISOString())
-  const {connection} = config
+  const {connection, name} = config
 
-  console.log(
-    new Date(),
-    `Beginning ${environment.toUpperCase()} database backup...`
-  )
+  console.log(new Date(), `Beginning ${name} database backup...`)
 
-  const sqlFile = process.argv[2] || `${environment}.${timestamp}.bak`
+  const sqlFile = process.argv[2] || `${name}.${timestamp}.bak`
 
   execSync(
     `PGPASSWORD=${connection.password} pg_dump -Fc -f ${sqlFile} -d ${connection.database} -h ${connection.host} -p ${connection.port} -U ${connection.user}`,
     {stdio: 'inherit'}
   )
 
-  console.log(
-    new Date(),
-    `${environment.toUpperCase()} database backup complete!`
-  )
+  console.log(new Date(), `${name} database backup complete!`)
 }
 
 if (require.main === module) {
