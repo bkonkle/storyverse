@@ -19,6 +19,8 @@ export type Scalars = {
    * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
    **/
   Datetime: any
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any
 }
 
 /** All input for the create `Profile` mutation. */
@@ -53,6 +55,76 @@ export type CreateProfilePayload = {
 /** The output of our create `Profile` mutation. */
 export type CreateProfilePayloadProfileEdgeArgs = {
   orderBy?: Maybe<Array<ProfilesOrderBy>>
+}
+
+/** All input for the create `Universe` mutation. */
+export type CreateUniverseInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Universe` to be created by this mutation. */
+  universe: UniverseInput
+}
+
+/** All input for the create `UniverseModerator` mutation. */
+export type CreateUniverseModeratorInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `UniverseModerator` to be created by this mutation. */
+  universeModerator: UniverseModeratorInput
+}
+
+/** The output of our create `UniverseModerator` mutation. */
+export type CreateUniverseModeratorPayload = {
+  __typename?: 'CreateUniverseModeratorPayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `UniverseModerator` that was created by this mutation. */
+  universeModerator?: Maybe<UniverseModerator>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `Profile` that is related to this `UniverseModerator`. */
+  profileByProfileId?: Maybe<Profile>
+  /** Reads a single `Universe` that is related to this `UniverseModerator`. */
+  universeByUniverseId?: Maybe<Universe>
+  /** An edge for our `UniverseModerator`. May be used by Relay 1. */
+  universeModeratorEdge?: Maybe<UniverseModeratorsEdge>
+}
+
+/** The output of our create `UniverseModerator` mutation. */
+export type CreateUniverseModeratorPayloadUniverseModeratorEdgeArgs = {
+  orderBy?: Maybe<Array<UniverseModeratorsOrderBy>>
+}
+
+/** The output of our create `Universe` mutation. */
+export type CreateUniversePayload = {
+  __typename?: 'CreateUniversePayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Universe` that was created by this mutation. */
+  universe?: Maybe<Universe>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `Profile` that is related to this `Universe`. */
+  profileByOwnedByProfileId?: Maybe<Profile>
+  /** An edge for our `Universe`. May be used by Relay 1. */
+  universeEdge?: Maybe<UniversesEdge>
+}
+
+/** The output of our create `Universe` mutation. */
+export type CreateUniversePayloadUniverseEdgeArgs = {
+  orderBy?: Maybe<Array<UniversesOrderBy>>
 }
 
 /** All input for the create `User` mutation. */
@@ -123,6 +195,76 @@ export type DeleteProfilePayloadProfileEdgeArgs = {
   orderBy?: Maybe<Array<ProfilesOrderBy>>
 }
 
+/** All input for the `deleteUniverseById` mutation. */
+export type DeleteUniverseByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  id: Scalars['UUID']
+}
+
+/** All input for the `deleteUniverseModeratorById` mutation. */
+export type DeleteUniverseModeratorByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  id: Scalars['UUID']
+}
+
+/** The output of our delete `UniverseModerator` mutation. */
+export type DeleteUniverseModeratorPayload = {
+  __typename?: 'DeleteUniverseModeratorPayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `UniverseModerator` that was deleted by this mutation. */
+  universeModerator?: Maybe<UniverseModerator>
+  deletedUniverseModeratorId?: Maybe<Scalars['ID']>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `Profile` that is related to this `UniverseModerator`. */
+  profileByProfileId?: Maybe<Profile>
+  /** Reads a single `Universe` that is related to this `UniverseModerator`. */
+  universeByUniverseId?: Maybe<Universe>
+  /** An edge for our `UniverseModerator`. May be used by Relay 1. */
+  universeModeratorEdge?: Maybe<UniverseModeratorsEdge>
+}
+
+/** The output of our delete `UniverseModerator` mutation. */
+export type DeleteUniverseModeratorPayloadUniverseModeratorEdgeArgs = {
+  orderBy?: Maybe<Array<UniverseModeratorsOrderBy>>
+}
+
+/** The output of our delete `Universe` mutation. */
+export type DeleteUniversePayload = {
+  __typename?: 'DeleteUniversePayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Universe` that was deleted by this mutation. */
+  universe?: Maybe<Universe>
+  deletedUniverseId?: Maybe<Scalars['ID']>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `Profile` that is related to this `Universe`. */
+  profileByOwnedByProfileId?: Maybe<Profile>
+  /** An edge for our `Universe`. May be used by Relay 1. */
+  universeEdge?: Maybe<UniversesEdge>
+}
+
+/** The output of our delete `Universe` mutation. */
+export type DeleteUniversePayloadUniverseEdgeArgs = {
+  orderBy?: Maybe<Array<UniversesOrderBy>>
+}
+
 /** All input for the `deleteUserById` mutation. */
 export type DeleteUserByIdInput = {
   /**
@@ -171,16 +313,28 @@ export type Mutation = {
   __typename?: 'Mutation'
   /** Creates a single `Profile`. */
   createProfile?: Maybe<CreateProfilePayload>
+  /** Creates a single `UniverseModerator`. */
+  createUniverseModerator?: Maybe<CreateUniverseModeratorPayload>
+  /** Creates a single `Universe`. */
+  createUniverse?: Maybe<CreateUniversePayload>
   /** Creates a single `User`. */
   createUser?: Maybe<CreateUserPayload>
   /** Updates a single `Profile` using a unique key and a patch. */
   updateProfileById?: Maybe<UpdateProfilePayload>
+  /** Updates a single `UniverseModerator` using a unique key and a patch. */
+  updateUniverseModeratorById?: Maybe<UpdateUniverseModeratorPayload>
+  /** Updates a single `Universe` using a unique key and a patch. */
+  updateUniverseById?: Maybe<UpdateUniversePayload>
   /** Updates a single `User` using a unique key and a patch. */
   updateUserById?: Maybe<UpdateUserPayload>
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUsername?: Maybe<UpdateUserPayload>
   /** Deletes a single `Profile` using a unique key. */
   deleteProfileById?: Maybe<DeleteProfilePayload>
+  /** Deletes a single `UniverseModerator` using a unique key. */
+  deleteUniverseModeratorById?: Maybe<DeleteUniverseModeratorPayload>
+  /** Deletes a single `Universe` using a unique key. */
+  deleteUniverseById?: Maybe<DeleteUniversePayload>
   /** Deletes a single `User` using a unique key. */
   deleteUserById?: Maybe<DeleteUserPayload>
   /** Deletes a single `User` using a unique key. */
@@ -193,6 +347,16 @@ export type MutationCreateProfileArgs = {
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateUniverseModeratorArgs = {
+  input: CreateUniverseModeratorInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateUniverseArgs = {
+  input: CreateUniverseInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserArgs = {
   input: CreateUserInput
 }
@@ -200,6 +364,16 @@ export type MutationCreateUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateProfileByIdArgs = {
   input: UpdateProfileByIdInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUniverseModeratorByIdArgs = {
+  input: UpdateUniverseModeratorByIdInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUniverseByIdArgs = {
+  input: UpdateUniverseByIdInput
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -215,6 +389,16 @@ export type MutationUpdateUserByUsernameArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteProfileByIdArgs = {
   input: DeleteProfileByIdInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUniverseModeratorByIdArgs = {
+  input: DeleteUniverseModeratorByIdInput
+}
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUniverseByIdArgs = {
+  input: DeleteUniverseByIdInput
 }
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -257,10 +441,40 @@ export type Profile = {
   email?: Maybe<Scalars['String']>
   /** A Profile photo */
   picture?: Maybe<Scalars['String']>
+  /** Editor json profile content */
+  content?: Maybe<Scalars['JSON']>
+  /** The User's city */
+  city?: Maybe<Scalars['String']>
+  /** The User's state or province */
+  stateProvince?: Maybe<Scalars['String']>
   /** The User that created the Profile. */
   userId: Scalars['UUID']
   /** Reads a single `User` that is related to this `Profile`. */
   userByUserId?: Maybe<User>
+  /** Reads and enables pagination through a set of `Universe`. */
+  universesByOwnedByProfileId: UniversesConnection
+  /** Reads and enables pagination through a set of `UniverseModerator`. */
+  universeModeratorsByProfileId: UniverseModeratorsConnection
+}
+
+export type ProfileUniversesByOwnedByProfileIdArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<UniversesOrderBy>>
+  condition?: Maybe<UniverseCondition>
+}
+
+export type ProfileUniverseModeratorsByProfileIdArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<UniverseModeratorsOrderBy>>
+  condition?: Maybe<UniverseModeratorCondition>
 }
 
 /** A condition to be used against `Profile` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -277,6 +491,12 @@ export type ProfileCondition = {
   email?: Maybe<Scalars['String']>
   /** Checks for equality with the object’s `picture` field. */
   picture?: Maybe<Scalars['String']>
+  /** Checks for equality with the object’s `content` field. */
+  content?: Maybe<Scalars['JSON']>
+  /** Checks for equality with the object’s `city` field. */
+  city?: Maybe<Scalars['String']>
+  /** Checks for equality with the object’s `stateProvince` field. */
+  stateProvince?: Maybe<Scalars['String']>
   /** Checks for equality with the object’s `userId` field. */
   userId?: Maybe<Scalars['UUID']>
 }
@@ -292,6 +512,12 @@ export type ProfileInput = {
   email?: Maybe<Scalars['String']>
   /** A Profile photo */
   picture?: Maybe<Scalars['String']>
+  /** Editor json profile content */
+  content?: Maybe<Scalars['JSON']>
+  /** The User's city */
+  city?: Maybe<Scalars['String']>
+  /** The User's state or province */
+  stateProvince?: Maybe<Scalars['String']>
   /** The User that created the Profile. */
   userId: Scalars['UUID']
 }
@@ -307,6 +533,12 @@ export type ProfilePatch = {
   email?: Maybe<Scalars['String']>
   /** A Profile photo */
   picture?: Maybe<Scalars['String']>
+  /** Editor json profile content */
+  content?: Maybe<Scalars['JSON']>
+  /** The User's city */
+  city?: Maybe<Scalars['String']>
+  /** The User's state or province */
+  stateProvince?: Maybe<Scalars['String']>
   /** The User that created the Profile. */
   userId?: Maybe<Scalars['UUID']>
 }
@@ -348,6 +580,12 @@ export enum ProfilesOrderBy {
   EmailDesc = 'EMAIL_DESC',
   PictureAsc = 'PICTURE_ASC',
   PictureDesc = 'PICTURE_DESC',
+  ContentAsc = 'CONTENT_ASC',
+  ContentDesc = 'CONTENT_DESC',
+  CityAsc = 'CITY_ASC',
+  CityDesc = 'CITY_DESC',
+  StateProvinceAsc = 'STATE_PROVINCE_ASC',
+  StateProvinceDesc = 'STATE_PROVINCE_DESC',
   UserIdAsc = 'USER_ID_ASC',
   UserIdDesc = 'USER_ID_DESC',
 }
@@ -366,9 +604,15 @@ export type Query = Node & {
   node?: Maybe<Node>
   /** Reads and enables pagination through a set of `Profile`. */
   allProfiles?: Maybe<ProfilesConnection>
+  /** Reads and enables pagination through a set of `UniverseModerator`. */
+  allUniverseModerators?: Maybe<UniverseModeratorsConnection>
+  /** Reads and enables pagination through a set of `Universe`. */
+  allUniverses?: Maybe<UniversesConnection>
   /** Reads and enables pagination through a set of `User`. */
   allUsers?: Maybe<UsersConnection>
   profileById?: Maybe<Profile>
+  universeModeratorById?: Maybe<UniverseModerator>
+  universeById?: Maybe<Universe>
   userById?: Maybe<User>
   userByUsername?: Maybe<User>
   /** Get a user based on the logged-in JWT claims. */
@@ -392,6 +636,28 @@ export type QueryAllProfilesArgs = {
 }
 
 /** The root query type which gives access points into the data universe. */
+export type QueryAllUniverseModeratorsArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<UniverseModeratorsOrderBy>>
+  condition?: Maybe<UniverseModeratorCondition>
+}
+
+/** The root query type which gives access points into the data universe. */
+export type QueryAllUniversesArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<UniversesOrderBy>>
+  condition?: Maybe<UniverseCondition>
+}
+
+/** The root query type which gives access points into the data universe. */
 export type QueryAllUsersArgs = {
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
@@ -408,6 +674,16 @@ export type QueryProfileByIdArgs = {
 }
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUniverseModeratorByIdArgs = {
+  id: Scalars['UUID']
+}
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUniverseByIdArgs = {
+  id: Scalars['UUID']
+}
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserByIdArgs = {
   id: Scalars['UUID']
 }
@@ -415,6 +691,208 @@ export type QueryUserByIdArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByUsernameArgs = {
   username: Scalars['String']
+}
+
+export type Universe = {
+  __typename?: 'Universe'
+  id: Scalars['UUID']
+  createdAt: Scalars['Datetime']
+  updatedAt: Scalars['Datetime']
+  /** A name for the Universe */
+  name?: Maybe<Scalars['String']>
+  /** Editor json for the Universe's description */
+  description?: Maybe<Scalars['JSON']>
+  /** The Profile that owns the Universe. */
+  ownedByProfileId: Scalars['UUID']
+  /** Reads a single `Profile` that is related to this `Universe`. */
+  profileByOwnedByProfileId?: Maybe<Profile>
+  /** Reads and enables pagination through a set of `UniverseModerator`. */
+  universeModeratorsByUniverseId: UniverseModeratorsConnection
+}
+
+export type UniverseUniverseModeratorsByUniverseIdArgs = {
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['Cursor']>
+  after?: Maybe<Scalars['Cursor']>
+  orderBy?: Maybe<Array<UniverseModeratorsOrderBy>>
+  condition?: Maybe<UniverseModeratorCondition>
+}
+
+/**
+ * A condition to be used against `Universe` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ **/
+export type UniverseCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['UUID']>
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>
+  /** Checks for equality with the object’s `updatedAt` field. */
+  updatedAt?: Maybe<Scalars['Datetime']>
+  /** Checks for equality with the object’s `name` field. */
+  name?: Maybe<Scalars['String']>
+  /** Checks for equality with the object’s `description` field. */
+  description?: Maybe<Scalars['JSON']>
+  /** Checks for equality with the object’s `ownedByProfileId` field. */
+  ownedByProfileId?: Maybe<Scalars['UUID']>
+}
+
+/** An input for mutations affecting `Universe` */
+export type UniverseInput = {
+  id?: Maybe<Scalars['UUID']>
+  createdAt?: Maybe<Scalars['Datetime']>
+  updatedAt?: Maybe<Scalars['Datetime']>
+  /** A name for the Universe */
+  name?: Maybe<Scalars['String']>
+  /** Editor json for the Universe's description */
+  description?: Maybe<Scalars['JSON']>
+  /** The Profile that owns the Universe. */
+  ownedByProfileId: Scalars['UUID']
+}
+
+export type UniverseModerator = {
+  __typename?: 'UniverseModerator'
+  id: Scalars['UUID']
+  /** The Profile that this row grants Moderator status to */
+  profileId: Scalars['UUID']
+  /** The Universe that this row grants Moderator status for */
+  universeId: Scalars['UUID']
+  createdAt: Scalars['Datetime']
+  updatedAt: Scalars['Datetime']
+  /** Reads a single `Profile` that is related to this `UniverseModerator`. */
+  profileByProfileId?: Maybe<Profile>
+  /** Reads a single `Universe` that is related to this `UniverseModerator`. */
+  universeByUniverseId?: Maybe<Universe>
+}
+
+/**
+ * A condition to be used against `UniverseModerator` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ **/
+export type UniverseModeratorCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['UUID']>
+  /** Checks for equality with the object’s `profileId` field. */
+  profileId?: Maybe<Scalars['UUID']>
+  /** Checks for equality with the object’s `universeId` field. */
+  universeId?: Maybe<Scalars['UUID']>
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>
+  /** Checks for equality with the object’s `updatedAt` field. */
+  updatedAt?: Maybe<Scalars['Datetime']>
+}
+
+/** An input for mutations affecting `UniverseModerator` */
+export type UniverseModeratorInput = {
+  id?: Maybe<Scalars['UUID']>
+  /** The Profile that this row grants Moderator status to */
+  profileId: Scalars['UUID']
+  /** The Universe that this row grants Moderator status for */
+  universeId: Scalars['UUID']
+  createdAt?: Maybe<Scalars['Datetime']>
+  updatedAt?: Maybe<Scalars['Datetime']>
+}
+
+/** Represents an update to a `UniverseModerator`. Fields that are set will be updated. */
+export type UniverseModeratorPatch = {
+  id?: Maybe<Scalars['UUID']>
+  /** The Profile that this row grants Moderator status to */
+  profileId?: Maybe<Scalars['UUID']>
+  /** The Universe that this row grants Moderator status for */
+  universeId?: Maybe<Scalars['UUID']>
+  createdAt?: Maybe<Scalars['Datetime']>
+  updatedAt?: Maybe<Scalars['Datetime']>
+}
+
+/** A connection to a list of `UniverseModerator` values. */
+export type UniverseModeratorsConnection = {
+  __typename?: 'UniverseModeratorsConnection'
+  /** A list of `UniverseModerator` objects. */
+  nodes: Array<UniverseModerator>
+  /** A list of edges which contains the `UniverseModerator` and cursor to aid in pagination. */
+  edges: Array<UniverseModeratorsEdge>
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** The count of *all* `UniverseModerator` you could get from the connection. */
+  totalCount: Scalars['Int']
+}
+
+/** A `UniverseModerator` edge in the connection. */
+export type UniverseModeratorsEdge = {
+  __typename?: 'UniverseModeratorsEdge'
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>
+  /** The `UniverseModerator` at the end of the edge. */
+  node: UniverseModerator
+}
+
+/** Methods to use when ordering `UniverseModerator`. */
+export enum UniverseModeratorsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  ProfileIdAsc = 'PROFILE_ID_ASC',
+  ProfileIdDesc = 'PROFILE_ID_DESC',
+  UniverseIdAsc = 'UNIVERSE_ID_ASC',
+  UniverseIdDesc = 'UNIVERSE_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  UpdatedAtAsc = 'UPDATED_AT_ASC',
+  UpdatedAtDesc = 'UPDATED_AT_DESC',
+}
+
+/** Represents an update to a `Universe`. Fields that are set will be updated. */
+export type UniversePatch = {
+  id?: Maybe<Scalars['UUID']>
+  createdAt?: Maybe<Scalars['Datetime']>
+  updatedAt?: Maybe<Scalars['Datetime']>
+  /** A name for the Universe */
+  name?: Maybe<Scalars['String']>
+  /** Editor json for the Universe's description */
+  description?: Maybe<Scalars['JSON']>
+  /** The Profile that owns the Universe. */
+  ownedByProfileId?: Maybe<Scalars['UUID']>
+}
+
+/** A connection to a list of `Universe` values. */
+export type UniversesConnection = {
+  __typename?: 'UniversesConnection'
+  /** A list of `Universe` objects. */
+  nodes: Array<Universe>
+  /** A list of edges which contains the `Universe` and cursor to aid in pagination. */
+  edges: Array<UniversesEdge>
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** The count of *all* `Universe` you could get from the connection. */
+  totalCount: Scalars['Int']
+}
+
+/** A `Universe` edge in the connection. */
+export type UniversesEdge = {
+  __typename?: 'UniversesEdge'
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>
+  /** The `Universe` at the end of the edge. */
+  node: Universe
+}
+
+/** Methods to use when ordering `Universe`. */
+export enum UniversesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  UpdatedAtAsc = 'UPDATED_AT_ASC',
+  UpdatedAtDesc = 'UPDATED_AT_DESC',
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  OwnedByProfileIdAsc = 'OWNED_BY_PROFILE_ID_ASC',
+  OwnedByProfileIdDesc = 'OWNED_BY_PROFILE_ID_DESC',
 }
 
 /** All input for the `updateProfileById` mutation. */
@@ -450,6 +928,78 @@ export type UpdateProfilePayload = {
 /** The output of our update `Profile` mutation. */
 export type UpdateProfilePayloadProfileEdgeArgs = {
   orderBy?: Maybe<Array<ProfilesOrderBy>>
+}
+
+/** All input for the `updateUniverseById` mutation. */
+export type UpdateUniverseByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** An object where the defined keys will be set on the `Universe` being updated. */
+  universePatch: UniversePatch
+  id: Scalars['UUID']
+}
+
+/** All input for the `updateUniverseModeratorById` mutation. */
+export type UpdateUniverseModeratorByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** An object where the defined keys will be set on the `UniverseModerator` being updated. */
+  universeModeratorPatch: UniverseModeratorPatch
+  id: Scalars['UUID']
+}
+
+/** The output of our update `UniverseModerator` mutation. */
+export type UpdateUniverseModeratorPayload = {
+  __typename?: 'UpdateUniverseModeratorPayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `UniverseModerator` that was updated by this mutation. */
+  universeModerator?: Maybe<UniverseModerator>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `Profile` that is related to this `UniverseModerator`. */
+  profileByProfileId?: Maybe<Profile>
+  /** Reads a single `Universe` that is related to this `UniverseModerator`. */
+  universeByUniverseId?: Maybe<Universe>
+  /** An edge for our `UniverseModerator`. May be used by Relay 1. */
+  universeModeratorEdge?: Maybe<UniverseModeratorsEdge>
+}
+
+/** The output of our update `UniverseModerator` mutation. */
+export type UpdateUniverseModeratorPayloadUniverseModeratorEdgeArgs = {
+  orderBy?: Maybe<Array<UniverseModeratorsOrderBy>>
+}
+
+/** The output of our update `Universe` mutation. */
+export type UpdateUniversePayload = {
+  __typename?: 'UpdateUniversePayload'
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   **/
+  clientMutationId?: Maybe<Scalars['String']>
+  /** The `Universe` that was updated by this mutation. */
+  universe?: Maybe<Universe>
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>
+  /** Reads a single `Profile` that is related to this `Universe`. */
+  profileByOwnedByProfileId?: Maybe<Profile>
+  /** An edge for our `Universe`. May be used by Relay 1. */
+  universeEdge?: Maybe<UniversesEdge>
+}
+
+/** The output of our update `Universe` mutation. */
+export type UpdateUniversePayloadUniverseEdgeArgs = {
+  orderBy?: Maybe<Array<UniversesOrderBy>>
 }
 
 /** All input for the `updateUserById` mutation. */

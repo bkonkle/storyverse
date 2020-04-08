@@ -1,3 +1,5 @@
+import snake from 'snakecase-keys'
+import {pipe, pick} from 'ramda'
 import {knex as Knex} from '@graft/knex'
 
 import config from '../../knexfile'
@@ -18,3 +20,5 @@ export const dbCleaner = async <Record, Result>(
     tables.map(table => db.raw(`TRUNCATE TABLE "${table}" CASCADE;`))
   )
 }
+
+export const pickDb = <T>(keys: string[], t: T) => pipe(pick(keys), snake)(t)

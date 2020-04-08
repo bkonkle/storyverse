@@ -1,12 +1,11 @@
 import {Application} from 'express'
-import faker from 'faker'
 import {pick} from 'ramda'
 
 import {init} from '../src/Server'
-import {getDb, dbCleaner} from './lib/db'
+import {getDb, dbCleaner, pickDb} from './lib/db'
 import {mockJwt, getToken} from './lib/jwt'
 import {GraphQL, initGraphQL} from './lib/graphql'
-import {ProfileFactory} from './factories'
+import {UserFactory, ProfileFactory} from './factories'
 
 jest.mock('express-jwt')
 
@@ -34,21 +33,19 @@ describe('ProfileIntegration', () => {
   describe('Query: allProfiles', () => {
     it('lists profiles', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const [profile1, profile2] = await db('profiles')
         .insert([
-          {
-            user_id: user.id,
-            display_name: faker.name.findName(),
-            email: faker.internet.email(),
-          },
-          {
-            user_id: user.id,
-            display_name: faker.name.findName(),
-            email: faker.internet.email(),
-          },
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          ),
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          ),
         ])
         .returning('*')
 
@@ -85,15 +82,16 @@ describe('ProfileIntegration', () => {
   describe('Query: profileById', () => {
     it('retrieves a profile', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const [profile] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
+        .insert(
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          )
+        )
         .returning('*')
 
       const query = `
@@ -154,7 +152,7 @@ describe('ProfileIntegration', () => {
 
     it('requires the token sub to match the username', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const query = `
@@ -190,11 +188,12 @@ describe('ProfileIntegration', () => {
         .returning('*')
 
       const [profile] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
+        .insert(
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          )
+        )
         .returning('*')
 
       const query = `
@@ -226,15 +225,16 @@ describe('ProfileIntegration', () => {
 
     it('requires the token sub to match the username', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const [profile] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
+        .insert(
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          )
+        )
         .returning('*')
 
       const query = `
@@ -273,11 +273,12 @@ describe('ProfileIntegration', () => {
         .returning('*')
 
       const [profile] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
+        .insert(
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          )
+        )
         .returning('*')
 
       const query = `
@@ -305,15 +306,16 @@ describe('ProfileIntegration', () => {
 
     it('requires the token sub to match the username', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const [profile] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
+        .insert(
+          pickDb(
+            ['userId', 'displayName', 'email'],
+            ProfileFactory.make({userId: user.id})
+          )
+        )
         .returning('*')
 
       const query = `

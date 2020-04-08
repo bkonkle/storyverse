@@ -1,5 +1,4 @@
 import {Application} from 'express'
-import faker from 'faker'
 import {pick} from 'ramda'
 
 import {init} from '../src/Server'
@@ -34,10 +33,7 @@ describe('UserIntegration', () => {
   describe('Query: allUsers', () => {
     it('lists users', async () => {
       const [user1] = await db('users')
-        .insert([
-          {username: token.sub},
-          {username: faker.random.alphaNumeric(10)},
-        ])
+        .insert([{username: token.sub}, pick(['username'], UserFactory.make())])
         .returning('*')
 
       const query = `
@@ -54,9 +50,10 @@ describe('UserIntegration', () => {
       const {data} = await graphql.query(query)
 
       expect(data?.allUsers).toHaveProperty('nodes', [
-        expect.objectContaining({
+        {
+          id: user1.id,
           username: user1.username,
-        }),
+        },
       ])
     })
   })
@@ -80,15 +77,15 @@ describe('UserIntegration', () => {
 
       const {data} = await graphql.query(query, variables)
 
-      expect(data).toHaveProperty(
-        'userById',
-        expect.objectContaining({username: user.username})
-      )
+      expect(data).toHaveProperty('userById', {
+        id: user.id,
+        username: user.username,
+      })
     })
 
     it('requires the token sub to match the username', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const query = `
@@ -193,7 +190,7 @@ describe('UserIntegration', () => {
 
     it('requires the token sub to match the username', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const query = `
@@ -253,7 +250,7 @@ describe('UserIntegration', () => {
 
     it('requires the token sub to match the username', async () => {
       const [user] = await db('users')
-        .insert({username: faker.random.alphaNumeric(10)})
+        .insert(pick(['username'], UserFactory.make()))
         .returning('*')
 
       const query = `
