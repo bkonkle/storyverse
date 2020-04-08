@@ -30,11 +30,22 @@ describe('UserIntegration', () => {
     await dbCleaner()
   })
 
+  const createUsers = async (
+    extras: [object, object] = [undefined, undefined]
+  ) => {
+    const [extra1, extra2] = extras
+
+    return db('users')
+      .insert([
+        pick(['username'], UserFactory.make({username: token.sub, ...extra1})),
+        pick(['username'], UserFactory.make(extra2)),
+      ])
+      .returning('*')
+  }
+
   describe('Query: allUsers', () => {
     it('lists users', async () => {
-      const [user1] = await db('users')
-        .insert([{username: token.sub}, pick(['username'], UserFactory.make())])
-        .returning('*')
+      const [user] = await createUsers()
 
       const query = `
         query allUsers {
@@ -51,8 +62,8 @@ describe('UserIntegration', () => {
 
       expect(data?.allUsers).toHaveProperty('nodes', [
         {
-          id: user1.id,
-          username: user1.username,
+          id: user.id,
+          username: user.username,
         },
       ])
     })
@@ -60,9 +71,7 @@ describe('UserIntegration', () => {
 
   describe('Query: userById', () => {
     it('retrieves a user', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
+      const [user] = await createUsers()
 
       const query = `
         query userById($id: UUID!) {
@@ -84,9 +93,7 @@ describe('UserIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
+      const [_, user] = await createUsers()
 
       const query = `
         query userById($id: UUID!) {
@@ -159,9 +166,7 @@ describe('UserIntegration', () => {
 
   describe('Mutation: updateUserById', () => {
     it('updates an existing user', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
+      const [user] = await createUsers()
 
       const query = `
         mutation updateUserById($input: UpdateUserByIdInput!) {
@@ -189,9 +194,7 @@ describe('UserIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
+      const [_, user] = await createUsers()
 
       const query = `
         mutation updateUserById($input: UpdateUserByIdInput!) {
@@ -223,9 +226,7 @@ describe('UserIntegration', () => {
 
   describe('Mutation: deleteUserById', () => {
     it('updates an existing user', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
+      const [user] = await createUsers()
 
       const query = `
         mutation deleteUserById($input: DeleteUserByIdInput!) {
@@ -249,9 +250,7 @@ describe('UserIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
+      const [_, user] = await createUsers()
 
       const query = `
         mutation deleteUserById($input: DeleteUserByIdInput!) {

@@ -1,5 +1,5 @@
 import snake from 'snakecase-keys'
-import {pipe, pick} from 'ramda'
+import {pipe, pick, omit} from 'ramda'
 import {knex as Knex} from '@graft/knex'
 
 import config from '../../knexfile'
@@ -22,3 +22,5 @@ export const dbCleaner = async <Record, Result>(
 }
 
 export const pickDb = <T>(keys: string[], t: T) => pipe(pick(keys), snake)(t)
+
+export const omitDb = <T>(keys: string[], t: T) => pipe(omit(keys), snake)(t)

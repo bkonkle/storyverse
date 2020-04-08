@@ -2,7 +2,7 @@ import {Application} from 'express'
 import {pick} from 'ramda'
 
 import {init} from '../src/Server'
-import {getDb, dbCleaner, pickDb} from './lib/db'
+import {getDb, dbCleaner, pickDb, omitDb} from './lib/db'
 import {mockJwt, getToken} from './lib/jwt'
 import {GraphQL, initGraphQL} from './lib/graphql'
 import {UserFactory, ProfileFactory} from './factories'
@@ -30,24 +30,32 @@ describe('ProfileIntegration', () => {
     await dbCleaner()
   })
 
+  const createProfiles = async (
+    extras: [object, object] = [undefined, undefined]
+  ) => {
+    const [extra1, extra2] = extras
+
+    const [user1, user2] = await db('users')
+      .insert([{username: token.sub}, pickDb(['username'], UserFactory.make())])
+      .returning('*')
+
+    return db('profiles')
+      .insert([
+        omitDb(
+          ['id', 'createdAt', 'updatedAt'],
+          ProfileFactory.make({userId: user1.id, ...extra1})
+        ),
+        omitDb(
+          ['id', 'createdAt', 'updatedAt'],
+          ProfileFactory.make({userId: user2.id, ...extra2})
+        ),
+      ])
+      .returning('*')
+  }
+
   describe('Query: allProfiles', () => {
     it('lists profiles', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
-
-      const [profile1, profile2] = await db('profiles')
-        .insert([
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          ),
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          ),
-        ])
-        .returning('*')
+      const [profile1, profile2] = await createProfiles()
 
       const query = `
         query allProfiles {
@@ -66,14 +74,16 @@ describe('ProfileIntegration', () => {
       expect(data?.allProfiles).toHaveProperty(
         'nodes',
         expect.arrayContaining([
-          expect.objectContaining({
+          {
+            id: profile1.id,
             displayName: profile1.display_name,
             email: profile1.email,
-          }),
-          expect.objectContaining({
+          },
+          {
+            id: profile2.id,
             displayName: profile2.display_name,
             email: profile2.email,
-          }),
+          },
         ])
       )
     })
@@ -81,18 +91,7 @@ describe('ProfileIntegration', () => {
 
   describe('Query: profileById', () => {
     it('retrieves a profile', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
-
-      const [profile] = await db('profiles')
-        .insert(
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          )
-        )
-        .returning('*')
+      const [profile] = await createProfiles()
 
       const query = `
         query profileById($id: UUID!) {
@@ -108,13 +107,11 @@ describe('ProfileIntegration', () => {
 
       const {data} = await graphql.query(query, variables)
 
-      expect(data).toHaveProperty(
-        'profileById',
-        expect.objectContaining({
-          displayName: profile.display_name,
-          email: profile.email,
-        })
-      )
+      expect(data).toHaveProperty('profileById', {
+        id: profile.id,
+        displayName: profile.display_name,
+        email: profile.email,
+      })
     })
   })
 
@@ -183,18 +180,7 @@ describe('ProfileIntegration', () => {
 
   describe('Mutation: updateProfileById', () => {
     it('updates an existing profile', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
-
-      const [profile] = await db('profiles')
-        .insert(
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          )
-        )
-        .returning('*')
+      const [profile] = await createProfiles()
 
       const query = `
         mutation updateProfileById($input: UpdateProfileByIdInput!) {
@@ -224,18 +210,7 @@ describe('ProfileIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
-
-      const [profile] = await db('profiles')
-        .insert(
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          )
-        )
-        .returning('*')
+      const [_, profile] = await createProfiles()
 
       const query = `
         mutation updateProfileById($input: UpdateProfileByIdInput!) {
@@ -268,18 +243,7 @@ describe('ProfileIntegration', () => {
 
   describe('Mutation: deleteProfileById', () => {
     it('updates an existing profile', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
-
-      const [profile] = await db('profiles')
-        .insert(
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          )
-        )
-        .returning('*')
+      const [profile] = await createProfiles()
 
       const query = `
         mutation deleteProfileById($input: DeleteProfileByIdInput!) {
@@ -305,18 +269,7 @@ describe('ProfileIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
-
-      const [profile] = await db('profiles')
-        .insert(
-          pickDb(
-            ['userId', 'displayName', 'email'],
-            ProfileFactory.make({userId: user.id})
-          )
-        )
-        .returning('*')
+      const [_, profile] = await createProfiles()
 
       const query = `
         mutation deleteProfileById($input: DeleteProfileByIdInput!) {
