@@ -44,6 +44,7 @@
     "graphql-tag": "^2.10.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
+    "ramda": "^0.27.0",
     "ts-parse-database-url": "^1.0.3"
   },
   "devDependencies": {

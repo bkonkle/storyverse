@@ -5,8 +5,6 @@ import jwt from 'jsonwebtoken'
 
 import {User} from '../../src/Config'
 
-jest.mock('express-jwt')
-
 const eJwt = (expressJwt as unknown) as jest.Mock<typeof expressJwt>
 
 export const mockJwt = (token: User) => {
