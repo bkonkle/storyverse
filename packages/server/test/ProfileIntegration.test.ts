@@ -6,17 +6,16 @@ import {
   getToken,
   initGraphQL,
   mockJwt,
-  omitDb,
-  pickDb,
 } from '@graft/server/test'
 
 import config from '../knexfile'
 import {TABLES, init} from './TestApp'
-import {UserFactory, ProfileFactory} from './factories'
+import {ProfileFactory} from './factories'
+import {handleCreateProfiles, handleCreateUsers} from './TestData'
 
 jest.mock('express-jwt')
 
-describe('ProfileIntegration', () => {
+describe('Profile Integration', () => {
   let graphql: GraphQL
 
   const token = getToken()
@@ -35,39 +34,8 @@ describe('ProfileIntegration', () => {
     await dbCleaner(db, TABLES)
   })
 
-  const createUsers = async (
-    extras: [object, object] = [undefined, undefined]
-  ) => {
-    const [extra1, extra2] = extras
-
-    return db('users')
-      .insert([
-        {username: token.sub, ...extra1},
-        pickDb(['username'], UserFactory.make(extra2)),
-      ])
-      .returning('*')
-  }
-
-  const createProfiles = async (
-    extras: [object, object] = [undefined, undefined],
-    users?: [object, object]
-  ) => {
-    const [extra1, extra2] = extras
-    const [user1, user2] = users || (await createUsers())
-
-    return db('profiles')
-      .insert([
-        omitDb(
-          ['id', 'createdAt', 'updatedAt'],
-          ProfileFactory.make({userId: user1.id, ...extra1})
-        ),
-        omitDb(
-          ['id', 'createdAt', 'updatedAt'],
-          ProfileFactory.make({userId: user2.id, ...extra2})
-        ),
-      ])
-      .returning('*')
-  }
+  const createUsers = handleCreateUsers(db, token)
+  const createProfiles = handleCreateProfiles(db, token)
 
   describe('Query: allProfiles', () => {
     it('lists profiles', async () => {

@@ -1,4 +1,3 @@
-import {pick} from 'ramda'
 import {
   GraphQL,
   dbCleaner,
@@ -11,10 +10,11 @@ import {
 import config from '../knexfile'
 import {TABLES, init} from './TestApp'
 import {UserFactory} from './factories'
+import {handleCreateUsers} from './TestData'
 
 jest.mock('express-jwt')
 
-describe('UserIntegration', () => {
+describe('User Integration', () => {
   let graphql: GraphQL
 
   const token = getToken()
@@ -33,18 +33,7 @@ describe('UserIntegration', () => {
     await dbCleaner(db, TABLES)
   })
 
-  const createUsers = async (
-    extras: [object, object] = [undefined, undefined]
-  ) => {
-    const [extra1, extra2] = extras
-
-    return db('users')
-      .insert([
-        pick(['username'], UserFactory.make({username: token.sub, ...extra1})),
-        pick(['username'], UserFactory.make(extra2)),
-      ])
-      .returning('*')
-  }
+  const createUsers = handleCreateUsers(db, token)
 
   describe('Query: allUsers', () => {
     it('lists users', async () => {

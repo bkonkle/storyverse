@@ -6,17 +6,16 @@ import {
   getToken,
   initGraphQL,
   mockJwt,
-  omitDb,
-  pickDb,
 } from '@graft/server/test'
 
 import config from '../knexfile'
 import {TABLES, init} from './TestApp'
-import {ProfileFactory, UserFactory, UniverseFactory} from './factories'
+import {UniverseFactory} from './factories'
+import {handleCreateProfiles, handleCreateUniverses} from './TestData'
 
 jest.mock('express-jwt')
 
-describe('UniverseIntegration', () => {
+describe('Universe Integration', () => {
   let graphql: GraphQL
 
   const token = getToken()
@@ -35,60 +34,8 @@ describe('UniverseIntegration', () => {
     await dbCleaner(db, TABLES)
   })
 
-  const createUsers = async (
-    extras: [object, object] = [undefined, undefined]
-  ) => {
-    const [extra1, extra2] = extras
-
-    return db('users')
-      .insert([
-        {username: token.sub, ...extra1},
-        pickDb(['username'], UserFactory.make(extra2)),
-      ])
-      .returning('*')
-  }
-
-  const createProfiles = async (
-    extras: [object, object] = [undefined, undefined],
-    users?: [object, object]
-  ) => {
-    const [extra1, extra2] = extras
-    const [user1, user2] = users || (await createUsers())
-
-    return db('profiles')
-      .insert([
-        omitDb(
-          ['id', 'createdAt', 'updatedAt'],
-          ProfileFactory.make({userId: user1.id, ...extra1})
-        ),
-        omitDb(
-          ['id', 'createdAt', 'updatedAt'],
-          ProfileFactory.make({userId: user2.id, ...extra2})
-        ),
-      ])
-      .returning('*')
-  }
-
-  const createUniverses = async (
-    extras: [object, object] = [undefined, undefined],
-    profiles?: [object, object]
-  ) => {
-    const [extra1, extra2] = extras
-    const [profile1, profile2] = profiles || (await createProfiles())
-
-    return db('universes')
-      .insert([
-        omitDb(
-          ['id', 'createdAt', 'updatedAt'],
-          UniverseFactory.make({ownedByProfileId: profile1.id, ...extra1})
-        ),
-        omitDb(
-          ['id', 'createdAt', 'updatedAt'],
-          UniverseFactory.make({ownedByProfileId: profile2.id, ...extra2})
-        ),
-      ])
-      .returning('*')
-  }
+  const createProfiles = handleCreateProfiles(db, token)
+  const createUniverses = handleCreateUniverses(db, token)
 
   describe('Query: allUniverses', () => {
     it('lists universes', async () => {
@@ -220,7 +167,7 @@ describe('UniverseIntegration', () => {
         }
       `
 
-      const input = pickDb(['name'], UniverseFactory.make())
+      const input = pick(['name'], UniverseFactory.make())
 
       const variables = {
         input: {id: universe.id, universePatch: input},
