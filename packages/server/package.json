@@ -32,7 +32,7 @@
     "start": "node .build/src/Server.js",
     "test": "NODE_ENV=test jest",
     "test.watch": "yarn test --watch",
-    "test.int": "NODE_ENV=test jest -c ./jest.integration.config.js"
+    "test.int": "NODE_ENV=test jest -i -c ./jest.integration.config.js --forceExit"
   },
   "dependencies": {
     "@graft/knex": "^1.0.1",

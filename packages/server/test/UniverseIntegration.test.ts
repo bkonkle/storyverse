@@ -1,6 +1,6 @@
 import {pick} from 'ramda'
 
-import {TestApp, init} from './TestApp'
+import {init} from './TestApp'
 import {getDb, dbCleaner, pickDb, omitDb} from './lib/db'
 import {mockJwt, getToken} from './lib/jwt'
 import {GraphQL, initGraphQL} from './lib/graphql'
@@ -9,7 +9,6 @@ import {ProfileFactory, UserFactory, UniverseFactory} from './factories'
 jest.mock('express-jwt')
 
 describe.skip('UniverseIntegration', () => {
-  let testApp: TestApp
   let graphql: GraphQL
 
   const token = getToken()
@@ -18,18 +17,14 @@ describe.skip('UniverseIntegration', () => {
   const db = getDb()
 
   beforeAll(async () => {
-    testApp = await init()
-    graphql = initGraphQL(testApp.app, token)
+    const {app} = await init()
+    graphql = initGraphQL(app, token)
   })
 
   beforeEach(async () => {
     jest.clearAllMocks()
 
     await dbCleaner()
-  })
-
-  afterAll(async () => {
-    await testApp.close()
   })
 
   const createUniverses = async (
@@ -69,7 +64,7 @@ describe.skip('UniverseIntegration', () => {
   }
 
   describe('Query: allUniverses', () => {
-    it('lists universes', async () => {
+    it.only('lists universes', async () => {
       const [universe] = await createUniverses()
 
       const query = `

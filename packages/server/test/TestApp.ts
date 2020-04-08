@@ -12,7 +12,20 @@ export interface TestApp {
   close(): Promise<void>
 }
 
+// Cache the test app between tests
+let instance: TestApp | undefined = undefined
+
+afterAll(async () => {
+  if (instance) {
+    await instance.close()
+  }
+})
+
 export async function init() {
+  if (instance) {
+    return instance
+  }
+
   const app = express().use(morgan('dev'))
 
   const server = await new Promise<Server>(resolve => {
@@ -38,7 +51,11 @@ export async function init() {
   const close = async () => {
     await pool.end()
     await new Promise(resolve => server.close(resolve))
+
+    instance = undefined
   }
 
-  return {app: graft, pool, close}
+  instance = {app: graft, pool, close}
+
+  return instance
 }

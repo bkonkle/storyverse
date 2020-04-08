@@ -1,6 +1,6 @@
 import {pick} from 'ramda'
 
-import {TestApp, init} from './TestApp'
+import {init} from './TestApp'
 import {getDb, dbCleaner} from './lib/db'
 import {mockJwt, getToken} from './lib/jwt'
 import {GraphQL, initGraphQL} from './lib/graphql'
@@ -9,7 +9,6 @@ import {UserFactory} from './factories'
 jest.mock('express-jwt')
 
 describe('UserIntegration', () => {
-  let testApp: TestApp
   let graphql: GraphQL
 
   const token = getToken()
@@ -18,18 +17,14 @@ describe('UserIntegration', () => {
   const db = getDb()
 
   beforeAll(async () => {
-    testApp = await init()
-    graphql = initGraphQL(testApp.app, token)
+    const {app} = await init()
+    graphql = initGraphQL(app, token)
   })
 
   beforeEach(async () => {
     jest.clearAllMocks()
 
     await dbCleaner()
-  })
-
-  afterAll(async () => {
-    await testApp.close()
   })
 
   const createUsers = async (
