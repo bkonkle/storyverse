@@ -7,15 +7,15 @@ import {encodeToken} from './jwt'
 export const handleQuery = (app: Application, token: User) => async (
   query: string,
   variables?: object,
-  options: {warn?: boolean} = {}
+  options: {warn?: boolean; expect?: number} = {}
 ) => {
-  const {warn = true} = options
+  const {warn = true, expect = 200} = options
 
   const response = await request(app)
     .post('/graphql')
     .set('Authorization', `Bearer ${encodeToken(token)}`)
     .send({query, variables})
-    .expect(200)
+    .expect(expect)
 
   if (warn && response.body.errors) {
     console.error(

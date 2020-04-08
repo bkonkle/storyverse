@@ -37,20 +37,19 @@ describe('ProfileIntegration', () => {
         .insert({username: faker.random.alphaNumeric(10)})
         .returning('*')
 
-      const [profile1] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
-        .returning('*')
-
-      const [profile2] = await db('profiles')
-        .insert({
-          user_id: user.id,
-          display_name: faker.name.findName(),
-          email: faker.internet.email(),
-        })
+      const [profile1, profile2] = await db('profiles')
+        .insert([
+          {
+            user_id: user.id,
+            display_name: faker.name.findName(),
+            email: faker.internet.email(),
+          },
+          {
+            user_id: user.id,
+            display_name: faker.name.findName(),
+            email: faker.internet.email(),
+          },
+        ])
         .returning('*')
 
       const query = `
@@ -107,9 +106,7 @@ describe('ProfileIntegration', () => {
         }
       `
 
-      const variables = {
-        id: profile.id,
-      }
+      const variables = {id: profile.id}
 
       const {data} = await graphql.query(query, variables)
 
@@ -141,13 +138,8 @@ describe('ProfileIntegration', () => {
         }
       `
 
-      const profile = ProfileFactory.make({
-        userId: user.id,
-      })
-
-      const variables = {
-        input: {profile},
-      }
+      const profile = ProfileFactory.make({userId: user.id})
+      const variables = {input: {profile}}
 
       const {data} = await graphql.query(query, variables)
 
@@ -177,13 +169,8 @@ describe('ProfileIntegration', () => {
         }
       `
 
-      const profile = ProfileFactory.make({
-        userId: user.id,
-      })
-
-      const variables = {
-        input: {profile},
-      }
+      const profile = ProfileFactory.make({userId: user.id})
+      const variables = {input: {profile}}
 
       const body = await graphql.query(query, variables, {warn: false})
 
@@ -305,9 +292,7 @@ describe('ProfileIntegration', () => {
         }
       `
 
-      const variables = {
-        input: {id: profile.id},
-      }
+      const variables = {input: {id: profile.id}}
 
       const {data} = await graphql.query(query, variables)
 
@@ -343,9 +328,7 @@ describe('ProfileIntegration', () => {
         }
       `
 
-      const variables = {
-        input: {id: profile.id},
-      }
+      const variables = {input: {id: profile.id}}
 
       const body = await graphql.query(query, variables, {warn: false})
 
