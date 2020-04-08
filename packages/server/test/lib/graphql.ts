@@ -1,5 +1,5 @@
 import {Application} from 'express'
-import request from 'supertest'
+import supertest from 'supertest'
 
 import {User} from '../../src/Config'
 import {encodeToken} from './jwt'
@@ -11,7 +11,8 @@ export const handleQuery = (app: Application, token: User) => async (
 ) => {
   const {warn = true, expect = 200} = options
 
-  const response = await request(app)
+  const response = await supertest
+    .agent(app)
     .post('/graphql')
     .set('Authorization', `Bearer ${encodeToken(token)}`)
     .send({query, variables})
