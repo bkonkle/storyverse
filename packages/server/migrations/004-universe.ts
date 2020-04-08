@@ -112,7 +112,8 @@ export async function up(knex: Knex) {
   // Policy for everything else
   await knex.raw(`
     CREATE POLICY universe_moderators_modify_policy ON universe_moderators
-      USING (
+      USING (true)
+      WITH CHECK (
         profile_id IN (
           SELECT uv.owned_by_profile_id FROM universes uv
           INNER JOIN profiles p ON p.id = uv.owned_by_profile_id

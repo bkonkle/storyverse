@@ -11,12 +11,12 @@ import {
 } from '@graft/server/test'
 
 import config from '../knexfile'
-import {init} from './TestApp'
+import {TABLES, init} from './TestApp'
 import {ProfileFactory, UserFactory, UniverseFactory} from './factories'
 
 jest.mock('express-jwt')
 
-describe.skip('UniverseIntegration', () => {
+describe('UniverseIntegration', () => {
   let graphql: GraphQL
 
   const token = getToken()
@@ -32,30 +32,49 @@ describe.skip('UniverseIntegration', () => {
   beforeEach(async () => {
     jest.clearAllMocks()
 
-    await dbCleaner(db)
+    await dbCleaner(db, TABLES)
   })
 
-  const createUniverses = async (
+  const createUsers = async (
     extras: [object, object] = [undefined, undefined]
   ) => {
     const [extra1, extra2] = extras
 
-    const [user1, user2] = await db('users')
-      .insert([{username: token.sub}, pickDb(['username'], UserFactory.make())])
+    return db('users')
+      .insert([
+        {username: token.sub, ...extra1},
+        pickDb(['username'], UserFactory.make(extra2)),
+      ])
       .returning('*')
+  }
 
-    const [profile1, profile2] = await db('profiles')
+  const createProfiles = async (
+    extras: [object, object] = [undefined, undefined],
+    users?: [object, object]
+  ) => {
+    const [extra1, extra2] = extras
+    const [user1, user2] = users || (await createUsers())
+
+    return db('profiles')
       .insert([
         omitDb(
           ['id', 'createdAt', 'updatedAt'],
-          ProfileFactory.make({userId: user1.id})
+          ProfileFactory.make({userId: user1.id, ...extra1})
         ),
         omitDb(
           ['id', 'createdAt', 'updatedAt'],
-          ProfileFactory.make({userId: user2.id})
+          ProfileFactory.make({userId: user2.id, ...extra2})
         ),
       ])
       .returning('*')
+  }
+
+  const createUniverses = async (
+    extras: [object, object] = [undefined, undefined],
+    profiles?: [object, object]
+  ) => {
+    const [extra1, extra2] = extras
+    const [profile1, profile2] = profiles || (await createProfiles())
 
     return db('universes')
       .insert([
@@ -72,8 +91,8 @@ describe.skip('UniverseIntegration', () => {
   }
 
   describe('Query: allUniverses', () => {
-    it.only('lists universes', async () => {
-      const [universe] = await createUniverses()
+    it('lists universes', async () => {
+      const [universe1, universe2] = await createUniverses()
 
       const query = `
         query allUniverses {
@@ -88,12 +107,19 @@ describe.skip('UniverseIntegration', () => {
 
       const {data} = await graphql.query(query)
 
-      expect(data?.allUniverses).toHaveProperty('nodes', [
-        {
-          id: universe.id,
-          name: universe.name,
-        },
-      ])
+      expect(data?.allUniverses).toHaveProperty(
+        'nodes',
+        expect.arrayContaining([
+          {
+            id: universe1.id,
+            name: universe1.name,
+          },
+          {
+            id: universe2.id,
+            name: universe2.name,
+          },
+        ])
+      )
     })
   })
 
@@ -105,8 +131,7 @@ describe.skip('UniverseIntegration', () => {
         query universeById($id: UUID!) {
           universeById (id: $id) {
             id
-            displayName
-            email
+            name
           }
         }
       `
@@ -115,41 +140,16 @@ describe.skip('UniverseIntegration', () => {
 
       const {data} = await graphql.query(query, variables)
 
-      expect(data).toHaveProperty(
-        'universeById',
-        expect.objectContaining({
-          displayName: universe.display_name,
-          email: universe.email,
-        })
-      )
-    })
-
-    it('requires the token sub to match the username', async () => {
-      const [_, universe] = await createUniverses()
-
-      const query = `
-        query universeById($id: UUID!) {
-          universeById (id: $id) {
-            id
-            displayName
-            email
-          }
-        }
-      `
-
-      const variables = {id: universe.id}
-
-      const {data} = await graphql.query(query, variables)
-
-      expect(data.universeById).toBe(null)
+      expect(data).toHaveProperty('universeById', {
+        id: universe.id,
+        name: universe.name,
+      })
     })
   })
 
   describe('Mutation: createUniverse', () => {
     it('creates a universe', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
+      const [profile] = await createProfiles()
 
       const query = `
         mutation createUniverse($input: CreateUniverseInput!) {
@@ -162,7 +162,9 @@ describe.skip('UniverseIntegration', () => {
         }
       `
 
-      const universe = UniverseFactory.make({userId: user.id})
+      const universe = UniverseFactory.make({
+        ownedByProfileId: profile.id,
+      })
       const variables = {input: {universe}}
 
       const {data} = await graphql.query(query, variables)
@@ -174,23 +176,22 @@ describe.skip('UniverseIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pickDb(['username'], UserFactory.make()))
-        .returning('*')
+      const [_, profile] = await createProfiles()
 
       const query = `
         mutation createUniverse($input: CreateUniverseInput!) {
           createUniverse(input: $input) {
             universe {
               id
-              displayName
-              email
+              name
             }
           }
         }
       `
 
-      const universe = UniverseFactory.make({userId: user.id})
+      const universe = UniverseFactory.make({
+        ownedByProfileId: profile.id,
+      })
       const variables = {input: {universe}}
 
       const body = await graphql.query(query, variables, {warn: false})
@@ -213,14 +214,13 @@ describe.skip('UniverseIntegration', () => {
           updateUniverseById(input: $input) {
             universe {
               id
-              displayName
-              email
+              name
             }
           }
         }
       `
 
-      const input = pickDb(['email'], UniverseFactory.make())
+      const input = pickDb(['name'], UniverseFactory.make())
 
       const variables = {
         input: {id: universe.id, universePatch: input},
@@ -230,8 +230,7 @@ describe.skip('UniverseIntegration', () => {
 
       expect(data?.updateUniverseById).toHaveProperty('universe', {
         id: universe.id,
-        displayName: universe.display_name,
-        email: input.email,
+        name: input.name,
       })
     })
 
@@ -243,14 +242,13 @@ describe.skip('UniverseIntegration', () => {
           updateUniverseById(input: $input) {
             universe {
               id
-              displayName
-              email
+              name
             }
           }
         }
       `
 
-      const input = pick(['email'], UniverseFactory.make())
+      const input = pick(['name'], UniverseFactory.make())
 
       const variables = {
         input: {id: universe.id, universePatch: input},
@@ -276,8 +274,7 @@ describe.skip('UniverseIntegration', () => {
           deleteUniverseById(input: $input) {
             universe {
               id
-              displayName
-              email
+              name
             }
           }
         }
@@ -289,8 +286,7 @@ describe.skip('UniverseIntegration', () => {
 
       expect(data?.deleteUniverseById).toHaveProperty('universe', {
         id: universe.id,
-        displayName: universe.display_name,
-        email: universe.email,
+        name: universe.name,
       })
     })
 
@@ -302,8 +298,7 @@ describe.skip('UniverseIntegration', () => {
           deleteUniverseById(input: $input) {
             universe {
               id
-              displayName
-              email
+              name
             }
           }
         }

@@ -1786,10 +1786,10 @@
     knex "^0.20.1"
     pg "^7.12.1"
 
-"@graft/server@^5.4.1":
-  version "5.4.1"
-  resolved "https://registry.yarnpkg.com/@graft/server/-/server-5.4.1.tgz#b503f68b61ee610984a8c85bae3ff77a4daf023b"
-  integrity sha512-/5KFZGbIPOn3d9mEkGD2fN3Ne7l091SQxbzBScl5ebV4YXE/6JhLdSfPgYnQ6izQvTor1uFUiLVRKX1+sFruXQ==
+"@graft/server@^5.4.2":
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/@graft/server/-/server-5.4.2.tgz#8e7cc2e2c67d98aafde3cf889152d0c368863a76"
+  integrity sha512-MSY3BU9kr1vebotJDRAkJvonF7kWan4SCBBc6eOQhJ9Wbf6/fs4qrBpw6hBbK+vpfRTGBWvy4rX893l8uRdAWg==
   dependencies:
     chalk "^3.0.0"
     cors "^2.8.5"

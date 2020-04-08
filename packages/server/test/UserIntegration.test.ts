@@ -9,7 +9,7 @@ import {
 } from '@graft/server/test'
 
 import config from '../knexfile'
-import {init} from './TestApp'
+import {TABLES, init} from './TestApp'
 import {UserFactory} from './factories'
 
 jest.mock('express-jwt')
@@ -30,7 +30,7 @@ describe('UserIntegration', () => {
   beforeEach(async () => {
     jest.clearAllMocks()
 
-    await dbCleaner(db)
+    await dbCleaner(db, TABLES)
   })
 
   const createUsers = async (

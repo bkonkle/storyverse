@@ -10,7 +10,7 @@ export const make = (
   updatedAt: faker.date.recent(),
 
   name: faker.name.findName(),
-  description: faker.lorem.paragraphs(2),
+  description: {text: faker.lorem.paragraphs(2)},
   ownedByProfileId: faker.random.uuid(),
   ...extra,
 })

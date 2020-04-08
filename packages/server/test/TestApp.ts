@@ -12,6 +12,8 @@ export interface TestApp {
   close(): Promise<void>
 }
 
+export const TABLES = ['users', 'profiles', 'universes', 'universe_moderators']
+
 // Cache the test app between tests
 let instance: TestApp | undefined = undefined
 

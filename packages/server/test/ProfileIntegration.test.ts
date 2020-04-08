@@ -11,7 +11,7 @@ import {
 } from '@graft/server/test'
 
 import config from '../knexfile'
-import {init} from './TestApp'
+import {TABLES, init} from './TestApp'
 import {UserFactory, ProfileFactory} from './factories'
 
 jest.mock('express-jwt')
@@ -32,17 +32,28 @@ describe('ProfileIntegration', () => {
   beforeEach(async () => {
     jest.clearAllMocks()
 
-    await dbCleaner(db)
+    await dbCleaner(db, TABLES)
   })
 
-  const createProfiles = async (
+  const createUsers = async (
     extras: [object, object] = [undefined, undefined]
   ) => {
     const [extra1, extra2] = extras
 
-    const [user1, user2] = await db('users')
-      .insert([{username: token.sub}, pickDb(['username'], UserFactory.make())])
+    return db('users')
+      .insert([
+        {username: token.sub, ...extra1},
+        pickDb(['username'], UserFactory.make(extra2)),
+      ])
       .returning('*')
+  }
+
+  const createProfiles = async (
+    extras: [object, object] = [undefined, undefined],
+    users?: [object, object]
+  ) => {
+    const [extra1, extra2] = extras
+    const [user1, user2] = users || (await createUsers())
 
     return db('profiles')
       .insert([
@@ -122,9 +133,7 @@ describe('ProfileIntegration', () => {
 
   describe('Mutation: createProfile', () => {
     it('creates a profile', async () => {
-      const [user] = await db('users')
-        .insert({username: token.sub})
-        .returning('*')
+      const [user] = await createUsers()
 
       const query = `
         mutation createProfile($input: CreateProfileInput!) {
@@ -153,9 +162,7 @@ describe('ProfileIntegration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const [user] = await db('users')
-        .insert(pick(['username'], UserFactory.make()))
-        .returning('*')
+      const [_, user] = await createUsers()
 
       const query = `
         mutation createProfile($input: CreateProfileInput!) {
