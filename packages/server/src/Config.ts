@@ -1,26 +1,16 @@
 import dotenv from 'dotenv'
 import Http from 'http'
 import parseDbUrl from 'ts-parse-database-url'
-import {GraphileUtils, GraftConfig} from '@graft/server'
+import {GraphileUtils, GraftConfig, Token} from '@graft/server'
 
 import Plugins from './Plugins'
 
-export interface User {
-  iss: string
-  sub: string
-  aud: string[]
-  iat: number
-  exp: number
-  azp: string
-  scope: string
-}
-
 export interface IncomingMessage extends Http.IncomingMessage {
-  user?: User
+  user?: Token
 }
 
 export interface Context extends GraphileUtils.PostGraphileContext {
-  user?: User
+  user?: Token
 }
 
 export type AppRequest = GraphileUtils.GraphileRequest<Context>

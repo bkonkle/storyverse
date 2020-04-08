@@ -1,9 +1,17 @@
 import {pick} from 'ramda'
+import {
+  GraphQL,
+  dbCleaner,
+  getDb,
+  getToken,
+  initGraphQL,
+  mockJwt,
+  omitDb,
+  pickDb,
+} from '@graft/server/test'
 
+import config from '../knexfile'
 import {init} from './TestApp'
-import {getDb, dbCleaner, pickDb, omitDb} from './lib/db'
-import {mockJwt, getToken} from './lib/jwt'
-import {GraphQL, initGraphQL} from './lib/graphql'
 import {ProfileFactory, UserFactory, UniverseFactory} from './factories'
 
 jest.mock('express-jwt')
@@ -14,7 +22,7 @@ describe.skip('UniverseIntegration', () => {
   const token = getToken()
   mockJwt(token)
 
-  const db = getDb()
+  const db = getDb(config)
 
   beforeAll(async () => {
     const {app} = await init()
@@ -24,7 +32,7 @@ describe.skip('UniverseIntegration', () => {
   beforeEach(async () => {
     jest.clearAllMocks()
 
-    await dbCleaner()
+    await dbCleaner(db)
   })
 
   const createUniverses = async (
