@@ -20,7 +20,7 @@ const config: PostgresConnectionOptions = {
   password: getEnv(EnvKeys.DbPassword, appName),
   database: dbName,
 
-  entities: [`${__dirname}/../**/*Entity{.ts,.js}`],
+  entities: [`${__dirname}/../*/data/*{.ts,.js}`],
 
   synchronize: false,
   migrationsRun: true,

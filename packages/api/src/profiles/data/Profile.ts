@@ -1,22 +1,21 @@
 import {Entity, Column, ManyToOne, JoinColumn, OneToMany} from 'typeorm'
 import {IsString, IsJSON, IsOptional, IsUUID, Max} from 'class-validator'
+import {Field, ObjectType} from '@nestjs/graphql'
 
-import User from '../../users/data/UserEntity'
-import Universe from '../../universes/data/UniverseEntity'
-import {UuidTable} from '../../utils/UuidTable'
-
-export interface ProfileContent {
-  [key: string]: string
-}
+import User from '../../users/data/User'
+import Universe from '../../universes/data/Universe'
+import {UuidTable} from '../../utils/Uuid'
+import ProfileContent from './ProfileContent'
 
 @Entity({name: 'profiles'})
+@ObjectType({description: 'A User Profile'})
 export class Profile extends UuidTable {
   @Column({
     type: 'varchar',
     length: 300,
     nullable: false,
-    comment: 'An email address',
   })
+  @Field({description: 'An email address'})
   @IsString()
   @Max(300)
   email!: string
@@ -26,8 +25,8 @@ export class Profile extends UuidTable {
     type: 'varchar',
     length: 300,
     nullable: true,
-    comment: 'A display name',
   })
+  @Field({description: 'A display name'})
   @IsString()
   @Max(300)
   @IsOptional()
@@ -36,8 +35,8 @@ export class Profile extends UuidTable {
   @Column({
     type: 'text',
     nullable: true,
-    comment: 'A Profile photo',
   })
+  @Field({description: 'A Profile photo'})
   @IsString()
   @IsOptional()
   picture?: string
@@ -45,8 +44,8 @@ export class Profile extends UuidTable {
   @Column({
     type: 'jsonb',
     nullable: true,
-    comment: 'Editor json content for the Profile body',
   })
+  @Field({description: 'Editor json content for the Profile body'})
   @IsJSON()
   @IsOptional()
   content?: ProfileContent
@@ -55,8 +54,8 @@ export class Profile extends UuidTable {
     type: 'varchar',
     length: 300,
     nullable: true,
-    comment: "The User''s city",
   })
+  @Field({description: "The User''s city"})
   @IsString()
   @Max(300)
   @IsOptional()
@@ -67,8 +66,8 @@ export class Profile extends UuidTable {
     type: 'varchar',
     length: 300,
     nullable: true,
-    comment: "The User''s city",
   })
+  @Field({description: "The User''s state or province"})
   @IsString()
   @Max(300)
   @IsOptional()
@@ -78,16 +77,16 @@ export class Profile extends UuidTable {
     name: 'user_id',
     type: 'uuid',
     nullable: false,
-    comment: 'The User that created the Profile',
   })
+  @Field({description: 'The User that created the Profile'})
   @IsUUID()
   userId!: string
 
-  @ManyToOne((_type) => User, (user) => user.profiles)
+  @ManyToOne(() => User, (user) => user.profiles)
   @JoinColumn({name: 'user_id'})
   user!: User
 
-  @OneToMany((_type) => Universe, (universe) => universe.ownedByProfile)
+  @OneToMany(() => Universe, (universe) => universe.ownedByProfile)
   universesOwned!: Universe[]
 }
 

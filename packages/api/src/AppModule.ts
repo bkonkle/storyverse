@@ -1,3 +1,4 @@
+import {join} from 'path'
 import {
   Module,
   NestModule,
@@ -33,6 +34,7 @@ const isProd = env === 'production'
     GraphQLModule.forRoot({
       debug: isDev,
       playground: !isProd,
+      autoSchemaFile: join(process.cwd(), 'schema.gql'),
     }),
     UsersModule,
     ProfilesModule,

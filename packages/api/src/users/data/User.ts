@@ -1,8 +1,8 @@
 import {Entity, Column, OneToMany} from 'typeorm'
 import {IsString, IsBoolean, Max} from 'class-validator'
 
-import Profile from '../../profiles/data/ProfileEntity'
-import {UuidTable} from '../../utils/UuidTable'
+import Profile from '../../profiles/data/Profile'
+import {UuidTable} from '../../utils/Uuid'
 
 @Entity({name: 'users'})
 export class User extends UuidTable {
@@ -25,7 +25,7 @@ export class User extends UuidTable {
   @IsBoolean()
   isActive!: boolean
 
-  @OneToMany((_type) => Profile, (profile) => profile.user)
+  @OneToMany(() => Profile, (profile) => profile.user)
   profiles!: Profile[]
 }
 

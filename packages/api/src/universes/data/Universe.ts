@@ -1,8 +1,8 @@
 import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm'
 import {IsString, IsJSON, IsOptional, IsUUID, Max} from 'class-validator'
 
-import Profile from '../../profiles/data/ProfileEntity'
-import {UuidTable} from '../../utils/UuidTable'
+import Profile from '../../profiles/data/Profile'
+import {UuidTable} from '../../utils/Uuid'
 
 export interface UniverseDescription {
   [key: string]: string
@@ -38,7 +38,7 @@ export class Universe extends UuidTable {
   @IsUUID()
   ownedByProfileId!: string
 
-  @ManyToOne((_type) => Profile, (profile) => profile.universesOwned)
+  @ManyToOne(() => Profile, (profile) => profile.universesOwned)
   @JoinColumn({name: 'owned_by_profile_id'})
   ownedByProfile!: Profile
 }

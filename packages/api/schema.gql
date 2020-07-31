@@ -1,0 +1,44 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProfileContent {
+  temp: String!
+}
+
+"""A User Profile"""
+type Profile {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """An email address"""
+  email: String!
+
+  """A display name"""
+  displayName: String!
+
+  """A Profile photo"""
+  picture: String!
+
+  """Editor json content for the Profile body"""
+  content: ProfileContent!
+
+  """The User''s city"""
+  city: String!
+
+  """The User''s state or province"""
+  stateProvince: String!
+
+  """The User that created the Profile"""
+  userId: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  profile(id: ID!): Profile
+}
