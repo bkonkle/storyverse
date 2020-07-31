@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 
-import {Database} from '../../config'
+import Database from '../../config/Database'
 
 const main = async () => {
   const sqlFile = process.argv[2]
@@ -32,7 +32,7 @@ const main = async () => {
 }
 
 if (require.main === module) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error(err)
 
     process.exit(1)

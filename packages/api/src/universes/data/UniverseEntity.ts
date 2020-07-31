@@ -1,7 +1,7 @@
 import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm'
 import {IsString, IsJSON, IsOptional, IsUUID, Max} from 'class-validator'
 
-import {Profile} from '../../profiles'
+import Profile from '../../profiles/data/ProfileEntity'
 import {UuidTable} from '../../utils/UuidTable'
 
 export interface UniverseDescription {

@@ -1,8 +1,8 @@
 import {Entity, Column, ManyToOne, JoinColumn, OneToMany} from 'typeorm'
 import {IsString, IsJSON, IsOptional, IsUUID, Max} from 'class-validator'
 
-import {User} from '../../users'
-import {Universe} from '../../universes'
+import User from '../../users/data/UserEntity'
+import Universe from '../../universes/data/UniverseEntity'
 import {UuidTable} from '../../utils/UuidTable'
 
 export interface ProfileContent {
@@ -88,7 +88,7 @@ export class Profile extends UuidTable {
   user!: User
 
   @OneToMany((_type) => Universe, (universe) => universe.ownedByProfile)
-  universesOwned!: Profile[]
+  universesOwned!: Universe[]
 }
 
 export default Profile

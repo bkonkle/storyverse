@@ -2,7 +2,7 @@ import path from 'path'
 import readdir from 'recursive-readdir'
 import {execSync} from 'child_process'
 
-import {Database} from '../../config'
+import Database from '../../config/Database'
 
 export async function main(): Promise<void> {
   console.log(new Date(), `Refreshing DB functions...`)

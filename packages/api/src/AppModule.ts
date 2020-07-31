@@ -8,12 +8,14 @@ import {TypeOrmModule} from '@nestjs/typeorm'
 import {ScheduleModule} from '@nestjs/schedule'
 import {GraphQLModule} from '@nestjs/graphql'
 
-import {Database} from './config'
-import {ConfigModule} from './config'
-import {HealthModule} from './health'
-import {DecoderMiddleware} from './jwt'
 import {getEnv, EnvKeys} from './config/Environment'
-import {UsersModule} from './users'
+import Database from './config/Database'
+import ConfigModule from './config/ConfigModule'
+import HealthModule from './health/HealthModule'
+import DecoderMiddleware from './jwt/DecoderMiddleware'
+import UsersModule from './users/UsersModule'
+import ProfilesModule from './profiles/ProfilesModule'
+import UniversesModule from './universes/UniversesModule'
 
 const env = getEnv(EnvKeys.NodeEnv, 'production')
 const isDev = env === 'development'
@@ -30,6 +32,8 @@ const isProd = env === 'production'
       playground: !isProd,
     }),
     UsersModule,
+    ProfilesModule,
+    UniversesModule,
   ],
 })
 export class AppModule implements NestModule {

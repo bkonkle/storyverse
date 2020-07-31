@@ -1,7 +1,7 @@
 import {Entity, Column, OneToMany} from 'typeorm'
 import {IsString, IsBoolean, Max} from 'class-validator'
 
-import {Profile} from '../../profiles'
+import Profile from '../../profiles/data/ProfileEntity'
 import {UuidTable} from '../../utils/UuidTable'
 
 @Entity({name: 'users'})

@@ -1,6 +1,7 @@
 import {execSync} from 'child_process'
 
-import {Database, Environment} from '../../config'
+import Database from '../../config/Database'
+import * as Environment from '../../config/Environment'
 
 const {EnvKeys, getEnv} = Environment
 
@@ -27,7 +28,7 @@ const main = async () => {
 }
 
 if (require.main === module) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error(err)
 
     process.exit(1)
