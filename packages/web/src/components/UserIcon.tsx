@@ -12,7 +12,7 @@ import {logout} from '../data/AuthClient'
 import {handleUserData, getProfile} from '../data/UserData'
 import {useGetCurrentUserQuery, useCreateUserMutation} from '../data/Schema'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   avatarMenu: {
     flexDirection: 'column',
   },
@@ -59,7 +59,7 @@ const UserIcon: FC = () => {
         aria-label="account of current user"
         aria-controls="menu-appbar"
         aria-haspopup="true"
-        onClick={event => setAnchorEl(event.currentTarget)}
+        // onClick={event => setAnchorEl(event.currentTarget)}
         color="inherit"
       >
         <AccountCircle />
