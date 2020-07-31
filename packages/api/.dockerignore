@@ -1,0 +1,22 @@
+# Start by ignoring everything
+*
+
+# Package management
+!package.json
+!yarn.lock
+!.yarnrc
+!.npmrc
+
+# src and test folders
+!src/
+!test/
+
+# Configs
+!.eslintrc.js
+!.eslintignore
+!.prettierrc
+!nest-cli.json
+!nodemon-debug.json
+!nodemon.json
+!tsconfig.build.json
+!tsconfig.json

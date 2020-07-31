@@ -34,11 +34,6 @@
     "urql": "^1.6.3"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^1.8.3",
-    "@graphql-codegen/cli": "^1.8.3",
-    "@graphql-codegen/typescript": "^1.8.3",
-    "@graphql-codegen/typescript-operations": "^1.8.3",
-    "@graphql-codegen/typescript-urql": "^1.8.3",
     "@types/auth0-js": "^9.10.6",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/reach__router": "^1.2.6",

@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "downlevelIteration": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "module": "commonjs",
@@ -37,6 +38,6 @@
     "node_modules",
     "packages/*/node_modules",
     "packages/*/.build",
-    "packages/**/*.gen.tsx"
+    "packages/*/dist"
   ]
 }
