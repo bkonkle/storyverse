@@ -1,4 +1,5 @@
 # gatsby files
+.build/
 .cache/
 public
 .env.*
