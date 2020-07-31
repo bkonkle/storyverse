@@ -2,7 +2,7 @@ import {execSync} from 'child_process'
 
 import {Database} from '../../src/config'
 
-export const main = async () => {
+export async function main(): Promise<void> {
   console.log(new Date(), `Dropping database ${Database.database}...`)
 
   execSync(

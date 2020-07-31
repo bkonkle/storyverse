@@ -1,14 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
-  "exclude": [
-    // Default
-    "node_modules",
-    "packages/*/node_modules",
-    "packages/*/.build",
-    "packages/*/dist",
-
-    // Test files
-    "packages/**/*.spec.ts",
-    "packages/*/test"
-  ]
+  "extends": "./tsconfig.json",
+  "include": ["src"],
+  "exclude": ["test"]
 }

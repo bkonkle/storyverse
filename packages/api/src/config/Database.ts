@@ -4,8 +4,9 @@ import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnect
 import {EnvKeys, getEnv} from './Environment'
 
 const appName = 'storyverse'
-const env = getEnv(EnvKeys.NodeEnv, 'development')
+const env = getEnv(EnvKeys.NodeEnv, 'production')
 const dbHost = getEnv(EnvKeys.DbHostname, 'localhost')
+const dbName = env === 'test' ? `${appName}_test` : appName
 
 const logging: LoggerOptions =
   env === 'production' ? ['error'] : ['error', 'query', 'schema']
@@ -17,9 +18,9 @@ const config: PostgresConnectionOptions = {
   port: Number(getEnv(EnvKeys.DbPort, '5432')),
   username: getEnv(EnvKeys.DbUsername, appName),
   password: getEnv(EnvKeys.DbPassword, appName),
-  database: getEnv(EnvKeys.DbName, `${appName}_${env}`),
+  database: dbName,
 
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../**/*Entity{.ts,.js}'],
 
   // Use manual migrations
   synchronize: false,

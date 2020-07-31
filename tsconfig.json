@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "module": "commonjs",
@@ -14,7 +14,6 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": ".build",
     "preserveConstEnums": true,
     "removeComments": true,
     "resolveJsonModule": true,
@@ -23,21 +22,6 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "es6",
-    "paths": {
-      "*": ["*", "src/bindings/*"]
-    }
-  },
-  "include": [
-    "src",
-    "packages/*/src",
-    "packages/*/migrations",
-    "packages/**/__tests__/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "packages/*/node_modules",
-    "packages/*/.build",
-    "packages/*/dist"
-  ]
+    "target": "es6"
+  }
 }

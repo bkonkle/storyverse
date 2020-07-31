@@ -2,7 +2,7 @@ import {execSync} from 'child_process'
 
 import {Database} from '../../src/config'
 
-export const slugify = (text: string) =>
+export const slugify = (text: string): string =>
   text
     .toString()
     .replace(/\s+/g, '-') // Replace spaces with -
@@ -11,7 +11,7 @@ export const slugify = (text: string) =>
     .replace(/^-+/, '') // Trim - from start of text
     .replace(/-+$/, '') // Trim - from end of text
 
-const main = async () => {
+async function main() {
   const timestamp = slugify(new Date().toISOString())
 
   console.log(new Date(), `Beginning ${Database.database} database backup...`)
@@ -27,7 +27,7 @@ const main = async () => {
 }
 
 if (require.main === module) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error(err)
 
     process.exit(1)

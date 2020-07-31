@@ -4,15 +4,15 @@ import {execSync} from 'child_process'
 
 import {Database} from '../../src/config'
 
-export const main = async () => {
+export async function main(): Promise<void> {
   console.log(new Date(), `Refreshing DB functions...`)
 
   // Find all SQL files in the `src` folder
-  const files = (await readdir(path.join(__dirname, '..', 'src'))).filter(
-    filename => filename.endsWith('.sql')
-  )
+  const files = (
+    await readdir(path.join(__dirname, '..', 'src'))
+  ).filter((filename) => filename.endsWith('.sql'))
 
-  files.forEach(filename => {
+  files.forEach((filename) => {
     console.log(new Date(), `Loading ${path.basename(filename)}...`)
 
     execSync(
@@ -27,7 +27,7 @@ if (require.main === module) {
     .then(() => {
       process.exit(0)
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
 
       process.exit(1)
