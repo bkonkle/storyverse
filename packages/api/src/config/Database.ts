@@ -20,11 +20,10 @@ const config: PostgresConnectionOptions = {
   password: getEnv(EnvKeys.DbPassword, appName),
   database: dbName,
 
-  entities: [__dirname + '/../**/*Entity{.ts,.js}'],
+  entities: [`${__dirname}/../**/*Entity{.ts,.js}`],
 
-  // Use manual migrations
   synchronize: false,
-  migrationsRun: false,
+  migrationsRun: true,
 
   logging,
 
@@ -37,7 +36,7 @@ const config: PostgresConnectionOptions = {
   // Allow both start.prod and start.dev to use migrations.
   // __dirname points to either the dist/ or src/ folder, meaning
   // either the compiled JS in Prod or the TS in Dev.
-  migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+  migrations: [`${__dirname}/../migrations/**/*{.ts,.js}`],
   cli: {
     // Migrations should be inside the src/ folder
     // to be compiled into the dist/ folder.

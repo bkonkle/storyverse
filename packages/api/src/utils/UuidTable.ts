@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm'
-import {IsUUID, IsOptional, IsDateString} from 'class-validator'
+import {IsUUID, IsDateString} from 'class-validator'
 
 export abstract class UuidTable {
   @PrimaryGeneratedColumn('uuid')
@@ -12,11 +12,9 @@ export abstract class UuidTable {
 
   @CreateDateColumn({name: 'created_at'})
   @IsDateString()
-  @IsOptional()
   public createdAt!: Date
 
   @UpdateDateColumn({name: 'updated_at'})
   @IsDateString()
-  @IsOptional()
   public updatedAt!: Date
 }

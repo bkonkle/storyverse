@@ -43,11 +43,11 @@
     "prettier": "^2.0.5"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^1.8.3",
-    "@graphql-codegen/cli": "^1.8.3",
-    "@graphql-codegen/typescript": "^1.8.3",
-    "@graphql-codegen/typescript-operations": "^1.8.3",
-    "@graphql-codegen/typescript-urql": "^1.8.3",
+    "@graphql-codegen/add": "^1.17.6",
+    "@graphql-codegen/cli": "^1.17.6",
+    "@graphql-codegen/typescript": "^1.17.6",
+    "@graphql-codegen/typescript-operations": "^1.17.6",
+    "@graphql-codegen/typescript-urql": "^1.17.6",
     "@types/jest": "^26.0.7",
     "@types/node": "^14.0.27",
     "babel-jest": "^26.2.1",
