@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 
-import {Database} from '../../src/config'
+import {Database} from '../../config'
 
 const main = async () => {
   const sqlFile = process.argv[2]

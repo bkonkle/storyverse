@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 
-import {Database} from '../../src/config'
+import {Database} from '../../config'
 
 export async function main(): Promise<void> {
   console.log(new Date(), `Creating database ${Database.database}...`)

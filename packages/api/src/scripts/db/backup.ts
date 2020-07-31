@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 
-import {Database} from '../../src/config'
+import {Database} from '../../config'
 
 export const slugify = (text: string): string =>
   text
@@ -27,7 +27,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch((err) => {
+  main().catch(err => {
     console.error(err)
 
     process.exit(1)

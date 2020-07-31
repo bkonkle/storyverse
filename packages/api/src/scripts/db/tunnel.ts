@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 
-import {Database, Environment} from '../../src/config'
+import {Database, Environment} from '../../config'
 
 const {EnvKeys, getEnv} = Environment
 

@@ -6,7 +6,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
-    "incremental": true,
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
