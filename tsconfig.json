@@ -6,6 +6,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": true,
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -18,10 +19,11 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "es6"
+    "target": "es2017"
   }
 }

@@ -25,8 +25,7 @@
     ]
   },
   "scripts": {
-    "build": "tsc --pretty --skipLibCheck",
-    "check.types": "yarn build --noEmit",
+    "check.types": "tsc --pretty --skipLibCheck --noEmit",
     "format": "prettier --write",
     "format.all": "yarn format \"{src,packages}/**/*.{js,jsx,ts,tsx}\""
   },
