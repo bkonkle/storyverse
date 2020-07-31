@@ -10,10 +10,9 @@ import {
 } from '@nestjs/common'
 import {AXIOS_INSTANCE_TOKEN} from '@nestjs/common/http/http.constants'
 
-import {ConfigService, Environment} from './config'
+import ConfigService from './config/ConfigService'
+import {EnvKeys} from './config/Environment'
 import {AppModule} from './AppModule'
-
-const {EnvKeys} = Environment
 
 export async function init(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule)
