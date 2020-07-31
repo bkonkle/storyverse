@@ -3,6 +3,8 @@ import {
   NestModule,
   MiddlewareConsumer,
   RequestMethod,
+  HttpModule,
+  Logger,
 } from '@nestjs/common'
 import {TypeOrmModule} from '@nestjs/typeorm'
 import {ScheduleModule} from '@nestjs/schedule'
@@ -25,6 +27,7 @@ const isProd = env === 'production'
   imports: [
     ConfigModule,
     HealthModule,
+    HttpModule,
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(Database),
     GraphQLModule.forRoot({
@@ -35,6 +38,7 @@ const isProd = env === 'production'
     ProfilesModule,
     UniversesModule,
   ],
+  providers: [Logger],
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer): void {
