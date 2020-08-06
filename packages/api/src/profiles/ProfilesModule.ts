@@ -3,10 +3,11 @@ import {TypeOrmModule} from '@nestjs/typeorm'
 
 import Profile from './data/Profile'
 import {ProfilesResolver} from './ProfilesResolver'
+import {ProfilesService} from './ProfilesService'
 
 @Module({
   imports: [TypeOrmModule.forFeature([Profile])],
-  providers: [ProfilesResolver],
+  providers: [ProfilesResolver, ProfilesService],
 })
 export class ProfilesModule {}
 
