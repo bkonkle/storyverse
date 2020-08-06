@@ -10,6 +10,6 @@ export class ProfilesResolver {
   ): Promise<Profile | undefined> {
     console.log(`>- id ->`, id)
 
-    return undefined
+    return
   }
 }
