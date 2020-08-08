@@ -2,19 +2,20 @@ import chalk from 'chalk'
 import express, {Application} from 'express'
 import http from 'http'
 import morgan from 'morgan'
+import {readFileSync} from 'fs'
+import {join} from 'path'
 import {ApolloServer, gql} from 'cultivar/exchanges/graphql'
 
 import * as App from './App'
+import ProfileResolvers from './profiles/ProfileResolvers'
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`
+const typeDefs = gql(
+  readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
+)
 
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
+    ...ProfileResolvers,
   },
 }
 
@@ -55,11 +56,13 @@ export function run(app: Application, port: number, baseUrl?: string): void {
   const server = http.createServer(app)
 
   server.listen(port, () => {
-    console.log(chalk.cyan(`> Started API on port ${portStr}${baseUrlStr}`))
+    console.log(
+      chalk.cyan(`> Started Storyverse on port ${portStr}${baseUrlStr}`)
+    )
   })
 
   server.on('close', () => {
-    console.log(chalk.cyan(`> API shutting down`))
+    console.log(chalk.cyan(`> Storyverse shutting down`))
   })
 }
 

@@ -1,0 +1,48 @@
+type ProfileContent {
+  temp: String!
+}
+
+"""
+A User Profile
+"""
+type Profile {
+  id: ID!
+
+  """
+  An email address
+  """
+  email: String!
+
+  """
+  A display name
+  """
+  displayName: String!
+
+  """
+  A Profile photo
+  """
+  picture: String!
+
+  """
+  Editor json content for the Profile body
+  """
+  content: ProfileContent!
+
+  """
+  The User's city
+  """
+  city: String!
+
+  """
+  The User's state or province
+  """
+  stateProvince: String!
+
+  """
+  The User that created the Profile
+  """
+  userId: String!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
