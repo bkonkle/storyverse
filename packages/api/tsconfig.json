@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist",
-    "paths": {
-      "*": ["*", "src/bindings/*"]
-    }
+    "outDir": "./dist"
   },
   "include": ["src/**/*", "test/**/*"]
 }

@@ -1,7 +1,6 @@
 import {Handler} from 'express'
-
-import {ApolloServer, graphqlExchange} from '../../src/exchanges/graphql'
-import {createMiddleware} from '../../src/express'
+import {createMiddleware} from 'cultivar/express'
+import {ApolloServer, graphqlExchange} from 'cultivar/exchanges/graphql'
 
 export const middleware = (apollo: ApolloServer): Handler =>
   createMiddleware({

@@ -2,8 +2,8 @@ import chalk from 'chalk'
 import express, {Application} from 'express'
 import http from 'http'
 import morgan from 'morgan'
+import {ApolloServer, gql} from 'cultivar/exchanges/graphql'
 
-import {ApolloServer, gql} from '../../src/exchanges/graphql/ApolloServer'
 import * as App from './App'
 
 const typeDefs = gql`
