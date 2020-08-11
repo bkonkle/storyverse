@@ -34,21 +34,6 @@ export class Profile extends UuidTable {
   content?: Record<string, unknown>
 
   @Column({
-    type: 'varchar',
-    length: 300,
-    nullable: true,
-  })
-  city?: string
-
-  @Column({
-    name: 'state_province',
-    type: 'varchar',
-    length: 300,
-    nullable: true,
-  })
-  stateProvince?: string
-
-  @Column({
     name: 'user_id',
     type: 'uuid',
     nullable: false,

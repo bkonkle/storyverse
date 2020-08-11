@@ -15,6 +15,8 @@ export enum EnvKeys {
   DbName = 'DATABASE_NAME',
   DbPort = 'DATABASE_PORT',
   DbDebugLogging = 'DATABASE_DEBUG_LOGGING',
+  DbPoolMin = 'DATABASE_POOL_MIN',
+  DbPoolMax = 'DATABASE_POOL_MAX',
   SshKeyPath = 'SSH_KEY_PATH',
   BastionHost = 'BASTION_HOST',
 

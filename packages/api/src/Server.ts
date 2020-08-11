@@ -4,19 +4,29 @@ import http from 'http'
 import morgan from 'morgan'
 import {readFileSync} from 'fs'
 import {join} from 'path'
+import GraphQLDateTime from 'graphql-type-datetime'
+import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
 import {ApolloServer, gql} from 'cultivar/exchanges/graphql'
 
 import * as App from './App'
+import {Resolvers} from './Schema'
 import ProfileResolvers from './profiles/ProfileResolvers'
+import {getContext} from './utils/Context'
 
 const typeDefs = gql(
   readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
 )
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    ...ProfileResolvers,
+    ...ProfileResolvers.Queries,
   },
+  Mutation: {
+    ...ProfileResolvers.Mutations,
+  },
+  DateTime: GraphQLDateTime,
+  JSON: GraphQLJSON,
+  JSONObject: GraphQLJSONObject,
 }
 
 export async function start(): Promise<void> {
@@ -31,6 +41,7 @@ export async function start(): Promise<void> {
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
+    context: getContext,
     introspection: isDev,
     playground: isDev
       ? {

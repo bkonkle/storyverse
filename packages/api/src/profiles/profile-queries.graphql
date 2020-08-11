@@ -1,0 +1,6 @@
+extend type Query {
+  """
+  Get an existing User Profile by ID
+  """
+  profile(id: ID!): Profile
+}

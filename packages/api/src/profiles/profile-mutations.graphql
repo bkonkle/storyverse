@@ -1,0 +1,83 @@
+"""
+Input to create a new User Profile
+"""
+input CreateProfileInput {
+  """
+  An email address
+  """
+  email: String!
+
+  """
+  A display name
+  """
+  displayName: String
+
+  """
+  A Profile photo
+  """
+  picture: String
+
+  """
+  Editor json content for the Profile body
+  """
+  content: JSONObject
+
+  """
+  The User that created the Profile
+  """
+  userId: String!
+}
+
+"""
+Input to update an existing User Profile
+"""
+input UpdateProfileInput {
+  """
+  An email address
+  """
+  email: String
+
+  """
+  A display name
+  """
+  displayName: String
+
+  """
+  A Profile photo
+  """
+  picture: String
+
+  """
+  Editor json content for the Profile body
+  """
+  content: JSONObject
+
+  """
+  The User that created the Profile
+  """
+  userId: String
+}
+
+type MutateProfileResult {
+  profile: Profile
+  mutationId: String
+}
+
+extend type Mutation {
+  """
+  Create a new User Profile
+  """
+  createProfile(
+    input: CreateProfileInput!
+    mutationId: String
+  ): MutateProfileResult!
+
+  """
+  Update an existing User Profile by ID
+  """
+  updateProfile(
+    id: ID!
+    input: UpdateProfileInput!
+    mutationId: String
+  ): MutateProfileResult!
+}

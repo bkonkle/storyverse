@@ -1,7 +1,3 @@
-type ProfileContent {
-  temp: String!
-}
-
 """
 A User Profile
 """
@@ -16,27 +12,17 @@ type Profile {
   """
   A display name
   """
-  displayName: String!
+  displayName: String
 
   """
   A Profile photo
   """
-  picture: String!
+  picture: String
 
   """
   Editor json content for the Profile body
   """
-  content: ProfileContent!
-
-  """
-  The User's city
-  """
-  city: String!
-
-  """
-  The User's state or province
-  """
-  stateProvince: String!
+  content: JSONObject
 
   """
   The User that created the Profile

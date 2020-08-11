@@ -2,9 +2,47 @@
 
 schema {
   query: Query
+  mutation: Mutation
 }
-type ProfileContent {
-  temp: String!
+"""Input to create a new User Profile"""
+input CreateProfileInput {
+  """An email address"""
+  email: String!
+  """A display name"""
+  displayName: String
+  """A Profile photo"""
+  picture: String
+  """Editor json content for the Profile body"""
+  content: JSONObject
+  """The User that created the Profile"""
+  userId: String!
+}
+"""Input to update an existing User Profile"""
+input UpdateProfileInput {
+  """An email address"""
+  email: String
+  """A display name"""
+  displayName: String
+  """A Profile photo"""
+  picture: String
+  """Editor json content for the Profile body"""
+  content: JSONObject
+  """The User that created the Profile"""
+  userId: String
+}
+type MutateProfileResult {
+  profile: Profile
+  mutationId: String
+}
+type Mutation {
+  """Create a new User Profile"""
+  createProfile(input: CreateProfileInput!, mutationId: String): MutateProfileResult!
+  """Update an existing User Profile by ID"""
+  updateProfile(id: ID!, input: UpdateProfileInput!, mutationId: String): MutateProfileResult!
+}
+type Query {
+  """Get an existing User Profile by ID"""
+  profile(id: ID!): Profile
 }
 """A User Profile"""
 type Profile {
@@ -12,15 +50,11 @@ type Profile {
   """An email address"""
   email: String!
   """A display name"""
-  displayName: String!
+  displayName: String
   """A Profile photo"""
-  picture: String!
+  picture: String
   """Editor json content for the Profile body"""
-  content: ProfileContent!
-  """The User's city"""
-  city: String!
-  """The User's state or province"""
-  stateProvince: String!
+  content: JSONObject
   """The User that created the Profile"""
   userId: String!
   createdAt: DateTime!
@@ -28,6 +62,5 @@ type Profile {
 }
 """A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."""
 scalar DateTime
-type Query {
-  profile(id: ID!): Profile
-}
+scalar JSON
+scalar JSONObject

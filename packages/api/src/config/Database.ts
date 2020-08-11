@@ -20,6 +20,11 @@ const config: PostgresConnectionOptions = {
   password: getEnv(EnvKeys.DbPassword, appName),
   database: dbName,
 
+  extra: {
+    min: Number(getEnv(EnvKeys.DbPoolMin, '0')),
+    max: Number(getEnv(EnvKeys.DbPoolMax, '10')),
+  },
+
   entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
 
   synchronize: false,

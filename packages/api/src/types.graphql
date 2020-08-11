@@ -2,7 +2,9 @@
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+scalar JSON
+scalar JSONObject
 
-type Query {
-  profile(id: ID!): Profile
-}
+type Query
+
+type Mutation
