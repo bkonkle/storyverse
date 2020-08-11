@@ -1,6 +1,5 @@
 import Nope from 'nope-validator'
-
-import {validate} from '../utils/Validation'
+import {fromValidation} from 'cultivar/utils/validation'
 
 export const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.compile()
 
@@ -10,7 +9,7 @@ export const getById = Nope.object().shape({
     .required(),
 })
 
-export const validateGetById = validate(getById)
+export const validateGetById = fromValidation(getById)
 
 export const create = Nope.object().shape({
   email: Nope.string().email().required(),
@@ -25,7 +24,7 @@ export const create = Nope.object().shape({
   content: Nope.object(),
 })
 
-export const validateCreate = validate(create)
+export const validateCreate = fromValidation(create)
 
 export const update = Nope.object()
   .extend(create)
@@ -34,4 +33,4 @@ export const update = Nope.object()
     userId: Nope.string().regex(uuidRegex, 'Please provide a valid userId.'),
   })
 
-export const validateUpdate = validate(update)
+export const validateUpdate = fromValidation(update)

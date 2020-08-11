@@ -1,8 +1,8 @@
-import {pipe, map, mergeMap, fromValue, toPromise} from 'wonka'
+import {pipe, map, fromValue, toPromise} from 'wonka'
+import {handleValidationResult} from 'cultivar/utils/validation'
 
 import {QueryResolvers, MutationResolvers} from '../Schema'
 import {Context} from '../utils/Context'
-import {handleValidationResult} from '../utils/Validation'
 import {
   validateCreate,
   validateGetById,
@@ -21,13 +21,11 @@ export const profile = (service = ProfileService.init): ProfileResolver => (
   _resolveInfo
 ) =>
   pipe(
-    fromValue(validateGetById(input)),
-    mergeMap(
-      handleValidationResult({
-        Valid: ({input: {id}}) => service().get(id),
-        Invalid: () => fromValue(undefined),
-      })
-    ),
+    validateGetById(input),
+    handleValidationResult({
+      Valid: ({input: {id}}) => service().get(id),
+      Invalid: () => fromValue(undefined),
+    }),
     toPromise
   )
 
@@ -40,13 +38,11 @@ export const createProfile = (
   _resolveInfo
 ) =>
   pipe(
-    fromValue(validateCreate(input)),
-    mergeMap(
-      handleValidationResult({
-        Valid: () => service().create(input),
-        Invalid: () => fromValue(undefined),
-      })
-    ),
+    validateCreate(input),
+    handleValidationResult({
+      Valid: () => service().create(input),
+      Invalid: () => fromValue(undefined),
+    }),
     map((profile) => ({profile, mutationId})),
     toPromise
   )
@@ -60,13 +56,11 @@ export const updateProfile = (
   _resolveInfo
 ) =>
   pipe(
-    fromValue(validateUpdate(input)),
-    mergeMap(
-      handleValidationResult({
-        Valid: () => service().update(input),
-        Invalid: () => fromValue(undefined),
-      })
-    ),
+    validateUpdate(input),
+    handleValidationResult({
+      Valid: () => service().update(input),
+      Invalid: () => fromValue(undefined),
+    }),
     map((profile) => ({profile, mutationId})),
     toPromise
   )
