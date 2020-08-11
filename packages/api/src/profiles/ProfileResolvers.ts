@@ -51,14 +51,14 @@ export const updateProfile = (
   service = ProfileService.init
 ): UpdateProfileResolver => (
   _parent,
-  {input, mutationId},
+  {id, input, mutationId},
   _context,
   _resolveInfo
 ) =>
   pipe(
     validateUpdate(input),
     handleValidationResult({
-      Valid: () => service().update(input),
+      Valid: () => service().update(id, input),
       Invalid: () => fromValue(undefined),
     }),
     map((profile) => ({profile, mutationId})),
