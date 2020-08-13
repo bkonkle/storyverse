@@ -82,6 +82,7 @@ export const deleteProfile = (
 
 const Queries = {
   getProfile: getProfile(),
+  getManyProfiles: getManyProfiles(),
 }
 
 const Mutations = {

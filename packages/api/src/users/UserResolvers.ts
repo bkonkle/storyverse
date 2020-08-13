@@ -94,6 +94,7 @@ export const deleteUser = (service = UserService.init): DeleteUserResolver => (
 
 const Queries = {
   getUser: getUser(),
+  getManyUsers: getManyUsers(),
 }
 
 const Mutations = {

@@ -11,8 +11,9 @@ import {ApolloServer, gql} from 'cultivar/exchanges/graphql'
 
 import * as App from './App'
 import {Resolvers} from './Schema'
-import ProfileResolvers from './profiles/ProfileResolvers'
 import {getContext} from './utils/Context'
+import ProfileResolvers from './profiles/ProfileResolvers'
+import UserResolvers from './users/UserResolvers'
 
 const typeDefs = gql(
   readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
@@ -21,9 +22,11 @@ const typeDefs = gql(
 const resolvers: Resolvers = {
   Query: {
     ...ProfileResolvers.Queries,
+    ...UserResolvers.Queries,
   },
   Mutation: {
     ...ProfileResolvers.Mutations,
+    ...UserResolvers.Mutations,
   },
   DateTime: GraphQLDateTime,
   JSON: GraphQLJSON,

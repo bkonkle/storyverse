@@ -70,7 +70,7 @@ type ProfilesPage {
   page: Int!
   pageCount: Int!
 }
-type ProfileCondition {
+input ProfileCondition {
   id: UUID
   email: String
   displayName: String
@@ -128,7 +128,7 @@ type UsersPage {
   page: Int!
   pageCount: Int!
 }
-type UserCondition {
+input UserCondition {
   id: UUID
   username: String
   isActive: Boolean

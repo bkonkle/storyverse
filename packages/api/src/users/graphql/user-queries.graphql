@@ -43,7 +43,7 @@ type UsersPage {
   pageCount: Int!
 }
 
-type UserCondition {
+input UserCondition {
   id: UUID
   username: String
   isActive: Boolean

@@ -58,7 +58,7 @@ type ProfilesPage {
   pageCount: Int!
 }
 
-type ProfileCondition {
+input ProfileCondition {
   id: UUID
   email: String
   displayName: String
