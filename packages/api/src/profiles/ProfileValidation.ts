@@ -1,18 +1,36 @@
 import Nope from 'nope-validator'
-import {fromValidation} from 'cultivar/utils/validation'
+import {fromValidation, uuidRegex} from 'cultivar/utils/validation'
 
-export const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.compile()
+import {ProfilesOrderBy} from '../Schema'
 
-export const getById = Nope.object().shape({
+export const get = Nope.object().shape({
   id: Nope.string()
     .regex(uuidRegex, 'Please provide a valid Profile id')
     .required(),
 })
 
-export const validateGetById = fromValidation(getById)
+export const validateGet = fromValidation(get)
+
+export const getMany = Nope.object().shape({
+  where: Nope.object().shape({
+    id: Nope.string().regex(uuidRegex, 'Please provide a valid Profile id'),
+    email: Nope.string().email('Please provide a valid email address'),
+    displayName: Nope.string(),
+    picture: Nope.string(),
+    content: Nope.object(),
+    userId: Nope.string(),
+    createdAt: Nope.date('Please provide a valid createdAt DateTime'),
+    updatedAt: Nope.date('Please provide a valid updatedAt DateTime'),
+  }),
+  orderBy: Nope.string().oneOf(Object.values(ProfilesOrderBy)),
+  pageSize: Nope.number(),
+  page: Nope.number(),
+})
+
+export const validateGetMany = fromValidation(getMany)
 
 export const create = Nope.object().shape({
-  email: Nope.string().email().required(),
+  email: Nope.string().email('Please provide a valid email address').required(),
   userId: Nope.string()
     .regex(uuidRegex, 'Please provide a valid userId.')
     .required(),

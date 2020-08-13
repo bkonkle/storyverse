@@ -6,6 +6,7 @@ import {readFileSync} from 'fs'
 import {join} from 'path'
 import GraphQLDateTime from 'graphql-type-datetime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
+import GraphQLUUID from 'graphql-type-uuid'
 import {ApolloServer, gql} from 'cultivar/exchanges/graphql'
 
 import * as App from './App'
@@ -27,6 +28,7 @@ const resolvers: Resolvers = {
   DateTime: GraphQLDateTime,
   JSON: GraphQLJSON,
   JSONObject: GraphQLJSONObject,
+  UUID: GraphQLUUID,
 }
 
 export async function start(): Promise<void> {

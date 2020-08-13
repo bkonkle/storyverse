@@ -1936,6 +1936,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/graphql-type-uuid@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@types/graphql-type-uuid/-/graphql-type-uuid-0.2.3.tgz#4ba98c8e50fa44c60c1b5ee0bc2c0f0629afff0b"
+  integrity sha512-2wDianawweUVLZ8wyKwlZbBk5NDRx2L9HVKOik3Q9qLhwQPoZdvF8nswftp8bo8IATVyMFW/1vhvZFc3CqFd6g==
+  dependencies:
+    graphql "^14.5.3"
+
 "@types/graphql-upload@^8.0.0":
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/@types/graphql-upload/-/graphql-upload-8.0.3.tgz#b371edb5f305a2a1f7b7843a890a2a7adc55c3ec"
@@ -3501,10 +3508,10 @@ cssstyle@^2.2.0:
   dependencies:
     cssom "~0.3.6"
 
-cultivar@^1.0.0-alpha.5:
-  version "1.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/cultivar/-/cultivar-1.0.0-alpha.5.tgz#869c03d011d5802fbc76beda7a3c360eae34f139"
-  integrity sha512-aJsydNwqFxk1jX0lMQPEDQ4UdClPcL2XD42Hcc+tGQyVf/XBPxyWN+woJCDEHMUSa+Ebzo8VaDeVb/IrCa2YAg==
+cultivar@^1.0.0-alpha.7:
+  version "1.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/cultivar/-/cultivar-1.0.0-alpha.7.tgz#828408a1c0f99f30a466e8c04c7a6a30eae92407"
+  integrity sha512-jpJ1qacm6dYn9hi8n8J8e+LnFyEVhvoM+6Gw2v0ybTbAVYYvsx0vy5UfTDTxQqAX560vaKyGbVC4sDvb+h7qXw==
   dependencies:
     "@apollographql/graphql-playground-html" "^1.6.26"
     apollo-server-core "^2.16.1"
@@ -4756,6 +4763,11 @@ graphql-type-json@^0.3.2:
   resolved "https://registry.yarnpkg.com/graphql-type-json/-/graphql-type-json-0.3.2.tgz#f53a851dbfe07bd1c8157d24150064baab41e115"
   integrity sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==
 
+graphql-type-uuid@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-type-uuid/-/graphql-type-uuid-0.2.0.tgz#677a363a93d1b04c4844d20b35ffab7a1d5e6b6a"
+  integrity sha1-Z3o2OpPRsExIRNILNf+reh1ea2o=
+
 graphql-upload@^8.0.2:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/graphql-upload/-/graphql-upload-8.1.0.tgz#6d0ab662db5677a68bfb1f2c870ab2544c14939a"
@@ -4766,14 +4778,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.3"
     object-path "^0.11.4"
 
-graphql@^14.5.3:
-  version "14.7.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.7.0.tgz#7fa79a80a69be4a31c27dda824dc04dac2035a72"
-  integrity sha512-l0xWZpoPKpppFzMfvVyFmp9vLN7w/ZZJPefUicMCepfJeQ8sMcztloGYY9DfjVPo6tIUDzU5Hw3MUbIjj9AVVA==
-  dependencies:
-    iterall "^1.2.2"
-
-graphql@^15.3.0:
+graphql@^14.5.3, graphql@^15.3.0:
   version "15.3.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.3.0.tgz#3ad2b0caab0d110e3be4a5a9b2aa281e362b5278"
   integrity sha512-GTCJtzJmkFLWRfFJuoo9RWWa/FfamUHgiFosxi/X1Ani4AVWbeyBenZTNX6dM+7WSbbFfTo/25eh0LLkwHMw2w==
@@ -5477,7 +5482,7 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
-iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
+iterall@^1.1.3, iterall@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.3.0.tgz#afcb08492e2915cbd8a0884eb93a8c94d0d72fea"
   integrity sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==

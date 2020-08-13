@@ -1,3 +1,20 @@
+extend type Mutation {
+  """
+  Create a new User Profile
+  """
+  createProfile(input: CreateProfileInput!): MutateProfileResult!
+
+  """
+  Update an existing User Profile by ID
+  """
+  updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+
+  """
+  Remove an existing User Profile by ID
+  """
+  deleteProfile(id: UUID!): MutateProfileResult!
+}
+
 """
 Input to create a new User Profile
 """
@@ -60,24 +77,4 @@ input UpdateProfileInput {
 
 type MutateProfileResult {
   profile: Profile
-  mutationId: String
-}
-
-extend type Mutation {
-  """
-  Create a new User Profile
-  """
-  createProfile(
-    input: CreateProfileInput!
-    mutationId: String
-  ): MutateProfileResult!
-
-  """
-  Update an existing User Profile by ID
-  """
-  updateProfile(
-    id: ID!
-    input: UpdateProfileInput!
-    mutationId: String
-  ): MutateProfileResult!
 }

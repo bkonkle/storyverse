@@ -1,0 +1,50 @@
+extend type Query {
+  """
+  Get an existing User Profile by ID
+  """
+  getProfile(id: UUID!): Profile
+
+  """
+  Get many User Profiles, with optional filtering conditions
+  """
+  getManyProfiles(
+    where: ProfileCondition
+    orderBy: [ProfilesOrderBy!]
+    pageSize: Int
+    page: Int
+  ): ProfilesPage!
+}
+
+type ProfilesPage {
+  data: [Profile!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+
+type ProfileCondition {
+  id: UUID
+  email: String
+  displayName: String
+  picture: String
+  content: JSONObject
+  userId: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+enum ProfilesOrderBy {
+  ID_ASC
+  ID_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  DISPLAY_NAME_ASC
+  DISPLAY_NAME_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}

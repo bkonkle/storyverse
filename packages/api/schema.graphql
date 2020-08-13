@@ -4,6 +4,14 @@ schema {
   query: Query
   mutation: Mutation
 }
+type Mutation {
+  """Create a new User Profile"""
+  createProfile(input: CreateProfileInput!): MutateProfileResult!
+  """Remove an existing User Profile by ID"""
+  deleteProfile(id: UUID!): MutateProfileResult!
+  """Update an existing User Profile by ID"""
+  updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+}
 """Input to create a new User Profile"""
 input CreateProfileInput {
   """An email address"""
@@ -32,21 +40,47 @@ input UpdateProfileInput {
 }
 type MutateProfileResult {
   profile: Profile
-  mutationId: String
-}
-type Mutation {
-  """Create a new User Profile"""
-  createProfile(input: CreateProfileInput!, mutationId: String): MutateProfileResult!
-  """Update an existing User Profile by ID"""
-  updateProfile(id: ID!, input: UpdateProfileInput!, mutationId: String): MutateProfileResult!
 }
 type Query {
+  """Get many User Profiles, with optional filtering conditions"""
+  getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
   """Get an existing User Profile by ID"""
-  profile(id: ID!): Profile
+  getProfile(id: UUID!): Profile
+}
+type ProfilesPage {
+  data: [Profile!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+type ProfileCondition {
+  id: UUID
+  email: String
+  displayName: String
+  picture: String
+  content: JSONObject
+  userId: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+enum ProfilesOrderBy {
+  ID_ASC
+  ID_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  DISPLAY_NAME_ASC
+  DISPLAY_NAME_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
 }
 """A User Profile"""
 type Profile {
-  id: ID!
+  id: UUID!
   """An email address"""
   email: String!
   """A display name"""
@@ -64,3 +98,4 @@ type Profile {
 scalar DateTime
 scalar JSON
 scalar JSONObject
+scalar UUID

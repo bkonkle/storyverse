@@ -2,7 +2,7 @@
 A User Profile
 """
 type Profile {
-  id: ID!
+  id: UUID!
 
   """
   An email address
