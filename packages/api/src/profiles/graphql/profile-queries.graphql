@@ -15,6 +15,41 @@ extend type Query {
   ): ProfilesPage!
 }
 
+"""
+A User Profile
+"""
+type Profile {
+  id: UUID!
+
+  """
+  An email address
+  """
+  email: String!
+
+  """
+  A display name
+  """
+  displayName: String
+
+  """
+  A Profile photo
+  """
+  picture: String
+
+  """
+  Editor json content for the Profile body
+  """
+  content: JSONObject
+
+  """
+  The User that created the Profile
+  """
+  userId: String!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type ProfilesPage {
   data: [Profile!]!
   count: Int!

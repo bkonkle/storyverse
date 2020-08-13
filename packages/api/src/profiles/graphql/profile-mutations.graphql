@@ -19,29 +19,10 @@ extend type Mutation {
 Input to create a new User Profile
 """
 input CreateProfileInput {
-  """
-  An email address
-  """
   email: String!
-
-  """
-  A display name
-  """
   displayName: String
-
-  """
-  A Profile photo
-  """
   picture: String
-
-  """
-  Editor json content for the Profile body
-  """
   content: JSONObject
-
-  """
-  The User that created the Profile
-  """
   userId: String!
 }
 
@@ -49,29 +30,10 @@ input CreateProfileInput {
 Input to update an existing User Profile
 """
 input UpdateProfileInput {
-  """
-  An email address
-  """
   email: String
-
-  """
-  A display name
-  """
   displayName: String
-
-  """
-  A Profile photo
-  """
   picture: String
-
-  """
-  Editor json content for the Profile body
-  """
   content: JSONObject
-
-  """
-  The User that created the Profile
-  """
   userId: String
 }
 

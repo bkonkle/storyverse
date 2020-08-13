@@ -7,13 +7,49 @@ schema {
 type Mutation {
   """Create a new User Profile"""
   createProfile(input: CreateProfileInput!): MutateProfileResult!
+  """Create a new User"""
+  createUser(input: CreateUserInput!): MutateUserResult!
   """Remove an existing User Profile by ID"""
   deleteProfile(id: UUID!): MutateProfileResult!
+  """Remove an existing User by ID"""
+  deleteUser(id: UUID!): MutateUserResult!
   """Update an existing User Profile by ID"""
   updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+  """Update an existing User by ID"""
+  updateUser(id: UUID!, input: UpdateUserInput!): MutateUserResult!
 }
 """Input to create a new User Profile"""
 input CreateProfileInput {
+  email: String!
+  displayName: String
+  picture: String
+  content: JSONObject
+  userId: String!
+}
+"""Input to update an existing User Profile"""
+input UpdateProfileInput {
+  email: String
+  displayName: String
+  picture: String
+  content: JSONObject
+  userId: String
+}
+type MutateProfileResult {
+  profile: Profile
+}
+type Query {
+  """Get many User Profiles, with optional filtering conditions"""
+  getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
+  """Get many Users, with optional filtering conditions"""
+  getManyUsers(where: UserCondition, orderBy: [UsersOrderBy!], pageSize: Int, page: Int): UsersPage!
+  """Get an existing User Profile by ID"""
+  getProfile(id: UUID!): Profile
+  """Get an existing User by ID"""
+  getUser(id: UUID!): User
+}
+"""A User Profile"""
+type Profile {
+  id: UUID!
   """An email address"""
   email: String!
   """A display name"""
@@ -24,28 +60,8 @@ input CreateProfileInput {
   content: JSONObject
   """The User that created the Profile"""
   userId: String!
-}
-"""Input to update an existing User Profile"""
-input UpdateProfileInput {
-  """An email address"""
-  email: String
-  """A display name"""
-  displayName: String
-  """A Profile photo"""
-  picture: String
-  """Editor json content for the Profile body"""
-  content: JSONObject
-  """The User that created the Profile"""
-  userId: String
-}
-type MutateProfileResult {
-  profile: Profile
-}
-type Query {
-  """Get many User Profiles, with optional filtering conditions"""
-  getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
-  """Get an existing User Profile by ID"""
-  getProfile(id: UUID!): Profile
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 type ProfilesPage {
   data: [Profile!]!
@@ -78,24 +94,54 @@ enum ProfilesOrderBy {
   UPDATED_AT_ASC
   UPDATED_AT_DESC
 }
-"""A User Profile"""
-type Profile {
-  id: UUID!
-  """An email address"""
-  email: String!
-  """A display name"""
-  displayName: String
-  """A Profile photo"""
-  picture: String
-  """Editor json content for the Profile body"""
-  content: JSONObject
-  """The User that created the Profile"""
-  userId: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
 """A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."""
 scalar DateTime
 scalar JSON
 scalar JSONObject
 scalar UUID
+"""Input to create a new User"""
+input CreateUserInput {
+  username: String!
+}
+"""Input to update an existing User"""
+input UpdateUserInput {
+  username: String
+  isActive: Boolean
+}
+type MutateUserResult {
+  user: User
+}
+"""A User"""
+type User {
+  id: UUID!
+  """The User's login id - usually their email address"""
+  username: String!
+  """If false, the User is suspended"""
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type UsersPage {
+  data: [User!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+type UserCondition {
+  id: UUID
+  username: String
+  isActive: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+enum UsersOrderBy {
+  ID_ASC
+  ID_DESC
+  USERNAME_ASC
+  USERNAME_DESC
+  IS_ACTIVE_ASC
+  IS_ACTIVE_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}

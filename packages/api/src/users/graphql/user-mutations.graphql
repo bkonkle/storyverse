@@ -1,0 +1,35 @@
+extend type Mutation {
+  """
+  Create a new User
+  """
+  createUser(input: CreateUserInput!): MutateUserResult!
+
+  """
+  Update an existing User by ID
+  """
+  updateUser(id: UUID!, input: UpdateUserInput!): MutateUserResult!
+
+  """
+  Remove an existing User by ID
+  """
+  deleteUser(id: UUID!): MutateUserResult!
+}
+
+"""
+Input to create a new User
+"""
+input CreateUserInput {
+  username: String!
+}
+
+"""
+Input to update an existing User
+"""
+input UpdateUserInput {
+  username: String
+  isActive: Boolean
+}
+
+type MutateUserResult {
+  user: User
+}
