@@ -24,7 +24,8 @@ export const getProfile = (
   service = ProfileService.init
 ): GetProfileResolver => (_parent, input, _context, _resolveInfo) =>
   pipe(
-    validateGet(input),
+    fromValue(input),
+    validateGet,
     handleValidationResult({
       Valid: ({input: {id}}) => service().findOne({where: {id}}),
       Invalid: () => fromValue(undefined),
@@ -36,7 +37,8 @@ export const getManyProfiles = (
   service = ProfileService.init
 ): GetManyProfilesResolver => (_parent, input, _context, _resolveInfo) =>
   pipe(
-    validateGetMany(input),
+    fromValue(input),
+    validateGetMany,
     handleValidationResult({
       Valid: ({input: {where, orderBy, pageSize, page}}) =>
         service().find({where, order: fromOrderBy(orderBy), pageSize, page}),
@@ -49,7 +51,8 @@ export const createProfile = (
   service = ProfileService.init
 ): CreateProfileResolver => (_parent, {input}, _context, _resolveInfo) =>
   pipe(
-    validateCreate(input),
+    fromValue(input),
+    validateCreate,
     handleValidationResult({
       Valid: () => service().create(input),
       Invalid: () => fromValue(undefined),
@@ -62,7 +65,8 @@ export const updateProfile = (
   service = ProfileService.init
 ): UpdateProfileResolver => (_parent, {id, input}, _context, _resolveInfo) =>
   pipe(
-    validateUpdate(input),
+    fromValue(input),
+    validateUpdate,
     handleValidationResult({
       Valid: () => service().update(id, input),
       Invalid: () => fromValue(undefined),

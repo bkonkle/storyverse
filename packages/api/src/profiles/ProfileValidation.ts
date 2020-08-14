@@ -1,54 +1,81 @@
-import Nope from 'nope-validator'
-import {fromValidation, uuidRegex} from 'cultivar/utils/validation'
+import * as yup from 'yup'
+import {withValidation, uuidRegex} from 'cultivar/utils/validation'
 
-import {ProfilesOrderBy} from '../Schema'
+import {
+  ProfilesOrderBy,
+  QueryGetProfileArgs,
+  QueryGetManyProfilesArgs,
+  CreateProfileInput,
+  UpdateProfileInput,
+} from '../Schema'
 
-export const get = Nope.object().shape({
-  id: Nope.string()
-    .regex(uuidRegex, 'Please provide a valid Profile id')
-    .required(),
-})
-
-export const validateGet = fromValidation(get)
-
-export const getMany = Nope.object().shape({
-  where: Nope.object().shape({
-    id: Nope.string().regex(uuidRegex, 'Please provide a valid Profile id'),
-    email: Nope.string().email('Please provide a valid email address'),
-    displayName: Nope.string(),
-    picture: Nope.string(),
-    content: Nope.object(),
-    userId: Nope.string(),
-    createdAt: Nope.date('Please provide a valid createdAt DateTime'),
-    updatedAt: Nope.date('Please provide a valid updatedAt DateTime'),
-  }),
-  orderBy: Nope.string().oneOf(Object.values(ProfilesOrderBy)),
-  pageSize: Nope.number(),
-  page: Nope.number(),
-})
-
-export const validateGetMany = fromValidation(getMany)
-
-export const create = Nope.object().shape({
-  email: Nope.string().email('Please provide a valid email address').required(),
-  userId: Nope.string()
-    .regex(uuidRegex, 'Please provide a valid userId.')
-    .required(),
-  displayName: Nope.string().atMost(
-    300,
-    'Please use a displayName less than 300 characters.'
-  ),
-  picture: Nope.string().url('Please provide a valid picture url.'),
-  content: Nope.object(),
-})
-
-export const validateCreate = fromValidation(create)
-
-export const update = Nope.object()
-  .extend(create)
-  .shape({
-    email: Nope.string().email(),
-    userId: Nope.string().regex(uuidRegex, 'Please provide a valid userId.'),
+export const get = yup
+  .object()
+  .shape<QueryGetProfileArgs>({
+    id: yup
+      .string()
+      .matches(uuidRegex, 'Please provide a valid Profile id')
+      .required(),
   })
+  .required()
 
-export const validateUpdate = fromValidation(update)
+export const validateGet = withValidation(get)
+
+export const getMany = yup
+  .object()
+  .shape<QueryGetManyProfilesArgs>({
+    where: yup.object().shape({
+      id: yup.string().matches(uuidRegex, 'Please provide a valid Profile id'),
+      email: yup.string().email('Please provide a valid email address'),
+      displayName: yup.string(),
+      picture: yup.string(),
+      content: yup.object(),
+      userId: yup.string(),
+      createdAt: yup.date(),
+      updatedAt: yup.date(),
+    }),
+    orderBy: yup.array(
+      yup.string().oneOf(Object.values(ProfilesOrderBy)).required()
+    ),
+    pageSize: yup.number(),
+    page: yup.number(),
+  })
+  .required()
+
+export const validateGetMany = withValidation(getMany)
+
+export const create = yup
+  .object()
+  .shape<CreateProfileInput>({
+    email: yup
+      .string()
+      .email('Please provide a valid email address')
+      .required(),
+    userId: yup
+      .string()
+      .matches(uuidRegex, 'Please provide a valid userId.')
+      .required(),
+    displayName: yup
+      .string()
+      .max(300, 'Please use a displayName less than 300 characters.'),
+    picture: yup.string().url('Please provide a valid picture url.'),
+    content: yup.object(),
+  })
+  .required()
+
+export const validateCreate = withValidation(create)
+
+export const update = yup
+  .object()
+  .shape<UpdateProfileInput>({
+    email: yup.string().email(),
+    userId: yup.string().matches(uuidRegex, 'Please provide a valid userId.'),
+    displayName: yup
+      .string()
+      .max(300, 'Please use a displayName less than 300 characters.'),
+    picture: yup.string().url('Please provide a valid picture url.'),
+    content: yup.object(),
+  })
+  .required()
+
+export const validateUpdate = withValidation(update)

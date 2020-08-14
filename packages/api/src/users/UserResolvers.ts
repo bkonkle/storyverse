@@ -27,7 +27,8 @@ export const getUser = (service = UserService.init): GetUserResolver => (
   _resolveInfo
 ) =>
   pipe(
-    validateGet(input),
+    fromValue(input),
+    validateGet,
     handleValidationResult({
       Valid: ({input: {id}}) => service().findOne({where: {id}}),
       Invalid: () => fromValue(undefined),
@@ -39,10 +40,16 @@ export const getManyUsers = (
   service = UserService.init
 ): GetManyUsersResolver => (_parent, input, _context, _resolveInfo) =>
   pipe(
-    validateGetMany(input),
+    fromValue(input),
+    validateGetMany,
     handleValidationResult({
       Valid: ({input: {where, orderBy, pageSize, page}}) =>
-        service().find({where, order: fromOrderBy(orderBy), pageSize, page}),
+        service().find({
+          where,
+          order: fromOrderBy(orderBy),
+          pageSize,
+          page,
+        }),
       Invalid: () => fromValue(paginateResponse<User>()),
     }),
     toPromise
@@ -55,7 +62,8 @@ export const createUser = (service = UserService.init): CreateUserResolver => (
   _resolveInfo
 ) =>
   pipe(
-    validateCreate(input),
+    fromValue(input),
+    validateCreate,
     handleValidationResult({
       Valid: () => service().create(input),
       Invalid: () => fromValue(undefined),
@@ -71,7 +79,8 @@ export const updateUser = (service = UserService.init): UpdateUserResolver => (
   _resolveInfo
 ) =>
   pipe(
-    validateUpdate(input),
+    fromValue(input),
+    validateUpdate,
     handleValidationResult({
       Valid: () => service().update(id, input),
       Invalid: () => fromValue(undefined),
