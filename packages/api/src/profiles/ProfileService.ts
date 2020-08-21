@@ -3,9 +3,9 @@ import Typeorm from 'cultivar/utils/typeorm'
 
 import Profile from './Profile.entity'
 
-export type ProfileService = ReturnType<typeof init>
-
-export const init = (repository?: Repository<Profile>) =>
+export const init = (
+  repository?: Repository<Profile>
+): Typeorm.EntityService<Profile> =>
   Typeorm.init(repository || getRepository(Profile))
 
 export default {init}

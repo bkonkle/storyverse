@@ -10,6 +10,7 @@ import {
   validateGet,
   validateUpdate,
   validateGetMany,
+  validateDelete,
 } from './ProfileValidation'
 import ProfileService from './ProfileService'
 import Profile from './Profile.entity'
@@ -77,9 +78,14 @@ export const updateProfile = (
 
 export const deleteProfile = (
   service = ProfileService.init
-): DeleteProfileResolver => (_parent, {id}, _context, _resolveInfo) =>
+): DeleteProfileResolver => (_parent, input, _context, _resolveInfo) =>
   pipe(
-    service().delete(id),
+    fromValue(input),
+    validateDelete,
+    handleValidationResult({
+      Valid: () => service().delete(input.id),
+      Invalid: () => fromValue(undefined),
+    }),
     map(() => ({})),
     toPromise
   )

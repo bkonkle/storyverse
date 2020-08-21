@@ -10,6 +10,7 @@ import {
   validateGet,
   validateUpdate,
   validateGetMany,
+  validateDelete,
 } from './UserValidation'
 import UserService from './UserService'
 import User from './User.entity'
@@ -91,12 +92,17 @@ export const updateUser = (service = UserService.init): UpdateUserResolver => (
 
 export const deleteUser = (service = UserService.init): DeleteUserResolver => (
   _parent,
-  {id},
+  input,
   _context,
   _resolveInfo
 ) =>
   pipe(
-    service().delete(id),
+    fromValue(input),
+    validateDelete,
+    handleValidationResult({
+      Valid: () => service().delete(input.id),
+      Invalid: () => fromValue(undefined),
+    }),
     map(() => ({})),
     toPromise
   )

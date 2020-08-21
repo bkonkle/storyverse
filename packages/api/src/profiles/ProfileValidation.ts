@@ -7,6 +7,7 @@ import {
   QueryGetManyProfilesArgs,
   CreateProfileInput,
   UpdateProfileInput,
+  MutationDeleteProfileArgs,
 } from '../Schema'
 
 export const get = yup
@@ -79,3 +80,15 @@ export const update = yup
   .required()
 
 export const validateUpdate = withValidation(update)
+
+export const remove = yup
+  .object()
+  .shape<MutationDeleteProfileArgs>({
+    id: yup
+      .string()
+      .matches(uuidRegex, 'Please provide a valid Profile id')
+      .required(),
+  })
+  .required()
+
+export const validateDelete = withValidation(remove)

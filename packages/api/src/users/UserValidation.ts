@@ -8,6 +8,7 @@ import {
   UserCondition,
   CreateUserInput,
   UpdateUserInput,
+  MutationDeleteUserArgs,
 } from '../Schema'
 
 export const get = yup
@@ -60,3 +61,15 @@ export const update = yup
   .required()
 
 export const validateUpdate = withValidation(update)
+
+export const remove = yup
+  .object()
+  .shape<MutationDeleteUserArgs>({
+    id: yup
+      .string()
+      .matches(uuidRegex, 'Please provide a valid User id')
+      .required(),
+  })
+  .required()
+
+export const validateDelete = withValidation(remove)
