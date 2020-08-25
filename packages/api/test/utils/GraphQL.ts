@@ -20,11 +20,9 @@ export const handleQuery = (app: Application, token: Token) => async (
 
   if (warn && response.body.errors) {
     console.error(
-      new Error(
-        response.body.errors
-          .map((err: {message: string}) => err.message)
-          .join(', ')
-      )
+      response.body.errors
+        .map((err: {message: string}) => err.message)
+        .join('\n\n')
     )
   }
 

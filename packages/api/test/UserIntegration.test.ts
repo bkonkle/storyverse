@@ -1,4 +1,5 @@
 import {getConnection, QueryRunner} from 'typeorm'
+import {uuidRegex} from 'cultivar/utils/validation'
 
 import {init} from '../src/Server'
 import {getToken, mockJwt} from './utils/Token'
@@ -39,21 +40,51 @@ describe('User Integration', () => {
             user {
               id
               username
+              isActive
             }
           }
         }
       `
 
-      const user = UserFactory.make({username: token.sub})
-
-      const variables = {input: {user}}
+      const variables = {input: {username: token.sub}}
 
       const {data} = await graphql.query(query, variables)
 
       expect(data?.createUser).toHaveProperty(
         'user',
-        expect.objectContaining({username: user.username})
+        expect.objectContaining({
+          id: expect.stringMatching(uuidRegex),
+          username: token.sub,
+          isActive: true,
+        })
       )
+    })
+
+    it('requires the token sub to match the username', async () => {
+      const query = `
+        mutation createUser($input: CreateUserInput!) {
+          createUser(input: $input) {
+            user {
+              id
+              username
+              isActive
+            }
+          }
+        }
+      `
+
+      const {username} = UserFactory.make()
+
+      const variables = {input: {username}}
+
+      const body = await graphql.query(query, variables, {warn: false})
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message:
+            'new row violates row-level security policy for table "users"',
+        }),
+      ])
     })
   })
 })
