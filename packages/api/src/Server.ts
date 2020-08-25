@@ -4,16 +4,18 @@ import http from 'http'
 import morgan from 'morgan'
 import {readFileSync} from 'fs'
 import {join} from 'path'
+import {createConnection} from 'typeorm'
 import GraphQLDateTime from 'graphql-type-datetime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
 import GraphQLUUID from 'graphql-type-uuid'
 import {ApolloServer, gql} from 'cultivar/exchanges/graphql'
 
 import * as App from './App'
-import {Resolvers} from './Schema'
-import {getContext} from './utils/Context'
+import dbConfig from './config/Database'
 import ProfileResolvers from './profiles/ProfileResolvers'
 import UserResolvers from './users/UserResolvers'
+import {Resolvers} from './Schema'
+import {getContext} from './utils/Context'
 
 const typeDefs = gql(
   readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
@@ -34,7 +36,7 @@ const resolvers: Resolvers = {
   UUID: GraphQLUUID,
 }
 
-export async function start(): Promise<void> {
+export async function init(): Promise<Application> {
   const {NODE_ENV = 'production'} = process.env
 
   const isDev = NODE_ENV === 'development'
@@ -60,9 +62,11 @@ export async function start(): Promise<void> {
   })
   await apollo.applyMiddleware({app})
 
+  await createConnection(dbConfig)
+
   app.use(App.middleware(apollo))
 
-  run(app, 3000)
+  return app
 }
 
 export function run(app: Application, port: number, baseUrl?: string): void {
@@ -80,6 +84,12 @@ export function run(app: Application, port: number, baseUrl?: string): void {
   server.on('close', () => {
     console.log(chalk.cyan(`> Storyverse shutting down`))
   })
+}
+
+export async function start(): Promise<void> {
+  const {PORT = '3000'} = process.env
+
+  run(await init(), Number(PORT))
 }
 
 if (require.main === module) {

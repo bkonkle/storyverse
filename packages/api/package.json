@@ -24,10 +24,8 @@
     "generate.schema": "graphql-codegen && prettier --write src/Schema.ts",
     "lint": "yarn eslint 'src/**/*{.js,.ts}'",
     "lint.fix": "yarn lint --fix",
-    "start": "ts-node --transpile-only --files src/Server.ts",
-    "start.dev": "concurrently --handle-input \"wait-on dist/Server.js && nodemon\" \"yarn build.watch\" ",
-    "start.debug": "TS_NODE_FILES=true nodemon --config nodemon-debug.json",
-    "start.prod": "node dist/Server.js",
+    "start": "node dist/Server.js",
+    "start.dev": "concurrently --handle-input \"wait-on dist/Server.js && nodemon\" \"yarn build.watch\"",
     "test": "NODE_ENV=test jest",
     "test.cov": "NODE_ENV=test jest --coverage",
     "test.int": "NODE_ENV=test jest -i -c ./jest.integration.config.js --forceExit",
@@ -40,6 +38,7 @@
     "cultivar": "^1.0.0-alpha.11",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
     "fp-ts": "^2.7.1",
     "graphql": "^15.3.0",
     "graphql-extensions": "^0.12.4",
@@ -77,5 +76,8 @@
     "recursive-readdir": "^2.2.2",
     "supertest": "^4.0.2",
     "wait-on": "^5.1.0"
+  },
+  "resolutions": {
+    "graphql": "^15.3.0"
   }
 }

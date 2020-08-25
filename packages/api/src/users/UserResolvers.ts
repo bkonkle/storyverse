@@ -15,13 +15,9 @@ import {
 import UserService from './UserService'
 import User from './User.entity'
 
-type GetUserResolver = QueryResolvers<Context>['getUser']
-type GetManyUsersResolver = QueryResolvers<Context>['getManyUsers']
-type CreateUserResolver = MutationResolvers<Context>['createUser']
-type UpdateUserResolver = MutationResolvers<Context>['updateUser']
-type DeleteUserResolver = MutationResolvers<Context>['deleteUser']
-
-export const getUser = (service = UserService.init): GetUserResolver => (
+export const getUser = (
+  service = UserService.init
+): QueryResolvers<Context>['getUser'] => (
   _parent,
   input,
   _context,
@@ -39,7 +35,12 @@ export const getUser = (service = UserService.init): GetUserResolver => (
 
 export const getManyUsers = (
   service = UserService.init
-): GetManyUsersResolver => (_parent, input, _context, _resolveInfo) =>
+): QueryResolvers<Context>['getManyUsers'] => (
+  _parent,
+  input,
+  _context,
+  _resolveInfo
+) =>
   pipe(
     fromValue(input),
     validateGetMany,
@@ -56,7 +57,9 @@ export const getManyUsers = (
     toPromise
   )
 
-export const createUser = (service = UserService.init): CreateUserResolver => (
+export const createUser = (
+  service = UserService.init
+): MutationResolvers<Context>['createUser'] => (
   _parent,
   {input},
   _context,
@@ -73,7 +76,9 @@ export const createUser = (service = UserService.init): CreateUserResolver => (
     toPromise
   )
 
-export const updateUser = (service = UserService.init): UpdateUserResolver => (
+export const updateUser = (
+  service = UserService.init
+): MutationResolvers<Context>['updateUser'] => (
   _parent,
   {id, input},
   _context,
@@ -90,7 +95,9 @@ export const updateUser = (service = UserService.init): UpdateUserResolver => (
     toPromise
   )
 
-export const deleteUser = (service = UserService.init): DeleteUserResolver => (
+export const deleteUser = (
+  service = UserService.init
+): MutationResolvers<Context>['deleteUser'] => (
   _parent,
   input,
   _context,
