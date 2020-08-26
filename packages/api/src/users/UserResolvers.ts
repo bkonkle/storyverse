@@ -1,4 +1,4 @@
-import {pipe, map, fromValue, toPromise} from 'wonka'
+import {pipe, map, mergeMap, fromValue, toPromise} from 'wonka'
 import {paginateResponse} from 'cultivar/utils/pagination'
 import {handleValidation, nothing} from 'cultivar/utils/validation'
 import {fromOrderBy} from 'cultivar/utils/typeorm'
@@ -37,15 +37,24 @@ export const queries = ({service = UserService.init} = {}): QueryResolvers<
     ),
 })
 
+const requireAuthentication = (context: Context) => {
+  console.log(`>- context ->`, context)
+
+  return fromValue(undefined)
+}
+
 export const mutations = ({service = UserService.init} = {}): MutationResolvers<
   Context
 > => ({
-  createUser: (_parent, {input}, _context, _resolveInfo) =>
+  createUser: (_parent, {input}, context, _resolveInfo) =>
     pipe(
-      handleValidation(input, Validate.create, {
-        Valid: () => service().create(input),
-        Invalid: nothing,
-      }),
+      requireAuthentication(context),
+      mergeMap(() =>
+        handleValidation(input, Validate.create, {
+          Valid: () => service().create(input),
+          Invalid: nothing,
+        })
+      ),
       map((user) => ({user})),
       toPromise
     ),

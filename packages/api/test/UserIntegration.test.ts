@@ -7,8 +7,6 @@ import {MutationResolvers} from '../src/Schema'
 import {Context} from '../src/utils/Context'
 import UserFactory from './factories/UserFactory'
 
-jest.mock('express-jwt')
-
 describe('User Integration', () => {
   let graphql: GraphQL.Test
   let db: QueryRunner
@@ -16,7 +14,6 @@ describe('User Integration', () => {
   const tables = ['users']
 
   const token = Express.getToken()
-  Express.mockJwt(token)
 
   beforeAll(async () => {
     const app = await init()

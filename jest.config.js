@@ -5,4 +5,9 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '/lib/', '/dist/'],
   testRegex: '(/(test|__tests__)/.*(\\.|/)(test|spec))\\.[j|t]sx?$',
   testURL: 'http://localhost',
+  globals: {
+    'ts-jest': {
+      diagnostics: false,
+    },
+  },
 }
