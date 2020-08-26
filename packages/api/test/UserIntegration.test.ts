@@ -1,40 +1,42 @@
 import {getConnection, QueryRunner} from 'typeorm'
 import {uuidRegex} from 'cultivar/utils/validation'
+import {Express, GraphQL} from 'cultivar/utils/testing'
 
 import {init} from '../src/Server'
-import {getToken, mockJwt} from './utils/Token'
-import {TestGraphQL, initGraphQL} from './utils/GraphQL'
+import {MutationResolvers} from '../src/Schema'
+import {Context} from '../src/utils/Context'
 import UserFactory from './factories/UserFactory'
 
 jest.mock('express-jwt')
 
 describe('User Integration', () => {
-  let graphql: TestGraphQL
+  let graphql: GraphQL.Test
   let db: QueryRunner
 
   const tables = ['users']
 
-  const token = getToken()
-  mockJwt(token)
+  const token = Express.getToken()
+  Express.mockJwt(token)
 
   beforeAll(async () => {
     const app = await init()
 
-    graphql = initGraphQL(app, token)
+    graphql = GraphQL.init(app, token)
     db = getConnection().createQueryRunner()
   })
 
   beforeEach(async () => {
     jest.clearAllMocks()
+  })
 
+  afterEach(async () => {
     await Promise.all(
       tables.map((table) => db.query(`TRUNCATE TABLE "${table}" CASCADE;`))
     )
   })
 
   describe('Mutation: createUser', () => {
-    it('creates a user', async () => {
-      const query = `
+    const query = `
         mutation createUser($input: CreateUserInput!) {
           createUser(input: $input) {
             user {
@@ -46,9 +48,12 @@ describe('User Integration', () => {
         }
       `
 
+    it('creates a user', async () => {
       const variables = {input: {username: token.sub}}
 
-      const {data} = await graphql.query(query, variables)
+      const {data} = await graphql.query<
+        Pick<MutationResolvers<Context>, 'createUser'>
+      >(query, variables)
 
       expect(data?.createUser).toHaveProperty(
         'user',
@@ -61,18 +66,6 @@ describe('User Integration', () => {
     })
 
     it('requires the token sub to match the username', async () => {
-      const query = `
-        mutation createUser($input: CreateUserInput!) {
-          createUser(input: $input) {
-            user {
-              id
-              username
-              isActive
-            }
-          }
-        }
-      `
-
       const {username} = UserFactory.make()
 
       const variables = {input: {username}}

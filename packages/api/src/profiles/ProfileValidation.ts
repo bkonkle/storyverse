@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import {withValidation, uuidRegex} from 'cultivar/utils/validation'
+import {uuidRegex} from 'cultivar/utils/validation'
 
 import {
   ProfilesOrderBy,
@@ -19,8 +19,6 @@ export const get = yup
       .required(),
   })
   .required()
-
-export const validateGet = withValidation(get)
 
 export const getMany = yup
   .object()
@@ -43,8 +41,6 @@ export const getMany = yup
   })
   .required()
 
-export const validateGetMany = withValidation(getMany)
-
 export const create = yup
   .object()
   .shape<CreateProfileInput>({
@@ -64,8 +60,6 @@ export const create = yup
   })
   .required()
 
-export const validateCreate = withValidation(create)
-
 export const update = yup
   .object()
   .shape<UpdateProfileInput>({
@@ -79,8 +73,6 @@ export const update = yup
   })
   .required()
 
-export const validateUpdate = withValidation(update)
-
 export const remove = yup
   .object()
   .shape<MutationDeleteProfileArgs>({
@@ -90,5 +82,3 @@ export const remove = yup
       .required(),
   })
   .required()
-
-export const validateDelete = withValidation(remove)

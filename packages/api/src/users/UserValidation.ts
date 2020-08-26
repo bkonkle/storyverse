@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import {withValidation, uuidRegex} from 'cultivar/utils/validation'
+import {uuidRegex} from 'cultivar/utils/validation'
 
 import {
   UsersOrderBy,
@@ -21,8 +21,6 @@ export const get = yup
   })
   .required()
 
-export const validateGet = withValidation(get)
-
 export const getMany = yup
   .object()
   .shape<QueryGetManyUsersArgs>({
@@ -41,16 +39,12 @@ export const getMany = yup
   })
   .required()
 
-export const validateGetMany = withValidation(getMany)
-
 export const create = yup
   .object()
   .shape<CreateUserInput>({
     username: yup.string().required(),
   })
   .required()
-
-export const validateCreate = withValidation(create)
 
 export const update = yup
   .object()
@@ -59,8 +53,6 @@ export const update = yup
     isActive: yup.boolean(),
   })
   .required()
-
-export const validateUpdate = withValidation(update)
 
 export const remove = yup
   .object()
@@ -71,5 +63,3 @@ export const remove = yup
       .required(),
   })
   .required()
-
-export const validateDelete = withValidation(remove)

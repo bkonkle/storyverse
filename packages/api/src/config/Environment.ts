@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export enum EnvKeys {
+export enum Vars {
   NodeEnv = 'NODE_ENV',
 
   // Server
@@ -26,8 +26,5 @@ export enum EnvKeys {
   Auth0JwksUri = 'AUTH0_JWKS_URI',
 }
 
-export const getEnv = (
-  key: EnvKeys,
-  defaultValue?: string,
-  env: NodeJS.ProcessEnv = process.env
-): string | undefined => env[key] || defaultValue
+export const getVars = (keys: Vars[], env: NodeJS.ProcessEnv = process.env) =>
+  keys.map((key) => env[key])

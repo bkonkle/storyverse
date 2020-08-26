@@ -3,12 +3,14 @@ import {execSync} from 'child_process'
 import Database from '../../config/Database'
 import * as Environment from '../../config/Environment'
 
-const {EnvKeys, getEnv} = Environment
+const {Vars, getVars} = Environment
 
 const main = async () => {
-  const port = Number(getEnv(EnvKeys.Port, '1701'))
-  const key = getEnv(EnvKeys.SshKeyPath)
-  const bastion = getEnv(EnvKeys.BastionHost)
+  const [port = '1701', key, bastion] = getVars([
+    Vars.Port,
+    Vars.SshKeyPath,
+    Vars.BastionHost,
+  ])
 
   if (!bastion) {
     throw new Error(

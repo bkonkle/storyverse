@@ -1,11 +1,30 @@
 import {LoggerOptions} from 'typeorm/logger/LoggerOptions'
 import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnectionOptions'
 
-import {EnvKeys, getEnv} from './Environment'
+import {Vars, getVars} from './Environment'
 
 const appName = 'storyverse'
-const env = getEnv(EnvKeys.NodeEnv, 'production')
-const dbHost = getEnv(EnvKeys.DbHostname, 'localhost')
+
+const [
+  env = 'production',
+  dbHost = 'localhost',
+  dbPort = '5432',
+  dbUser = appName,
+  dbPass = appName,
+  dbPoolMin = '0',
+  dbPoolMax = '10',
+  dbDebugLogging,
+] = getVars([
+  Vars.NodeEnv,
+  Vars.DbHostname,
+  Vars.DbPort,
+  Vars.DbUsername,
+  Vars.DbPassword,
+  Vars.DbPoolMin,
+  Vars.DbPoolMax,
+  Vars.DbDebugLogging,
+])
+
 const dbName = env === 'test' ? `${appName}_test` : appName
 
 const logging: LoggerOptions =
@@ -15,14 +34,14 @@ const config: PostgresConnectionOptions = {
   type: 'postgres',
 
   host: dbHost,
-  port: Number(getEnv(EnvKeys.DbPort, '5432')),
-  username: getEnv(EnvKeys.DbUsername, appName),
-  password: getEnv(EnvKeys.DbPassword, appName),
+  port: Number(dbPort),
+  username: dbUser,
+  password: dbPass,
   database: dbName,
 
   extra: {
-    min: Number(getEnv(EnvKeys.DbPoolMin, '0')),
-    max: Number(getEnv(EnvKeys.DbPoolMax, '10')),
+    min: Number(dbPoolMin),
+    max: Number(dbPoolMax),
   },
 
   entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
@@ -34,9 +53,7 @@ const config: PostgresConnectionOptions = {
 
   // Silence DB logs in tests
   logger:
-    env === 'test' || getEnv(EnvKeys.DbDebugLogging) === 'false'
-      ? 'file'
-      : 'advanced-console',
+    env === 'test' || dbDebugLogging === 'false' ? 'file' : 'advanced-console',
 
   // Allow both start.prod and start.dev to use migrations.
   // __dirname points to either the dist/ or src/ folder, meaning
