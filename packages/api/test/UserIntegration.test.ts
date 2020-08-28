@@ -6,6 +6,7 @@ import {init} from '../src/Server'
 import {MutationResolvers} from '../src/Schema'
 import {Context} from '../src/utils/Context'
 import UserFactory from './factories/UserFactory'
+import TestAuthn from './utils/TestAuthn'
 
 describe('User Integration', () => {
   let graphql: GraphQL.Test
@@ -15,15 +16,18 @@ describe('User Integration', () => {
 
   const token = Express.getToken()
 
+  const auth = TestAuthn.init(token)
+
   beforeAll(async () => {
-    const app = await init()
+    const app = await init({auth: {middleware: auth.middleware}})
 
     graphql = GraphQL.init(app, token)
     db = getConnection().createQueryRunner()
   })
 
   beforeEach(async () => {
-    jest.clearAllMocks()
+    jest.resetAllMocks()
+    auth.reset()
   })
 
   afterEach(async () => {
@@ -64,6 +68,11 @@ describe('User Integration', () => {
 
     it('requires the token sub to match the username', async () => {
       const {username} = UserFactory.make()
+
+      auth.setToken({
+        ...token,
+        sub: username,
+      })
 
       const variables = {input: {username}}
 

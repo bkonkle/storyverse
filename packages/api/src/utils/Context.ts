@@ -1,9 +1,14 @@
+import {Token} from 'cultivar/express'
 import {Request, Response} from 'express'
 import {GraphQLExtensionStack} from 'graphql-extensions'
 
+export interface AppRequest extends Request {
+  user?: Token
+}
+
 export interface Context {
   _extensionStack: GraphQLExtensionStack
-  req: Request
+  req: AppRequest
   res: Response
 }
 

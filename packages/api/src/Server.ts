@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import {ApolloServer, gql, graphqlExchange} from 'cultivar/exchanges/graphql'
 import {createMiddleware, jwtMiddleware} from 'cultivar/express'
-import express, {Application} from 'express'
+import express, {Application, RequestHandler} from 'express'
 import {readFileSync} from 'fs'
 import GraphQLDateTime from 'graphql-type-datetime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
@@ -17,6 +17,11 @@ import ProfileResolvers from './profiles/ProfileResolvers'
 import {Resolvers} from './Schema'
 import UserResolvers from './users/UserResolvers'
 import {getContext} from './utils/Context'
+
+export interface InitOptions {
+  env?: NodeJS.ProcessEnv
+  auth?: {middleware?: RequestHandler}
+}
 
 const typeDefs = gql(
   readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
@@ -37,18 +42,19 @@ const resolvers: Resolvers = {
   UUID: GraphQLUUID,
 }
 
-export async function init(): Promise<Application> {
+export async function init({
+  env = process.env,
+  auth,
+}: InitOptions = {}): Promise<Application> {
   const [
     nodeEnv = 'production',
     audience = 'production',
     issuer = 'https://storyverse.auth0.com/',
     jwksUri = 'https://storyverse.auth0.com/.well-known/jwks.json',
-  ] = getVars([
-    Vars.NodeEnv,
-    Vars.Auth0Audience,
-    Vars.Auth0Issuer,
-    Vars.Auth0JwksUri,
-  ])
+  ] = getVars(
+    [Vars.NodeEnv, Vars.Auth0Audience, Vars.Auth0Issuer, Vars.Auth0JwksUri],
+    env
+  )
 
   const isDev = nodeEnv === 'development'
 
@@ -59,17 +65,18 @@ export async function init(): Promise<Application> {
     .use(morgan(isDev ? 'dev' : 'combined'))
 
   app.use(
-    jwtMiddleware({
-      jwt: {
-        audience,
-        issuer,
-        algorithms: ['RS256'],
-        credentialsRequired: false,
-      },
-      jwks: {
-        jwksUri,
-      },
-    })
+    auth?.middleware ||
+      jwtMiddleware({
+        jwt: {
+          audience,
+          issuer,
+          algorithms: ['RS256'],
+          credentialsRequired: false,
+        },
+        jwks: {
+          jwksUri,
+        },
+      })
   )
 
   const apollo = new ApolloServer({

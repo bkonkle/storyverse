@@ -38,7 +38,12 @@ export const queries = ({service = UserService.init} = {}): QueryResolvers<
 })
 
 const requireAuthentication = (context: Context) => {
-  console.log(`>- context ->`, context)
+  const {
+    req: {user},
+  } = context
+
+  if (!user) {
+  }
 
   return fromValue(undefined)
 }
