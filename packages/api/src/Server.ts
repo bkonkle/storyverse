@@ -1,15 +1,10 @@
-import chalk from 'chalk'
-import {ApolloServer, gql, graphqlExchange} from 'cultivar/exchanges/graphql'
-import {createMiddleware, jwtMiddleware} from 'cultivar/express'
-import express, {Application, RequestHandler} from 'express'
+import {InitOptions, start} from 'cultivar/express'
+import {gql} from 'cultivar/graphql'
 import {readFileSync} from 'fs'
 import GraphQLDateTime from 'graphql-type-datetime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
 import GraphQLUUID from 'graphql-type-uuid'
-import http from 'http'
-import morgan from 'morgan'
 import {join} from 'path'
-import {createConnection} from 'typeorm'
 
 import dbConfig from './config/Database'
 import {Vars, getVars} from './config/Environment'
@@ -17,11 +12,6 @@ import ProfileResolvers from './profiles/ProfileResolvers'
 import {Resolvers} from './Schema'
 import UserResolvers from './users/UserResolvers'
 import {getContext} from './utils/Context'
-
-export interface InitOptions {
-  env?: NodeJS.ProcessEnv
-  auth?: {middleware?: RequestHandler}
-}
 
 const typeDefs = gql(
   readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
@@ -42,10 +32,7 @@ const resolvers: Resolvers = {
   UUID: GraphQLUUID,
 }
 
-export async function init({
-  env = process.env,
-  auth,
-}: InitOptions = {}): Promise<Application> {
+export const getOptions = (env = process.env): InitOptions => {
   const [
     nodeEnv = 'production',
     audience = 'production',
@@ -56,78 +43,36 @@ export async function init({
     env
   )
 
-  const isDev = nodeEnv === 'development'
-
-  await createConnection(dbConfig)
-
-  const app = express()
-    .disable('x-powered-by')
-    .use(morgan(isDev ? 'dev' : 'combined'))
-
-  app.use(
-    auth?.middleware ||
-      jwtMiddleware({
+  return {
+    label: 'Storyverse',
+    nodeEnv,
+    db: {
+      config: dbConfig,
+    },
+    auth: {
+      config: {
         jwt: {
           audience,
           issuer,
-          algorithms: ['RS256'],
           credentialsRequired: false,
         },
         jwks: {
           jwksUri,
         },
-      })
-  )
-
-  const apollo = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: getContext,
-    introspection: isDev,
-    playground: isDev
-      ? {
-          settings: {
-            'request.credentials': 'same-origin',
-          },
-        }
-      : false,
-    tracing: true,
-    cacheControl: true,
-  })
-  await apollo.applyMiddleware({app})
-
-  app.use(
-    createMiddleware({
-      exchange: graphqlExchange(apollo),
-    })
-  )
-
-  return app
+      },
+    },
+    apollo: {
+      config: {
+        typeDefs,
+        resolvers,
+        context: getContext,
+      },
+    },
+  }
 }
 
-export function run(app: Application, port: number, baseUrl?: string): void {
-  const baseUrlStr = baseUrl ? `at ${baseUrl}` : ''
-  const portStr = chalk.yellow(port.toString())
-
-  const server = http.createServer(app)
-
-  server.listen(port, () => {
-    console.log(
-      chalk.cyan(`> Started Storyverse on port ${portStr}${baseUrlStr}`)
-    )
-  })
-
-  server.on('close', () => {
-    console.log(chalk.cyan(`> Storyverse shutting down`))
-  })
-}
-
-export async function start(): Promise<void> {
-  const {PORT = '3000'} = process.env
-
-  run(await init(), Number(PORT))
-}
+export const run = async () => start(getOptions())
 
 if (require.main === module) {
-  start().catch(console.error)
+  run().catch(console.error)
 }
