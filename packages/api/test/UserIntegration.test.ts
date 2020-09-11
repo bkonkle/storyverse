@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {getConnection, QueryRunner} from 'typeorm'
-import {uuidRegex} from 'cultivar/utils/validation'
-import {Express, GraphQL} from 'cultivar/utils/testing'
+import {init} from 'cultivar/express'
+import {Validation} from 'cultivar/services'
+import {Express, GraphQL} from 'cultivar/testing'
 
-import {init} from '../src/Server'
 import {MutationResolvers} from '../src/Schema'
 import {Context} from '../src/utils/Context'
 import UserFactory from './factories/UserFactory'
 import TestAuthn from './utils/TestAuthn'
+import {getOptions} from '../src/Server'
 
 describe('User Integration', () => {
   let graphql: GraphQL.Test
@@ -18,8 +20,15 @@ describe('User Integration', () => {
 
   const auth = TestAuthn.init(token)
 
+  const env = {}
+
   beforeAll(async () => {
-    const app = await init({auth: {middleware: auth.middleware}})
+    const options = getOptions(env)
+
+    const app = await init({
+      ...options,
+      auth: {config: options.auth!.config, middleware: auth.middleware},
+    })
 
     graphql = GraphQL.init(app, token)
     db = getConnection().createQueryRunner()
@@ -59,7 +68,7 @@ describe('User Integration', () => {
       expect(data?.createUser).toHaveProperty(
         'user',
         expect.objectContaining({
-          id: expect.stringMatching(uuidRegex),
+          id: expect.stringMatching(Validation.uuidRegex),
           username: token.sub,
           isActive: true,
         })

@@ -1,5 +1,5 @@
 import {Repository, getRepository} from 'typeorm'
-import Typeorm from 'cultivar/utils/typeorm'
+import Typeorm from 'cultivar/services'
 
 import User from './User.entity'
 

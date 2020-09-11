@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import {uuidRegex} from 'cultivar/utils/validation'
+import {uuidRegex} from 'cultivar/services'
 
 import {
   UsersOrderBy,
