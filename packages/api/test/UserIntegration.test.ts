@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {getConnection, QueryRunner} from 'typeorm'
-import {init} from 'cultivar/express'
-import {Validation} from 'cultivar/services'
-import {Express, GraphQL} from 'cultivar/testing'
+import {init} from '../src/lib/express'
+import {Validation} from '../src/lib/resolvers'
+import {Express, GraphQL} from '../src/lib/testing'
 
 import {MutationResolvers} from '../src/Schema'
 import {Context} from '../src/utils/Context'

@@ -1,4 +1,4 @@
-import {Token} from 'cultivar/express'
+import {Token} from '../lib/express'
 import {Request, Response} from 'express'
 import {GraphQLExtensionStack} from 'graphql-extensions'
 

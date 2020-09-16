@@ -1,5 +1,5 @@
-import {InitOptions, start} from 'cultivar/express'
-import {gql} from 'cultivar/graphql'
+import {InitOptions, start} from './lib/express'
+import {gql} from './lib/graphql'
 import {readFileSync} from 'fs'
 import GraphQLDateTime from 'graphql-type-datetime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'

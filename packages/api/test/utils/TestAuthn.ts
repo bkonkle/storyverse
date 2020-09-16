@@ -1,4 +1,4 @@
-import {Token} from 'cultivar/express'
+import {Token} from '../../src/lib/express'
 
 export const init = (initialToken: Token) => {
   const middleware = jest.fn()
