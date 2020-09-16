@@ -103,8 +103,8 @@ export namespace Schema {
     .required()
 }
 
-export const get = Schema.get.validate
-export const getMany = Schema.getMany.validate
-export const create = Schema.create.validate
-export const update = Schema.update.validate
-export const remove = Schema.remove.validate
+export const get = Schema.get.validate.bind(Schema.get)
+export const getMany = Schema.getMany.validate.bind(Schema.getMany)
+export const create = Schema.create.validate.bind(Schema.create)
+export const update = Schema.update.validate.bind(Schema.update)
+export const remove = Schema.remove.validate.bind(Schema.remove)
