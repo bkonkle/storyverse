@@ -6,14 +6,20 @@ schema {
 type Mutation {
   """Create a new User Profile"""
   createProfile(input: CreateProfileInput!): MutateProfileResult!
+  """Create a new Universe"""
+  createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
   """Create a new User"""
   createUser(input: CreateUserInput!): MutateUserResult!
   """Remove an existing User Profile by ID"""
   deleteProfile(id: UUID!): MutateProfileResult!
+  """Remove an existing Universe by ID"""
+  deleteUniverse(id: UUID!): MutateUniverseResult!
   """Remove an existing User by ID"""
   deleteUser(id: UUID!): MutateUserResult!
   """Update an existing User Profile by ID"""
   updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+  """Update an existing Universe by ID"""
+  updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
   """Update an existing User by ID"""
   updateUser(id: UUID!, input: UpdateUserInput!): MutateUserResult!
 }
@@ -39,10 +45,14 @@ type MutateProfileResult {
 type Query {
   """Get many User Profiles, with optional filtering conditions"""
   getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
+  """Get many Universes, with optional filtering conditions"""
+  getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
   """Get many Users, with optional filtering conditions"""
   getManyUsers(where: UserCondition, orderBy: [UsersOrderBy!], pageSize: Int, page: Int): UsersPage!
   """Get an existing User Profile by ID"""
   getProfile(id: UUID!): Profile
+  """Get an existing Universe by ID"""
+  getUniverse(id: UUID!): Universe
   """Get an existing User by ID"""
   getUser(id: UUID!): User
 }
@@ -98,6 +108,58 @@ scalar DateTime
 scalar JSON
 scalar JSONObject
 scalar UUID
+"""Input to create a new Universe"""
+input CreateUniverseInput {
+  name: String!
+  description: JSONObject
+  ownedByProfileId: UUID!
+}
+"""Input to update an existing Universe"""
+input UpdateUniverseInput {
+  name: String
+  description: JSONObject
+  ownedByProfileId: UUID
+}
+type MutateUniverseResult {
+  universe: Universe
+}
+"""A Universe"""
+type Universe {
+  id: UUID!
+  """The Universe's name"""
+  name: String!
+  """Editor json content for the Universe's description"""
+  description: JSONObject
+  """The Profile that owns the Universe"""
+  ownedByProfileId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type UniversesPage {
+  data: [Universe!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+input UniverseCondition {
+  name: String
+  ownedByProfileId: UUID
+}
+enum UniversesOrderBy {
+  ID_ASC
+  ID_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  DISPLAY_NAME_ASC
+  DISPLAY_NAME_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
 """Input to create a new User"""
 input CreateUserInput {
   username: String!

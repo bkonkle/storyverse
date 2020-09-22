@@ -1,0 +1,69 @@
+extend type Query {
+  """
+  Get an existing Universe by ID
+  """
+  getUniverse(id: UUID!): Universe
+
+  """
+  Get many Universes, with optional filtering conditions
+  """
+  getManyUniverses(
+    where: UniverseCondition
+    orderBy: [UniversesOrderBy!]
+    pageSize: Int
+    page: Int
+  ): UniversesPage!
+}
+
+"""
+A Universe
+"""
+type Universe {
+  id: UUID!
+
+  """
+  The Universe's name
+  """
+  name: String!
+
+  """
+  Editor json content for the Universe's description
+  """
+  description: JSONObject
+
+  """
+  The Profile that owns the Universe
+  """
+  ownedByProfileId: UUID!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UniversesPage {
+  data: [Universe!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+
+input UniverseCondition {
+  name: String
+  ownedByProfileId: UUID
+}
+
+enum UniversesOrderBy {
+  ID_ASC
+  ID_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  DISPLAY_NAME_ASC
+  DISPLAY_NAME_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}

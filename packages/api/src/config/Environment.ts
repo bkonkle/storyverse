@@ -23,8 +23,10 @@ export enum Vars {
   // Authentication
   Auth0Audience = 'AUTH0_AUDIENCE',
   Auth0Issuer = 'AUTH0_ISSUER',
-  Auth0JwksUri = 'AUTH0_JWKS_URI',
 }
 
-export const getVars = (keys: Vars[], env: NodeJS.ProcessEnv = process.env) =>
-  keys.map((key) => env[key])
+export const getVar = (key: Vars, env: NodeJS.ProcessEnv = process.env) =>
+  env[key]
+
+export const getVars = (keys: Vars[], env?: NodeJS.ProcessEnv) =>
+  keys.map((key) => getVar(key, env))

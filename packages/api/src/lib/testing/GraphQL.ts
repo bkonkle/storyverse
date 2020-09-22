@@ -1,12 +1,12 @@
 import {Application} from 'express'
 import supertest from 'supertest'
 
-import {Token} from '../express/JwtMiddleware'
+import {JWT} from '../../auth//JwtTypes'
 import {encodeToken} from './Express'
 
 export const handleQuery = (
   app: Application,
-  token: Token,
+  token: JWT,
   endpoint = '/graphql'
 ) => async <T>(
   query: string,
@@ -33,7 +33,7 @@ export const handleQuery = (
   return response.body
 }
 
-export const init = (app: Application, token: Token) => ({
+export const init = (app: Application, token: JWT) => ({
   query: handleQuery(app, token),
 })
 

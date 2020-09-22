@@ -3,7 +3,7 @@ import faker from 'faker'
 import http from 'http'
 import jwt from 'jsonwebtoken'
 
-import {Token} from '../express/JwtMiddleware'
+import {JWT} from '../../auth/JwtTypes'
 
 export function makeRequest(extra: Partial<Request> = {}): Request {
   const req = {
@@ -30,15 +30,15 @@ export function makeResponse(extra: Partial<Response> = {}): Response {
   return res
 }
 
-export const getToken = (): Token => ({
+export const getToken = (overrides?: Partial<JWT>): JWT => ({
   sub: faker.random.alphaNumeric(10),
   iat: faker.random.number(10),
   aud: ['localhost'],
   iss: faker.random.alphaNumeric(10),
   exp: faker.random.number(10),
-  azp: faker.random.alphaNumeric(10),
-  scope: faker.random.alphaNumeric(10),
+  jti: faker.random.uuid(), // JWT id
+  ...overrides,
 })
 
-export const encodeToken = <T extends Token>(token: T) =>
+export const encodeToken = <T extends JWT>(token: T) =>
   jwt.sign(token, 'test-secret', {algorithm: 'HS256'})

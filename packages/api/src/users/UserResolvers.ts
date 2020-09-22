@@ -1,57 +1,61 @@
+import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
+
+import {User, UsersPage, MutateUserResult} from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
+import UsersService from './UsersService'
+import GetUserArgs from './data/GetUserArgs'
+import GetManyUsersArgs from './data/GetManyUsersArgs'
+import CreateUserArgs from './data/CreateUserArgs'
+import UpdateUserArgs from './data/UpdateUserArgs'
+import DeleteUserArgs from './data/DeleteUserArgs'
 
-import {QueryResolvers, MutationResolvers} from '../Schema'
-import {Context} from '../utils/Context'
-import * as Validate from './UserValidation'
-import UserService from './UserService'
+@Resolver('User')
+export class UserResolvers {
+  constructor(private readonly service: UsersService) {}
 
-export const queries = ({service = UserService.init} = {}): QueryResolvers<
-  Context
-> => ({
-  getUser: async (_parent, args, _context, _resolveInfo) => {
-    const {id} = await Validate.get(args)
+  @Query()
+  async getUser(@Args() args: GetUserArgs): Promise<User | undefined> {
+    const {id} = args
 
-    return service().findOne({where: {id}})
-  },
+    return this.service.findOne({where: {id}})
+  }
 
-  getManyUsers: async (_parent, args, _context, _resolveInfo) => {
-    const {where, orderBy, pageSize, page} = await Validate.getMany(args)
+  @Query()
+  async getManyUsers(@Args() args: GetManyUsersArgs): Promise<UsersPage> {
+    const {where, orderBy, pageSize, page} = args
 
-    return service().find({
+    return this.service.find({
       where,
       order: fromOrderBy(orderBy),
       pageSize,
       page,
     })
-  },
-})
+  }
 
-export const mutations = ({service = UserService.init} = {}): MutationResolvers<
-  Context
-> => ({
-  createUser: async (_parent, args, _context, _resolveInfo) => {
-    const {input} = await Validate.create(args)
+  @Mutation()
+  async createUser(@Args() args: CreateUserArgs): Promise<MutateUserResult> {
+    const {input} = args
 
-    const user = await service().create(input)
+    const user = await this.service.create(input)
 
     return {user}
-  },
+  }
 
-  updateUser: async (_parent, args, _context, _resolveInfo) => {
-    const {id, input} = await Validate.update(args)
+  @Mutation()
+  async updateUser(@Args() args: UpdateUserArgs): Promise<MutateUserResult> {
+    const {id, input} = args
 
-    const user = await service().update(id, input)
+    const user = await this.service.update(id, input)
 
     return {user}
-  },
+  }
 
-  deleteUser: async (_parent, args, _context, _resolveInfo) => {
-    const {id} = await Validate.remove(args)
+  @Mutation()
+  async deleteUser(@Args() args: DeleteUserArgs): Promise<MutateUserResult> {
+    const {id} = args
 
-    await service().delete(id)
+    await this.service.delete(id)
 
     return {}
-  },
-})
-
-export default {queries, mutations}
+  }
+}

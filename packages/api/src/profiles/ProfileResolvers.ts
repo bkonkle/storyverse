@@ -1,58 +1,69 @@
+import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
+
+import {Profile, ProfilesPage, MutateProfileResult} from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
+import ProfilesService from './ProfilesService'
+import GetProfileArgs from './data/GetProfileArgs'
+import GetManyProfilesArgs from './data/GetManyProfilesArgs'
+import CreateProfileArgs from './data/CreateProfileArgs'
+import UpdateProfileArgs from './data/UpdateProfileArgs'
+import DeleteProfileArgs from './data/DeleteProfileArgs'
 
-import {QueryResolvers, MutationResolvers} from '../Schema'
-import {Context} from '../utils/Context'
-import * as Validate from './ProfileValidation'
-import ProfileService from './ProfileService'
-import Profile from './Profile.entity'
+@Resolver('Profile')
+export class ProfileResolvers {
+  constructor(private readonly service: ProfilesService) {}
 
-export const queries = ({service = ProfileService.init} = {}): QueryResolvers<
-  Context
-> => ({
-  getProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {id} = await Validate.get(args)
+  @Query()
+  async getProfile(@Args() args: GetProfileArgs): Promise<Profile | undefined> {
+    const {id} = args
 
-    return service().findOne({where: {id}})
-  },
+    return this.service.findOne({where: {id}})
+  }
 
-  getManyProfiles: async (_parent, args, _context, _resolveInfo) => {
-    const {where, orderBy, pageSize, page} = await Validate.getMany(args)
+  @Query()
+  async getManyProfiles(
+    @Args() args: GetManyProfilesArgs
+  ): Promise<ProfilesPage> {
+    const {where, orderBy, pageSize, page} = args
 
-    return service().find({
+    return this.service.find({
       where,
       order: fromOrderBy(orderBy),
       pageSize,
       page,
     })
-  },
-})
+  }
 
-export const mutations = ({
-  service = ProfileService.init,
-} = {}): MutationResolvers<Context> => ({
-  createProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {input} = await Validate.create(args)
+  @Mutation()
+  async createProfile(
+    @Args() args: CreateProfileArgs
+  ): Promise<MutateProfileResult> {
+    const {input} = args
 
-    const profile = await service().create(input)
-
-    return {profile}
-  },
-
-  updateProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {id, input} = await Validate.update(args)
-
-    const profile = await service().update(id, input)
+    const profile = await this.service.create(input)
 
     return {profile}
-  },
+  }
 
-  deleteProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {id} = await Validate.remove(args)
+  @Mutation()
+  async updateProfile(
+    @Args() args: UpdateProfileArgs
+  ): Promise<MutateProfileResult> {
+    const {id, input} = args
 
-    await service().delete(id)
+    const profile = await this.service.update(id, input)
+
+    return {profile}
+  }
+
+  @Mutation()
+  async deleteProfile(
+    @Args() args: DeleteProfileArgs
+  ): Promise<MutateProfileResult> {
+    const {id} = args
+
+    await this.service.delete(id)
 
     return {}
-  },
-})
-
-export default {queries, mutations}
+  }
+}

@@ -1,48 +1,55 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {getConnection, QueryRunner} from 'typeorm'
-import {init} from '../src/lib/express'
-import {Validation} from '../src/lib/resolvers'
-import {Express, GraphQL} from '../src/lib/testing'
+import {INestApplication, ValidationPipe} from '@nestjs/common'
+import {Test} from '@nestjs/testing'
+import {Connection} from 'typeorm'
 
 import {MutationResolvers} from '../src/Schema'
-import {Context} from '../src/utils/Context'
+import {AppModule} from '../src/AppModule'
+import {Context} from '../src/auth/JwtTypes'
+import {ProcessEnv} from '../src/config/ConfigService'
+import {Validation} from '../src/lib/resolvers'
+import {Express, GraphQL} from '../src/lib/testing'
 import UserFactory from './factories/UserFactory'
-import TestAuthn from './utils/TestAuthn'
-import {getOptions} from '../src/Server'
 
-describe('User Integration', () => {
+describe('User', () => {
+  let app: INestApplication
   let graphql: GraphQL.Test
-  let db: QueryRunner
+  let db: Connection
 
-  const tables = ['users']
+  const dbCleaner = (tables = ['users']) =>
+    Promise.all(
+      tables.map((table) => db.query(`TRUNCATE TABLE "${table}" CASCADE;`))
+    )
 
   const token = Express.getToken()
-
-  const auth = TestAuthn.init(token)
 
   const env = {}
 
   beforeAll(async () => {
-    const options = getOptions(env)
-
-    const app = await init({
-      ...options,
-      auth: {config: options.auth!.config, middleware: auth.middleware},
+    const moduleFixture = await Test.createTestingModule({
+      imports: [AppModule],
     })
+      .overrideProvider(ProcessEnv)
+      .useValue(env)
 
-    graphql = GraphQL.init(app, token)
-    db = getConnection().createQueryRunner()
+      .compile()
+
+    app = moduleFixture.createNestApplication()
+    app.useGlobalPipes(new ValidationPipe())
+
+    await app.init()
+
+    db = app.get(Connection)
+
+    await dbCleaner()
   })
 
   beforeEach(async () => {
     jest.resetAllMocks()
-    auth.reset()
   })
 
   afterEach(async () => {
-    await Promise.all(
-      tables.map((table) => db.query(`TRUNCATE TABLE "${table}" CASCADE;`))
-    )
+    await dbCleaner()
   })
 
   describe('Mutation: createUser', () => {
@@ -77,11 +84,6 @@ describe('User Integration', () => {
 
     it('requires the token sub to match the username', async () => {
       const {username} = UserFactory.make()
-
-      auth.setToken({
-        ...token,
-        sub: username,
-      })
 
       const variables = {input: {username}}
 
