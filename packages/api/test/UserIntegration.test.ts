@@ -39,6 +39,8 @@ describe('User', () => {
 
     await app.init()
 
+    graphql = GraphQL.init(app, token)
+
     db = app.get(Connection)
 
     await dbCleaner()

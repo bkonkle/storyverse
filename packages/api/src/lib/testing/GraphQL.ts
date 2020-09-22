@@ -1,11 +1,11 @@
-import {Application} from 'express'
+import {INestApplication} from '@nestjs/common'
 import supertest from 'supertest'
 
 import {JWT} from '../../auth//JwtTypes'
 import {encodeToken} from './Express'
 
 export const handleQuery = (
-  app: Application,
+  app: INestApplication,
   token: JWT,
   endpoint = '/graphql'
 ) => async <T>(
@@ -15,8 +15,7 @@ export const handleQuery = (
 ): Promise<{data: T}> => {
   const {warn = true, expect = 200} = options
 
-  const response = await supertest
-    .agent(app)
+  const response = await supertest(app.getHttpServer())
     .post(endpoint)
     .set('Authorization', `Bearer ${encodeToken(token)}`)
     .send({query, variables})
@@ -33,7 +32,7 @@ export const handleQuery = (
   return response.body
 }
 
-export const init = (app: Application, token: JWT) => ({
+export const init = (app: INestApplication, token: JWT) => ({
   query: handleQuery(app, token),
 })
 
