@@ -1,5 +1,7 @@
-import {Request, Response} from 'express'
+import {Request} from 'express'
 import {GraphQLExtensionStack} from 'graphql-extensions'
+
+export const AUTHENTICATED = 'authn:authenticated'
 
 export interface JWT {
   jti: string // JWT id
@@ -13,10 +15,10 @@ export interface JWT {
 
 export interface TokenRequest extends Request {
   user?: JWT
+  [AUTHENTICATED]: boolean
 }
 
 export interface Context {
   _extensionStack: GraphQLExtensionStack
   req: TokenRequest
-  res: Response
 }

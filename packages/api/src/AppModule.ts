@@ -28,6 +28,7 @@ const isProd = env === 'production'
       debug: isDev,
       playground: !isProd,
       typePaths: ['./**/*.graphql'],
+      context: ({req}) => ({req}),
     }),
     UsersModule,
     ProfilesModule,
