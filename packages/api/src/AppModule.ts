@@ -1,4 +1,3 @@
-import {join} from 'path'
 import {Module, HttpModule, Logger} from '@nestjs/common'
 import {TypeOrmModule} from '@nestjs/typeorm'
 import {ScheduleModule} from '@nestjs/schedule'
@@ -29,7 +28,6 @@ const isProd = env === 'production'
       debug: isDev,
       playground: !isProd,
       typePaths: ['./**/*.graphql'],
-      autoSchemaFile: join(process.cwd(), 'schema.gql'),
     }),
     UsersModule,
     ProfilesModule,
