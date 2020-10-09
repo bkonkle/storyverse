@@ -5,8 +5,8 @@ import {Connection} from 'typeorm'
 
 import {MutationResolvers} from '../src/Schema'
 import {AppModule} from '../src/AppModule'
-import {Context} from '../src/auth/JwtTypes'
-import {ProcessEnv} from '../src/config/ConfigService'
+import {JwtContext} from '../src/auth/JwtTypes'
+import {ProcessEnv, Vars} from '../src/config/ConfigService'
 import {Validation} from '../src/lib/resolvers'
 import {Express, GraphQL} from '../src/lib/testing'
 import UserFactory from './factories/UserFactory'
@@ -21,9 +21,11 @@ describe('User', () => {
       tables.map((table) => db.query(`TRUNCATE TABLE "${table}" CASCADE;`))
     )
 
-  const token = Express.getToken()
+  const token = Express.makeToken()
 
-  const env = {}
+  const env = {
+    [Vars.Auth0Issuer]: 'http://localhost',
+  }
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
@@ -39,7 +41,7 @@ describe('User', () => {
 
     await app.init()
 
-    graphql = GraphQL.init(app, token)
+    graphql = GraphQL.init(app)
 
     db = app.get(Connection)
 
@@ -67,12 +69,12 @@ describe('User', () => {
         }
       `
 
-    it('creates a user', async () => {
+    it.only('creates a user', async () => {
       const variables = {input: {username: token.sub}}
 
       const {data} = await graphql.query<
-        Pick<MutationResolvers<Context>, 'createUser'>
-      >(query, variables)
+        Pick<MutationResolvers<JwtContext>, 'createUser'>
+      >(query, variables, {token})
 
       expect(data?.createUser).toHaveProperty(
         'user',
@@ -89,7 +91,10 @@ describe('User', () => {
 
       const variables = {input: {username}}
 
-      const body = await graphql.query(query, variables, {warn: false})
+      const body = await graphql.query(query, variables, {
+        warn: false,
+        token: Express.makeToken(),
+      })
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({

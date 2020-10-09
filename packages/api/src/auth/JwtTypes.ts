@@ -13,12 +13,12 @@ export interface JWT {
   nbf?: number // not before
 }
 
-export interface TokenRequest extends Request {
+export interface JwtRequest extends Request {
   user?: JWT
   [AUTHENTICATED]: boolean
 }
 
-export interface Context {
+export interface JwtContext {
   _extensionStack: GraphQLExtensionStack
-  req: TokenRequest
+  req: JwtRequest
 }

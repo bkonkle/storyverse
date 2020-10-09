@@ -1,25 +1,31 @@
+import {isObservable} from 'rxjs'
 import {ExecutionContext, Injectable, Optional} from '@nestjs/common'
 import {GqlExecutionContext} from '@nestjs/graphql'
 import {AuthGuard, AuthModuleOptions} from '@nestjs/passport'
 
-import {AUTHENTICATED, Context} from './JwtTypes'
+import {AUTHENTICATED, JwtContext} from './JwtTypes'
 
 @Injectable()
-export class GqlAuthGuard extends AuthGuard('jwt') {
+export class RequireAuthentication extends AuthGuard('jwt') {
   constructor(@Optional() protected readonly options?: AuthModuleOptions) {
     super(options)
   }
 
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context)
-    return ctx.getContext<Context>().req
+    return ctx.getContext<JwtContext>().req
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const success = (await super.canActivate(context)) as boolean
+    const req = this.getRequest(context)
+    const canActivate = super.canActivate(context)
 
+    const success = isObservable(canActivate)
+      ? await canActivate.toPromise()
+      : await canActivate
+
+    // Annotate the success on the request object so that the interceptor can check for it.
     if (success) {
-      const req = this.getRequest(context)
       req[AUTHENTICATED] = true
     }
 

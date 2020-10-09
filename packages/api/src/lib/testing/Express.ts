@@ -30,7 +30,7 @@ export function makeResponse(extra: Partial<Response> = {}): Response {
   return res
 }
 
-export const getToken = (overrides?: Partial<JWT>): JWT => ({
+export const makeToken = (overrides?: Partial<JWT>): JWT => ({
   sub: faker.random.alphaNumeric(10),
   iat: faker.random.number(10),
   aud: ['localhost'],

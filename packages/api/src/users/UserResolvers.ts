@@ -1,4 +1,5 @@
-import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
+import {ForbiddenException, UseGuards} from '@nestjs/common'
+import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
 
 import {User, UsersPage, MutateUserResult} from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
@@ -8,11 +9,14 @@ import GetManyUsersArgs from './data/GetManyUsersArgs'
 import CreateUserArgs from './data/CreateUserArgs'
 import UpdateUserArgs from './data/UpdateUserArgs'
 import DeleteUserArgs from './data/DeleteUserArgs'
+import {RequireAuthentication} from '../auth/JwtGuard'
+import {JwtContext} from '../auth/JwtTypes'
 
 @Resolver('User')
 export class UserResolvers {
   constructor(private readonly service: UsersService) {}
 
+  @UseGuards(RequireAuthentication)
   @Query()
   async getUser(@Args() args: GetUserArgs): Promise<User | undefined> {
     const {id} = args
@@ -32,9 +36,27 @@ export class UserResolvers {
     })
   }
 
+  @UseGuards(RequireAuthentication)
   @Mutation()
-  async createUser(@Args() args: CreateUserArgs): Promise<MutateUserResult> {
+  async createUser(
+    @Args() args: CreateUserArgs,
+    @Context() context: JwtContext
+  ): Promise<MutateUserResult> {
     const {input} = args
+    const {req} = context
+
+    console.log(
+      `>- req.user.sub, input.username ->`,
+      req.user?.sub,
+      input.username
+    )
+
+    console.log(`>- req.jwt ->`, req.jwt)
+    console.log(`>- req.token ->`, req.token)
+
+    if (!req.user || !req.user.sub || req.user.sub !== input.username) {
+      throw new ForbiddenException()
+    }
 
     const user = await this.service.create(input)
 

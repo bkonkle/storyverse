@@ -6,20 +6,21 @@ import {encodeToken} from './Express'
 
 export const handleQuery = (
   app: INestApplication,
-  token: JWT,
   endpoint = '/graphql'
 ) => async <T>(
   query: string,
   variables?: Record<string, unknown>,
-  options: {warn?: boolean; expect?: number} = {}
+  options: {warn?: boolean; expect?: number; token?: JWT} = {}
 ): Promise<{data: T}> => {
-  const {warn = true, expect = 200} = options
+  const {warn = true, expect = 200, token} = options
 
-  const response = await supertest(app.getHttpServer())
-    .post(endpoint)
-    .set('Authorization', `Bearer ${encodeToken(token)}`)
-    .send({query, variables})
-    .expect(expect)
+  let test = supertest(app.getHttpServer()).post(endpoint)
+
+  if (token) {
+    test = test.set('Authorization', `Bearer ${encodeToken(token)}`)
+  }
+
+  const response = await test.send({query, variables}).expect(expect)
 
   if (warn && response.body.errors) {
     console.error(
@@ -32,8 +33,8 @@ export const handleQuery = (
   return response.body
 }
 
-export const init = (app: INestApplication, token: JWT) => ({
-  query: handleQuery(app, token),
+export const init = (app: INestApplication) => ({
+  query: handleQuery(app),
 })
 
 export type Test = ReturnType<typeof init>

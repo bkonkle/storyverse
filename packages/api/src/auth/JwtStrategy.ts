@@ -21,7 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           config.getVar(Vars.Auth0Issuer) || DEFAULT_ISSUER
         }.well-known/jwks.json`,
       }),
-
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       audience: config.getVar(Vars.Auth0Audience) || DEFAULT_AUDIENCE,
       issuer: config.getVar(Vars.Auth0Issuer) || DEFAULT_ISSUER,

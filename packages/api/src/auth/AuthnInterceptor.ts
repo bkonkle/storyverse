@@ -5,11 +5,11 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common'
-import {ALLOW_ANONYMOUS} from './AuthnDecorators'
 import {GqlExecutionContext} from '@nestjs/graphql'
 import {Reflector} from '@nestjs/core'
 
-import {AUTHENTICATED, Context} from './JwtTypes'
+import {ALLOW_ANONYMOUS} from './AuthnDecorators'
+import {AUTHENTICATED, JwtContext} from './JwtTypes'
 
 @Injectable()
 export class AuthnInterceptor implements NestInterceptor {
@@ -17,7 +17,7 @@ export class AuthnInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler) {
     const gqlContext = GqlExecutionContext.create(context)
-    const req = gqlContext.getContext<Context>().req
+    const req = gqlContext.getContext<JwtContext>().req
 
     const allowAnon =
       this.reflector.get<boolean | undefined>(

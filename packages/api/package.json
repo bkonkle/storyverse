@@ -61,6 +61,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "pg": "^8.3.3",
+    "rxjs": "^6.6.3",
     "ts-parse-database-url": "^1.0.3",
     "typeorm": "^0.2.26",
     "yup": "^0.29.3"
@@ -85,7 +86,6 @@
     "@types/yup": "^0.29.7",
     "concurrently": "^5.2.0",
     "faker": "^5.1.0",
-    "nock": "^13.0.4",
     "nodemon": "^2.0.4",
     "recursive-readdir": "^2.2.2",
     "supertest": "^4.0.2",
