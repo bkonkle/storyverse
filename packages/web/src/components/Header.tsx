@@ -15,7 +15,7 @@ interface Props {
   siteDescription?: string
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },

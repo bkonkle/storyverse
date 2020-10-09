@@ -1,4 +1,4 @@
-import {AuthSession} from 'expo'
+import * as AuthSession from 'expo-auth-session'
 import {Alert, AsyncStorage} from 'react-native'
 
 import Config from '../Config'

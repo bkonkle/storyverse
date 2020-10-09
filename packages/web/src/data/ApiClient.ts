@@ -1,6 +1,7 @@
 import {createClient, dedupExchange, fetchExchange} from 'urql'
 import {cacheExchange} from '@urql/exchange-graphcache'
 import fetch from 'isomorphic-fetch'
+import {IntrospectionQuery} from 'graphql'
 
 import schema from '../../../../schema.json'
 import {tokens} from '../data/AuthClient'
@@ -23,7 +24,9 @@ export const client = createClient({
   },
   exchanges: [
     dedupExchange,
-    cacheExchange({schema: schema.data}),
+    cacheExchange({
+      schema: (schema.data as unknown) as IntrospectionQuery,
+    }),
     fetchExchange,
   ],
 })
