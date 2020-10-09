@@ -37,27 +37,27 @@
   "dependencies": {
     "@graft/knex": "^1.0.1",
     "@graft/server": "^5.4.2",
-    "debug": "^4.1.1",
+    "debug": "^4.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "graphql": "14.5.8",
-    "graphql-tag": "^2.10.1",
-    "moment": "^2.24.0",
-    "morgan": "^1.9.1",
-    "ramda": "^0.27.0",
+    "graphql": "^14.7.0",
+    "graphql-tag": "^2.11.0",
+    "moment": "^2.29.1",
+    "morgan": "^1.10.0",
+    "ramda": "^0.27.1",
     "ts-parse-database-url": "^1.0.3"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^1.8.3",
-    "@graphql-codegen/cli": "^1.8.3",
-    "@graphql-codegen/typescript": "^1.8.3",
-    "@graphql-codegen/typescript-operations": "^1.8.3",
-    "@graphql-codegen/typescript-urql": "^1.8.3",
-    "snakecase-keys": "^3.1.2",
-    "supertest": "^4.0.2"
+    "@graphql-codegen/add": "^2.0.1",
+    "@graphql-codegen/cli": "^1.17.10",
+    "@graphql-codegen/typescript": "^1.17.10",
+    "@graphql-codegen/typescript-operations": "^1.17.8",
+    "@graphql-codegen/typescript-urql": "^2.0.2",
+    "snakecase-keys": "^3.2.0",
+    "supertest": "^5.0.0"
   },
   "resolutions": {
-    "graphql": "14.5.8",
+    "graphql": "^14.7.0",
     "mem": "^4.0.0"
   }
 }
