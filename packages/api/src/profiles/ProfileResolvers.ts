@@ -18,7 +18,7 @@ import {
 } from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
 import ProfilesService from './ProfilesService'
-import {RequireAuthentication} from '../auth/JwtGuard'
+import {RequireAuthentication} from '../lib/auth/JwtGuard'
 import {JwtContext} from '../lib/auth/JwtTypes'
 import UsersService from '../users/UsersService'
 

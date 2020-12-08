@@ -3,7 +3,7 @@ import {ExecutionContext, Injectable, Optional} from '@nestjs/common'
 import {GqlExecutionContext} from '@nestjs/graphql'
 import {AuthGuard, AuthModuleOptions} from '@nestjs/passport'
 
-import {AUTHENTICATED, JwtContext} from '../lib/auth/JwtTypes'
+import {AUTHENTICATED, JwtContext} from './JwtTypes'
 
 @Injectable()
 export class RequireAuthentication extends AuthGuard('jwt') {

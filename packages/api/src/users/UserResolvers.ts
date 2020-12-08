@@ -12,7 +12,7 @@ import {
   UpdateUserInput,
 } from '../Schema'
 import UsersService from './UsersService'
-import {RequireAuthentication} from '../auth/JwtGuard'
+import {RequireAuthentication} from '../lib/auth/JwtGuard'
 import {JwtContext} from '../lib/auth/JwtTypes'
 
 @Resolver('User')
