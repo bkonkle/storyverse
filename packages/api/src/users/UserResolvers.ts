@@ -45,15 +45,6 @@ export class UserResolvers {
     const {input} = args
     const {req} = context
 
-    console.log(
-      `>- req.user.sub, input.username ->`,
-      req.user?.sub,
-      input.username
-    )
-
-    console.log(`>- req.jwt ->`, req.jwt)
-    console.log(`>- req.token ->`, req.token)
-
     if (!req.user || !req.user.sub || req.user.sub !== input.username) {
       throw new ForbiddenException()
     }

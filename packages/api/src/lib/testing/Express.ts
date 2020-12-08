@@ -1,9 +1,5 @@
 import {Request, Response} from 'express'
-import faker from 'faker'
 import http from 'http'
-import jwt from 'jsonwebtoken'
-
-import {JWT} from '../../auth/JwtTypes'
 
 export function makeRequest(extra: Partial<Request> = {}): Request {
   const req = {
@@ -29,16 +25,3 @@ export function makeResponse(extra: Partial<Response> = {}): Response {
 
   return res
 }
-
-export const makeToken = (overrides?: Partial<JWT>): JWT => ({
-  sub: faker.random.alphaNumeric(10),
-  iat: faker.random.number(10),
-  aud: ['localhost'],
-  iss: faker.random.alphaNumeric(10),
-  exp: faker.random.number(10),
-  jti: faker.random.uuid(), // JWT id
-  ...overrides,
-})
-
-export const encodeToken = <T extends JWT>(token: T) =>
-  jwt.sign(token, 'test-secret', {algorithm: 'HS256'})
