@@ -1,31 +1,64 @@
-import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
+import {
+  BadRequestException,
+  ForbiddenException,
+  ParseUUIDPipe,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common'
+import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
 
-import {Profile, ProfilesPage, MutateProfileResult} from '../Schema'
+import {
+  Profile,
+  ProfilesPage,
+  MutateProfileResult,
+  CreateProfileInput,
+  QueryGetProfileArgs,
+  UpdateProfileInput,
+  QueryGetManyProfilesArgs,
+} from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
 import ProfilesService from './ProfilesService'
-import GetProfileArgs from './data/GetProfileArgs'
-import GetManyProfilesArgs from './data/GetManyProfilesArgs'
-import CreateProfileArgs from './data/CreateProfileArgs'
-import UpdateProfileArgs from './data/UpdateProfileArgs'
-import DeleteProfileArgs from './data/DeleteProfileArgs'
+import {RequireAuthentication} from '../auth/JwtGuard'
+import {JwtContext} from '../lib/auth/JwtTypes'
+import UsersService from '../users/UsersService'
 
 @Resolver('Profile')
+@UseGuards(RequireAuthentication)
 export class ProfileResolvers {
-  constructor(private readonly service: ProfilesService) {}
+  constructor(
+    private readonly service: ProfilesService,
+    private readonly users: UsersService
+  ) {}
 
   @Query()
-  async getProfile(@Args() args: GetProfileArgs): Promise<Profile | undefined> {
+  async getProfile(
+    @Args() args: QueryGetProfileArgs,
+    @Context() context: JwtContext
+  ): Promise<Profile | undefined> {
     const {id} = args
+    const {req} = context
 
-    return this.service.findOne({where: {id}})
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
+
+    const profile = await this.service.findOne({where: {id}})
+    if (!profile) {
+      return undefined
+    }
+
+    if (req.user.sub !== profile.user.username) {
+      throw new ForbiddenException()
+    }
+
+    return profile
   }
 
   @Query()
   async getManyProfiles(
-    @Args() args: GetManyProfilesArgs
+    @Args() args: QueryGetManyProfilesArgs
   ): Promise<ProfilesPage> {
     const {where, orderBy, pageSize, page} = args
-
     return this.service.find({
       where,
       order: fromOrderBy(orderBy),
@@ -36,20 +69,63 @@ export class ProfileResolvers {
 
   @Mutation()
   async createProfile(
-    @Args() args: CreateProfileArgs
+    @Args('input') input: CreateProfileInput,
+    @Context() context: JwtContext
   ): Promise<MutateProfileResult> {
-    const {input} = args
+    const {req} = context
 
-    const profile = await this.service.create(input)
+    if (!input.userId && !input.user) {
+      throw new BadRequestException(
+        'Field "userId" of type "String" or "user" of type "CreateUserInput" was not provided.'
+      )
+    }
+
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
+
+    const user =
+      (input.userId &&
+        (await this.users.findOne({where: {id: input.userId}}))) ||
+      (input.user && (await this.users.create(input.user)))
+
+    if (!user) {
+      return {}
+    }
+
+    if (req.user.sub !== user.username) {
+      throw new ForbiddenException()
+    }
+
+    const profile = await this.service.create({...input, userId: user.id, user})
 
     return {profile}
   }
 
   @Mutation()
   async updateProfile(
-    @Args() args: UpdateProfileArgs
+    @Args('id', new ParseUUIDPipe()) id: string,
+    @Args('input') input: UpdateProfileInput,
+    @Context() context: JwtContext
   ): Promise<MutateProfileResult> {
-    const {id, input} = args
+    const {req} = context
+
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
+
+    if (input.userId && input.userId !== req.user.sub) {
+      throw new ForbiddenException()
+    }
+
+    const existing = await this.service.findOne({where: {id}})
+    if (!existing) {
+      return {}
+    }
+
+    if (req.user.sub !== existing.user.username) {
+      throw new ForbiddenException()
+    }
 
     const profile = await this.service.update(id, input)
 
@@ -58,12 +134,26 @@ export class ProfileResolvers {
 
   @Mutation()
   async deleteProfile(
-    @Args() args: DeleteProfileArgs
+    @Args('id', new ParseUUIDPipe()) id: string,
+    @Context() context: JwtContext
   ): Promise<MutateProfileResult> {
-    const {id} = args
+    const {req} = context
+
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
+
+    const existing = await this.service.findOne({where: {id}})
+    if (!existing) {
+      return {}
+    }
+
+    if (req.user.sub !== existing.user.username) {
+      throw new ForbiddenException()
+    }
 
     await this.service.delete(id)
 
-    return {}
+    return {profile: existing}
   }
 }

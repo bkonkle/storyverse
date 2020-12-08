@@ -1,18 +1,8 @@
 extend type Query {
   """
-  Get an existing User by ID
+  Get the currently authenticated User
   """
-  getUser(id: UUID!): User
-
-  """
-  Get many Users, with optional filtering conditions
-  """
-  getManyUsers(
-    where: UserCondition
-    orderBy: [UsersOrderBy!]
-    pageSize: Int
-    page: Int
-  ): UsersPage!
+  getCurrentUser: User
 }
 
 """
@@ -33,31 +23,4 @@ type User {
 
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type UsersPage {
-  data: [User!]!
-  count: Int!
-  total: Int!
-  page: Int!
-  pageCount: Int!
-}
-
-input UserCondition {
-  id: UUID
-  username: String
-  isActive: Boolean
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-enum UsersOrderBy {
-  ID_ASC
-  ID_DESC
-  USERNAME_ASC
-  USERNAME_DESC
-  IS_ACTIVE_ASC
-  IS_ACTIVE_DESC
-  UPDATED_AT_ASC
-  UPDATED_AT_DESC
 }

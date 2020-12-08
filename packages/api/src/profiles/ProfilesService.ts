@@ -2,13 +2,13 @@ import {Repository} from 'typeorm'
 import {Injectable} from '@nestjs/common'
 import {InjectRepository} from '@nestjs/typeorm'
 
-import {Typeorm} from '../lib/services'
+import {TypeOrm} from '../lib/services'
 
 import Profile from './Profile.entity'
 
 @Injectable()
 export class ProfilesService {
-  typeorm = Typeorm.init(this.repo)
+  typeorm = TypeOrm.init(this.repo)
 
   constructor(
     @InjectRepository(Profile) private readonly repo: Repository<Profile>

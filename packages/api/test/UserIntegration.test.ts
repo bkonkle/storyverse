@@ -1,31 +1,30 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {INestApplication, ValidationPipe} from '@nestjs/common'
 import {Test} from '@nestjs/testing'
-import {Connection} from 'typeorm'
+import {Connection, Repository} from 'typeorm'
 
-import {MutationResolvers} from '../src/Schema'
+import {Mutation, Query} from '../src/Schema'
 import {AppModule} from '../src/AppModule'
-import {JwtContext} from '../src/auth/JwtTypes'
 import {ProcessEnv} from '../src/config/ConfigService'
 import {Validation} from '../src/lib/resolvers'
-import {GraphQL, Auth0} from '../src/lib/testing'
+import {GraphQl, OAuth2, TypeOrm} from '../src/lib/testing'
 import UserFactory from './factories/UserFactory'
+import User from '../src/users/User.entity'
 
 describe('User', () => {
   let app: INestApplication
-  let graphql: GraphQL.Test
+  let graphql: GraphQl.Test
   let db: Connection
+  let users: Repository<User>
+  let typeorm: TypeOrm.Utils
 
-  const {getCredentials} = Auth0.init()
-
-  const dbCleaner = (tables = ['users']) =>
-    Promise.all(
-      tables.map((table) => db.query(`TRUNCATE TABLE "${table}" CASCADE;`))
-    )
+  const {getCredentials} = OAuth2.init()
 
   const env = {
     ...process.env,
   }
+
+  const tables = ['users']
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
@@ -41,11 +40,13 @@ describe('User', () => {
 
     await app.init()
 
-    graphql = GraphQL.init(app)
+    graphql = GraphQl.init(app)
 
     db = app.get(Connection)
+    typeorm = TypeOrm.init(db)
+    users = db.getRepository(User)
 
-    await dbCleaner()
+    await typeorm.dbCleaner(tables)
   })
 
   beforeEach(async () => {
@@ -53,38 +54,87 @@ describe('User', () => {
   })
 
   afterEach(async () => {
-    await dbCleaner()
+    await typeorm.dbCleaner(tables)
   })
 
   describe('Mutation: createUser', () => {
     const mutation = `
-        mutation createUser($input: CreateUserInput!) {
-          createUser(input: $input) {
-            user {
-              id
-              username
-              isActive
-            }
+      mutation CreateUser($input: CreateUserInput!) {
+        createUser(input: $input) {
+          user {
+            id
+            username
+            isActive
           }
         }
-      `
+      }
+    `
 
-    it('creates a user', async () => {
+    it('creates a new user', async () => {
       const {token, username} = getCredentials()
       const variables = {input: {username}}
 
-      const {data} = await graphql.mutation<
-        Pick<MutationResolvers<JwtContext>, 'createUser'>
-      >(mutation, variables, {token})
+      const expected = {
+        id: expect.stringMatching(Validation.uuidRegex),
+        username,
+        isActive: true,
+      }
 
-      expect(data?.createUser).toHaveProperty(
-        'user',
-        expect.objectContaining({
-          id: expect.stringMatching(Validation.uuidRegex),
-          username,
-          isActive: true,
-        })
+      const {data} = await graphql.mutation<Pick<Mutation, 'createUser'>>(
+        mutation,
+        variables,
+        {token}
       )
+
+      expect(data.createUser).toHaveProperty(
+        'user',
+        expect.objectContaining(expected)
+      )
+
+      const user = await users.findOne(data.createUser.user?.id)
+      expect(user).toMatchObject({
+        ...expected,
+        id: data.createUser.user?.id,
+      })
+    })
+
+    it('requires a username', async () => {
+      const {token} = getCredentials()
+      const variables = {input: {}}
+
+      const body = await graphql.mutation(mutation, variables, {
+        token,
+        statusCode: 400,
+        warn: false,
+      })
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: `Variable "$input" got invalid value {}; Field "username" of required type "String!" was not provided.`,
+        }),
+      ])
+    })
+
+    it('requires authentication', async () => {
+      const {username} = getCredentials()
+      const variables = {input: {username}}
+
+      const body = await graphql.mutation(mutation, variables, {warn: false})
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Unauthorized',
+          extensions: expect.objectContaining({
+            exception: expect.objectContaining({
+              status: 401,
+              response: {
+                message: 'Unauthorized',
+                statusCode: 401,
+              },
+            }),
+          }),
+        }),
+      ])
     })
 
     it('requires the token sub to match the username', async () => {
@@ -94,8 +144,8 @@ describe('User', () => {
       const variables = {input: {username: otherUser.username}}
 
       const body = await graphql.mutation(mutation, variables, {
-        warn: false,
         token,
+        warn: false,
       })
 
       expect(body).toHaveProperty('errors', [
@@ -107,6 +157,151 @@ describe('User', () => {
               response: {
                 message: 'Forbidden',
                 statusCode: 403,
+              },
+            }),
+          }),
+        }),
+      ])
+    })
+  })
+
+  describe('Query: getCurrentUser', () => {
+    const query = `
+      query GetCurrentUser {
+        getCurrentUser {
+          id
+          username
+          isActive
+        }
+      }
+    `
+
+    let user: User
+
+    beforeEach(async () => {
+      const {username} = getCredentials()
+
+      user = await users.save({
+        username,
+        isActive: true,
+      })
+    })
+
+    it('retrieves the currently authenticated user', async () => {
+      const {token, username} = getCredentials()
+
+      const {data} = await graphql.query<Pick<Query, 'getCurrentUser'>>(
+        query,
+        undefined,
+        {token}
+      )
+
+      expect(data.getCurrentUser).toEqual({
+        id: user.id,
+        username,
+        isActive: true,
+      })
+    })
+
+    it('returns null when no user is found', async () => {
+      const {token} = getCredentials()
+
+      await users.delete(user.id)
+
+      const {data} = await graphql.query<Pick<Query, 'getCurrentUser'>>(
+        query,
+        undefined,
+        {token}
+      )
+
+      expect(data.getCurrentUser).toBeFalsy()
+    })
+
+    it('requires authentication', async () => {
+      const body = await graphql.query(query, undefined, {warn: false})
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Unauthorized',
+          extensions: expect.objectContaining({
+            exception: expect.objectContaining({
+              status: 401,
+              response: {
+                message: 'Unauthorized',
+                statusCode: 401,
+              },
+            }),
+          }),
+        }),
+      ])
+    })
+  })
+
+  describe('Query: updateCurrentUser', () => {
+    const mutation = `
+      mutation UpdateCurrentUser($input: UpdateUserInput!) {
+        updateCurrentUser(input: $input) {
+          user {
+            id
+            username
+            isActive
+          }
+        }
+      }
+    `
+
+    let user: User
+
+    beforeEach(async () => {
+      const {username} = getCredentials()
+
+      user = await users.save({
+        username,
+        isActive: true,
+      })
+    })
+
+    it('updates the currently authenticated user', async () => {
+      const {token, username} = getCredentials()
+      const variables = {
+        input: {isActive: false},
+      }
+
+      const expected = {
+        id: user.id,
+        username,
+        isActive: false,
+      }
+
+      const {data} = await graphql.mutation<
+        Pick<Mutation, 'updateCurrentUser'>
+      >(mutation, variables, {token})
+
+      expect(data.updateCurrentUser).toHaveProperty(
+        'user',
+        expect.objectContaining(expected)
+      )
+
+      const updated = await users.findOne(data.updateCurrentUser.user?.id)
+      expect(updated).toMatchObject(expected)
+    })
+
+    it('requires authentication', async () => {
+      const variables = {
+        input: {isActive: false},
+      }
+
+      const body = await graphql.mutation(mutation, variables, {warn: false})
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Unauthorized',
+          extensions: expect.objectContaining({
+            exception: expect.objectContaining({
+              status: 401,
+              response: {
+                message: 'Unauthorized',
+                statusCode: 401,
               },
             }),
           }),

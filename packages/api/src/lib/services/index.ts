@@ -1,8 +1,7 @@
 import * as Pagination from './Pagination'
-import * as Typeorm from './Typeorm'
+import * as TypeOrm from './TypeOrm'
 
 export * from './Pagination'
-export * from './Typeorm'
 
-export {Pagination, Typeorm}
-export default {Pagination, Typeorm}
+export {Pagination, TypeOrm}
+export default {Pagination, TypeOrm}

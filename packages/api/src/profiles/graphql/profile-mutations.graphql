@@ -23,7 +23,8 @@ input CreateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String!
+  userId: String
+  user: CreateUserInput
 }
 
 """

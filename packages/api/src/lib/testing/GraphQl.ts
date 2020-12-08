@@ -7,9 +7,9 @@ export const handleQuery = (
 ) => async <T>(
   query: string,
   variables?: Record<string, unknown>,
-  options: {warn?: boolean; expect?: number; token?: string} = {}
+  options: {warn?: boolean; statusCode?: number; token?: string} = {}
 ): Promise<{data: T}> => {
-  const {warn = true, expect = 200, token} = options
+  const {warn = true, statusCode = 200, token} = options
 
   let test = supertest(app.getHttpServer()).post(endpoint)
 
@@ -17,7 +17,7 @@ export const handleQuery = (
     test = test.set('Authorization', `Bearer ${token}`)
   }
 
-  const response = await test.send({query, variables}).expect(expect)
+  const response = await test.send({query, variables})
 
   if (warn && response.body.errors) {
     console.error(
@@ -26,6 +26,8 @@ export const handleQuery = (
         .join('\n\n')
     )
   }
+
+  expect(response.status).toEqual(statusCode)
 
   return response.body
 }

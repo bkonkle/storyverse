@@ -1,51 +1,46 @@
-import {ForbiddenException, UseGuards} from '@nestjs/common'
+import {
+  ForbiddenException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common'
 import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
 
-import {User, UsersPage, MutateUserResult} from '../Schema'
-import {fromOrderBy} from '../lib/resolvers'
+import {
+  User,
+  MutateUserResult,
+  CreateUserInput,
+  UpdateUserInput,
+} from '../Schema'
 import UsersService from './UsersService'
-import GetUserArgs from './data/GetUserArgs'
-import GetManyUsersArgs from './data/GetManyUsersArgs'
-import CreateUserArgs from './data/CreateUserArgs'
-import UpdateUserArgs from './data/UpdateUserArgs'
-import DeleteUserArgs from './data/DeleteUserArgs'
 import {RequireAuthentication} from '../auth/JwtGuard'
-import {JwtContext} from '../auth/JwtTypes'
+import {JwtContext} from '../lib/auth/JwtTypes'
 
 @Resolver('User')
+@UseGuards(RequireAuthentication)
 export class UserResolvers {
   constructor(private readonly service: UsersService) {}
 
-  @UseGuards(RequireAuthentication)
   @Query()
-  async getUser(@Args() args: GetUserArgs): Promise<User | undefined> {
-    const {id} = args
-
-    return this.service.findOne({where: {id}})
-  }
-
-  @Query()
-  async getManyUsers(@Args() args: GetManyUsersArgs): Promise<UsersPage> {
-    const {where, orderBy, pageSize, page} = args
-
-    return this.service.find({
-      where,
-      order: fromOrderBy(orderBy),
-      pageSize,
-      page,
-    })
-  }
-
-  @UseGuards(RequireAuthentication)
-  @Mutation()
-  async createUser(
-    @Args() args: CreateUserArgs,
+  async getCurrentUser(
     @Context() context: JwtContext
-  ): Promise<MutateUserResult> {
-    const {input} = args
+  ): Promise<User | undefined> {
     const {req} = context
 
-    if (!req.user || !req.user.sub || req.user.sub !== input.username) {
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
+
+    return this.service.findOne({where: {username: req.user.sub}})
+  }
+
+  @Mutation()
+  async createUser(
+    @Args('input') input: CreateUserInput,
+    @Context() context: JwtContext
+  ): Promise<MutateUserResult> {
+    const {req} = context
+
+    if (req.user?.sub !== input.username) {
       throw new ForbiddenException()
     }
 
@@ -55,20 +50,23 @@ export class UserResolvers {
   }
 
   @Mutation()
-  async updateUser(@Args() args: UpdateUserArgs): Promise<MutateUserResult> {
-    const {id, input} = args
+  async updateCurrentUser(
+    @Args('input') input: UpdateUserInput,
+    @Context() context: JwtContext
+  ): Promise<MutateUserResult> {
+    const {req} = context
 
-    const user = await this.service.update(id, input)
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
 
-    return {user}
-  }
+    const user = await this.service.findOne({where: {username: req.user.sub}})
+    if (!user) {
+      return {}
+    }
 
-  @Mutation()
-  async deleteUser(@Args() args: DeleteUserArgs): Promise<MutateUserResult> {
-    const {id} = args
+    const updated = await this.service.update(user.id, input)
 
-    await this.service.delete(id)
-
-    return {}
+    return {user: updated}
   }
 }

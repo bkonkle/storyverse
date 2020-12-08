@@ -40,7 +40,7 @@ export class Profile extends UuidTable {
   })
   userId!: string
 
-  @ManyToOne(() => User, (user) => user.profiles)
+  @ManyToOne(() => User, (user) => user.profiles, {eager: true})
   @JoinColumn({name: 'user_id'})
   user!: User
 

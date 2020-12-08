@@ -80,7 +80,12 @@ export const update = <Entity>(repo: Repository<Entity>) => async (
     return undefined
   }
 
-  return repo.save({...input, id})
+  const existing = await repo.findOne(id)
+  if (!existing) {
+    return undefined
+  }
+
+  return repo.save({...existing, ...input})
 }
 
 export const remove = <Entity>(repo: Repository<Entity>) => async (

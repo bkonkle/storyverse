@@ -21,8 +21,8 @@ export enum Vars {
   BastionHost = 'BASTION_HOST',
 
   // Authentication
-  Auth0Audience = 'AUTH0_AUDIENCE',
-  Auth0Issuer = 'AUTH0_ISSUER',
+  OAuth2Audience = 'OAUTH2_AUDIENCE',
+  OAuth2Issuer = 'OAUTH2_ISSUER',
 }
 
 export const getVar = (key: Vars, env: NodeJS.ProcessEnv = process.env) =>

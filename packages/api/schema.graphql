@@ -14,14 +14,12 @@ type Mutation {
   deleteProfile(id: UUID!): MutateProfileResult!
   """Remove an existing Universe by ID"""
   deleteUniverse(id: UUID!): MutateUniverseResult!
-  """Remove an existing User by ID"""
-  deleteUser(id: UUID!): MutateUserResult!
+  """Update the currently authenticated User"""
+  updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
   """Update an existing User Profile by ID"""
   updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
   """Update an existing Universe by ID"""
   updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
-  """Update an existing User by ID"""
-  updateUser(id: UUID!, input: UpdateUserInput!): MutateUserResult!
 }
 """Input to create a new User Profile"""
 input CreateProfileInput {
@@ -29,7 +27,8 @@ input CreateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String!
+  userId: String
+  user: CreateUserInput
 }
 """Input to update an existing User Profile"""
 input UpdateProfileInput {
@@ -43,18 +42,16 @@ type MutateProfileResult {
   profile: Profile
 }
 type Query {
+  """Get the currently authenticated User"""
+  getCurrentUser: User
   """Get many User Profiles, with optional filtering conditions"""
   getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
   """Get many Universes, with optional filtering conditions"""
   getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
-  """Get many Users, with optional filtering conditions"""
-  getManyUsers(where: UserCondition, orderBy: [UsersOrderBy!], pageSize: Int, page: Int): UsersPage!
   """Get an existing User Profile by ID"""
   getProfile(id: UUID!): Profile
   """Get an existing Universe by ID"""
   getUniverse(id: UUID!): Universe
-  """Get an existing User by ID"""
-  getUser(id: UUID!): User
 }
 """A User Profile"""
 type Profile {
@@ -181,28 +178,4 @@ type User {
   isActive: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-type UsersPage {
-  data: [User!]!
-  count: Int!
-  total: Int!
-  page: Int!
-  pageCount: Int!
-}
-input UserCondition {
-  id: UUID
-  username: String
-  isActive: Boolean
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-enum UsersOrderBy {
-  ID_ASC
-  ID_DESC
-  USERNAME_ASC
-  USERNAME_DESC
-  IS_ACTIVE_ASC
-  IS_ACTIVE_DESC
-  UPDATED_AT_ASC
-  UPDATED_AT_DESC
 }

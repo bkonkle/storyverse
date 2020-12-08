@@ -1,8 +1,9 @@
-import * as Auth0 from './Auth0'
 import * as Express from './Express'
-import * as GraphQL from './GraphQL'
+import * as GraphQl from './GraphQl'
+import * as OAuth2 from './OAuth2'
+import * as TypeOrm from './TypeOrm'
 
 export * from './Express'
 
-export {Auth0, Express, GraphQL}
-export default {Auth0, Express, GraphQL}
+export {Express, GraphQl, OAuth2, TypeOrm}
+export default {Express, GraphQl, OAuth2, TypeOrm}
