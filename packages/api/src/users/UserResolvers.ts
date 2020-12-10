@@ -1,10 +1,5 @@
-import {
-  ForbiddenException,
-  NotFoundException,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common'
-import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
+import {ForbiddenException, NotFoundException, UseGuards} from '@nestjs/common'
+import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
 
 import {
   User,
@@ -14,7 +9,7 @@ import {
 } from '../Schema'
 import UsersService from './UsersService'
 import {RequireAuthentication} from '../lib/auth/JwtGuard'
-import {JwtContext} from '../lib/auth/JwtTypes'
+import {UserSub} from '../lib/auth/JwtDecorators'
 
 @Resolver('User')
 @UseGuards(RequireAuthentication)
@@ -23,25 +18,17 @@ export class UserResolvers {
 
   @Query()
   async getCurrentUser(
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<User | undefined> {
-    const {req} = context
-
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
-    return this.service.findOne({where: {username: req.user.sub}})
+    return this.service.findOne({where: {username}})
   }
 
   @Mutation()
   async createUser(
     @Args('input') input: CreateUserInput,
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<MutateUserResult> {
-    const {req} = context
-
-    if (req.user?.sub !== input.username) {
+    if (username !== input.username) {
       throw new ForbiddenException()
     }
 
@@ -53,15 +40,9 @@ export class UserResolvers {
   @Mutation()
   async updateCurrentUser(
     @Args('input') input: UpdateUserInput,
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<MutateUserResult> {
-    const {req} = context
-
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
-    const user = await this.service.findOne({where: {username: req.user.sub}})
+    const user = await this.service.findOne({where: {username}})
     if (!user) {
       throw new NotFoundException()
     }

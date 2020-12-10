@@ -1,11 +1,11 @@
 import {
   BadRequestException,
   ForbiddenException,
+  NotFoundException,
   ParseUUIDPipe,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
+import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
 
 import {
   Universe,
@@ -17,9 +17,9 @@ import {
 } from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
 import UniversesService from './UniversesService'
-import {RequireAuthentication} from '../lib/auth/JwtGuard'
 import ProfilesService from '../profiles/ProfilesService'
-import {JwtContext} from '../lib/auth/JwtTypes'
+import {RequireAuthentication} from '../lib/auth/JwtGuard'
+import {UserSub} from '../lib/auth/JwtDecorators'
 
 @Resolver('Universe')
 @UseGuards(RequireAuthentication)
@@ -53,13 +53,8 @@ export class UniverseResolvers {
   @Mutation()
   async createUniverse(
     @Args('input') input: CreateUniverseInput,
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    const {req} = context
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
     const profile = await this.profiles.findOne({
       where: {id: input.ownedByProfileId},
     })
@@ -69,7 +64,7 @@ export class UniverseResolvers {
       )
     }
 
-    if (req.user.sub !== profile.user.username) {
+    if (username !== profile.user.username) {
       throw new ForbiddenException()
     }
 
@@ -81,8 +76,18 @@ export class UniverseResolvers {
   @Mutation()
   async updateUniverse(
     @Args('id', new ParseUUIDPipe()) id: string,
-    @Args('input') input: UpdateUniverseInput
+    @Args('input') input: UpdateUniverseInput,
+    @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
+    const existing = await this.service.findOne({where: {id}})
+    if (!existing) {
+      throw new NotFoundException()
+    }
+
+    if (username !== existing.ownedByProfile.user.username) {
+      throw new ForbiddenException()
+    }
+
     const universe = await this.service.update(id, input)
 
     return {universe}
@@ -90,10 +95,20 @@ export class UniverseResolvers {
 
   @Mutation()
   async deleteUniverse(
-    @Args('id', new ParseUUIDPipe()) id: string
+    @Args('id', new ParseUUIDPipe()) id: string,
+    @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
+    const existing = await this.service.findOne({where: {id}})
+    if (!existing) {
+      throw new NotFoundException()
+    }
+
+    if (username !== existing.ownedByProfile.user.username) {
+      throw new ForbiddenException()
+    }
+
     await this.service.delete(id)
 
-    return {}
+    return {universe: existing}
   }
 }

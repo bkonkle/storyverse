@@ -5,14 +5,14 @@ import {Test} from '@nestjs/testing'
 import {Connection, Repository} from 'typeorm'
 import {omit, pick} from 'lodash'
 
-import {Mutation, Query} from '../src/Schema'
-import {AppModule} from '../src/AppModule'
-import {ProcessEnv} from '../src/config/ConfigService'
-import {Validation} from '../src/lib/resolvers'
-import {GraphQl, OAuth2, TypeOrm} from '../src/lib/testing'
-import ProfileFactory from './factories/ProfileFactory'
-import Profile from '../src/profiles/Profile.entity'
-import User from '../src/users/User.entity'
+import {Mutation, Query} from '../../Schema'
+import {AppModule} from '../../AppModule'
+import {ProcessEnv} from '../../config/ConfigService'
+import {Validation} from '../../lib/resolvers'
+import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
+import ProfileFactory from '../../utils/test/factories/ProfileFactory'
+import Profile from '../../profiles/Profile.entity'
+import User from '../../users/User.entity'
 
 describe('Profile', () => {
   let app: INestApplication
@@ -97,7 +97,7 @@ describe('Profile', () => {
       const variables = {input: profile}
 
       const expected = {
-        ...variables.input,
+        ...profile,
         id: expect.stringMatching(Validation.uuidRegex),
       }
 
@@ -500,34 +500,6 @@ describe('Profile', () => {
       const variables = {
         id: profile.id,
         input: {picture: faker.internet.avatar()},
-      }
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: 'Forbidden',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 403,
-              response: {
-                message: 'Forbidden',
-                statusCode: 403,
-              },
-            }),
-          }),
-        }),
-      ])
-    })
-
-    it('requires any new userId to have a username matching the token sub', async () => {
-      const {token} = getCredentials()
-      const variables = {
-        id: profile.id,
-        input: {userId: otherUser.id},
       }
 
       const body = await graphql.mutation(mutation, variables, {

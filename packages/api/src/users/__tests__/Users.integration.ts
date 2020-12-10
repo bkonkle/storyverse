@@ -3,13 +3,13 @@ import {INestApplication, ValidationPipe} from '@nestjs/common'
 import {Test} from '@nestjs/testing'
 import {Connection, Repository} from 'typeorm'
 
-import {Mutation, Query} from '../src/Schema'
-import {AppModule} from '../src/AppModule'
-import {ProcessEnv} from '../src/config/ConfigService'
-import {Validation} from '../src/lib/resolvers'
-import {GraphQl, OAuth2, TypeOrm} from '../src/lib/testing'
-import UserFactory from './factories/UserFactory'
-import User from '../src/users/User.entity'
+import {Mutation, Query} from '../../Schema'
+import {AppModule} from '../../AppModule'
+import {ProcessEnv} from '../../config/ConfigService'
+import {Validation} from '../../lib/resolvers'
+import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
+import UserFactory from '../../utils/test/factories/UserFactory'
+import User from '../../users/User.entity'
 
 describe('User', () => {
   let app: INestApplication

@@ -3,8 +3,8 @@ import {plainToClass} from 'class-transformer'
 import faker from 'faker'
 import {DeepPartial} from 'typeorm'
 
-import Profile from '../../src/profiles/Profile.entity'
-import {CreateProfileInput} from '../../src/Schema'
+import Profile from '../../../profiles/Profile.entity'
+import {CreateProfileInput} from '../../../Schema'
 
 export const makeCreateInput = (
   overrides?: DeepPartial<CreateProfileInput>

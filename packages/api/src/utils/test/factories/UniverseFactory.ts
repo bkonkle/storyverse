@@ -3,8 +3,8 @@ import {plainToClass} from 'class-transformer'
 import faker from 'faker'
 import {DeepPartial} from 'typeorm'
 
-import Universe from '../../src/universes/Universe.entity'
-import {CreateUniverseInput} from '../../src/Schema'
+import Universe from '../../../universes/Universe.entity'
+import {CreateUniverseInput} from '../../../Schema'
 
 export const makeCreateInput = (
   overrides?: DeepPartial<CreateUniverseInput>

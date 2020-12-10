@@ -28,7 +28,7 @@ export class Universe extends UuidTable {
   })
   ownedByProfileId!: string
 
-  @ManyToOne(() => Profile, (profile) => profile.universesOwned)
+  @ManyToOne(() => Profile, (profile) => profile.universesOwned, {eager: true})
   @JoinColumn({name: 'owned_by_profile_id'})
   ownedByProfile!: Profile
 }

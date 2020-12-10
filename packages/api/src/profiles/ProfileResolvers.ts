@@ -3,10 +3,9 @@ import {
   ForbiddenException,
   NotFoundException,
   ParseUUIDPipe,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
+import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
 
 import {
   Profile,
@@ -18,9 +17,9 @@ import {
 } from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
 import ProfilesService from './ProfilesService'
-import {RequireAuthentication} from '../lib/auth/JwtGuard'
-import {JwtContext} from '../lib/auth/JwtTypes'
 import UsersService from '../users/UsersService'
+import {RequireAuthentication} from '../lib/auth/JwtGuard'
+import {UserSub} from '../lib/auth/JwtDecorators'
 
 @Resolver('Profile')
 @UseGuards(RequireAuthentication)
@@ -65,21 +64,15 @@ export class ProfileResolvers {
   @Mutation()
   async createProfile(
     @Args('input') input: CreateProfileInput,
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const {req} = context
-
     if (!input.userId && !input.user) {
       throw new BadRequestException(
         'Field "userId" of type "String" or "user" of type "CreateUserInput" was not provided.'
       )
     }
 
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
-    if (req.user.sub !== input.user?.username) {
+    if (input.user && username !== input.user.username) {
       throw new ForbiddenException()
     }
 
@@ -97,7 +90,7 @@ export class ProfileResolvers {
       )
     }
 
-    if (req.user.sub !== user.username) {
+    if (username !== user.username) {
       throw new ForbiddenException()
     }
 
@@ -110,24 +103,14 @@ export class ProfileResolvers {
   async updateProfile(
     @Args('id', new ParseUUIDPipe()) id: string,
     @Args('input') input: UpdateProfileInput,
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const {req} = context
-
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
-    if (input.userId && input.userId !== req.user.sub) {
-      throw new ForbiddenException()
-    }
-
     const existing = await this.service.findOne({where: {id}})
     if (!existing) {
       throw new NotFoundException()
     }
 
-    if (req.user.sub !== existing.user.username) {
+    if (username !== existing.user.username) {
       throw new ForbiddenException()
     }
 
@@ -139,20 +122,14 @@ export class ProfileResolvers {
   @Mutation()
   async deleteProfile(
     @Args('id', new ParseUUIDPipe()) id: string,
-    @Context() context: JwtContext
+    @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const {req} = context
-
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
     const existing = await this.service.findOne({where: {id}})
     if (!existing) {
       throw new NotFoundException()
     }
 
-    if (req.user.sub !== existing.user.username) {
+    if (username !== existing.user.username) {
       throw new ForbiddenException()
     }
 

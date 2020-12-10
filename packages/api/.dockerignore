@@ -9,7 +9,6 @@
 
 # src and test folders
 !src/
-!test/
 
 # Configs
 !.eslintrc.js
