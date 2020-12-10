@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  NotFoundException,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
@@ -62,7 +63,7 @@ export class UserResolvers {
 
     const user = await this.service.findOne({where: {username: req.user.sub}})
     if (!user) {
-      return {}
+      throw new NotFoundException()
     }
 
     const updated = await this.service.update(user.id, input)

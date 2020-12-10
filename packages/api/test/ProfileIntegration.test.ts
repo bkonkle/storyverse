@@ -30,7 +30,7 @@ describe('Profile', () => {
     ...process.env,
   }
 
-  const tables = ['users']
+  const tables = ['users', 'profiles']
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
@@ -61,19 +61,13 @@ describe('Profile', () => {
 
     const {username} = getCredentials()
 
-    user = await users.save({
-      username,
-      isActive: true,
-    })
+    user = await users.save({username, isActive: true})
   })
 
   beforeEach(async () => {
     const {username} = getAltCredentials()
 
-    otherUser = await users.save({
-      username,
-      isActive: true,
-    })
+    otherUser = await users.save({username, isActive: true})
   })
 
   afterEach(async () => {
@@ -221,16 +215,17 @@ describe('Profile', () => {
 
   describe('Query: getProfile', () => {
     const query = `
-        query GetProfile($id: UUID!) {
-          getProfile(id: $id) {
-            id
-            email
-            displayName
-            picture
-            userId
-          }
+      query GetProfile($id: UUID!) {
+        getProfile(id: $id) {
+          id
+          email
+          displayName
+          picture
+          userId
         }
-      `
+      }
+    `
+    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
 
     let profile: Profile
 
@@ -253,12 +248,10 @@ describe('Profile', () => {
         {token}
       )
 
-      expect(data.getProfile).toEqual(
-        pick(profile, ['id', 'email', 'displayName', 'picture', 'userId'])
-      )
+      expect(data.getProfile).toEqual(pick(profile, fields))
     })
 
-    it('returns null when no user is found', async () => {
+    it('returns nothing when no user is found', async () => {
       const {token} = getCredentials()
       const variables = {id: profile.id}
 
@@ -295,20 +288,93 @@ describe('Profile', () => {
     })
   })
 
+  describe('Query: getManyProfiles', () => {
+    const query = `
+      query GetManyProfiles(
+        $where: ProfileCondition
+        $orderBy: [ProfilesOrderBy!]
+        $pageSize: Int
+        $page: Int
+      ) {
+        getManyProfiles(
+        where: $where
+        orderBy: $orderBy
+        pageSize: $pageSize
+        page: $page
+        ) {
+          data {
+            id
+            email
+            displayName
+            picture
+            userId
+          }
+          count
+          total
+          page
+          pageCount
+        }
+      }
+    `
+    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
+
+    let profile: Profile
+    let otherProfile: Profile
+
+    beforeEach(async () => {
+      profile = await profiles.save(
+        ProfileFactory.make({
+          userId: user.id,
+          user,
+        })
+      )
+
+      otherProfile = await profiles.save(
+        ProfileFactory.make({
+          userId: otherUser.id,
+          user: otherUser,
+        })
+      )
+    })
+
+    it('queries existing profiles', async () => {
+      const {token} = getCredentials()
+      const variables = {}
+
+      const {data} = await graphql.query<Pick<Query, 'getManyProfiles'>>(
+        query,
+        variables,
+        {token}
+      )
+
+      expect(data.getManyProfiles).toEqual({
+        data: expect.arrayContaining([
+          pick(profile, fields),
+          pick(otherProfile, fields),
+        ]),
+        count: 2,
+        page: 1,
+        pageCount: 1,
+        total: 2,
+      })
+    })
+  })
+
   describe('Mutation: updateProfile', () => {
     const mutation = `
-        mutation UpdateProfile($id: UUID!, $input: UpdateProfileInput!) {
-          updateProfile(id: $id, input: $input) {
-            profile {
-              id
-              email
-              displayName
-              picture
-              userId
-            }
+      mutation UpdateProfile($id: UUID!, $input: UpdateProfileInput!) {
+        updateProfile(id: $id, input: $input) {
+          profile {
+            id
+            email
+            displayName
+            picture
+            userId
           }
         }
-      `
+      }
+    `
+    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
 
     let profile: Profile
 
@@ -329,7 +395,7 @@ describe('Profile', () => {
       }
 
       const expected = {
-        ...pick(profile, ['id', 'email', 'displayName', 'userId']),
+        ...pick(profile, fields),
         picture: variables.input.picture,
       }
 
@@ -400,20 +466,33 @@ describe('Profile', () => {
       ])
     })
 
-    it('returns nothing if no existing profile was found', async () => {
+    it('returns an error if no existing profile was found', async () => {
       const {token} = getCredentials()
       const variables = {
         id: faker.random.uuid(),
         input: {picture: faker.internet.avatar()},
       }
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'updateProfile'>>(
+      const body = await graphql.mutation<Pick<Mutation, 'updateProfile'>>(
         mutation,
         variables,
-        {token}
+        {token, warn: false}
       )
 
-      expect(data.updateProfile).toHaveProperty('profile', null)
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Not Found',
+          extensions: expect.objectContaining({
+            exception: expect.objectContaining({
+              status: 404,
+              response: {
+                message: 'Not Found',
+                statusCode: 404,
+              },
+            }),
+          }),
+        }),
+      ])
     })
 
     it('requires the token sub to match the related user.username', async () => {
@@ -561,17 +640,30 @@ describe('Profile', () => {
       ])
     })
 
-    it('returns nothing if no existing profile was found', async () => {
+    it('returns an error if no existing profile was found', async () => {
       const {token} = getCredentials()
       const variables = {id: faker.random.uuid()}
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'deleteProfile'>>(
+      const body = await graphql.mutation<Pick<Mutation, 'deleteProfile'>>(
         mutation,
         variables,
-        {token}
+        {token, warn: false}
       )
 
-      expect(data.deleteProfile).toHaveProperty('profile', null)
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Not Found',
+          extensions: expect.objectContaining({
+            exception: expect.objectContaining({
+              status: 404,
+              response: {
+                message: 'Not Found',
+                statusCode: 404,
+              },
+            }),
+          }),
+        }),
+      ])
     })
 
     it('requires the token sub to match the related user.username', async () => {

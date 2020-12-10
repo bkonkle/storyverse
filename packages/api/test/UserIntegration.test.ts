@@ -308,5 +308,35 @@ describe('User', () => {
         }),
       ])
     })
+
+    it('returns an error if no user is found', async () => {
+      const {token} = getCredentials()
+      const variables = {
+        input: {isActive: false},
+      }
+
+      await users.delete(user.id)
+
+      const body = await graphql.mutation<Pick<Mutation, 'updateCurrentUser'>>(
+        mutation,
+        variables,
+        {token, warn: false}
+      )
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Not Found',
+          extensions: expect.objectContaining({
+            exception: expect.objectContaining({
+              status: 404,
+              response: {
+                message: 'Not Found',
+                statusCode: 404,
+              },
+            }),
+          }),
+        }),
+      ])
+    })
   })
 })

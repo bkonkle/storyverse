@@ -1,30 +1,44 @@
-import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
+import {
+  BadRequestException,
+  ForbiddenException,
+  ParseUUIDPipe,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common'
+import {Resolver, Query, Args, Mutation, Context} from '@nestjs/graphql'
 
-import {Universe, UniversesPage, MutateUniverseResult} from '../Schema'
+import {
+  Universe,
+  UniversesPage,
+  MutateUniverseResult,
+  CreateUniverseInput,
+  QueryGetManyUniversesArgs,
+  UpdateUniverseInput,
+} from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
 import UniversesService from './UniversesService'
-import GetUniverseArgs from './data/GetUniverseArgs'
-import GetManyUniversesArgs from './data/GetManyUniversesArgs'
-import CreateUniverseArgs from './data/CreateUniverseArgs'
-import UpdateUniverseArgs from './data/UpdateUniverseArgs'
-import DeleteUniverseArgs from './data/DeleteUniverseArgs'
+import {RequireAuthentication} from '../lib/auth/JwtGuard'
+import ProfilesService from '../profiles/ProfilesService'
+import {JwtContext} from '../lib/auth/JwtTypes'
 
 @Resolver('Universe')
+@UseGuards(RequireAuthentication)
 export class UniverseResolvers {
-  constructor(private readonly service: UniversesService) {}
+  constructor(
+    private readonly service: UniversesService,
+    private readonly profiles: ProfilesService
+  ) {}
 
   @Query()
   async getUniverse(
-    @Args() args: GetUniverseArgs
+    @Args('id', new ParseUUIDPipe()) id: string
   ): Promise<Universe | undefined> {
-    const {id} = args
-
     return this.service.findOne({where: {id}})
   }
 
   @Query()
   async getManyUniverses(
-    @Args() args: GetManyUniversesArgs
+    @Args() args: QueryGetManyUniversesArgs
   ): Promise<UniversesPage> {
     const {where, orderBy, pageSize, page} = args
 
@@ -38,9 +52,26 @@ export class UniverseResolvers {
 
   @Mutation()
   async createUniverse(
-    @Args() args: CreateUniverseArgs
+    @Args('input') input: CreateUniverseInput,
+    @Context() context: JwtContext
   ): Promise<MutateUniverseResult> {
-    const {input} = args
+    const {req} = context
+    if (!req.user?.sub) {
+      throw new UnauthorizedException()
+    }
+
+    const profile = await this.profiles.findOne({
+      where: {id: input.ownedByProfileId},
+    })
+    if (!profile) {
+      throw new BadRequestException(
+        'The specified owned-by `Profile` was not found.'
+      )
+    }
+
+    if (req.user.sub !== profile.user.username) {
+      throw new ForbiddenException()
+    }
 
     const universe = await this.service.create(input)
 
@@ -49,10 +80,9 @@ export class UniverseResolvers {
 
   @Mutation()
   async updateUniverse(
-    @Args() args: UpdateUniverseArgs
+    @Args('id', new ParseUUIDPipe()) id: string,
+    @Args('input') input: UpdateUniverseInput
   ): Promise<MutateUniverseResult> {
-    const {id, input} = args
-
     const universe = await this.service.update(id, input)
 
     return {universe}
@@ -60,10 +90,8 @@ export class UniverseResolvers {
 
   @Mutation()
   async deleteUniverse(
-    @Args() args: DeleteUniverseArgs
+    @Args('id', new ParseUUIDPipe()) id: string
   ): Promise<MutateUniverseResult> {
-    const {id} = args
-
     await this.service.delete(id)
 
     return {}

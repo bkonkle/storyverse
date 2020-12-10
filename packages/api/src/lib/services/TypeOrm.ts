@@ -6,6 +6,7 @@ import {
   FindConditions,
   DeleteResult,
 } from 'typeorm'
+import {pickBy, identity} from 'lodash'
 
 import {ManyResponse, paginateResponse} from './Pagination'
 
@@ -41,12 +42,19 @@ export const find = <Entity>(repo: Repository<Entity>) => async (
   const skip =
     (pageSize && page && page > 1 && (page - 1) * pageSize) || undefined
 
-  const [data, total] = await repo.findAndCount({
-    where,
-    order,
-    take: pageSize,
-    skip,
-  })
+  // Don't pass options with undefined values.
+  // Solves: `EntityColumnNotFound: No entity column "where" was found.`
+  const input = pickBy(
+    {
+      where,
+      order,
+      take: pageSize,
+      skip,
+    },
+    identity
+  )
+
+  const [data, total] = await repo.findAndCount(input)
 
   return paginateResponse(data, {
     total,

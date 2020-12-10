@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  NotFoundException,
   ParseUUIDPipe,
   UnauthorizedException,
   UseGuards,
@@ -12,7 +13,6 @@ import {
   ProfilesPage,
   MutateProfileResult,
   CreateProfileInput,
-  QueryGetProfileArgs,
   UpdateProfileInput,
   QueryGetManyProfilesArgs,
 } from '../Schema'
@@ -30,35 +30,27 @@ export class ProfileResolvers {
     private readonly users: UsersService
   ) {}
 
+  /**
+   * Retrieves a profile by id. Profiles are public, but the requesting user
+   * must at least be authenticated.
+   */
   @Query()
   async getProfile(
-    @Args() args: QueryGetProfileArgs,
-    @Context() context: JwtContext
+    @Args('id', new ParseUUIDPipe()) id: string
   ): Promise<Profile | undefined> {
-    const {id} = args
-    const {req} = context
-
-    if (!req.user?.sub) {
-      throw new UnauthorizedException()
-    }
-
-    const profile = await this.service.findOne({where: {id}})
-    if (!profile) {
-      return undefined
-    }
-
-    if (req.user.sub !== profile.user.username) {
-      throw new ForbiddenException()
-    }
-
-    return profile
+    return this.service.findOne({where: {id}})
   }
 
+  /**
+   * Lists profiles by various criteria. Profiles are public, but the requesting
+   * user must at least be authenticated.
+   */
   @Query()
   async getManyProfiles(
     @Args() args: QueryGetManyProfilesArgs
   ): Promise<ProfilesPage> {
     const {where, orderBy, pageSize, page} = args
+
     return this.service.find({
       where,
       order: fromOrderBy(orderBy),
@@ -67,6 +59,9 @@ export class ProfileResolvers {
     })
   }
 
+  /**
+   * Create a new Profile for an authenticated user.
+   */
   @Mutation()
   async createProfile(
     @Args('input') input: CreateProfileInput,
@@ -84,13 +79,22 @@ export class ProfileResolvers {
       throw new UnauthorizedException()
     }
 
+    if (req.user.sub !== input.user?.username) {
+      throw new ForbiddenException()
+    }
+
     const user =
+      // If a userId was provided, try to find the existing User
       (input.userId &&
         (await this.users.findOne({where: {id: input.userId}}))) ||
+      // If UserInput was provided, create a new User
       (input.user && (await this.users.create(input.user)))
 
+    // If no user was found or created, throw an error
     if (!user) {
-      return {}
+      throw new BadRequestException(
+        'An existing User must be found or valid UserInput must be provided.'
+      )
     }
 
     if (req.user.sub !== user.username) {
@@ -120,7 +124,7 @@ export class ProfileResolvers {
 
     const existing = await this.service.findOne({where: {id}})
     if (!existing) {
-      return {}
+      throw new NotFoundException()
     }
 
     if (req.user.sub !== existing.user.username) {
@@ -145,7 +149,7 @@ export class ProfileResolvers {
 
     const existing = await this.service.findOne({where: {id}})
     if (!existing) {
-      return {}
+      throw new NotFoundException()
     }
 
     if (req.user.sub !== existing.user.username) {
