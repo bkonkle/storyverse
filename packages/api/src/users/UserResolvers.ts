@@ -8,11 +8,11 @@ import {
   UpdateUserInput,
 } from '../Schema'
 import UsersService from './UsersService'
-import {RequireAuthentication} from '../lib/auth/JwtGuard'
+import {JwtGuard} from '../lib/auth/JwtGuard'
 import {UserSub} from '../lib/auth/JwtDecorators'
 
 @Resolver('User')
-@UseGuards(RequireAuthentication)
+@UseGuards(JwtGuard)
 export class UserResolvers {
   constructor(private readonly service: UsersService) {}
 

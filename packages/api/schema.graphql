@@ -57,15 +57,17 @@ type Query {
 type Profile {
   id: UUID!
   """An email address"""
-  email: String!
+  email: String
   """A display name"""
   displayName: String
   """A Profile photo"""
   picture: String
   """Editor json content for the Profile body"""
   content: JSONObject
+  """The id of the User that created the Profile"""
+  userId: UUID
   """The User that created the Profile"""
-  userId: String!
+  user: User
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -82,7 +84,7 @@ input ProfileCondition {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String
+  userId: UUID
   createdAt: DateTime
   updatedAt: DateTime
 }

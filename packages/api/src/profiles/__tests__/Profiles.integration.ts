@@ -222,10 +222,20 @@ describe('Profile', () => {
           displayName
           picture
           userId
+          user {
+            id
+          }
         }
       }
     `
-    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
+    const fields = [
+      'id',
+      'email',
+      'displayName',
+      'picture',
+      'userId',
+      'user.id',
+    ]
 
     let profile: Profile
 
@@ -241,6 +251,7 @@ describe('Profile', () => {
     it('retrieves an existing user profile', async () => {
       const {token} = getCredentials()
       const variables = {id: profile.id}
+      const expected = pick(profile, fields)
 
       const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
         query,
@@ -248,7 +259,7 @@ describe('Profile', () => {
         {token}
       )
 
-      expect(data.getProfile).toEqual(pick(profile, fields))
+      expect(data.getProfile).toEqual(expected)
     })
 
     it('returns nothing when no user is found', async () => {
@@ -266,25 +277,22 @@ describe('Profile', () => {
       expect(data.getProfile).toBeFalsy()
     })
 
-    it('requires authentication', async () => {
+    it('censors responses for anonymous users', async () => {
       const variables = {id: profile.id}
+      const expected = pick(profile, fields)
 
-      const body = await graphql.query(query, variables, {warn: false})
+      const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
+        query,
+        variables,
+        {}
+      )
 
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: 'Unauthorized',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 401,
-              response: {
-                message: 'Unauthorized',
-                statusCode: 401,
-              },
-            }),
-          }),
-        }),
-      ])
+      expect(data.getProfile).toEqual({
+        ...expected,
+        email: null,
+        userId: null,
+        user: null,
+      })
     })
   })
 

@@ -18,11 +18,11 @@ import {
 import {fromOrderBy} from '../lib/resolvers'
 import UniversesService from './UniversesService'
 import ProfilesService from '../profiles/ProfilesService'
-import {RequireAuthentication} from '../lib/auth/JwtGuard'
+import {JwtGuard} from '../lib/auth/JwtGuard'
 import {UserSub} from '../lib/auth/JwtDecorators'
 
 @Resolver('Universe')
-@UseGuards(RequireAuthentication)
+@UseGuards(JwtGuard)
 export class UniverseResolvers {
   constructor(
     private readonly service: UniversesService,

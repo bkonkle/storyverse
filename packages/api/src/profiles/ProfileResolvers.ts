@@ -18,11 +18,16 @@ import {
 import {fromOrderBy} from '../lib/resolvers'
 import ProfilesService from './ProfilesService'
 import UsersService from '../users/UsersService'
-import {RequireAuthentication} from '../lib/auth/JwtGuard'
-import {UserSub} from '../lib/auth/JwtDecorators'
+import {JwtGuard} from '../lib/auth/JwtGuard'
+import {
+  AllowAnonymous,
+  IsAuthenticated,
+  UserSub,
+} from '../lib/auth/JwtDecorators'
+import {censorAnonymous} from './ProfileUtils'
 
 @Resolver('Profile')
-@UseGuards(RequireAuthentication)
+@UseGuards(JwtGuard)
 export class ProfileResolvers {
   constructor(
     private readonly service: ProfilesService,
@@ -34,10 +39,14 @@ export class ProfileResolvers {
    * must at least be authenticated.
    */
   @Query()
+  @AllowAnonymous()
   async getProfile(
-    @Args('id', new ParseUUIDPipe()) id: string
+    @Args('id', new ParseUUIDPipe()) id: string,
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<Profile | undefined> {
-    return this.service.findOne({where: {id}})
+    const profile = await this.service.findOne({where: {id}})
+
+    return censorAnonymous(profile, isAuthenticated)
   }
 
   /**
