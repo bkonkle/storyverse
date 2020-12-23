@@ -317,7 +317,7 @@ describe('Universe', () => {
     })
   })
 
-  describe.only('Query: getManyUniverses', () => {
+  describe('Query: getManyUniverses', () => {
     const query = `
       query GetManyUniverses(
         $where: UniverseCondition
