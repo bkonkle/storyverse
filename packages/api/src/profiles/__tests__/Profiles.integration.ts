@@ -32,6 +32,13 @@ describe('Profile', () => {
 
   const tables = ['users', 'profiles']
 
+  const mockCensor = (profile?: Partial<Profile>) => ({
+    ...profile,
+    email: null,
+    userId: null,
+    user: null,
+  })
+
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
@@ -287,12 +294,7 @@ describe('Profile', () => {
         {}
       )
 
-      expect(data.getProfile).toEqual({
-        ...expected,
-        email: null,
-        userId: null,
-        user: null,
-      })
+      expect(data.getProfile).toEqual(mockCensor(expected))
     })
 
     it('censors responses for unauthorized users', async () => {
@@ -306,12 +308,7 @@ describe('Profile', () => {
         {token}
       )
 
-      expect(data.getProfile).toEqual({
-        ...expected,
-        email: null,
-        userId: null,
-        user: null,
-      })
+      expect(data.getProfile).toEqual(mockCensor(expected))
     })
   })
 
@@ -387,12 +384,7 @@ describe('Profile', () => {
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
           pick(profile, fields),
-          {
-            ...pick(otherProfile, fields),
-            email: null,
-            userId: null,
-            user: null,
-          },
+          mockCensor(pick(otherProfile, fields)),
         ]),
         count: 2,
         page: 1,
@@ -412,13 +404,8 @@ describe('Profile', () => {
 
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
-          {...pick(profile, fields), email: null, userId: null, user: null},
-          {
-            ...pick(otherProfile, fields),
-            email: null,
-            userId: null,
-            user: null,
-          },
+          mockCensor(pick(profile, fields)),
+          mockCensor(pick(otherProfile, fields)),
         ]),
         count: 2,
         page: 1,
@@ -439,7 +426,7 @@ describe('Profile', () => {
 
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
-          {...pick(profile, fields), email: null, userId: null, user: null},
+          mockCensor(pick(profile, fields)),
           pick(otherProfile, fields),
         ]),
         count: 2,

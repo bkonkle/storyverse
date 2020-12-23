@@ -39,6 +39,16 @@ describe('Universe', () => {
 
   const tables = ['users', 'profiles', 'universes']
 
+  const mockCensor = (universe: Partial<Universe>) => ({
+    ...universe,
+    ownedByProfile: {
+      ...universe.ownedByProfile,
+      email: null,
+      userId: null,
+      user: null,
+    },
+  })
+
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
@@ -220,10 +230,25 @@ describe('Universe', () => {
             name
             description
             ownedByProfileId
+            ownedByProfile {
+              email
+              userId
+              user {
+                id
+              }
+            }
           }
         }
       `
-    const fields = ['id', 'name', 'description', 'ownedByProfileId']
+    const fields = [
+      'id',
+      'name',
+      'description',
+      'ownedByProfileId',
+      'ownedByProfile.email',
+      'ownedByProfile.userId',
+      'ownedByProfile.user.id',
+    ]
 
     let universe: Universe
 
@@ -264,8 +289,9 @@ describe('Universe', () => {
       expect(data.getUniverse).toBeFalsy()
     })
 
-    it("doesn't require authentication", async () => {
+    it('censors the profile.user for anonymous users', async () => {
       const variables = {id: universe.id}
+      const expected = pick(universe, fields)
 
       const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
         query,
@@ -273,11 +299,25 @@ describe('Universe', () => {
         {}
       )
 
-      expect(data.getUniverse).toEqual(pick(universe, fields))
+      expect(data.getUniverse).toEqual(mockCensor(expected))
+    })
+
+    it('censors the profile.user for unauthorized users', async () => {
+      const {token} = getAltCredentials()
+      const variables = {id: universe.id}
+      const expected = pick(universe, fields)
+
+      const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
+        query,
+        variables,
+        {token}
+      )
+
+      expect(data.getUniverse).toEqual(mockCensor(expected))
     })
   })
 
-  describe('Query: getManyUniverses', () => {
+  describe.only('Query: getManyUniverses', () => {
     const query = `
       query GetManyUniverses(
         $where: UniverseCondition
@@ -296,6 +336,13 @@ describe('Universe', () => {
             name
             description
             ownedByProfileId
+            ownedByProfile {
+              email
+              userId
+              user {
+                id
+              }
+            }
           }
           count
           total
@@ -304,7 +351,15 @@ describe('Universe', () => {
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'ownedByProfileId']
+    const fields = [
+      'id',
+      'name',
+      'description',
+      'ownedByProfileId',
+      'ownedByProfile.email',
+      'ownedByProfile.userId',
+      'ownedByProfile.user.id',
+    ]
 
     let universe: Universe
     let otherUniverse: Universe
@@ -338,7 +393,7 @@ describe('Universe', () => {
       expect(data.getManyUniverses).toEqual({
         data: expect.arrayContaining([
           pick(universe, fields),
-          pick(otherUniverse, fields),
+          mockCensor(pick(otherUniverse, fields)),
         ]),
         count: 2,
         page: 1,
@@ -347,7 +402,7 @@ describe('Universe', () => {
       })
     })
 
-    it("doesn't require authentication", async () => {
+    it('censors the profile.user for anonymous users', async () => {
       const variables = {}
 
       const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
@@ -356,8 +411,36 @@ describe('Universe', () => {
         {}
       )
 
-      expect(data.getManyUniverses).toMatchObject({
+      expect(data.getManyUniverses).toEqual({
+        data: expect.arrayContaining([
+          mockCensor(pick(universe, fields)),
+          mockCensor(pick(otherUniverse, fields)),
+        ]),
         count: 2,
+        page: 1,
+        pageCount: 1,
+        total: 2,
+      })
+    })
+
+    it('censors the profile.user for unauthorized users', async () => {
+      const {token} = getAltCredentials()
+      const variables = {}
+
+      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
+        query,
+        variables,
+        {token}
+      )
+
+      expect(data.getManyUniverses).toEqual({
+        data: expect.arrayContaining([
+          mockCensor(pick(universe, fields)),
+          pick(otherUniverse, fields),
+        ]),
+        count: 2,
+        page: 1,
+        pageCount: 1,
         total: 2,
       })
     })

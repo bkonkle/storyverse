@@ -1,20 +1,3 @@
-extend type Query {
-  """
-  Get an existing User Profile by ID
-  """
-  getProfile(id: UUID!): Profile
-
-  """
-  Get many User Profiles, with optional filtering conditions
-  """
-  getManyProfiles(
-    where: ProfileCondition
-    orderBy: [ProfilesOrderBy!]
-    pageSize: Int
-    page: Int
-  ): ProfilesPage!
-}
-
 """
 A User Profile
 """
@@ -87,4 +70,21 @@ enum ProfilesOrderBy {
   CREATED_AT_DESC
   UPDATED_AT_ASC
   UPDATED_AT_DESC
+}
+
+extend type Query {
+  """
+  Get an existing User Profile by ID
+  """
+  getProfile(id: UUID!): Profile
+
+  """
+  Get many User Profiles, with optional filtering conditions
+  """
+  getManyProfiles(
+    where: ProfileCondition
+    orderBy: [ProfilesOrderBy!]
+    pageSize: Int
+    page: Int
+  ): ProfilesPage!
 }

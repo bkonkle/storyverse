@@ -42,15 +42,22 @@ export const authorizeCreate = (username: string) => (user?: User) => {
   return user
 }
 
-export const censor = (username?: string) => (profile: Profile) => {
+export const censoredFields = ['email', 'userId', 'user'] as const
+export type CensoredProfile = Omit<Profile, typeof censoredFields[number]>
+
+export const censor = (username?: string) => (
+  profile: Profile
+): CensoredProfile => {
   if (isAuthorized(profile, username)) {
     return profile
   }
 
-  return omit(profile, ['email', 'userId', 'user'])
+  return omit(profile, censoredFields)
 }
 
-export const maybeCensor = (username?: string) => (profile?: Profile) => {
+export const maybeCensor = (username?: string) => (
+  profile?: Profile
+): CensoredProfile | undefined => {
   if (!profile) {
     return
   }

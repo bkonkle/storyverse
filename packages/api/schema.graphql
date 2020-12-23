@@ -3,24 +3,6 @@ schema {
   query: Query
   mutation: Mutation
 }
-type Mutation {
-  """Create a new User Profile"""
-  createProfile(input: CreateProfileInput!): MutateProfileResult!
-  """Create a new Universe"""
-  createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
-  """Create a new User"""
-  createUser(input: CreateUserInput!): MutateUserResult!
-  """Remove an existing User Profile by ID"""
-  deleteProfile(id: UUID!): MutateProfileResult!
-  """Remove an existing Universe by ID"""
-  deleteUniverse(id: UUID!): MutateUniverseResult!
-  """Update the currently authenticated User"""
-  updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
-  """Update an existing User Profile by ID"""
-  updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
-  """Update an existing Universe by ID"""
-  updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
-}
 """Input to create a new User Profile"""
 input CreateProfileInput {
   email: String!
@@ -41,17 +23,23 @@ input UpdateProfileInput {
 type MutateProfileResult {
   profile: Profile
 }
-type Query {
-  """Get the currently authenticated User"""
-  getCurrentUser: User
-  """Get many User Profiles, with optional filtering conditions"""
-  getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
-  """Get many Universes, with optional filtering conditions"""
-  getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
-  """Get an existing User Profile by ID"""
-  getProfile(id: UUID!): Profile
-  """Get an existing Universe by ID"""
-  getUniverse(id: UUID!): Universe
+type Mutation {
+  """Create a new User Profile"""
+  createProfile(input: CreateProfileInput!): MutateProfileResult!
+  """Create a new Universe"""
+  createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
+  """Create a new User"""
+  createUser(input: CreateUserInput!): MutateUserResult!
+  """Remove an existing User Profile by ID"""
+  deleteProfile(id: UUID!): MutateProfileResult!
+  """Remove an existing Universe by ID"""
+  deleteUniverse(id: UUID!): MutateUniverseResult!
+  """Update the currently authenticated User"""
+  updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
+  """Update an existing User Profile by ID"""
+  updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+  """Update an existing Universe by ID"""
+  updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
 }
 """A User Profile"""
 type Profile {
@@ -102,6 +90,18 @@ enum ProfilesOrderBy {
   UPDATED_AT_ASC
   UPDATED_AT_DESC
 }
+type Query {
+  """Get the currently authenticated User"""
+  getCurrentUser: User
+  """Get many User Profiles, with optional filtering conditions"""
+  getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
+  """Get many Universes, with optional filtering conditions"""
+  getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
+  """Get an existing User Profile by ID"""
+  getProfile(id: UUID!): Profile
+  """Get an existing Universe by ID"""
+  getUniverse(id: UUID!): Universe
+}
 """A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."""
 scalar DateTime
 scalar JSON
@@ -129,8 +129,10 @@ type Universe {
   name: String!
   """Editor json content for the Universe's description"""
   description: JSONObject
-  """The Profile that owns the Universe"""
+  """The id of the Profile that owns the Universe"""
   ownedByProfileId: UUID!
+  """The Profile that owns the Universe"""
+  ownedByProfile: Profile!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

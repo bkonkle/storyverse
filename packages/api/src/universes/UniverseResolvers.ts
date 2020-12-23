@@ -14,7 +14,7 @@ import UniversesService from './UniversesService'
 import ProfilesService from '../profiles/ProfilesService'
 import {JwtGuard} from '../lib/auth/JwtGuard'
 import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
-import {authorize, authorizeCreate} from './UniverseUtils'
+import {authorize, authorizeCreate, censor, maybeCensor} from './UniverseUtils'
 
 @Resolver('Universe')
 @UseGuards(JwtGuard)
@@ -27,24 +27,31 @@ export class UniverseResolvers {
   @Query()
   @AllowAnonymous()
   async getUniverse(
-    @Args('id', new ParseUUIDPipe()) id: string
+    @Args('id', new ParseUUIDPipe()) id: string,
+    @UserSub() username?: string
   ): Promise<Universe | undefined> {
-    return this.service.findOne({where: {id}})
+    return this.service.findOne({where: {id}}).then(maybeCensor(username))
   }
 
   @Query()
   @AllowAnonymous()
   async getManyUniverses(
-    @Args() args: QueryGetManyUniversesArgs
+    @Args() args: QueryGetManyUniversesArgs,
+    @UserSub() username?: string
   ): Promise<UniversesPage> {
     const {where, orderBy, pageSize, page} = args
 
-    return this.service.find({
+    const universes = await this.service.find({
       where,
       order: fromOrderBy(orderBy),
       pageSize,
       page,
     })
+
+    return {
+      ...universes,
+      data: universes.data.map(censor(username)),
+    }
   }
 
   @Mutation()
