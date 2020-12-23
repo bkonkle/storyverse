@@ -3,9 +3,7 @@ schema {
   query: Query
   mutation: Mutation
 }
-"""
-Input to create a new User Profile
-"""
+"""Input to create a new User Profile"""
 input CreateProfileInput {
   email: String!
   displayName: String
@@ -14,9 +12,7 @@ input CreateProfileInput {
   userId: String
   user: CreateUserInput
 }
-"""
-Input to update an existing User Profile
-"""
+"""Input to update an existing User Profile"""
 input UpdateProfileInput {
   email: String
   displayName: String
@@ -28,67 +24,37 @@ type MutateProfileResult {
   profile: Profile
 }
 type Mutation {
-  """
-  Create a new User Profile
-  """
+  """Create a new User Profile"""
   createProfile(input: CreateProfileInput!): MutateProfileResult!
-  """
-  Create a new Universe
-  """
+  """Create a new Universe"""
   createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
-  """
-  Create a new User
-  """
+  """Create a new User"""
   createUser(input: CreateUserInput!): MutateUserResult!
-  """
-  Remove an existing User Profile by ID
-  """
+  """Remove an existing User Profile by ID"""
   deleteProfile(id: UUID!): MutateProfileResult!
-  """
-  Remove an existing Universe by ID
-  """
+  """Remove an existing Universe by ID"""
   deleteUniverse(id: UUID!): MutateUniverseResult!
-  """
-  Update the currently authenticated User
-  """
+  """Update the currently authenticated User"""
   updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
-  """
-  Update an existing User Profile by ID
-  """
+  """Update an existing User Profile by ID"""
   updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
-  """
-  Update an existing Universe by ID
-  """
+  """Update an existing Universe by ID"""
   updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
 }
-"""
-A User Profile
-"""
+"""A User Profile"""
 type Profile {
   id: UUID!
-  """
-  An email address
-  """
+  """An email address"""
   email: String
-  """
-  A display name
-  """
+  """A display name"""
   displayName: String
-  """
-  A Profile photo
-  """
+  """A Profile photo"""
   picture: String
-  """
-  Editor json content for the Profile body
-  """
+  """Editor json content for the Profile body"""
   content: JSONObject
-  """
-  The id of the User that created the Profile
-  """
+  """The id of the User that created the Profile"""
   userId: UUID
-  """
-  The User that created the Profile
-  """
+  """The User that created the Profile"""
   user: User
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -125,55 +91,29 @@ enum ProfilesOrderBy {
   UPDATED_AT_DESC
 }
 type Query {
-  """
-  Get the currently authenticated User
-  """
+  """Get the currently authenticated User"""
   getCurrentUser: User
-  """
-  Get many User Profiles, with optional filtering conditions
-  """
-  getManyProfiles(
-    where: ProfileCondition
-    orderBy: [ProfilesOrderBy!]
-    pageSize: Int
-    page: Int
-  ): ProfilesPage!
-  """
-  Get many Universes, with optional filtering conditions
-  """
-  getManyUniverses(
-    where: UniverseCondition
-    orderBy: [UniversesOrderBy!]
-    pageSize: Int
-    page: Int
-  ): UniversesPage!
-  """
-  Get an existing User Profile by ID
-  """
+  """Get many User Profiles, with optional filtering conditions"""
+  getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
+  """Get many Universes, with optional filtering conditions"""
+  getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
+  """Get an existing User Profile by ID"""
   getProfile(id: UUID!): Profile
-  """
-  Get an existing Universe by ID
-  """
+  """Get an existing Universe by ID"""
   getUniverse(id: UUID!): Universe
 }
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
+"""A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."""
 scalar DateTime
 scalar JSON
 scalar JSONObject
 scalar UUID
-"""
-Input to create a new Universe
-"""
+"""Input to create a new Universe"""
 input CreateUniverseInput {
   name: String!
   description: JSONObject
   ownerProfileId: UUID!
 }
-"""
-Input to update an existing Universe
-"""
+"""Input to update an existing Universe"""
 input UpdateUniverseInput {
   name: String
   description: JSONObject
@@ -182,26 +122,16 @@ input UpdateUniverseInput {
 type MutateUniverseResult {
   universe: Universe
 }
-"""
-A Universe
-"""
+"""A Universe"""
 type Universe {
   id: UUID!
-  """
-  The Universe's name
-  """
+  """The Universe's name"""
   name: String!
-  """
-  Editor json content for the Universe's description
-  """
+  """Editor json content for the Universe's description"""
   description: JSONObject
-  """
-  The id of the Profile that owns the Universe
-  """
+  """The id of the Profile that owns the Universe"""
   ownerProfileId: UUID!
-  """
-  The Profile that owns the Universe
-  """
+  """The Profile that owns the Universe"""
   ownerProfile: Profile!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -231,15 +161,11 @@ enum UniversesOrderBy {
   UPDATED_AT_ASC
   UPDATED_AT_DESC
 }
-"""
-Input to create a new User
-"""
+"""Input to create a new User"""
 input CreateUserInput {
   username: String!
 }
-"""
-Input to update an existing User
-"""
+"""Input to update an existing User"""
 input UpdateUserInput {
   username: String
   isActive: Boolean
@@ -247,18 +173,12 @@ input UpdateUserInput {
 type MutateUserResult {
   user: User
 }
-"""
-A User
-"""
+"""A User"""
 type User {
   id: UUID!
-  """
-  The User's login id - usually their email address
-  """
+  """The User's login id - usually their email address"""
   username: String!
-  """
-  If false, the User is suspended
-  """
+  """If false, the User is suspended"""
   isActive: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
