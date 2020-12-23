@@ -21,16 +21,16 @@ export class Universe extends UuidTable {
   description?: Record<string, unknown>
 
   @Column({
-    name: 'owned_by_profile_id',
+    name: 'owner_profile_id',
     type: 'uuid',
     nullable: false,
     comment: ' The Profile that owns the Universe',
   })
-  ownedByProfileId!: string
+  ownerProfileId!: string
 
   @ManyToOne(() => Profile, (profile) => profile.universesOwned, {eager: true})
-  @JoinColumn({name: 'owned_by_profile_id'})
-  ownedByProfile!: Profile
+  @JoinColumn({name: 'owner_profile_id'})
+  ownerProfile!: Profile
 }
 
 export default Universe

@@ -23,8 +23,8 @@ export class AddProfilesTable1596218300476 implements MigrationInterface {
       ALTER TABLE "profiles" ADD CONSTRAINT "profiles__user_id__foreign_key"
         FOREIGN KEY ("user_id")
         REFERENCES "users"("id")
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
     `)
   }
 

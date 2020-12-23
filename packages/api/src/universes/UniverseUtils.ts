@@ -9,7 +9,7 @@ import Universe from './Universe.entity'
 import * as ProfileUtils from '../profiles/ProfileUtils'
 
 export const isAuthorized = (universe: Universe, username?: string) => {
-  if (username && username === universe.ownedByProfile.user.username) {
+  if (username && username === universe.ownerProfile.user.username) {
     return true
   }
 
@@ -42,8 +42,8 @@ export const authorizeCreate = (username: string) => (profile?: Profile) => {
   return profile
 }
 
-export type CensoredUniverse = Omit<Universe, 'ownedByProfile'> & {
-  ownedByProfile: ProfileUtils.CensoredProfile
+export type CensoredUniverse = Omit<Universe, 'ownerProfile'> & {
+  ownerProfile: ProfileUtils.CensoredProfile
 }
 
 export const censor = (username?: string) => (
@@ -55,7 +55,7 @@ export const censor = (username?: string) => (
 
   return {
     ...universe,
-    ownedByProfile: ProfileUtils.censor(username)(universe.ownedByProfile),
+    ownerProfile: ProfileUtils.censor(username)(universe.ownerProfile),
   }
 }
 

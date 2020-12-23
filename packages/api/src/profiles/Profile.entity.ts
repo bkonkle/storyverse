@@ -44,7 +44,7 @@ export class Profile extends UuidTable {
   @JoinColumn({name: 'user_id'})
   user!: User
 
-  @OneToMany(() => Universe, (universe) => universe.ownedByProfile)
+  @OneToMany(() => Universe, (universe) => universe.ownerProfile)
   universesOwned!: Universe[]
 }
 

@@ -61,7 +61,7 @@ export class UniverseResolvers {
   ): Promise<MutateUniverseResult> {
     await this.profiles
       .findOne({
-        where: {id: input.ownedByProfileId},
+        where: {id: input.ownerProfileId},
       })
       .then(authorizeCreate(username))
 

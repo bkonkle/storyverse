@@ -41,8 +41,8 @@ describe('Universe', () => {
 
   const mockCensor = (universe: Partial<Universe>) => ({
     ...universe,
-    ownedByProfile: {
-      ...universe.ownedByProfile,
+    ownerProfile: {
+      ...universe.ownerProfile,
       email: null,
       userId: null,
       user: null,
@@ -104,17 +104,17 @@ describe('Universe', () => {
             id
             name
             description
-            ownedByProfileId
+            ownerProfileId
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'ownedByProfileId'] as const
+    const fields = ['id', 'name', 'description', 'ownerProfileId'] as const
 
     it('creates a new universe', async () => {
       const {token} = getCredentials()
       const universe = UniverseFactory.makeCreateInput({
-        ownedByProfileId: profile.id,
+        ownerProfileId: profile.id,
       })
       const variables = {input: universe}
 
@@ -141,11 +141,11 @@ describe('Universe', () => {
       })
     })
 
-    it('requires a name and an ownedByProfileId', async () => {
+    it('requires a name and an ownerProfileId', async () => {
       const {token} = getCredentials()
       const universe = omit(
-        UniverseFactory.makeCreateInput({ownedByProfileId: profile.id}),
-        ['name', 'ownedByProfileId']
+        UniverseFactory.makeCreateInput({ownerProfileId: profile.id}),
+        ['name', 'ownerProfileId']
       )
       const variables = {input: universe}
 
@@ -163,7 +163,7 @@ describe('Universe', () => {
         }),
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "ownedByProfileId" of required type "UUID!" was not provided.'
+            'Field "ownerProfileId" of required type "UUID!" was not provided.'
           ),
         }),
       ])
@@ -171,7 +171,7 @@ describe('Universe', () => {
 
     it('requires authentication', async () => {
       const universe = UniverseFactory.makeCreateInput({
-        ownedByProfileId: profile.id,
+        ownerProfileId: profile.id,
       })
       const variables = {input: universe}
 
@@ -193,10 +193,10 @@ describe('Universe', () => {
       ])
     })
 
-    it('requires the token sub to match the related ownedByProfile.user.username', async () => {
+    it('requires the token sub to match the related ownerProfile.user.username', async () => {
       const {token} = getCredentials()
       const universe = UniverseFactory.makeCreateInput({
-        ownedByProfileId: otherProfile.id,
+        ownerProfileId: otherProfile.id,
       })
       const variables = {input: universe}
 
@@ -229,8 +229,8 @@ describe('Universe', () => {
             id
             name
             description
-            ownedByProfileId
-            ownedByProfile {
+            ownerProfileId
+            ownerProfile {
               email
               userId
               user {
@@ -244,10 +244,10 @@ describe('Universe', () => {
       'id',
       'name',
       'description',
-      'ownedByProfileId',
-      'ownedByProfile.email',
-      'ownedByProfile.userId',
-      'ownedByProfile.user.id',
+      'ownerProfileId',
+      'ownerProfile.email',
+      'ownerProfile.userId',
+      'ownerProfile.user.id',
     ]
 
     let universe: Universe
@@ -255,8 +255,8 @@ describe('Universe', () => {
     beforeEach(async () => {
       universe = await universes.save(
         UniverseFactory.make({
-          ownedByProfileId: profile.id,
-          ownedByProfile: profile,
+          ownerProfileId: profile.id,
+          ownerProfile: profile,
         })
       )
     })
@@ -335,8 +335,8 @@ describe('Universe', () => {
             id
             name
             description
-            ownedByProfileId
-            ownedByProfile {
+            ownerProfileId
+            ownerProfile {
               email
               userId
               user {
@@ -355,10 +355,10 @@ describe('Universe', () => {
       'id',
       'name',
       'description',
-      'ownedByProfileId',
-      'ownedByProfile.email',
-      'ownedByProfile.userId',
-      'ownedByProfile.user.id',
+      'ownerProfileId',
+      'ownerProfile.email',
+      'ownerProfile.userId',
+      'ownerProfile.user.id',
     ]
 
     let universe: Universe
@@ -367,15 +367,15 @@ describe('Universe', () => {
     beforeEach(async () => {
       universe = await universes.save(
         UniverseFactory.make({
-          ownedByProfileId: profile.id,
-          ownedByProfile: profile,
+          ownerProfileId: profile.id,
+          ownerProfile: profile,
         })
       )
 
       otherUniverse = await universes.save(
         UniverseFactory.make({
-          ownedByProfileId: otherProfile.id,
-          ownedByProfile: otherProfile,
+          ownerProfileId: otherProfile.id,
+          ownerProfile: otherProfile,
         })
       )
     })
@@ -454,20 +454,20 @@ describe('Universe', () => {
             id
             name
             description
-            ownedByProfileId
+            ownerProfileId
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'ownedByProfileId'] as const
+    const fields = ['id', 'name', 'description', 'ownerProfileId'] as const
 
     let universe: Universe
 
     beforeEach(async () => {
       universe = await universes.save(
         UniverseFactory.make({
-          ownedByProfileId: profile.id,
-          ownedByProfile: profile,
+          ownerProfileId: profile.id,
+          ownerProfile: profile,
         })
       )
     })
@@ -580,7 +580,7 @@ describe('Universe', () => {
       ])
     })
 
-    it('requires the token sub to match the related ownedByProfile.user.username', async () => {
+    it('requires the token sub to match the related ownerProfile.user.username', async () => {
       const {token} = getAltCredentials()
       const variables = {
         id: universe.id,
@@ -625,8 +625,8 @@ describe('Universe', () => {
     beforeEach(async () => {
       universe = await universes.save(
         UniverseFactory.make({
-          ownedByProfileId: profile.id,
-          ownedByProfile: profile,
+          ownerProfileId: profile.id,
+          ownerProfile: profile,
         })
       )
     })
@@ -723,7 +723,7 @@ describe('Universe', () => {
       ])
     })
 
-    it('requires the token sub to match the related ownedByProfile.user.username', async () => {
+    it('requires the token sub to match the related ownerProfile.user.username', async () => {
       const {token} = getAltCredentials()
       const variables = {id: universe.id}
 

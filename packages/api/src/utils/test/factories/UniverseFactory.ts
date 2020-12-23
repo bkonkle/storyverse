@@ -12,7 +12,7 @@ export const makeCreateInput = (
   return {
     name: faker.name.findName(),
     description: faker.lorem.paragraph(),
-    ownedByProfileId: faker.random.uuid(),
+    ownerProfileId: faker.random.uuid(),
     ...overrides,
   }
 }
@@ -20,7 +20,7 @@ export const makeCreateInput = (
 export const make = (overrides?: DeepPartial<Universe>): Universe => {
   const Profiles: typeof import('./ProfileFactory') = require('./ProfileFactory')
 
-  const ownedByProfile = Profiles.make(overrides?.ownedByProfile)
+  const ownerProfile = Profiles.make(overrides?.ownerProfile)
 
   return plainToClass(Universe, {
     id: faker.random.uuid(),
@@ -28,7 +28,7 @@ export const make = (overrides?: DeepPartial<Universe>): Universe => {
     updatedAt: faker.date.recent(),
     ...makeCreateInput(overrides),
     ...overrides,
-    ...(ownedByProfile ? {ownedByProfile} : {}),
+    ...(ownerProfile ? {ownerProfile} : {}),
   })
 }
 

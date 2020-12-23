@@ -17,12 +17,12 @@ type Universe {
   """
   The id of the Profile that owns the Universe
   """
-  ownedByProfileId: UUID!
+  ownerProfileId: UUID!
 
   """
   The Profile that owns the Universe
   """
-  ownedByProfile: Profile!
+  ownerProfile: Profile!
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -38,7 +38,7 @@ type UniversesPage {
 
 input UniverseCondition {
   name: String
-  ownedByProfileId: UUID
+  ownerProfileId: UUID
 }
 
 enum UniversesOrderBy {
