@@ -137,7 +137,7 @@ describe('User', () => {
       ])
     })
 
-    it('requires the token sub to match the username', async () => {
+    it('requires authorization', async () => {
       const {token} = getCredentials()
       const otherUser = UserFactory.make()
 

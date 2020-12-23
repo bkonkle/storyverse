@@ -183,7 +183,7 @@ describe('Profile', () => {
       ])
     })
 
-    it('requires the token sub to match the related user.username', async () => {
+    it('requires authorization', async () => {
       const {token} = getCredentials()
       const profile = omit(
         ProfileFactory.makeCreateInput({userId: otherUser.id}),
@@ -294,6 +294,25 @@ describe('Profile', () => {
         user: null,
       })
     })
+
+    it('censors responses for unauthorized users', async () => {
+      const {token} = getAltCredentials()
+      const variables = {id: profile.id}
+      const expected = pick(profile, fields)
+
+      const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
+        query,
+        variables,
+        {token}
+      )
+
+      expect(data.getProfile).toEqual({
+        ...expected,
+        email: null,
+        userId: null,
+        user: null,
+      })
+    })
   })
 
   describe('Query: getManyProfiles', () => {
@@ -316,6 +335,9 @@ describe('Profile', () => {
             displayName
             picture
             userId
+            user {
+              id
+            }
           }
           count
           total
@@ -324,7 +346,14 @@ describe('Profile', () => {
         }
       }
     `
-    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
+    const fields = [
+      'id',
+      'email',
+      'displayName',
+      'picture',
+      'userId',
+      'user.id',
+    ]
 
     let profile: Profile
     let otherProfile: Profile
@@ -358,6 +387,59 @@ describe('Profile', () => {
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
           pick(profile, fields),
+          {
+            ...pick(otherProfile, fields),
+            email: null,
+            userId: null,
+            user: null,
+          },
+        ]),
+        count: 2,
+        page: 1,
+        pageCount: 1,
+        total: 2,
+      })
+    })
+
+    it('censors responses for anonymous users', async () => {
+      const variables = {}
+
+      const {data} = await graphql.query<Pick<Query, 'getManyProfiles'>>(
+        query,
+        variables,
+        {}
+      )
+
+      expect(data.getManyProfiles).toEqual({
+        data: expect.arrayContaining([
+          {...pick(profile, fields), email: null, userId: null, user: null},
+          {
+            ...pick(otherProfile, fields),
+            email: null,
+            userId: null,
+            user: null,
+          },
+        ]),
+        count: 2,
+        page: 1,
+        pageCount: 1,
+        total: 2,
+      })
+    })
+
+    it('censors responses for unauthorized users', async () => {
+      const {token} = getAltCredentials()
+      const variables = {}
+
+      const {data} = await graphql.query<Pick<Query, 'getManyProfiles'>>(
+        query,
+        variables,
+        {token}
+      )
+
+      expect(data.getManyProfiles).toEqual({
+        data: expect.arrayContaining([
+          {...pick(profile, fields), email: null, userId: null, user: null},
           pick(otherProfile, fields),
         ]),
         count: 2,
@@ -503,7 +585,7 @@ describe('Profile', () => {
       ])
     })
 
-    it('requires the token sub to match the related user.username', async () => {
+    it('requires authorization', async () => {
       const {token} = getAltCredentials()
       const variables = {
         id: profile.id,
@@ -646,7 +728,7 @@ describe('Profile', () => {
       ])
     })
 
-    it('requires the token sub to match the related user.username', async () => {
+    it('requires authorization', async () => {
       const {token} = getAltCredentials()
       const variables = {id: profile.id}
 

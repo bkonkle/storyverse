@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ForbiddenException,
-  NotFoundException,
   ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common'
@@ -19,12 +18,8 @@ import {fromOrderBy} from '../lib/resolvers'
 import ProfilesService from './ProfilesService'
 import UsersService from '../users/UsersService'
 import {JwtGuard} from '../lib/auth/JwtGuard'
-import {
-  AllowAnonymous,
-  IsAuthenticated,
-  UserSub,
-} from '../lib/auth/JwtDecorators'
-import {censorAnonymous} from './ProfileUtils'
+import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
+import {authorize, authorizeCreate, censor, maybeCensor} from './ProfileUtils'
 
 @Resolver('Profile')
 @UseGuards(JwtGuard)
@@ -35,36 +30,41 @@ export class ProfileResolvers {
   ) {}
 
   /**
-   * Retrieves a profile by id. Profiles are public, but the requesting user
-   * must at least be authenticated.
+   * Retrieves a profile by id. Profiles are public, but if the username and token sub don't match,
+   * censor the user and email address from the results.
    */
   @Query()
   @AllowAnonymous()
   async getProfile(
     @Args('id', new ParseUUIDPipe()) id: string,
-    @IsAuthenticated() isAuthenticated: boolean
+    @UserSub() username?: string
   ): Promise<Profile | undefined> {
-    const profile = await this.service.findOne({where: {id}})
-
-    return censorAnonymous(profile, isAuthenticated)
+    return this.service.findOne({where: {id}}).then(maybeCensor(username))
   }
 
   /**
-   * Lists profiles by various criteria. Profiles are public, but the requesting
-   * user must at least be authenticated.
+   * Lists profiles by various criteria. Profiles are public, but if the username and token sub
+   * don't match, censor the user and email address from the results.
    */
   @Query()
+  @AllowAnonymous()
   async getManyProfiles(
-    @Args() args: QueryGetManyProfilesArgs
+    @Args() args: QueryGetManyProfilesArgs,
+    @UserSub() username?: string
   ): Promise<ProfilesPage> {
     const {where, orderBy, pageSize, page} = args
 
-    return this.service.find({
+    const profiles = await this.service.find({
       where,
       order: fromOrderBy(orderBy),
       pageSize,
       page,
     })
+
+    return {
+      ...profiles,
+      data: profiles.data.map(censor(username)),
+    }
   }
 
   /**
@@ -75,75 +75,68 @@ export class ProfileResolvers {
     @Args('input') input: CreateProfileInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    if (!input.userId && !input.user) {
-      throw new BadRequestException(
-        'Field "userId" of type "String" or "user" of type "CreateUserInput" was not provided.'
-      )
-    }
-
-    if (input.user && username !== input.user.username) {
-      throw new ForbiddenException()
-    }
-
-    const user =
-      // If a userId was provided, try to find the existing User
-      (input.userId &&
-        (await this.users.findOne({where: {id: input.userId}}))) ||
-      // If UserInput was provided, create a new User
-      (input.user && (await this.users.create(input.user)))
-
-    // If no user was found or created, throw an error
-    if (!user) {
-      throw new BadRequestException(
-        'An existing User must be found or valid UserInput must be provided.'
-      )
-    }
-
-    if (username !== user.username) {
-      throw new ForbiddenException()
-    }
+    const user = await this.findOrCreateUser(input, username).then(
+      authorizeCreate(username)
+    )
 
     const profile = await this.service.create({...input, userId: user.id, user})
 
     return {profile}
   }
 
+  /**
+   * Update an existing Profile for an authorized user.
+   */
   @Mutation()
   async updateProfile(
     @Args('id', new ParseUUIDPipe()) id: string,
     @Args('input') input: UpdateProfileInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const existing = await this.service.findOne({where: {id}})
-    if (!existing) {
-      throw new NotFoundException()
-    }
-
-    if (username !== existing.user.username) {
-      throw new ForbiddenException()
-    }
+    await this.service.findOne({where: {id}}).then(authorize(username))
 
     const profile = await this.service.update(id, input)
 
     return {profile}
   }
 
+  /**
+   * Delete an existing profile for an authorized user.
+   */
   @Mutation()
   async deleteProfile(
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const existing = await this.service.findOne({where: {id}})
-    if (!existing) {
-      throw new NotFoundException()
-    }
-
-    if (username !== existing.user.username) {
-      throw new ForbiddenException()
-    }
+    const existing = await this.service
+      .findOne({where: {id}})
+      .then(authorize(username))
 
     await this.service.delete(id)
 
     return {profile: existing}
+  }
+
+  /**
+   * Find or create a User based on CreateProfileInput.
+   */
+  private async findOrCreateUser(input: CreateProfileInput, username: string) {
+    // If a userId was provided, try to find the existing User
+    if (input.userId) {
+      return this.users.findOne({where: {id: input.userId}})
+    }
+
+    // If UserInput was provided, create a new User if authorized
+    if (input.user) {
+      if (username === input.user.username) {
+        return this.users.create(input.user)
+      }
+
+      throw new ForbiddenException()
+    }
+
+    throw new BadRequestException(
+      'Field "userId" of type "String" or "user" of type "CreateUserInput" was not provided.'
+    )
   }
 }

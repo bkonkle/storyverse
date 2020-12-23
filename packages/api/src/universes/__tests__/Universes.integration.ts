@@ -264,25 +264,16 @@ describe('Universe', () => {
       expect(data.getUniverse).toBeFalsy()
     })
 
-    it('requires authentication', async () => {
+    it("doesn't require authentication", async () => {
       const variables = {id: universe.id}
 
-      const body = await graphql.query(query, variables, {warn: false})
+      const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
+        query,
+        variables,
+        {}
+      )
 
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: 'Unauthorized',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 401,
-              response: {
-                message: 'Unauthorized',
-                statusCode: 401,
-              },
-            }),
-          }),
-        }),
-      ])
+      expect(data.getUniverse).toEqual(pick(universe, fields))
     })
   })
 
@@ -352,6 +343,21 @@ describe('Universe', () => {
         count: 2,
         page: 1,
         pageCount: 1,
+        total: 2,
+      })
+    })
+
+    it("doesn't require authentication", async () => {
+      const variables = {}
+
+      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
+        query,
+        variables,
+        {}
+      )
+
+      expect(data.getManyUniverses).toMatchObject({
+        count: 2,
         total: 2,
       })
     })

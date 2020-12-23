@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-  ParseUUIDPipe,
-  UseGuards,
-} from '@nestjs/common'
+import {ParseUUIDPipe, UseGuards} from '@nestjs/common'
 import {Resolver, Query, Args, Mutation} from '@nestjs/graphql'
 
 import {
@@ -19,7 +13,8 @@ import {fromOrderBy} from '../lib/resolvers'
 import UniversesService from './UniversesService'
 import ProfilesService from '../profiles/ProfilesService'
 import {JwtGuard} from '../lib/auth/JwtGuard'
-import {UserSub} from '../lib/auth/JwtDecorators'
+import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
+import {authorize, authorizeCreate} from './UniverseUtils'
 
 @Resolver('Universe')
 @UseGuards(JwtGuard)
@@ -30,6 +25,7 @@ export class UniverseResolvers {
   ) {}
 
   @Query()
+  @AllowAnonymous()
   async getUniverse(
     @Args('id', new ParseUUIDPipe()) id: string
   ): Promise<Universe | undefined> {
@@ -37,6 +33,7 @@ export class UniverseResolvers {
   }
 
   @Query()
+  @AllowAnonymous()
   async getManyUniverses(
     @Args() args: QueryGetManyUniversesArgs
   ): Promise<UniversesPage> {
@@ -55,18 +52,11 @@ export class UniverseResolvers {
     @Args('input') input: CreateUniverseInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    const profile = await this.profiles.findOne({
-      where: {id: input.ownedByProfileId},
-    })
-    if (!profile) {
-      throw new BadRequestException(
-        'The specified owned-by `Profile` was not found.'
-      )
-    }
-
-    if (username !== profile.user.username) {
-      throw new ForbiddenException()
-    }
+    await this.profiles
+      .findOne({
+        where: {id: input.ownedByProfileId},
+      })
+      .then(authorizeCreate(username))
 
     const universe = await this.service.create(input)
 
@@ -79,14 +69,7 @@ export class UniverseResolvers {
     @Args('input') input: UpdateUniverseInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    const existing = await this.service.findOne({where: {id}})
-    if (!existing) {
-      throw new NotFoundException()
-    }
-
-    if (username !== existing.ownedByProfile.user.username) {
-      throw new ForbiddenException()
-    }
+    await this.service.findOne({where: {id}}).then(authorize(username))
 
     const universe = await this.service.update(id, input)
 
@@ -98,14 +81,9 @@ export class UniverseResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    const existing = await this.service.findOne({where: {id}})
-    if (!existing) {
-      throw new NotFoundException()
-    }
-
-    if (username !== existing.ownedByProfile.user.username) {
-      throw new ForbiddenException()
-    }
+    const existing = await this.service
+      .findOne({where: {id}})
+      .then(authorize(username))
 
     await this.service.delete(id)
 

@@ -46,11 +46,11 @@ export const User = createParamDecorator(
  * Require and return the user sub parameter on requests.
  */
 export const UserSub = createParamDecorator(
-  (options: {require?: true}, ctx: ExecutionContext) => {
+  (options: {require?: true} | undefined, ctx: ExecutionContext) => {
     const req = getRequest(ctx)
     const sub = getUserSub(req)
 
-    if (options.require && !sub) {
+    if (options?.require && !sub) {
       throw new UnauthorizedException()
     }
 
