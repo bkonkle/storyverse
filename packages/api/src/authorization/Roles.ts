@@ -30,6 +30,6 @@ export const RoleAdmin: Role = {
   permissions: [GrantRoles, RevokeRoles],
 }
 
-export const permissions: Permission[] = [GrantRoles, RevokeRoles]
+export const permissions = [GrantRoles, RevokeRoles]
 
-export const roles: Role[] = [RoleAdmin]
+export const roles = [RoleAdmin]
