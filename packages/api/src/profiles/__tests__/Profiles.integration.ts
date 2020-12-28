@@ -143,7 +143,7 @@ describe('Profile', () => {
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "email" of required type "String!" was not provided.'
+            'Field email of required type String! was not provided.'
           ),
         }),
       ])

@@ -110,7 +110,9 @@ describe('User', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: `Variable "$input" got invalid value {}; Field "username" of required type "String!" was not provided.`,
+          message: expect.stringContaining(
+            'Field username of required type String! was not provided.'
+          ),
         }),
       ])
     })

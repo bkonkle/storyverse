@@ -158,12 +158,12 @@ describe('Universe', () => {
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "name" of required type "String!" was not provided.'
+            'Field name of required type String! was not provided.'
           ),
         }),
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "ownerProfileId" of required type "UUID!" was not provided.'
+            'Field ownerProfileId of required type UUID! was not provided.'
           ),
         }),
       ])
