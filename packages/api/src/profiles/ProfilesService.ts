@@ -19,6 +19,14 @@ export class ProfilesService {
   create = this.typeorm.create
   update = this.typeorm.update
   delete = this.typeorm.delete
+
+  async getByUsername(username: string): Promise<Profile | undefined> {
+    return this.repo
+      .createQueryBuilder('profile')
+      .innerJoin('users', 'user', '"profile"."user_id" = "user"."id"')
+      .where('"user"."username" = :username', {username})
+      .getOne()
+  }
 }
 
 export default ProfilesService

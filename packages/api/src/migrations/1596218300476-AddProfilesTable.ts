@@ -16,22 +16,18 @@ export class AddProfilesTable1596218300476 implements MigrationInterface {
         "city" character varying(300),
         "state_province" character varying(300),
         "user_id" uuid NOT NULL,
-        CONSTRAINT "profiles__id__primary_key" PRIMARY KEY ("id")
+        CONSTRAINT "profiles__id__primary_key" PRIMARY KEY ("id"),
+        CONSTRAINT "profiles__user_id__unique" UNIQUE ("user_id"),
+        CONSTRAINT "profiles__user_id__foreign_key"
+          FOREIGN KEY ("user_id")
+          REFERENCES "users"("id")
+          ON DELETE CASCADE
+          ON UPDATE CASCADE
       )
-    `)
-    await queryRunner.query(`
-      ALTER TABLE "profiles" ADD CONSTRAINT "profiles__user_id__foreign_key"
-        FOREIGN KEY ("user_id")
-        REFERENCES "users"("id")
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
     `)
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "profiles" DROP CONSTRAINT "profiles__user_id__foreign_key"`
-    )
     await queryRunner.query(`DROP TABLE "profiles"`)
   }
 }

@@ -11,8 +11,8 @@ export class AddUsersTable1596216678335 implements MigrationInterface {
         "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
         "username" character varying(300) NOT NULL,
         "is_active" boolean NOT NULL DEFAULT true,
-        CONSTRAINT "users__username__unique" UNIQUE ("username"),
-        CONSTRAINT "users__id__primary_key" PRIMARY KEY ("id")
+        CONSTRAINT "users__id__primary_key" PRIMARY KEY ("id"),
+        CONSTRAINT "users__username__unique" UNIQUE ("username")
       )
     `)
   }

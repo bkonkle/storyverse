@@ -1,7 +1,7 @@
-import {Entity, Column, OneToMany} from 'typeorm'
+import {Entity, Column, OneToOne} from 'typeorm'
 
 import Profile from '../profiles/Profile.entity'
-import {UuidTable} from '../utils/Uuid'
+import {UuidTable} from '../lib/data/Uuid'
 
 @Entity({name: 'users'})
 export class User extends UuidTable {
@@ -21,7 +21,7 @@ export class User extends UuidTable {
   })
   isActive!: boolean
 
-  @OneToMany(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user)
   profiles!: Profile[]
 }
 

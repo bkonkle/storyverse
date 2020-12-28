@@ -12,22 +12,17 @@ export class AddUniversesTable1596220384736 implements MigrationInterface {
         "name" character varying(300) NOT NULL,
         "description" jsonb,
         "owner_profile_id" uuid NOT NULL,
-        CONSTRAINT "universes__id__primary_key" PRIMARY KEY ("id")
+        CONSTRAINT "universes__id__primary_key" PRIMARY KEY ("id"),
+        CONSTRAINT "universes__owner_profile_id__foreign_key"
+          FOREIGN KEY ("owner_profile_id")
+          REFERENCES "profiles"("id")
+          ON DELETE CASCADE
+          ON UPDATE CASCADE
       )
-    `)
-    await queryRunner.query(`
-      ALTER TABLE "universes" ADD CONSTRAINT "universes__owner_profile_id__foreign_key"
-        FOREIGN KEY ("owner_profile_id")
-        REFERENCES "profiles"("id")
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
     `)
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "universes" DROP CONSTRAINT "universes__owner_profile_id__foreign_key"`
-    )
     await queryRunner.query(`DROP TABLE "universes"`)
   }
 }

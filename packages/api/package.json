@@ -45,11 +45,12 @@
     "apollo-server-core": "^2.19.1",
     "apollo-server-express": "^2.19.1",
     "chalk": "^4.1.0",
+    "change-case": "^4.1.2",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "graphql": "^15.3.0",
+    "graphql": "^14.2.1",
     "graphql-extensions": "^0.12.7",
     "graphql-tag": "^2.11.0",
     "graphql-type-datetime": "^0.2.4",
@@ -85,6 +86,6 @@
     "wait-on": "^5.2.1"
   },
   "resolutions": {
-    "graphql": "^15.3.0"
+    "graphql": "^14.2.1"
   }
 }

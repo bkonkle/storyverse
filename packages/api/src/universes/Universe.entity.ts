@@ -1,7 +1,7 @@
 import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm'
 
 import Profile from '../profiles/Profile.entity'
-import {UuidTable} from '../utils/Uuid'
+import {UuidTable} from '../lib/data/Uuid'
 
 @Entity({name: 'universes'})
 export class Universe extends UuidTable {
