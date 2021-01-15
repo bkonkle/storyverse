@@ -22,23 +22,68 @@ type User {
   username: String!
   """If false, the User is suspended"""
   isActive: Boolean!
+  """The id of the Profile associated with this User"""
+  profileId: UUID!
+  """The Profile associated with this User"""
+  profile: Profile!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 scalar UUID
+"""A User Profile"""
+type Profile {
+  """Editor json content for the Profile body"""
+  content: JSONObject
+  createdAt: DateTime!
+  """A display name"""
+  displayName: String
+  """An email address"""
+  email: String!
+  id: UUID!
+  """
+  Retrieve all Permissions granted to the Profile, optionally in the context of content from another
+  table.
+  """
+  permissions(subjectTable: String, subjectId: UUID): [Permission!]
+  """A Profile photo"""
+  picture: String
+  """
+  Retrieve all Roles granted to the Profile, optionally in the context of content from another
+  table.
+  """
+  roles(subjectTable: String, subjectId: UUID): [Role!]
+  updatedAt: DateTime!
+}
+scalar JSONObject
 """A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."""
 scalar DateTime
+type Permission {
+  """A unique key to represent the Permission"""
+  key: String!
+  """A display name for the Permission"""
+  name: String!
+  """A description of the Permission"""
+  description: String!
+}
+type Role {
+  """A unique key to represent the Role"""
+  key: String!
+  """A display name for the Role"""
+  name: String!
+  """A description of the Role"""
+  description: String!
+  """The Permissions granted by the Role"""
+  permissions: [Permission!]!
+}
 input ProfileCondition {
   id: UUID
   email: String
   displayName: String
   picture: String
   content: JSONObject
-  userId: UUID
   createdAt: DateTime
   updatedAt: DateTime
 }
-scalar JSONObject
 enum ProfilesOrderBy {
   ID_ASC
   ID_DESC
@@ -57,52 +102,6 @@ type ProfilesPage {
   total: Int!
   page: Int!
   pageCount: Int!
-}
-"""A User Profile"""
-type Profile {
-  """Editor json content for the Profile body"""
-  content: JSONObject
-  createdAt: DateTime!
-  """A display name"""
-  displayName: String
-  """An email address"""
-  email: String
-  id: UUID!
-  """
-  Retrieve all Permissions granted to the Profile, optionally in the context of content from another
-  table.
-  """
-  permissions(subjectTable: String, subjectId: UUID): [Permission!]
-  """A Profile photo"""
-  picture: String
-  """
-  Retrieve all Roles granted to the Profile, optionally in the context of content from another
-  table.
-  """
-  roles(subjectTable: String, subjectId: UUID): [Role!]
-  updatedAt: DateTime!
-  """The User that created the Profile"""
-  user: User
-  """The id of the User that created the Profile"""
-  userId: UUID
-}
-type Permission {
-  """A unique key to represent the Permission"""
-  key: String!
-  """A display name for the Permission"""
-  name: String!
-  """A description of the Permission"""
-  description: String!
-}
-type Role {
-  """A unique key to represent the Role"""
-  key: String!
-  """A display name for the Role"""
-  name: String!
-  """A description of the Role"""
-  description: String!
-  """The Permissions granted by the Role"""
-  permissions: [Permission!]!
 }
 input UniverseCondition {
   name: String
@@ -167,12 +166,6 @@ input CreateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String
-  user: CreateUserInput
-}
-"""Input to create a new User"""
-input CreateUserInput {
-  username: String!
 }
 type MutateProfileResult {
   profile: Profile
@@ -209,12 +202,18 @@ input CreateUniverseInput {
 type MutateUniverseResult {
   universe: Universe
 }
+"""Input to create a new User"""
+input CreateUserInput {
+  username: String!
+  profileId: String
+  profile: CreateProfileInput
+}
 type MutateUserResult {
   user: User
 }
 """Input to update an existing User"""
 input UpdateUserInput {
-  username: String
+  profileId: String
   isActive: Boolean
 }
 """Input to update an existing User Profile"""
@@ -223,7 +222,6 @@ input UpdateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String
 }
 """Input to update an existing Universe"""
 input UpdateUniverseInput {

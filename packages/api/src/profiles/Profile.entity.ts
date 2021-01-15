@@ -1,8 +1,8 @@
-import {Entity, Column, OneToOne, JoinColumn, OneToMany} from 'typeorm'
+import {Entity, Column, OneToMany} from 'typeorm'
 
+import {UuidTable} from '../lib/data/Uuid'
 import User from '../users/User.entity'
 import Universe from '../universes/Universe.entity'
-import {UuidTable} from '../lib/data/Uuid'
 
 @Entity({name: 'profiles'})
 export class Profile extends UuidTable {
@@ -33,16 +33,8 @@ export class Profile extends UuidTable {
   })
   content?: Record<string, unknown>
 
-  @Column({
-    name: 'user_id',
-    type: 'uuid',
-    nullable: false,
-  })
-  userId!: string
-
-  @OneToOne(() => User, (user) => user.profiles, {eager: true})
-  @JoinColumn({name: 'user_id'})
-  user!: User
+  @OneToMany(() => User, (user) => user.profile)
+  users!: User[]
 
   @OneToMany(() => Universe, (universe) => universe.ownerProfile)
   universesOwned!: Universe[]
