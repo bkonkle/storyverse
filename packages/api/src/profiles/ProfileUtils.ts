@@ -42,7 +42,7 @@ export const authorizeCreate = (username: string) => (user?: User) => {
   return user
 }
 
-export const censoredFields = ['email'] as const
+export const censoredFields = ['email', 'userId', 'user'] as const
 export type CensoredProfile = Omit<Profile, typeof censoredFields[number]>
 
 export const censor = (username?: string) => (

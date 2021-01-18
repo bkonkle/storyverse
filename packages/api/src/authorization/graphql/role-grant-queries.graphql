@@ -1,17 +1,3 @@
-extend type Profile {
-  """
-  Retrieve all Roles granted to the Profile, optionally in the context of content from another
-  table.
-  """
-  roles(subjectTable: String, subjectId: UUID): [Role!]
-
-  """
-  Retrieve all Permissions granted to the Profile, optionally in the context of content from another
-  table.
-  """
-  permissions(subjectTable: String, subjectId: UUID): [Permission!]
-}
-
 type Permission {
   """
   A unique key to represent the Permission
@@ -76,4 +62,18 @@ type RoleGrant {
 
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+extend type Profile {
+  """
+  Retrieve all Roles granted to the Profile, optionally in the context of content from another
+  table.
+  """
+  roles(subjectTable: String, subjectId: UUID): [Role!]
+
+  """
+  Retrieve all Permissions granted to the Profile, optionally in the context of content from another
+  table.
+  """
+  permissions(subjectTable: String, subjectId: UUID): [Permission!]
 }

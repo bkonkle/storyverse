@@ -1,4 +1,4 @@
-import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm'
+import {Entity, Column, OneToOne} from 'typeorm'
 
 import Profile from '../profiles/Profile.entity'
 import {UuidTable} from '../lib/data/Uuid'
@@ -21,16 +21,8 @@ export class User extends UuidTable {
   })
   isActive!: boolean
 
-  @Column({
-    name: 'profile_id',
-    type: 'uuid',
-    nullable: false,
-  })
-  profileId!: string
-
-  @ManyToOne(() => Profile, (profile) => profile.users, {eager: true})
-  @JoinColumn({name: 'profile_id'})
-  profile!: Profile
+  @OneToOne(() => Profile, (profile) => profile.user)
+  profiles!: Profile[]
 }
 
 export default User

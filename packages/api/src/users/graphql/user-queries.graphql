@@ -21,16 +21,6 @@ type User {
   """
   isActive: Boolean!
 
-  """
-  The id of the Profile associated with this User
-  """
-  profileId: UUID!
-
-  """
-  The Profile associated with this User
-  """
-  profile: Profile!
-
   createdAt: DateTime!
   updatedAt: DateTime!
 }

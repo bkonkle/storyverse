@@ -6,6 +6,8 @@ input CreateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
+  userId: String
+  user: CreateUserInput
 }
 
 """
@@ -16,6 +18,7 @@ input UpdateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
+  userId: String
 }
 
 type MutateProfileResult {

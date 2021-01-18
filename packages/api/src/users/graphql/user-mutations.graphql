@@ -15,15 +15,13 @@ Input to create a new User
 """
 input CreateUserInput {
   username: String!
-  profileId: String
-  profile: CreateProfileInput
 }
 
 """
 Input to update an existing User
 """
 input UpdateUserInput {
-  profileId: String
+  username: String
   isActive: Boolean
 }
 
