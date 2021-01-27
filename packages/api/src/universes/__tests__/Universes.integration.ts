@@ -31,7 +31,7 @@ describe('Universe', () => {
   let otherUser: User
   let otherProfile: Profile
 
-  const {getCredentials, getAltCredentials} = OAuth2.init()
+  const {credentials, altCredentials} = OAuth2.init()
 
   const env = {
     ...process.env,
@@ -77,14 +77,14 @@ describe('Universe', () => {
   beforeEach(async () => {
     jest.resetAllMocks()
 
-    const {username} = getCredentials()
+    const {username} = credentials
 
     user = await users.save({username, isActive: true})
     profile = await profiles.save(ProfileFactory.make({userId: user.id, user}))
   })
 
   beforeEach(async () => {
-    const {username} = getAltCredentials()
+    const {username} = altCredentials
 
     otherUser = await users.save({username, isActive: true})
     otherProfile = await profiles.save(
@@ -112,7 +112,7 @@ describe('Universe', () => {
     const fields = ['id', 'name', 'description', 'ownerProfileId'] as const
 
     it('creates a new universe', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const universe = UniverseFactory.makeCreateInput({
         ownerProfileId: profile.id,
       })
@@ -142,7 +142,7 @@ describe('Universe', () => {
     })
 
     it('requires a name and an ownerProfileId', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const universe = omit(
         UniverseFactory.makeCreateInput({ownerProfileId: profile.id}),
         ['name', 'ownerProfileId']
@@ -194,7 +194,7 @@ describe('Universe', () => {
     })
 
     it('requires the token sub to match the related ownerProfile.user.username', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const universe = UniverseFactory.makeCreateInput({
         ownerProfileId: otherProfile.id,
       })
@@ -262,7 +262,7 @@ describe('Universe', () => {
     })
 
     it('retrieves an existing universe', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: universe.id}
 
       const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
@@ -275,7 +275,7 @@ describe('Universe', () => {
     })
 
     it('returns nothing when no user is found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: universe.id}
 
       await universes.delete(universe.id)
@@ -303,7 +303,7 @@ describe('Universe', () => {
     })
 
     it('censors the profile.user for unauthorized users', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {id: universe.id}
       const expected = pick(universe, fields)
 
@@ -381,7 +381,7 @@ describe('Universe', () => {
     })
 
     it('queries existing universes', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {}
 
       const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
@@ -424,7 +424,7 @@ describe('Universe', () => {
     })
 
     it('censors the profile.user for unauthorized users', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {}
 
       const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
@@ -473,7 +473,7 @@ describe('Universe', () => {
     })
 
     it('updates an existing universe', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         id: universe.id,
         input: {name: faker.random.word()},
@@ -500,7 +500,7 @@ describe('Universe', () => {
     })
 
     it('requires the id to be a uuid', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         id: 'test-id',
         input: {name: faker.random.word()},
@@ -552,7 +552,7 @@ describe('Universe', () => {
     })
 
     it('returns an error if no existing universe was found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         id: faker.random.uuid(),
         input: {name: faker.random.word()},
@@ -581,7 +581,7 @@ describe('Universe', () => {
     })
 
     it('requires the token sub to match the related ownerProfile.user.username', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {
         id: universe.id,
         input: {name: faker.random.word()},
@@ -632,7 +632,7 @@ describe('Universe', () => {
     })
 
     it('deletes an existing universe', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: universe.id}
 
       const {data} = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
@@ -652,7 +652,7 @@ describe('Universe', () => {
     })
 
     it('requires the id to be a uuid', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: 'test-id'}
 
       const body = await graphql.mutation(mutation, variables, {
@@ -698,7 +698,7 @@ describe('Universe', () => {
     })
 
     it('returns an error if no existing universe was found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: faker.random.uuid()}
 
       const body = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
@@ -724,7 +724,7 @@ describe('Universe', () => {
     })
 
     it('requires the token sub to match the related ownerProfile.user.username', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {id: universe.id}
 
       const body = await graphql.mutation(mutation, variables, {

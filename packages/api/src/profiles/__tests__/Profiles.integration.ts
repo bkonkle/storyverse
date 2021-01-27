@@ -24,7 +24,7 @@ describe('Profile', () => {
   let user: User
   let otherUser: User
 
-  const {getCredentials, getAltCredentials} = OAuth2.init()
+  const {credentials, altCredentials} = OAuth2.init()
 
   const env = {
     ...process.env,
@@ -66,13 +66,13 @@ describe('Profile', () => {
   beforeEach(async () => {
     jest.resetAllMocks()
 
-    const {username} = getCredentials()
+    const {username} = credentials
 
     user = await users.save({username, isActive: true})
   })
 
   beforeEach(async () => {
-    const {username} = getAltCredentials()
+    const {username} = altCredentials
 
     otherUser = await users.save({username, isActive: true})
   })
@@ -97,7 +97,7 @@ describe('Profile', () => {
     `
 
     it('creates a new user profile', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const profile = omit(ProfileFactory.makeCreateInput({userId: user.id}), [
         'user',
       ])
@@ -127,7 +127,7 @@ describe('Profile', () => {
     })
 
     it('requires an email address', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const profile = omit(ProfileFactory.makeCreateInput({userId: user.id}), [
         'user',
         'email',
@@ -150,7 +150,7 @@ describe('Profile', () => {
     })
 
     it('requires a userId or inline user input', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const profile = ProfileFactory.makeCreateInput()
       const variables = {input: profile}
 
@@ -191,7 +191,7 @@ describe('Profile', () => {
     })
 
     it('requires authorization', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const profile = omit(
         ProfileFactory.makeCreateInput({userId: otherUser.id}),
         ['user']
@@ -256,7 +256,7 @@ describe('Profile', () => {
     })
 
     it('retrieves an existing user profile', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: profile.id}
       const expected = pick(profile, fields)
 
@@ -270,7 +270,7 @@ describe('Profile', () => {
     })
 
     it('returns nothing when no user is found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: profile.id}
 
       await profiles.delete(profile.id)
@@ -298,7 +298,7 @@ describe('Profile', () => {
     })
 
     it('censors responses for unauthorized users', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {id: profile.id}
       const expected = pick(profile, fields)
 
@@ -372,7 +372,7 @@ describe('Profile', () => {
     })
 
     it('queries existing profiles', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {}
 
       const {data} = await graphql.query<Pick<Query, 'getManyProfiles'>>(
@@ -415,7 +415,7 @@ describe('Profile', () => {
     })
 
     it('censors responses for unauthorized users', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {}
 
       const {data} = await graphql.query<Pick<Query, 'getManyProfiles'>>(
@@ -465,7 +465,7 @@ describe('Profile', () => {
     })
 
     it('updates an existing user profile', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         id: profile.id,
         input: {picture: faker.internet.avatar()},
@@ -492,7 +492,7 @@ describe('Profile', () => {
     })
 
     it('requires the id to be a uuid', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         id: 'test-id',
         input: {picture: faker.internet.avatar()},
@@ -544,7 +544,7 @@ describe('Profile', () => {
     })
 
     it('returns an error if no existing profile was found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         id: faker.random.uuid(),
         input: {picture: faker.internet.avatar()},
@@ -573,7 +573,7 @@ describe('Profile', () => {
     })
 
     it('requires authorization', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {
         id: profile.id,
         input: {picture: faker.internet.avatar()},
@@ -624,7 +624,7 @@ describe('Profile', () => {
     })
 
     it('deletes an existing user profile', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: profile.id}
 
       const {data} = await graphql.mutation<Pick<Mutation, 'deleteProfile'>>(
@@ -644,7 +644,7 @@ describe('Profile', () => {
     })
 
     it('requires the id to be a uuid', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: 'test-id'}
 
       const body = await graphql.mutation(mutation, variables, {
@@ -690,7 +690,7 @@ describe('Profile', () => {
     })
 
     it('returns an error if no existing profile was found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {id: faker.random.uuid()}
 
       const body = await graphql.mutation<Pick<Mutation, 'deleteProfile'>>(
@@ -716,7 +716,7 @@ describe('Profile', () => {
     })
 
     it('requires authorization', async () => {
-      const {token} = getAltCredentials()
+      const {token} = altCredentials
       const variables = {id: profile.id}
 
       const body = await graphql.mutation(mutation, variables, {

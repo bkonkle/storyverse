@@ -18,7 +18,7 @@ describe('User', () => {
   let users: Repository<User>
   let typeorm: TypeOrm.Utils
 
-  const {getCredentials} = OAuth2.init()
+  const {credentials} = OAuth2.init()
 
   const env = {
     ...process.env,
@@ -71,7 +71,7 @@ describe('User', () => {
     `
 
     it('creates a new user', async () => {
-      const {token, username} = getCredentials()
+      const {token, username} = credentials
       const variables = {input: {username}}
 
       const expected = {
@@ -99,7 +99,7 @@ describe('User', () => {
     })
 
     it('requires a username', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {input: {}}
 
       const body = await graphql.mutation(mutation, variables, {
@@ -118,7 +118,7 @@ describe('User', () => {
     })
 
     it('requires authentication', async () => {
-      const {username} = getCredentials()
+      const {username} = credentials
       const variables = {input: {username}}
 
       const body = await graphql.mutation(mutation, variables, {warn: false})
@@ -140,7 +140,7 @@ describe('User', () => {
     })
 
     it('requires authorization', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const otherUser = UserFactory.make()
 
       const variables = {input: {username: otherUser.username}}
@@ -181,7 +181,7 @@ describe('User', () => {
     let user: User
 
     beforeEach(async () => {
-      const {username} = getCredentials()
+      const {username} = credentials
 
       user = await users.save({
         username,
@@ -190,7 +190,7 @@ describe('User', () => {
     })
 
     it('retrieves the currently authenticated user', async () => {
-      const {token, username} = getCredentials()
+      const {token, username} = credentials
 
       const {data} = await graphql.query<Pick<Query, 'getCurrentUser'>>(
         query,
@@ -206,7 +206,7 @@ describe('User', () => {
     })
 
     it('returns null when no user is found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
 
       await users.delete(user.id)
 
@@ -255,7 +255,7 @@ describe('User', () => {
     let user: User
 
     beforeEach(async () => {
-      const {username} = getCredentials()
+      const {username} = credentials
 
       user = await users.save({
         username,
@@ -264,7 +264,7 @@ describe('User', () => {
     })
 
     it('updates the currently authenticated user', async () => {
-      const {token, username} = getCredentials()
+      const {token, username} = credentials
       const variables = {
         input: {isActive: false},
       }
@@ -312,7 +312,7 @@ describe('User', () => {
     })
 
     it('returns an error if no user is found', async () => {
-      const {token} = getCredentials()
+      const {token} = credentials
       const variables = {
         input: {isActive: false},
       }

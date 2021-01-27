@@ -1,10 +1,12 @@
 import axios from 'axios'
 
-let token: string
-let username: string
+export interface Credentials {
+  token?: string
+  username?: string
+}
 
-let altToken: string
-let altUsername: string
+const credentials: Credentials = {}
+const altCredentials: Credentials = {}
 
 export const init = (processEnv = process.env) => {
   const {
@@ -19,7 +21,7 @@ export const init = (processEnv = process.env) => {
   } = processEnv
 
   beforeAll(async () => {
-    if (!token) {
+    if (!credentials.token) {
       const {
         data: {access_token: accessToken},
       } = await axios.post(`${OAUTH2_ISSUER}oauth/token`, {
@@ -31,19 +33,19 @@ export const init = (processEnv = process.env) => {
         scope: 'openid profile email',
         audience: OAUTH2_AUDIENCE,
       })
-      token = accessToken
+      credentials.token = accessToken
     }
 
-    if (!username) {
+    if (!credentials.username) {
       const {
         data: {sub},
       } = await axios.get(`${OAUTH2_ISSUER}userinfo`, {
-        headers: {Authorization: `Bearer ${token}`},
+        headers: {Authorization: `Bearer ${credentials.token}`},
       })
-      username = sub
+      credentials.username = sub
     }
 
-    if (!altToken) {
+    if (!altCredentials.token) {
       const {
         data: {access_token: altAccessToken},
       } = await axios.post(`${OAUTH2_ISSUER}oauth/token`, {
@@ -55,22 +57,22 @@ export const init = (processEnv = process.env) => {
         scope: 'openid profile email',
         audience: OAUTH2_AUDIENCE,
       })
-      altToken = altAccessToken
+      altCredentials.token = altAccessToken
     }
 
-    if (!altUsername) {
+    if (!altCredentials.username) {
       const {
         data: {sub: altSub},
       } = await axios.get(`${OAUTH2_ISSUER}userinfo`, {
-        headers: {Authorization: `Bearer ${altToken}`},
+        headers: {Authorization: `Bearer ${altCredentials.token}`},
       })
-      altUsername = altSub
+      altCredentials.username = altSub
     }
   })
 
   return {
-    getCredentials: () => ({token, username}),
-    getAltCredentials: () => ({token: altToken, username: altUsername}),
+    credentials,
+    altCredentials,
   }
 }
 

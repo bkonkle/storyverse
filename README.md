@@ -6,9 +6,7 @@ A collaborative storytelling app. Create a story universe, invite friends to con
 
 This project is packaged with Yarn workspaces. The following packages are available:
 
-- [Server](packages/server) - An Express app using Postgraphile to create an automatic, database-first, extensible GraphQL server.
-- [Web](packages/web) - A Gatsby web client for the Server.
-- [Mobile](packages/mobile) - An Expo mobile client for the Server.
+- [Api](packages/api) - A [Nest.js](https://nestjs.com) application.
 
 ## Screencasts
 
