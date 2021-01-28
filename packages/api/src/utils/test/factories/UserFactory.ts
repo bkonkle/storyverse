@@ -2,9 +2,9 @@
 import {plainToClass} from 'class-transformer'
 import faker from 'faker'
 import {DeepPartial} from 'typeorm'
-import {CreateUserInput} from '../../../Schema'
 
 import User from '../../../users/User.entity'
+import {CreateUserInput} from '../../../Schema'
 
 export const makeCreateInput = (
   overrides?: DeepPartial<CreateUserInput>

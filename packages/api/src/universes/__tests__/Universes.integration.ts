@@ -10,12 +10,14 @@ import {AppModule} from '../../AppModule'
 import {ProcessEnv} from '../../config/ConfigService'
 import {Validation} from '../../lib/resolvers'
 import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
+import {Manager} from '../../universes/UniverseRoles'
 import TestData from '../../utils/test/TestData'
 import ProfileFactory from '../../utils/test/factories/ProfileFactory'
 import UniverseFactory from '../../utils/test/factories/UniverseFactory'
 import User from '../../users/User.entity'
 import Profile from '../../profiles/Profile.entity'
 import Universe from '../../universes/Universe.entity'
+import RoleGrant from '../../authorization/RoleGrant.entity'
 
 describe('Universe', () => {
   let app: INestApplication
@@ -24,6 +26,7 @@ describe('Universe', () => {
   let users: Repository<User>
   let profiles: Repository<Profile>
   let universes: Repository<Universe>
+  let grants: Repository<RoleGrant>
   let typeorm: TypeOrm.Utils
 
   let user: User
@@ -71,6 +74,7 @@ describe('Universe', () => {
     users = db.getRepository(User)
     profiles = db.getRepository(Profile)
     universes = db.getRepository(Universe)
+    grants = db.getRepository(RoleGrant)
 
     await typeorm.dbCleaner(tables)
   })
@@ -607,6 +611,41 @@ describe('Universe', () => {
           }),
         }),
       ])
+    })
+
+    it.only('allows users with the Update permission', async () => {
+      const {token} = altCredentials
+      const variables = {
+        id: universe.id,
+        input: {name: faker.random.word()},
+      }
+
+      const grant = await grants.save({
+        roleKey: Manager.key,
+        profileId: otherProfile.id,
+        subjectTable: 'universe',
+        subjectId: universe.id,
+      })
+
+      const expected: Pick<Universe, typeof fields[number]> = {
+        ...pick(universe.value!, fields),
+        name: variables.input.name,
+      }
+
+      universe.resetAfter()
+
+      const {data} = await graphql.mutation<Pick<Mutation, 'updateUniverse'>>(
+        mutation,
+        variables,
+        {token}
+      )
+
+      expect(data.updateUniverse).toHaveProperty(
+        'universe',
+        expect.objectContaining(expected)
+      )
+
+      await grants.delete(grant.id)
     })
   })
 
