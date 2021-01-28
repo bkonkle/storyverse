@@ -10,6 +10,7 @@ import {AppModule} from '../../AppModule'
 import {ProcessEnv} from '../../config/ConfigService'
 import {Validation} from '../../lib/resolvers'
 import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
+import TestData from '../../utils/test/TestData'
 import ProfileFactory from '../../utils/test/factories/ProfileFactory'
 import Profile from '../../profiles/Profile.entity'
 import User from '../../users/User.entity'
@@ -63,7 +64,7 @@ describe('Profile', () => {
     await typeorm.dbCleaner(tables)
   })
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     jest.resetAllMocks()
 
     const {username} = credentials
@@ -71,14 +72,10 @@ describe('Profile', () => {
     user = await users.save({username, isActive: true})
   })
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const {username} = altCredentials
 
     otherUser = await users.save({username, isActive: true})
-  })
-
-  afterEach(async () => {
-    await typeorm.dbCleaner(tables)
   })
 
   describe('Mutation: createProfile', () => {
@@ -120,10 +117,17 @@ describe('Profile', () => {
       )
 
       const created = await profiles.findOne(data.createProfile.profile?.id)
+
+      if (!created) {
+        fail('No profile created.')
+      }
+
       expect(created).toMatchObject({
         ...expected,
         id: data.createProfile.profile?.id,
       })
+
+      await profiles.delete(created.id)
     })
 
     it('requires an email address', async () => {
@@ -244,21 +248,19 @@ describe('Profile', () => {
       'user.id',
     ]
 
-    let profile: Profile
-
-    beforeEach(async () => {
-      profile = await profiles.save(
+    const profile = new TestData(
+      () => profiles,
+      () =>
         ProfileFactory.make({
           userId: user.id,
           user,
         })
-      )
-    })
+    )
 
     it('retrieves an existing user profile', async () => {
       const {token} = credentials
       const variables = {id: profile.id}
-      const expected = pick(profile, fields)
+      const expected = pick(profile.value, fields)
 
       const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
         query,
@@ -269,11 +271,11 @@ describe('Profile', () => {
       expect(data.getProfile).toEqual(expected)
     })
 
-    it('returns nothing when no user is found', async () => {
+    it('returns nothing when no profile is found', async () => {
       const {token} = credentials
       const variables = {id: profile.id}
 
-      await profiles.delete(profile.id)
+      await profile.delete()
 
       const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
         query,
@@ -286,7 +288,7 @@ describe('Profile', () => {
 
     it('censors responses for anonymous users', async () => {
       const variables = {id: profile.id}
-      const expected = pick(profile, fields)
+      const expected = pick(profile.value, fields)
 
       const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
         query,
@@ -300,7 +302,7 @@ describe('Profile', () => {
     it('censors responses for unauthorized users', async () => {
       const {token} = altCredentials
       const variables = {id: profile.id}
-      const expected = pick(profile, fields)
+      const expected = pick(profile.value, fields)
 
       const {data} = await graphql.query<Pick<Query, 'getProfile'>>(
         query,
@@ -352,24 +354,22 @@ describe('Profile', () => {
       'user.id',
     ]
 
-    let profile: Profile
-    let otherProfile: Profile
-
-    beforeEach(async () => {
-      profile = await profiles.save(
+    const profile = new TestData(
+      () => profiles,
+      () =>
         ProfileFactory.make({
           userId: user.id,
           user,
         })
-      )
-
-      otherProfile = await profiles.save(
+    )
+    const otherProfile = new TestData(
+      () => profiles,
+      () =>
         ProfileFactory.make({
           userId: otherUser.id,
           user: otherUser,
         })
-      )
-    })
+    )
 
     it('queries existing profiles', async () => {
       const {token} = credentials
@@ -383,8 +383,8 @@ describe('Profile', () => {
 
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
-          pick(profile, fields),
-          mockCensor(pick(otherProfile, fields)),
+          pick(profile.value, fields),
+          mockCensor(pick(otherProfile.value, fields)),
         ]),
         count: 2,
         page: 1,
@@ -404,8 +404,8 @@ describe('Profile', () => {
 
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
-          mockCensor(pick(profile, fields)),
-          mockCensor(pick(otherProfile, fields)),
+          mockCensor(pick(profile.value, fields)),
+          mockCensor(pick(otherProfile.value, fields)),
         ]),
         count: 2,
         page: 1,
@@ -426,8 +426,8 @@ describe('Profile', () => {
 
       expect(data.getManyProfiles).toEqual({
         data: expect.arrayContaining([
-          mockCensor(pick(profile, fields)),
-          pick(otherProfile, fields),
+          mockCensor(pick(profile.value, fields)),
+          pick(otherProfile.value, fields),
         ]),
         count: 2,
         page: 1,
@@ -453,16 +453,14 @@ describe('Profile', () => {
     `
     const fields = ['id', 'email', 'displayName', 'picture', 'userId']
 
-    let profile: Profile
-
-    beforeEach(async () => {
-      profile = await profiles.save(
+    const profile = new TestData(
+      () => profiles,
+      () =>
         ProfileFactory.make({
           userId: user.id,
           user,
         })
-      )
-    })
+    )
 
     it('updates an existing user profile', async () => {
       const {token} = credentials
@@ -472,9 +470,11 @@ describe('Profile', () => {
       }
 
       const expected = {
-        ...pick(profile, fields),
+        ...pick(profile.value, fields),
         picture: variables.input.picture,
       }
+
+      profile.resetAfter()
 
       const {data} = await graphql.mutation<Pick<Mutation, 'updateProfile'>>(
         mutation,
@@ -612,20 +612,20 @@ describe('Profile', () => {
         }
       `
 
-    let profile: Profile
-
-    beforeEach(async () => {
-      profile = await profiles.save(
+    const profile = new TestData(
+      () => profiles,
+      () =>
         ProfileFactory.make({
           userId: user.id,
           user,
         })
-      )
-    })
+    )
 
     it('deletes an existing user profile', async () => {
       const {token} = credentials
       const variables = {id: profile.id}
+
+      profile.resetAfter()
 
       const {data} = await graphql.mutation<Pick<Mutation, 'deleteProfile'>>(
         mutation,

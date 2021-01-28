@@ -8,6 +8,7 @@ import {AppModule} from '../../AppModule'
 import {ProcessEnv} from '../../config/ConfigService'
 import {Validation} from '../../lib/resolvers'
 import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
+import TestData from '../../utils/test/TestData'
 import UserFactory from '../../utils/test/factories/UserFactory'
 import User from '../../users/User.entity'
 
@@ -53,10 +54,6 @@ describe('User', () => {
     jest.resetAllMocks()
   })
 
-  afterEach(async () => {
-    await typeorm.dbCleaner(tables)
-  })
-
   describe('Mutation: createUser', () => {
     const mutation = `
       mutation CreateUser($input: CreateUserInput!) {
@@ -92,10 +89,17 @@ describe('User', () => {
       )
 
       const user = await users.findOne(data.createUser.user?.id)
+
+      if (!user) {
+        fail('No user created.')
+      }
+
       expect(user).toMatchObject({
         ...expected,
         id: data.createUser.user?.id,
       })
+
+      await users.delete(user.id)
     })
 
     it('requires a username', async () => {
@@ -178,16 +182,13 @@ describe('User', () => {
       }
     `
 
-    let user: User
-
-    beforeEach(async () => {
-      const {username} = credentials
-
-      user = await users.save({
-        username,
+    const user = new TestData(
+      () => users,
+      () => ({
+        username: credentials.username,
         isActive: true,
       })
-    })
+    )
 
     it('retrieves the currently authenticated user', async () => {
       const {token, username} = credentials
@@ -208,7 +209,7 @@ describe('User', () => {
     it('returns null when no user is found', async () => {
       const {token} = credentials
 
-      await users.delete(user.id)
+      await user.delete()
 
       const {data} = await graphql.query<Pick<Query, 'getCurrentUser'>>(
         query,
@@ -252,16 +253,13 @@ describe('User', () => {
       }
     `
 
-    let user: User
-
-    beforeEach(async () => {
-      const {username} = credentials
-
-      user = await users.save({
-        username,
+    const user = new TestData(
+      () => users,
+      () => ({
+        username: credentials.username,
         isActive: true,
       })
-    })
+    )
 
     it('updates the currently authenticated user', async () => {
       const {token, username} = credentials
@@ -274,6 +272,8 @@ describe('User', () => {
         username,
         isActive: false,
       }
+
+      user.resetAfter()
 
       const {data} = await graphql.mutation<
         Pick<Mutation, 'updateCurrentUser'>
@@ -317,7 +317,7 @@ describe('User', () => {
         input: {isActive: false},
       }
 
-      await users.delete(user.id)
+      await user.delete()
 
       const body = await graphql.mutation<Pick<Mutation, 'updateCurrentUser'>>(
         mutation,
