@@ -53,7 +53,9 @@ const config: PostgresConnectionOptions = {
 
   // Silence DB logs in tests
   logger:
-    env === 'test' || dbDebugLogging === 'false' ? 'file' : 'advanced-console',
+    (env === 'test' && dbDebugLogging !== 'true') || dbDebugLogging === 'false'
+      ? 'file'
+      : 'advanced-console',
 
   // Allow both start.prod and start.dev to use migrations.
   // __dirname points to either the dist/ or src/ folder, meaning

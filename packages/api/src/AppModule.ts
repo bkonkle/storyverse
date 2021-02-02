@@ -11,6 +11,7 @@ import {AuthnModule} from './authentication/AuthnModule'
 import UsersModule from './users/UsersModule'
 import ProfilesModule from './profiles/ProfilesModule'
 import UniversesModule from './universes/UniversesModule'
+import SeriesModule from './series/SeriesModule'
 
 const env = getVar(Vars.NodeEnv) || 'production'
 const isDev = env === 'development'
@@ -33,6 +34,7 @@ const isProd = env === 'production'
     UsersModule,
     ProfilesModule,
     UniversesModule,
+    SeriesModule,
   ],
   providers: [Logger],
 })
