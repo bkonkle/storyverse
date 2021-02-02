@@ -15,18 +15,20 @@ import {
   QueryGetManyProfilesArgs,
 } from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
-import ProfilesService from './ProfilesService'
-import UsersService from '../users/UsersService'
 import {JwtGuard} from '../lib/auth/JwtGuard'
 import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
-import {authorize, authorizeCreate, censor, maybeCensor} from './ProfileUtils'
+import UsersService from '../users/UsersService'
+import ProfileAuthz from './ProfileAuthz'
+import ProfilesService from './ProfilesService'
+import {censor, maybeCensor} from './ProfileUtils'
 
 @Resolver('Profile')
 @UseGuards(JwtGuard)
-export class ProfileResolvers {
+export default class ProfileResolvers {
   constructor(
     private readonly service: ProfilesService,
-    private readonly users: UsersService
+    private readonly users: UsersService,
+    private readonly authz: ProfileAuthz // private readonly users: UsersService
   ) {}
 
   /**
@@ -76,10 +78,14 @@ export class ProfileResolvers {
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
     const user = await this.findOrCreateUser(input, username).then(
-      authorizeCreate(username)
+      this.authz.create(username)
     )
 
-    const profile = await this.service.create({...input, userId: user.id, user})
+    const profile = await this.service.create({
+      ...input,
+      userId: user.id,
+      user,
+    })
 
     return {profile}
   }
@@ -93,7 +99,7 @@ export class ProfileResolvers {
     @Args('input') input: UpdateProfileInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    await this.service.findOne({where: {id}}).then(authorize(username))
+    await this.authz.update(username, id)
 
     const profile = await this.service.update(id, input)
 
@@ -108,9 +114,7 @@ export class ProfileResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const existing = await this.service
-      .findOne({where: {id}})
-      .then(authorize(username))
+    const existing = await this.authz.update(username, id)
 
     await this.service.delete(id)
 

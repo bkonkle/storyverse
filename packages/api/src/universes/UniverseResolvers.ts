@@ -14,7 +14,7 @@ import {JwtGuard} from '../lib/auth/JwtGuard'
 import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
 import UniverseAuthz from './UniverseAuthz'
 import UniversesService from './UniversesService'
-import {Censored} from './UniverseUtils'
+import {censor, maybeCensor} from './UniverseUtils'
 
 @Resolver('Universe')
 @UseGuards(JwtGuard)
@@ -30,7 +30,7 @@ export class UniverseResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub() username?: string
   ): Promise<Universe | undefined> {
-    return this.service.findOne({where: {id}}).then(Censored.maybe(username))
+    return this.service.findOne({where: {id}}).then(maybeCensor(username))
   }
 
   @Query()
@@ -50,7 +50,7 @@ export class UniverseResolvers {
 
     return {
       ...universes,
-      data: universes.data.map(Censored.censor(username)),
+      data: universes.data.map(censor(username)),
     }
   }
 

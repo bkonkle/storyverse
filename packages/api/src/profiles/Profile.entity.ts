@@ -4,7 +4,9 @@ import User from '../users/User.entity'
 import Universe from '../universes/Universe.entity'
 import {UuidTable} from '../lib/data/Uuid'
 
-@Entity({name: 'profiles'})
+export const TABLE_NAME = 'profiles'
+
+@Entity({name: TABLE_NAME})
 export class Profile extends UuidTable {
   @Column({
     type: 'varchar',

@@ -7,7 +7,7 @@ import {TypeOrm} from '../lib/services'
 import Profile from './Profile.entity'
 
 @Injectable()
-export class ProfilesService {
+export default class ProfilesService {
   typeorm = TypeOrm.init(this.repo)
 
   constructor(
@@ -28,5 +28,3 @@ export class ProfilesService {
       .getOne()
   }
 }
-
-export default ProfilesService

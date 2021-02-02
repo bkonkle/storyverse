@@ -1,46 +1,20 @@
 import {omit} from 'lodash'
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common'
 
-import Profile from './Profile.entity'
-import User from '../users/User.entity'
+import Profile, {TABLE_NAME} from './Profile.entity'
+import {Subject, SubjectInput} from '../authorization/RoleGrantsService'
 
-export const isAuthorized = (profile: Profile, username?: string) => {
-  if (username && username === profile.user.username) {
-    return true
-  }
+export const isOwner = (profile: Profile, username?: string) =>
+  username && username === profile.user.username
 
-  return false
-}
+export const subject = (id: string): Subject => ({
+  table: TABLE_NAME,
+  id,
+})
 
-export const authorize = (username?: string) => (profile?: Profile) => {
-  if (!profile) {
-    throw new NotFoundException()
-  }
-
-  if (!isAuthorized(profile, username)) {
-    throw new ForbiddenException()
-  }
-
-  return profile
-}
-
-export const authorizeCreate = (username: string) => (user?: User) => {
-  if (!user) {
-    throw new BadRequestException(
-      'An existing User must be found or valid UserInput must be provided.'
-    )
-  }
-
-  if (username !== user.username) {
-    throw new ForbiddenException()
-  }
-
-  return user
-}
+export const subjectInput = (id: string): SubjectInput => ({
+  subjectTable: TABLE_NAME,
+  subjectId: id,
+})
 
 export const censoredFields = ['email', 'userId', 'user'] as const
 export type CensoredProfile = Omit<Profile, typeof censoredFields[number]>
@@ -48,7 +22,7 @@ export type CensoredProfile = Omit<Profile, typeof censoredFields[number]>
 export const censor = (username?: string) => (
   profile: Profile
 ): CensoredProfile => {
-  if (isAuthorized(profile, username)) {
+  if (isOwner(profile, username)) {
     return profile
   }
 
