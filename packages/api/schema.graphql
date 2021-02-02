@@ -139,7 +139,21 @@ type Series {
   """The id of the Universe that the Series belongs to"""
   universeId: UUID!
   """The Universe that the Series belongs to"""
-  universe: Profile!
+  universe: Universe
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+"""A Universe"""
+type Universe {
+  id: UUID!
+  """The Universe's name"""
+  name: String!
+  """Editor json content for the Universe's description"""
+  description: JSONObject
+  """The id of the Profile that owns the Universe"""
+  ownerProfileId: UUID!
+  """The Profile that owns the Universe"""
+  ownerProfile: Profile!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -163,20 +177,6 @@ type UniversesPage {
   total: Int!
   page: Int!
   pageCount: Int!
-}
-"""A Universe"""
-type Universe {
-  id: UUID!
-  """The Universe's name"""
-  name: String!
-  """Editor json content for the Universe's description"""
-  description: JSONObject
-  """The id of the Profile that owns the Universe"""
-  ownerProfileId: UUID!
-  """The Profile that owns the Universe"""
-  ownerProfile: Profile!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 type Mutation {
   """Create a new User Profile"""
