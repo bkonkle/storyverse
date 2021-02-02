@@ -3,7 +3,9 @@ import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm'
 import Profile from '../profiles/Profile.entity'
 import {UuidTable} from '../lib/data/Uuid'
 
-@Entity({name: 'universes'})
+export const TABLE_NAME = 'universes'
+
+@Entity({name: TABLE_NAME})
 export class Universe extends UuidTable {
   @Column({
     type: 'varchar',

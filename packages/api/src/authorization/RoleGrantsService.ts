@@ -1,6 +1,6 @@
 import {DeepPartial, Repository} from 'typeorm'
 import {uniqBy} from 'lodash'
-import {ForbiddenException, Inject, Injectable} from '@nestjs/common'
+import {ForbiddenException, Injectable} from '@nestjs/common'
 import {InjectRepository} from '@nestjs/typeorm'
 
 import {TypeOrm} from '../lib/services'
@@ -13,13 +13,15 @@ export interface Subject {
   id: string
 }
 
+export type SubjectInput = Pick<RoleGrant, 'subjectTable' | 'subjectId'>
+
 @Injectable()
 export class RoleGrantsService {
   typeorm = TypeOrm.init(this.repo)
 
   constructor(
     @InjectRepository(RoleGrant) private readonly repo: Repository<RoleGrant>,
-    @Inject(RolesRegistry) private readonly registry: RolesRegistry
+    private readonly registry: RolesRegistry
   ) {}
 
   find = this.typeorm.find
@@ -122,7 +124,7 @@ export class RoleGrantsService {
   /**
    * Map RoleGrants to Role objects.
    */
-  private toRoles(grant: RoleGrant): Role {
+  private toRoles = (grant: RoleGrant): Role => {
     const role = this.registry.findRole(grant.roleKey)
 
     if (!role) {

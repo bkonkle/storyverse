@@ -10,18 +10,18 @@ import {
   UpdateUniverseInput,
 } from '../Schema'
 import {fromOrderBy} from '../lib/resolvers'
-import UniversesService from './UniversesService'
-import ProfilesService from '../profiles/ProfilesService'
 import {JwtGuard} from '../lib/auth/JwtGuard'
 import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
-import {Authz, Censored} from './UniverseUtils'
+import UniverseAuthz from './UniverseAuthz'
+import UniversesService from './UniversesService'
+import {Censored} from './UniverseUtils'
 
 @Resolver('Universe')
 @UseGuards(JwtGuard)
 export class UniverseResolvers {
   constructor(
-    public readonly service: UniversesService,
-    private readonly profiles: ProfilesService
+    private readonly service: UniversesService,
+    private readonly authz: UniverseAuthz
   ) {}
 
   @Query()
@@ -59,11 +59,7 @@ export class UniverseResolvers {
     @Args('input') input: CreateUniverseInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    await this.profiles
-      .findOne({
-        where: {id: input.ownerProfileId},
-      })
-      .then(Authz.create(username))
+    await this.authz.create(username, input.ownerProfileId)
 
     const universe = await this.service.create(input)
 
@@ -76,7 +72,7 @@ export class UniverseResolvers {
     @Args('input') input: UpdateUniverseInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    await this.service.findOne({where: {id}}).then(Authz.update(username))
+    await this.authz.update(username, id)
 
     const universe = await this.service.update(id, input)
 
@@ -88,9 +84,7 @@ export class UniverseResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    const existing = await this.service
-      .findOne({where: {id}})
-      .then(Authz.remove(username))
+    const existing = await this.authz.remove(username, id)
 
     await this.service.delete(id)
 

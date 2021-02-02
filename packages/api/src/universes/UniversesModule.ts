@@ -6,6 +6,7 @@ import ProfilesModule from '../profiles/ProfilesModule'
 import Universe from './Universe.entity'
 import {UniverseResolvers} from './UniverseResolvers'
 import {UniversesService} from './UniversesService'
+import UniverseAuthz from './UniverseAuthz'
 import Roles from './UniverseRoles'
 
 @Module({
@@ -14,7 +15,7 @@ import Roles from './UniverseRoles'
     TypeOrmModule.forFeature([Universe]),
     AuthzModule.register(Roles),
   ],
-  providers: [UniverseResolvers, UniversesService],
+  providers: [UniverseAuthz, UniverseResolvers, UniversesService],
   exports: [UniversesService],
 })
 export class UniversesModule {}

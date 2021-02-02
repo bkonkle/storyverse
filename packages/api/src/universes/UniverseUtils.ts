@@ -1,50 +1,19 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common'
-
-import Profile from '../profiles/Profile.entity'
-import UniverseEntity from './Universe.entity'
+import {Subject, SubjectInput} from '../authorization/RoleGrantsService'
 import * as ProfileUtils from '../profiles/ProfileUtils'
+import UniverseEntity, {TABLE_NAME} from './Universe.entity'
 
-export namespace Authz {
-  export const isAuthorized = (universe: UniverseEntity, username?: string) => {
-    if (username && username === universe.ownerProfile.user.username) {
-      return true
-    }
+export const isOwner = (universe: UniverseEntity, username?: string) =>
+  username && username === universe.ownerProfile.user.username
 
-    return false
-  }
+export const subject = (id: string): Subject => ({
+  table: TABLE_NAME,
+  id,
+})
 
-  export const create = (username: string) => (profile?: Profile) => {
-    if (!profile) {
-      throw new BadRequestException(
-        'The specified owned-by `Profile` was not found.'
-      )
-    }
-
-    if (username !== profile.user.username) {
-      throw new ForbiddenException()
-    }
-
-    return profile
-  }
-
-  export const update = (username?: string) => (universe?: UniverseEntity) => {
-    if (!universe) {
-      throw new NotFoundException()
-    }
-
-    if (!isAuthorized(universe, username)) {
-      throw new ForbiddenException()
-    }
-
-    return universe
-  }
-
-  export const remove = update
-}
+export const subjectInput = (id: string): SubjectInput => ({
+  subjectTable: TABLE_NAME,
+  subjectId: id,
+})
 
 export namespace Censored {
   export type Universe = Omit<UniverseEntity, 'ownerProfile'> & {
@@ -54,7 +23,7 @@ export namespace Censored {
   export const censor = (username?: string) => (
     universe: UniverseEntity
   ): Universe => {
-    if (Authz.isAuthorized(universe, username)) {
+    if (isOwner(universe, username)) {
       return universe
     }
 

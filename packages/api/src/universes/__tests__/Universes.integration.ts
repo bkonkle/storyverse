@@ -18,6 +18,7 @@ import User from '../../users/User.entity'
 import Profile from '../../profiles/Profile.entity'
 import Universe from '../../universes/Universe.entity'
 import RoleGrantsService from '../../authorization/RoleGrantsService'
+import {subjectInput} from '../UniverseUtils'
 
 describe('Universe', () => {
   let app: INestApplication
@@ -624,8 +625,7 @@ describe('Universe', () => {
       const grant = await grants.create({
         roleKey: Manager.key,
         profileId: otherProfile.id,
-        subjectTable: 'universe',
-        subjectId: universe.id,
+        ...subjectInput(universe.id),
       })
 
       if (!grant) {
