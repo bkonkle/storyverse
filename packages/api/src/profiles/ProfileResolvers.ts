@@ -114,7 +114,7 @@ export default class ProfileResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub({require: true}) username: string
   ): Promise<MutateProfileResult> {
-    const existing = await this.authz.update(username, id)
+    const existing = await this.authz.delete(username, id)
 
     await this.service.delete(id)
 

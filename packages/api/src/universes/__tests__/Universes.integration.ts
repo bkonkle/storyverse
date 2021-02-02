@@ -10,7 +10,7 @@ import {AppModule} from '../../AppModule'
 import {ProcessEnv} from '../../config/ConfigService'
 import {Validation} from '../../lib/resolvers'
 import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
-import {Manager} from '../../universes/UniverseRoles'
+import {Admin, Manager} from '../../universes/UniverseRoles'
 import TestData from '../../utils/test/TestData'
 import ProfileFactory from '../../utils/test/factories/ProfileFactory'
 import UniverseFactory from '../../utils/test/factories/UniverseFactory'
@@ -205,7 +205,7 @@ describe('Universe', () => {
       ])
     })
 
-    it('requires the token sub to match the related ownerProfile.user.username', async () => {
+    it('requires authorization', async () => {
       const {token} = credentials
       const universe = UniverseFactory.makeCreateInput({
         ownerProfileId: otherProfile.id,
@@ -587,7 +587,7 @@ describe('Universe', () => {
       ])
     })
 
-    it('requires the token sub to match the related ownerProfile.user.username', async () => {
+    it('requires authorization', async () => {
       const {token} = altCredentials
       const variables = {
         id: universe.id,
@@ -768,7 +768,7 @@ describe('Universe', () => {
       ])
     })
 
-    it('requires the token sub to match the related ownerProfile.user.username', async () => {
+    it('requires authorization', async () => {
       const {token} = altCredentials
       const variables = {id: universe.id}
 
@@ -791,6 +791,38 @@ describe('Universe', () => {
           }),
         }),
       ])
+    })
+
+    it('allows users with the Delete permission', async () => {
+      const {token} = altCredentials
+      const variables = {id: universe.id}
+
+      const grant = await grants.create({
+        roleKey: Admin.key,
+        profileId: otherProfile.id,
+        ...subjectInput(universe.id),
+      })
+
+      if (!grant) {
+        fail('Grant not created')
+      }
+
+      universe.resetAfter()
+
+      const {data} = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
+        mutation,
+        variables,
+        {token}
+      )
+
+      expect(data.deleteUniverse).toEqual({
+        universe: {
+          id: universe.id,
+        },
+      })
+
+      const deleted = await universes.findOne(universe.id)
+      expect(deleted).toBeUndefined()
     })
   })
 })

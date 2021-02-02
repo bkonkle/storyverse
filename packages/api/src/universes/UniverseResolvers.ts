@@ -84,7 +84,7 @@ export class UniverseResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    const existing = await this.authz.remove(username, id)
+    const existing = await this.authz.delete(username, id)
 
     await this.service.delete(id)
 

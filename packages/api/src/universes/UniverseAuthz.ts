@@ -5,10 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 
+import Profile from '../profiles/Profile.entity'
 import ProfilesService from '../profiles/ProfilesService'
 import RoleGrantsService from '../authorization/RoleGrantsService'
+import Universe from './Universe.entity'
 import UniversesService from './UniversesService'
-import {Update} from './UniverseRoles'
+import {Update, Delete} from './UniverseRoles'
 import {isOwner, subject} from './UniverseUtils'
 
 @Injectable()
@@ -19,7 +21,10 @@ export default class UniverseAuthz {
     private readonly roles: RoleGrantsService
   ) {}
 
-  create = async (username: string, ownerProfileId: string) => {
+  create = async (
+    username: string,
+    ownerProfileId: string
+  ): Promise<Profile> => {
     const profile = await this.profiles.findOne({
       where: {id: ownerProfileId},
     })
@@ -33,30 +38,61 @@ export default class UniverseAuthz {
     if (username !== profile.user.username) {
       throw new ForbiddenException()
     }
+
+    return profile
   }
 
-  update = async (username: string, id: string) => {
-    const existing = await this.service.findOne({where: {id}})
-
-    if (!existing) {
-      throw new NotFoundException()
-    }
+  update = async (username: string, id: string): Promise<Universe> => {
+    const existing = await this.getExisting(id)
 
     if (isOwner(existing, username)) {
       return existing
     }
 
-    const profile = await this.profiles.getByUsername(username)
-    if (!profile) {
-      throw new ForbiddenException()
-    }
+    const profile = await this.getProfile(username)
 
     await this.roles.requirePermissions(
       [Update],
       profile.id,
       subject(existing.id)
     )
+
+    return existing
   }
 
-  remove = this.update
+  delete = async (username: string, id: string): Promise<Universe> => {
+    const existing = await this.getExisting(id)
+
+    if (isOwner(existing, username)) {
+      return existing
+    }
+
+    const profile = await this.getProfile(username)
+
+    await this.roles.requirePermissions(
+      [Delete],
+      profile.id,
+      subject(existing.id)
+    )
+
+    return existing
+  }
+
+  private getExisting = async (id: string): Promise<Universe> => {
+    const existing = await this.service.findOne({where: {id}})
+    if (!existing) {
+      throw new NotFoundException()
+    }
+
+    return existing
+  }
+
+  private getProfile = async (username: string): Promise<Profile> => {
+    const profile = await this.profiles.getByUsername(username)
+    if (!profile) {
+      throw new ForbiddenException()
+    }
+
+    return profile
+  }
 }

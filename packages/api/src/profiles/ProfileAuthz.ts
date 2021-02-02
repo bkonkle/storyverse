@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common'
 
 import User from '../users/User.entity'
+import Profile from './Profile.entity'
 import ProfilesService from './ProfilesService'
 import {isOwner} from './ProfileUtils'
 
@@ -27,12 +28,8 @@ export default class ProfileAuthz {
     return user
   }
 
-  update = async (username: string, id: string) => {
-    const existing = await this.service.findOne({where: {id}})
-
-    if (!existing) {
-      throw new NotFoundException()
-    }
+  update = async (username: string, id: string): Promise<Profile> => {
+    const existing = await this.getExisting(id)
 
     if (isOwner(existing, username)) {
       return existing
@@ -41,5 +38,15 @@ export default class ProfileAuthz {
     throw new ForbiddenException()
   }
 
-  remove = this.update
+  delete = this.update
+
+  private getExisting = async (id: string): Promise<Profile> => {
+    const existing = await this.service.findOne({where: {id}})
+
+    if (!existing) {
+      throw new NotFoundException()
+    }
+
+    return existing
+  }
 }
