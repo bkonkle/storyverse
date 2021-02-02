@@ -10,31 +10,37 @@ import {AppModule} from '../../AppModule'
 import {ProcessEnv} from '../../config/ConfigService'
 import {Validation} from '../../lib/resolvers'
 import {GraphQl, OAuth2, TypeOrm} from '../../lib/testing'
-import {Admin, Manager} from '../../universes/UniverseRoles'
 import TestData from '../../utils/test/TestData'
 import ProfileFactory from '../../utils/test/factories/ProfileFactory'
 import UniverseFactory from '../../utils/test/factories/UniverseFactory'
+import SeriesFactory from '../../utils/test/factories/SeriesFactory'
+import * as UniverseRoles from '../../universes/UniverseRoles'
 import User from '../../users/User.entity'
 import Profile from '../../profiles/Profile.entity'
 import Universe from '../../universes/Universe.entity'
 import RoleGrantsService from '../../authorization/RoleGrantsService'
-import {subjectInput} from '../UniverseUtils'
+import Series from '../Series.entity'
+import {Manager} from '../SeriesRoles'
+import {subjectInput} from '../SeriesUtils'
 
-describe('Universe', () => {
+describe('Series', () => {
   let app: INestApplication
   let graphql: GraphQl.Test
   let db: Connection
   let users: Repository<User>
   let profiles: Repository<Profile>
   let universes: Repository<Universe>
+  let seriesRepo: Repository<Series>
   let grants: RoleGrantsService
   let typeorm: TypeOrm.Utils
 
   let user: User
   let profile: Profile
+  let universe: Universe
 
   let otherUser: User
   let otherProfile: Profile
+  let otherUniverse: Universe
 
   const {credentials, altCredentials} = OAuth2.init()
 
@@ -42,17 +48,7 @@ describe('Universe', () => {
     ...process.env,
   }
 
-  const tables = ['users', 'profiles', 'universes']
-
-  const mockCensor = (universe: Partial<Universe>) => ({
-    ...universe,
-    ownerProfile: {
-      ...universe.ownerProfile,
-      email: null,
-      userId: null,
-      user: null,
-    },
-  })
+  const tables = ['users', 'profiles', 'universes', 'series']
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
@@ -75,6 +71,7 @@ describe('Universe', () => {
     users = db.getRepository(User)
     profiles = db.getRepository(Profile)
     universes = db.getRepository(Universe)
+    seriesRepo = db.getRepository(Series)
 
     grants = app.get(RoleGrantsService)
 
@@ -90,6 +87,9 @@ describe('Universe', () => {
 
     user = await users.save({username, isActive: true})
     profile = await profiles.save(ProfileFactory.make({userId: user.id, user}))
+    universe = await universes.save(
+      UniverseFactory.make({ownerProfileId: profile.id, ownerProfile: profile})
+    )
   })
 
   beforeAll(async () => {
@@ -99,67 +99,73 @@ describe('Universe', () => {
     otherProfile = await profiles.save(
       ProfileFactory.make({userId: otherUser.id, user: otherUser})
     )
+    otherUniverse = await universes.save(
+      UniverseFactory.make({
+        ownerProfileId: otherProfile.id,
+        ownerProfile: otherProfile,
+      })
+    )
   })
 
-  describe('Mutation: createUniverse', () => {
+  describe('Mutation: createSeries', () => {
     const mutation = `
-      mutation CreateUniverse($input: CreateUniverseInput!) {
-        createUniverse(input: $input) {
+      mutation CreateSeries($input: CreateSeriesInput!) {
+        createSeries(input: $input) {
           universe {
             id
             name
             description
-            ownerProfileId
+            universeId
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'ownerProfileId'] as const
+    const fields = ['id', 'name', 'description', 'universeId'] as const
 
-    it('creates a new universe', async () => {
+    it('creates a new series', async () => {
       const {token} = credentials
-      const universe = UniverseFactory.makeCreateInput({
-        ownerProfileId: profile.id,
+      const series = SeriesFactory.makeCreateInput({
+        universeId: universe.id,
       })
-      const variables = {input: universe}
+      const variables = {input: series}
 
-      const expected: Pick<Universe, typeof fields[number]> = {
+      const expected: Pick<Series, typeof fields[number]> = {
         ...variables.input,
         id: expect.stringMatching(Validation.uuidRegex),
       }
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'createUniverse'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'createSeries'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.createUniverse).toHaveProperty(
-        'universe',
+      expect(data.createSeries).toHaveProperty(
+        'series',
         expect.objectContaining(expected)
       )
 
-      const created = await universes.findOne(data.createUniverse.universe?.id)
+      const created = await seriesRepo.findOne(data.createSeries.series?.id)
 
       if (!created) {
-        fail('No universe created.')
+        fail('No series created.')
       }
 
       expect(created).toMatchObject({
         ...expected,
-        id: data.createUniverse.universe?.id,
+        id: data.createSeries.series?.id,
       })
 
-      await universes.delete(created.id)
+      await seriesRepo.delete(created.id)
     })
 
-    it('requires a name and an ownerProfileId', async () => {
+    it('requires a name and an universeId', async () => {
       const {token} = credentials
-      const universe = omit(
-        UniverseFactory.makeCreateInput({ownerProfileId: profile.id}),
-        ['name', 'ownerProfileId']
+      const series = omit(
+        SeriesFactory.makeCreateInput({universeId: universe.id}),
+        ['name', 'universeId']
       )
-      const variables = {input: universe}
+      const variables = {input: series}
 
       const body = await graphql.mutation(mutation, variables, {
         token,
@@ -175,17 +181,17 @@ describe('Universe', () => {
         }),
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field ownerProfileId of required type UUID! was not provided.'
+            'Field universeId of required type UUID! was not provided.'
           ),
         }),
       ])
     })
 
     it('requires authentication', async () => {
-      const universe = UniverseFactory.makeCreateInput({
-        ownerProfileId: profile.id,
+      const series = SeriesFactory.makeCreateInput({
+        universeId: universe.id,
       })
-      const variables = {input: universe}
+      const variables = {input: series}
 
       const body = await graphql.mutation(mutation, variables, {warn: false})
 
@@ -207,10 +213,10 @@ describe('Universe', () => {
 
     it('requires authorization', async () => {
       const {token} = credentials
-      const universe = UniverseFactory.makeCreateInput({
-        ownerProfileId: otherProfile.id,
+      const series = SeriesFactory.makeCreateInput({
+        universeId: otherUniverse.id,
       })
-      const variables = {input: universe}
+      const variables = {input: series}
 
       const body = await graphql.mutation(mutation, variables, {
         token,
@@ -234,20 +240,17 @@ describe('Universe', () => {
     })
   })
 
-  describe('Query: getUniverse', () => {
+  describe('Query: getSeries', () => {
     const query = `
-        query GetUniverse($id: UUID!) {
-          getUniverse(id: $id) {
+        query GetSeries($id: UUID!) {
+          getSeries(id: $id) {
             id
             name
             description
-            ownerProfileId
-            ownerProfile {
-              email
-              userId
-              user {
-                id
-              }
+            universeId
+            universe {
+              name
+              description
             }
           }
         }
@@ -256,86 +259,58 @@ describe('Universe', () => {
       'id',
       'name',
       'description',
-      'ownerProfileId',
-      'ownerProfile.email',
-      'ownerProfile.userId',
-      'ownerProfile.user.id',
+      'universeId',
+      'universe.name',
+      'universe.description',
     ]
 
-    const universe = new TestData(
-      () => universes,
+    const series = new TestData(
+      () => seriesRepo,
       () =>
-        UniverseFactory.make({
-          ownerProfileId: profile.id,
-          ownerProfile: profile,
+        SeriesFactory.make({
+          universeId: universe.id,
+          universe,
         })
     )
 
-    it('retrieves an existing universe', async () => {
+    it('retrieves an existing series', async () => {
       const {token} = credentials
-      const variables = {id: universe.id}
+      const variables = {id: series.id}
 
-      const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
+      const {data} = await graphql.query<Pick<Query, 'getSeries'>>(
         query,
         variables,
         {token}
       )
 
-      expect(data.getUniverse).toEqual(pick(universe.value, fields))
+      expect(data.getSeries).toEqual(pick(series.value, fields))
     })
 
-    it('returns nothing when no universe is found', async () => {
+    it('returns nothing when no series is found', async () => {
       const {token} = credentials
-      const variables = {id: universe.id}
+      const variables = {id: series.id}
 
-      await universe.delete()
+      await series.delete()
 
-      const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
+      const {data} = await graphql.query<Pick<Query, 'getSeries'>>(
         query,
         variables,
         {token}
       )
 
-      expect(data.getUniverse).toBeFalsy()
-    })
-
-    it('censors the profile.user for anonymous users', async () => {
-      const variables = {id: universe.id}
-      const expected = pick(universe.value, fields)
-
-      const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
-        query,
-        variables,
-        {}
-      )
-
-      expect(data.getUniverse).toEqual(mockCensor(expected))
-    })
-
-    it('censors the profile.user for unauthorized users', async () => {
-      const {token} = altCredentials
-      const variables = {id: universe.id}
-      const expected = pick(universe.value, fields)
-
-      const {data} = await graphql.query<Pick<Query, 'getUniverse'>>(
-        query,
-        variables,
-        {token}
-      )
-
-      expect(data.getUniverse).toEqual(mockCensor(expected))
+      expect(data.getSeries).toBeFalsy()
     })
   })
 
-  describe('Query: getManyUniverses', () => {
+  describe('Query: getManySeries', () => {
     const query = `
-      query GetManyUniverses(
-        $where: UniverseCondition
-        $orderBy: [UniversesOrderBy!]
+      query GetManySeries(
+        $where: SeriesCondition
+        $orderBy: [SeriesOrderBy!]
         $pageSize: Int
         $page: Int
       ) {
-        getManyUniverses(
+        getManySeries(
         where: $where
         orderBy: $orderBy
         pageSize: $pageSize
@@ -345,13 +320,10 @@ describe('Universe', () => {
             id
             name
             description
-            ownerProfileId
-            ownerProfile {
-              email
-              userId
-              user {
-                id
-              }
+            universeId
+            universe {
+              name
+              description
             }
           }
           count
@@ -365,85 +337,42 @@ describe('Universe', () => {
       'id',
       'name',
       'description',
-      'ownerProfileId',
-      'ownerProfile.email',
-      'ownerProfile.userId',
-      'ownerProfile.user.id',
+      'universeId',
+      'universe.name',
+      'universe.description',
     ]
 
-    const universe = new TestData(
-      () => universes,
+    const series = new TestData(
+      () => seriesRepo,
       () =>
-        UniverseFactory.make({
-          ownerProfileId: profile.id,
-          ownerProfile: profile,
+        SeriesFactory.make({
+          universeId: universe.id,
+          universe,
         })
     )
-    const otherUniverse = new TestData(
-      () => universes,
+    const otherSeries = new TestData(
+      () => seriesRepo,
       () =>
-        UniverseFactory.make({
-          ownerProfileId: otherProfile.id,
-          ownerProfile: otherProfile,
+        SeriesFactory.make({
+          universeId: otherUniverse.id,
+          universe,
         })
     )
-    it('queries existing universes', async () => {
+
+    it('queries existing series', async () => {
       const {token} = credentials
       const variables = {}
 
-      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
+      const {data} = await graphql.query<Pick<Query, 'getManySeries'>>(
         query,
         variables,
         {token}
       )
 
-      expect(data.getManyUniverses).toEqual({
+      expect(data.getManySeries).toEqual({
         data: expect.arrayContaining([
-          pick(universe.value, fields),
-          mockCensor(pick(otherUniverse.value, fields)),
-        ]),
-        count: 2,
-        page: 1,
-        pageCount: 1,
-        total: 2,
-      })
-    })
-
-    it('censors the profile.user for anonymous users', async () => {
-      const variables = {}
-
-      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
-        query,
-        variables,
-        {}
-      )
-
-      expect(data.getManyUniverses).toEqual({
-        data: expect.arrayContaining([
-          mockCensor(pick(universe.value, fields)),
-          mockCensor(pick(otherUniverse.value, fields)),
-        ]),
-        count: 2,
-        page: 1,
-        pageCount: 1,
-        total: 2,
-      })
-    })
-
-    it('censors the profile.user for unauthorized users', async () => {
-      const {token} = altCredentials
-      const variables = {}
-
-      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
-        query,
-        variables,
-        {token}
-      )
-
-      expect(data.getManyUniverses).toEqual({
-        data: expect.arrayContaining([
-          mockCensor(pick(universe.value, fields)),
-          pick(otherUniverse.value, fields),
+          pick(series.value, fields),
+          pick(otherSeries.value, fields),
         ]),
         count: 2,
         page: 1,
@@ -453,56 +382,56 @@ describe('Universe', () => {
     })
   })
 
-  describe('Mutation: updateUniverse', () => {
+  describe('Mutation: updateSeries', () => {
     const mutation = `
-      mutation UpdateUniverse($id: UUID!, $input: UpdateUniverseInput!) {
-        updateUniverse(id: $id, input: $input) {
-          universe {
+      mutation UpdateSeries($id: UUID!, $input: UpdateSeriesInput!) {
+        updateSeries(id: $id, input: $input) {
+          series {
             id
             name
             description
-            ownerProfileId
+            universeId
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'ownerProfileId'] as const
+    const fields = ['id', 'name', 'description', 'universeId'] as const
 
-    const universe = new TestData(
-      () => universes,
+    const series = new TestData(
+      () => seriesRepo,
       () =>
-        UniverseFactory.make({
-          ownerProfileId: profile.id,
-          ownerProfile: profile,
+        SeriesFactory.make({
+          universeId: universe.id,
+          universe,
         })
     )
 
-    it('updates an existing universe', async () => {
+    it('updates an existing series', async () => {
       const {token} = credentials
       const variables = {
-        id: universe.id,
+        id: series.id,
         input: {name: faker.random.word()},
       }
 
-      const expected: Pick<Universe, typeof fields[number]> = {
-        ...pick(universe.value!, fields),
+      const expected: Pick<Series, typeof fields[number]> = {
+        ...pick(series.value!, fields),
         name: variables.input.name,
       }
 
-      universe.resetAfter()
+      series.resetAfter()
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'updateUniverse'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'updateSeries'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.updateUniverse).toHaveProperty(
-        'universe',
+      expect(data.updateSeries).toHaveProperty(
+        'series',
         expect.objectContaining(expected)
       )
 
-      const updated = await universes.findOne(universe.id)
+      const updated = await seriesRepo.findOne(series.id)
       expect(updated).toMatchObject(expected)
     })
 
@@ -536,7 +465,7 @@ describe('Universe', () => {
 
     it('requires authentication', async () => {
       const variables = {
-        id: universe.id,
+        id: series.id,
         input: {name: faker.random.word()},
       }
 
@@ -558,14 +487,14 @@ describe('Universe', () => {
       ])
     })
 
-    it('returns an error if no existing universe was found', async () => {
+    it('returns an error if no existing series was found', async () => {
       const {token} = credentials
       const variables = {
         id: faker.random.uuid(),
         input: {name: faker.random.word()},
       }
 
-      const body = await graphql.mutation<Pick<Mutation, 'updateUniverse'>>(
+      const body = await graphql.mutation<Pick<Mutation, 'updateSeries'>>(
         mutation,
         variables,
         {token, warn: false}
@@ -590,7 +519,7 @@ describe('Universe', () => {
     it('requires authorization', async () => {
       const {token} = altCredentials
       const variables = {
-        id: universe.id,
+        id: series.id,
         input: {name: faker.random.word()},
       }
 
@@ -618,35 +547,35 @@ describe('Universe', () => {
     it('allows users with the Update permission', async () => {
       const {token} = altCredentials
       const variables = {
-        id: universe.id,
+        id: series.id,
         input: {name: faker.random.word()},
       }
 
       const grant = await grants.create({
         roleKey: Manager.key,
         profileId: otherProfile.id,
-        ...subjectInput(universe.id),
+        ...subjectInput(series.id),
       })
 
       if (!grant) {
         fail('Grant not created')
       }
 
-      const expected: Pick<Universe, typeof fields[number]> = {
-        ...pick(universe.value!, fields),
+      const expected: Pick<Series, typeof fields[number]> = {
+        ...pick(series.value!, fields),
         name: variables.input.name,
       }
 
-      universe.resetAfter()
+      series.resetAfter()
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'updateUniverse'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'updateSeries'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.updateUniverse).toHaveProperty(
-        'universe',
+      expect(data.updateSeries).toHaveProperty(
+        'series',
         expect.objectContaining(expected)
       )
 
@@ -654,45 +583,45 @@ describe('Universe', () => {
     })
   })
 
-  describe('Mutation: deleteUniverse', () => {
+  describe('Mutation: deleteSeries', () => {
     const mutation = `
-      mutation DeleteUniverse($id: UUID!) {
-        deleteUniverse(id: $id) {
-          universe {
+      mutation DeleteSeries($id: UUID!) {
+        deleteSeries(id: $id) {
+          series {
             id
           }
         }
       }
     `
 
-    const universe = new TestData(
-      () => universes,
+    const series = new TestData(
+      () => seriesRepo,
       () =>
-        UniverseFactory.make({
-          ownerProfileId: profile.id,
-          ownerProfile: profile,
+        SeriesFactory.make({
+          universeId: universe.id,
+          universe,
         })
     )
 
-    it('deletes an existing universe', async () => {
+    it('deletes an existing series', async () => {
       const {token} = credentials
-      const variables = {id: universe.id}
+      const variables = {id: series.id}
 
-      universe.resetAfter()
+      series.resetAfter()
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'deleteSeries'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.deleteUniverse).toEqual({
-        universe: {
+      expect(data.deleteSeries).toEqual({
+        series: {
           id: universe.id,
         },
       })
 
-      const deleted = await universes.findOne(universe.id)
+      const deleted = await seriesRepo.findOne(series.id)
       expect(deleted).toBeUndefined()
     })
 
@@ -722,7 +651,7 @@ describe('Universe', () => {
     })
 
     it('requires authentication', async () => {
-      const variables = {id: universe.id}
+      const variables = {id: series.id}
 
       const body = await graphql.mutation(mutation, variables, {warn: false})
 
@@ -742,11 +671,11 @@ describe('Universe', () => {
       ])
     })
 
-    it('returns an error if no existing universe was found', async () => {
+    it('returns an error if no existing series was found', async () => {
       const {token} = credentials
       const variables = {id: faker.random.uuid()}
 
-      const body = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
+      const body = await graphql.mutation<Pick<Mutation, 'deleteSeries'>>(
         mutation,
         variables,
         {token, warn: false}
@@ -770,7 +699,7 @@ describe('Universe', () => {
 
     it('requires authorization', async () => {
       const {token} = altCredentials
-      const variables = {id: universe.id}
+      const variables = {id: series.id}
 
       const body = await graphql.mutation(mutation, variables, {
         token,
@@ -793,12 +722,12 @@ describe('Universe', () => {
       ])
     })
 
-    it('allows users with the Delete permission', async () => {
+    it('allows users with the ManageSeries permission', async () => {
       const {token} = altCredentials
       const variables = {id: universe.id}
 
       const grant = await grants.create({
-        roleKey: Admin.key,
+        roleKey: UniverseRoles.ManageSeries.key,
         profileId: otherProfile.id,
         ...subjectInput(universe.id),
       })
@@ -807,21 +736,21 @@ describe('Universe', () => {
         fail('Grant not created')
       }
 
-      universe.resetAfter()
+      series.resetAfter()
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'deleteSeries'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.deleteUniverse).toEqual({
-        universe: {
+      expect(data.deleteSeries).toEqual({
+        series: {
           id: universe.id,
         },
       })
 
-      const deleted = await universes.findOne(universe.id)
+      const deleted = await seriesRepo.findOne(series.id)
       expect(deleted).toBeUndefined()
     })
   })
