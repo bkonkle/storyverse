@@ -1,11 +1,5 @@
 import {Permission, Role} from '../authorization/Roles'
 
-export const Curate: Permission = {
-  key: 'UNIVERSE_CURATE',
-  name: 'Curate Universe',
-  description: 'Curate content within a particular Universe',
-}
-
 export const Update: Permission = {
   key: 'UNIVERSE_UPDATE',
   name: 'Update Universe',
@@ -30,20 +24,12 @@ export const ManageRoles: Permission = {
   description: 'Grant or revoke User Roles for a particular Universe',
 }
 
-export const Curator: Role = {
-  key: 'UNIVERSE_CURATOR',
-  name: 'Universe Curator',
-  description:
-    'Able to curate content and update the details of a particular Universe',
-  permissions: [Curate],
-}
-
 export const Manager: Role = {
   key: 'UNIVERSE_MANAGER',
   name: 'Universe Manager',
   description:
     "Able to curate content, manage series', and update details for a particular Universe",
-  permissions: [...Curator.permissions, Update, ManageSeries],
+  permissions: [Update, ManageSeries],
 }
 
 export const Admin: Role = {
@@ -53,8 +39,8 @@ export const Admin: Role = {
   permissions: [...Manager.permissions, Delete, ManageRoles],
 }
 
-export const permissions = [Curate, Update, Delete, ManageSeries, ManageRoles]
+export const permissions = [Update, Delete, ManageSeries, ManageRoles]
 
-export const roles = [Curator, Manager, Admin]
+export const roles = [Manager, Admin]
 
 export default {roles, permissions}

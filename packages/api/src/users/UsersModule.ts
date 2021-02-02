@@ -10,6 +10,4 @@ import {UsersService} from './UsersService'
   providers: [UserResolvers, UsersService],
   exports: [UsersService],
 })
-export class UsersModule {}
-
-export default UsersModule
+export default class UsersModule {}

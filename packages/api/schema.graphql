@@ -8,10 +8,14 @@ type Query {
   getCurrentUser: User
   """Get many User Profiles, with optional filtering conditions"""
   getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
+  """Get many Series, with optional filtering conditions"""
+  getManySeries(where: SeriesCondition, orderBy: [SeriesOrderBy!], pageSize: Int, page: Int): SeriesPage!
   """Get many Universes, with optional filtering conditions"""
   getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
   """Get an existing User Profile by ID"""
   getProfile(id: UUID!): Profile
+  """Get an existing Series by ID"""
+  getSeries(id: UUID!): Series
   """Get an existing Universe by ID"""
   getUniverse(id: UUID!): Universe
 }
@@ -104,6 +108,41 @@ type Role {
   """The Permissions granted by the Role"""
   permissions: [Permission!]!
 }
+input SeriesCondition {
+  name: String
+  universeId: UUID
+}
+enum SeriesOrderBy {
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
+type SeriesPage {
+  data: [Series!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+"""A Series"""
+type Series {
+  id: UUID!
+  """The Series name"""
+  name: String!
+  """Editor json content for the Series description"""
+  description: JSONObject
+  """The id of the Universe that the Series belongs to"""
+  universeId: UUID!
+  """The Universe that the Series belongs to"""
+  universe: Profile!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
 input UniverseCondition {
   name: String
   ownerProfileId: UUID
@@ -144,6 +183,8 @@ type Mutation {
   createProfile(input: CreateProfileInput!): MutateProfileResult!
   """Grant a new Role to a User Profile"""
   createRoleGrant(input: CreateRoleGrantInput!): MutateRoleGrantResult!
+  """Create a new Series"""
+  createSeries(input: CreateSeriesInput!): MutateSeriesResult!
   """Create a new Universe"""
   createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
   """Create a new User"""
@@ -152,12 +193,16 @@ type Mutation {
   deleteProfile(id: UUID!): MutateProfileResult!
   """Remove an existing RoleGrant from a User Profile"""
   deleteRoleGrant(id: UUID!): MutateRoleGrantResult!
+  """Remove an existing Series by ID"""
+  deleteSeries(id: UUID!): MutateSeriesResult!
   """Remove an existing Universe by ID"""
   deleteUniverse(id: UUID!): MutateUniverseResult!
   """Update the currently authenticated User"""
   updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
   """Update an existing User Profile by ID"""
   updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+  """Update an existing Series by ID"""
+  updateSeries(id: UUID!, input: UpdateSeriesInput!): MutateSeriesResult!
   """Update an existing Universe by ID"""
   updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
 }
@@ -200,6 +245,15 @@ type RoleGrant {
   createdAt: DateTime!
   updatedAt: DateTime!
 }
+"""Input to create a new Series"""
+input CreateSeriesInput {
+  name: String!
+  description: JSONObject
+  universeId: UUID!
+}
+type MutateSeriesResult {
+  series: Series
+}
 """Input to create a new Universe"""
 input CreateUniverseInput {
   name: String!
@@ -224,6 +278,12 @@ input UpdateProfileInput {
   picture: String
   content: JSONObject
   userId: String
+}
+"""Input to update an existing Series"""
+input UpdateSeriesInput {
+  name: String
+  description: JSONObject
+  universeId: UUID
 }
 """Input to update an existing Universe"""
 input UpdateUniverseInput {

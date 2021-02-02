@@ -18,6 +18,4 @@ import Roles from './UniverseRoles'
   providers: [UniverseAuthz, UniverseResolvers, UniversesService],
   exports: [UniversesService],
 })
-export class UniversesModule {}
-
-export default UniversesModule
+export default class UniversesModule {}

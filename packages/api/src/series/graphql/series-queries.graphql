@@ -1,0 +1,70 @@
+"""
+A Series
+"""
+type Series {
+  id: UUID!
+
+  """
+  The Series name
+  """
+  name: String!
+
+  """
+  Editor json content for the Series description
+  """
+  description: JSONObject
+
+  """
+  The id of the Universe that the Series belongs to
+  """
+  universeId: UUID!
+
+  """
+  The Universe that the Series belongs to
+  """
+  universe: Profile!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SeriesPage {
+  data: [Series!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+
+input SeriesCondition {
+  name: String
+  universeId: UUID
+}
+
+enum SeriesOrderBy {
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
+
+extend type Query {
+  """
+  Get an existing Series by ID
+  """
+  getSeries(id: UUID!): Series
+
+  """
+  Get many Series, with optional filtering conditions
+  """
+  getManySeries(
+    where: SeriesCondition
+    orderBy: [SeriesOrderBy!]
+    pageSize: Int
+    page: Int
+  ): SeriesPage!
+}

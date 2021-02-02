@@ -12,6 +12,4 @@ import ProfilesService from './ProfilesService'
   providers: [ProfileAuthz, ProfileResolvers, ProfilesService],
   exports: [ProfilesService],
 })
-export class ProfilesModule {}
-
-export default ProfilesModule
+export default class ProfilesModule {}

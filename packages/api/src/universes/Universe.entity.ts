@@ -1,7 +1,8 @@
-import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm'
+import {Entity, Column, ManyToOne, JoinColumn, OneToMany} from 'typeorm'
 
-import Profile from '../profiles/Profile.entity'
 import {UuidTable} from '../lib/data/Uuid'
+import Profile from '../profiles/Profile.entity'
+import Series from '../series/Series.entity'
 
 export const TABLE_NAME = 'universes'
 
@@ -33,6 +34,9 @@ export class Universe extends UuidTable {
   @ManyToOne(() => Profile, (profile) => profile.universesOwned, {eager: true})
   @JoinColumn({name: 'owner_profile_id'})
   ownerProfile!: Profile
+
+  @OneToMany(() => Series, (series) => series.universe)
+  series!: Series[]
 }
 
 export default Universe
