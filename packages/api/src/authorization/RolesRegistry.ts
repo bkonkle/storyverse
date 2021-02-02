@@ -95,7 +95,7 @@ export class RolesRegistry {
    * Throws an error if the given Role key does not exist in the registry.
    */
   checkRole = (key: string): void => {
-    this.checkRole(key)
+    this.getRole(key)
   }
 }
 
