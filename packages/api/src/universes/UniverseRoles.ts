@@ -56,3 +56,5 @@ export const Admin: Role = {
 export const permissions = [Curate, Update, Delete, ManageSeries, ManageRoles]
 
 export const roles = [Curator, Manager, Admin]
+
+export default {roles, permissions}

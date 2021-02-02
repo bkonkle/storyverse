@@ -25,7 +25,7 @@ export class RoleGrant extends UuidTable {
     length: 300,
     nullable: true,
   })
-  sublectTable?: string
+  subjectTable?: string
 
   @Column({
     name: 'subject_id',
@@ -33,7 +33,7 @@ export class RoleGrant extends UuidTable {
     length: 300,
     nullable: true,
   })
-  sublectId?: string
+  subjectId?: string
 }
 
 export default RoleGrant

@@ -14,13 +14,13 @@ import UniversesService from './UniversesService'
 import ProfilesService from '../profiles/ProfilesService'
 import {JwtGuard} from '../lib/auth/JwtGuard'
 import {AllowAnonymous, UserSub} from '../lib/auth/JwtDecorators'
-import {authorize, authorizeCreate, censor, maybeCensor} from './UniverseUtils'
+import {Authz, Censored} from './UniverseUtils'
 
 @Resolver('Universe')
 @UseGuards(JwtGuard)
 export class UniverseResolvers {
   constructor(
-    private readonly service: UniversesService,
+    public readonly service: UniversesService,
     private readonly profiles: ProfilesService
   ) {}
 
@@ -30,7 +30,7 @@ export class UniverseResolvers {
     @Args('id', new ParseUUIDPipe()) id: string,
     @UserSub() username?: string
   ): Promise<Universe | undefined> {
-    return this.service.findOne({where: {id}}).then(maybeCensor(username))
+    return this.service.findOne({where: {id}}).then(Censored.maybe(username))
   }
 
   @Query()
@@ -50,7 +50,7 @@ export class UniverseResolvers {
 
     return {
       ...universes,
-      data: universes.data.map(censor(username)),
+      data: universes.data.map(Censored.censor(username)),
     }
   }
 
@@ -63,7 +63,7 @@ export class UniverseResolvers {
       .findOne({
         where: {id: input.ownerProfileId},
       })
-      .then(authorizeCreate(username))
+      .then(Authz.create(username))
 
     const universe = await this.service.create(input)
 
@@ -76,7 +76,7 @@ export class UniverseResolvers {
     @Args('input') input: UpdateUniverseInput,
     @UserSub({require: true}) username: string
   ): Promise<MutateUniverseResult> {
-    await this.service.findOne({where: {id}}).then(authorize(username))
+    await this.service.findOne({where: {id}}).then(Authz.update(username))
 
     const universe = await this.service.update(id, input)
 
@@ -90,7 +90,7 @@ export class UniverseResolvers {
   ): Promise<MutateUniverseResult> {
     const existing = await this.service
       .findOne({where: {id}})
-      .then(authorize(username))
+      .then(Authz.remove(username))
 
     await this.service.delete(id)
 

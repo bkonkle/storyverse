@@ -5,64 +5,70 @@ import {
 } from '@nestjs/common'
 
 import Profile from '../profiles/Profile.entity'
-import Universe from './Universe.entity'
+import UniverseEntity from './Universe.entity'
 import * as ProfileUtils from '../profiles/ProfileUtils'
 
-export const isAuthorized = (universe: Universe, username?: string) => {
-  if (username && username === universe.ownerProfile.user.username) {
-    return true
+export namespace Authz {
+  export const isAuthorized = (universe: UniverseEntity, username?: string) => {
+    if (username && username === universe.ownerProfile.user.username) {
+      return true
+    }
+
+    return false
   }
 
-  return false
-}
+  export const create = (username: string) => (profile?: Profile) => {
+    if (!profile) {
+      throw new BadRequestException(
+        'The specified owned-by `Profile` was not found.'
+      )
+    }
 
-export const authorize = (username?: string) => (universe?: Universe) => {
-  if (!universe) {
-    throw new NotFoundException()
+    if (username !== profile.user.username) {
+      throw new ForbiddenException()
+    }
+
+    return profile
   }
 
-  if (!isAuthorized(universe, username)) {
-    throw new ForbiddenException()
-  }
+  export const update = (username?: string) => (universe?: UniverseEntity) => {
+    if (!universe) {
+      throw new NotFoundException()
+    }
 
-  return universe
-}
+    if (!isAuthorized(universe, username)) {
+      throw new ForbiddenException()
+    }
 
-export const authorizeCreate = (username: string) => (profile?: Profile) => {
-  if (!profile) {
-    throw new BadRequestException(
-      'The specified owned-by `Profile` was not found.'
-    )
-  }
-
-  if (username !== profile.user.username) {
-    throw new ForbiddenException()
-  }
-
-  return profile
-}
-
-export type CensoredUniverse = Omit<Universe, 'ownerProfile'> & {
-  ownerProfile: ProfileUtils.CensoredProfile
-}
-
-export const censor = (username?: string) => (
-  universe: Universe
-): CensoredUniverse => {
-  if (isAuthorized(universe, username)) {
     return universe
   }
 
-  return {
-    ...universe,
-    ownerProfile: ProfileUtils.censor(username)(universe.ownerProfile),
-  }
+  export const remove = update
 }
 
-export const maybeCensor = (username?: string) => (universe?: Universe) => {
-  if (!universe) {
-    return
+export namespace Censored {
+  export type Universe = Omit<UniverseEntity, 'ownerProfile'> & {
+    ownerProfile: ProfileUtils.CensoredProfile
   }
 
-  return censor(username)(universe)
+  export const censor = (username?: string) => (
+    universe: UniverseEntity
+  ): Universe => {
+    if (Authz.isAuthorized(universe, username)) {
+      return universe
+    }
+
+    return {
+      ...universe,
+      ownerProfile: ProfileUtils.censor(username)(universe.ownerProfile),
+    }
+  }
+
+  export const maybe = (username?: string) => (universe?: UniverseEntity) => {
+    if (!universe) {
+      return
+    }
+
+    return censor(username)(universe)
+  }
 }

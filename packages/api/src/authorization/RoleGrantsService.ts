@@ -1,12 +1,12 @@
 import {DeepPartial, Repository} from 'typeorm'
 import {uniqBy} from 'lodash'
-import {ForbiddenException, Injectable} from '@nestjs/common'
+import {ForbiddenException, Inject, Injectable} from '@nestjs/common'
 import {InjectRepository} from '@nestjs/typeorm'
 
 import {TypeOrm} from '../lib/services'
 import {Role, Permission} from './Roles'
 import RoleGrant from './RoleGrant.entity'
-import RolesService from './RolesService'
+import {RolesRegistry} from './RolesRegistry'
 
 export interface Subject {
   table: string
@@ -19,7 +19,7 @@ export class RoleGrantsService {
 
   constructor(
     @InjectRepository(RoleGrant) private readonly repo: Repository<RoleGrant>,
-    private readonly roles: RolesService
+    @Inject(RolesRegistry) private readonly registry: RolesRegistry
   ) {}
 
   find = this.typeorm.find
@@ -31,18 +31,14 @@ export class RoleGrantsService {
       throw new Error("A 'roleKey' is required")
     }
 
-    if (!this.roles.roleKeys().includes(input.roleKey)) {
-      throw new Error(`Role ${input.roleKey} is not a registered Role`)
-    }
+    this.registry.checkRole(input.roleKey)
 
     return this.typeorm.create(input)
   }
 
   async update(id: string, input: DeepPartial<RoleGrant>) {
     if (input.roleKey) {
-      if (!this.roles.roleKeys().includes(input.roleKey)) {
-        throw new Error(`Role ${input.roleKey} is not a registered Role`)
-      }
+      this.registry.checkRole(input.roleKey)
     }
 
     return this.typeorm.update(id, input)
@@ -127,7 +123,7 @@ export class RoleGrantsService {
    * Map RoleGrants to Role objects.
    */
   private toRoles(grant: RoleGrant): Role {
-    const role = this.roles.roles.find((role) => role.key === grant.roleKey)
+    const role = this.registry.findRole(grant.roleKey)
 
     if (!role) {
       throw new Error(
