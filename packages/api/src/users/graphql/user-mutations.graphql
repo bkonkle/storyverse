@@ -5,14 +5,9 @@ extend type Mutation {
   createUser(input: CreateUserInput!): MutateUserResult!
 
   """
-  Update an existing User by ID
+  Update the currently authenticated User
   """
-  updateUser(id: UUID!, input: UpdateUserInput!): MutateUserResult!
-
-  """
-  Remove an existing User by ID
-  """
-  deleteUser(id: UUID!): MutateUserResult!
+  updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
 }
 
 """

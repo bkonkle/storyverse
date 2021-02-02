@@ -1,0 +1,38 @@
+extend type Mutation {
+  """
+  Create a new Universe
+  """
+  createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
+
+  """
+  Update an existing Universe by ID
+  """
+  updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
+
+  """
+  Remove an existing Universe by ID
+  """
+  deleteUniverse(id: UUID!): MutateUniverseResult!
+}
+
+"""
+Input to create a new Universe
+"""
+input CreateUniverseInput {
+  name: String!
+  description: JSONObject
+  ownerProfileId: UUID!
+}
+
+"""
+Input to update an existing Universe
+"""
+input UpdateUniverseInput {
+  name: String
+  description: JSONObject
+  ownerProfileId: UUID
+}
+
+type MutateUniverseResult {
+  universe: Universe
+}

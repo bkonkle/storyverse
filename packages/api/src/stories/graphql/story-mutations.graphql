@@ -1,0 +1,38 @@
+extend type Mutation {
+  """
+  Create a new Story
+  """
+  createStory(input: CreateStoryInput!): MutateStoryResult!
+
+  """
+  Update an existing Story by ID
+  """
+  updateStory(id: UUID!, input: UpdateStoryInput!): MutateStoryResult!
+
+  """
+  Remove an existing Story by ID
+  """
+  deleteStory(id: UUID!): MutateStoryResult!
+}
+
+"""
+Input to create a new Story
+"""
+input CreateStoryInput {
+  name: String!
+  description: JSONObject
+  universeId: UUID!
+}
+
+"""
+Input to update an existing Story
+"""
+input UpdateStoryInput {
+  name: String
+  description: JSONObject
+  universeId: UUID
+}
+
+type MutateStoryResult {
+  Story: Story
+}

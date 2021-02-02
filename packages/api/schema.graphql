@@ -6,16 +6,32 @@ schema {
 type Mutation {
   """Create a new User Profile"""
   createProfile(input: CreateProfileInput!): MutateProfileResult!
+  """Create a new Series"""
+  createSeries(input: CreateSeriesInput!): MutateSeriesResult!
+  """Create a new Story"""
+  createStory(input: CreateStoryInput!): MutateStoryResult!
+  """Create a new Universe"""
+  createUniverse(input: CreateUniverseInput!): MutateUniverseResult!
   """Create a new User"""
   createUser(input: CreateUserInput!): MutateUserResult!
   """Remove an existing User Profile by ID"""
   deleteProfile(id: UUID!): MutateProfileResult!
-  """Remove an existing User by ID"""
-  deleteUser(id: UUID!): MutateUserResult!
+  """Remove an existing Series by ID"""
+  deleteSeries(id: UUID!): MutateSeriesResult!
+  """Remove an existing Story by ID"""
+  deleteStory(id: UUID!): MutateStoryResult!
+  """Remove an existing Universe by ID"""
+  deleteUniverse(id: UUID!): MutateUniverseResult!
+  """Update the currently authenticated User"""
+  updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
   """Update an existing User Profile by ID"""
   updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
-  """Update an existing User by ID"""
-  updateUser(id: UUID!, input: UpdateUserInput!): MutateUserResult!
+  """Update an existing Series by ID"""
+  updateSeries(id: UUID!, input: UpdateSeriesInput!): MutateSeriesResult!
+  """Update an existing Story by ID"""
+  updateStory(id: UUID!, input: UpdateStoryInput!): MutateStoryResult!
+  """Update an existing Universe by ID"""
+  updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
 }
 """Input to create a new User Profile"""
 input CreateProfileInput {
@@ -23,7 +39,8 @@ input CreateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String!
+  userId: String
+  user: CreateUserInput
 }
 """Input to update an existing User Profile"""
 input UpdateProfileInput {
@@ -37,28 +54,40 @@ type MutateProfileResult {
   profile: Profile
 }
 type Query {
+  """Get the currently authenticated User"""
+  getCurrentUser: User
   """Get many User Profiles, with optional filtering conditions"""
   getManyProfiles(where: ProfileCondition, orderBy: [ProfilesOrderBy!], pageSize: Int, page: Int): ProfilesPage!
-  """Get many Users, with optional filtering conditions"""
-  getManyUsers(where: UserCondition, orderBy: [UsersOrderBy!], pageSize: Int, page: Int): UsersPage!
+  """Get many Series, with optional filtering conditions"""
+  getManySeries(where: SeriesCondition, orderBy: [SeriesOrderBy!], pageSize: Int, page: Int): SeriesPage!
+  """Get many Stories, with optional filtering conditions"""
+  getManyStories(where: StoryCondition, orderBy: [StoriesOrderBy!], pageSize: Int, page: Int): StoriesPage!
+  """Get many Universes, with optional filtering conditions"""
+  getManyUniverses(where: UniverseCondition, orderBy: [UniversesOrderBy!], pageSize: Int, page: Int): UniversesPage!
   """Get an existing User Profile by ID"""
   getProfile(id: UUID!): Profile
-  """Get an existing User by ID"""
-  getUser(id: UUID!): User
+  """Get an existing Series by ID"""
+  getSeries(id: UUID!): Series
+  """Get an existing Story by ID"""
+  getStory(id: UUID!): Story
+  """Get an existing Universe by ID"""
+  getUniverse(id: UUID!): Universe
 }
 """A User Profile"""
 type Profile {
   id: UUID!
   """An email address"""
-  email: String!
+  email: String
   """A display name"""
   displayName: String
   """A Profile photo"""
   picture: String
   """Editor json content for the Profile body"""
   content: JSONObject
+  """The id of the User that created the Profile"""
+  userId: UUID
   """The User that created the Profile"""
-  userId: String!
+  user: User
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -75,7 +104,7 @@ input ProfileCondition {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String
+  userId: UUID
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -86,8 +115,112 @@ enum ProfilesOrderBy {
   EMAIL_DESC
   DISPLAY_NAME_ASC
   DISPLAY_NAME_DESC
-  USER_ID_ASC
-  USER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
+"""Input to create a new Series"""
+input CreateSeriesInput {
+  name: String!
+  description: JSONObject
+  universeId: UUID!
+}
+"""Input to update an existing Series"""
+input UpdateSeriesInput {
+  name: String
+  description: JSONObject
+  universeId: UUID
+}
+type MutateSeriesResult {
+  series: Series
+}
+"""A Series"""
+type Series {
+  id: UUID!
+  """The Series name"""
+  name: String!
+  """Editor json content for the Series description"""
+  description: JSONObject
+  """The id of the Universe that the Series belongs to"""
+  universeId: UUID!
+  """The Universe that the Series belongs to"""
+  universe: Universe!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type SeriesPage {
+  data: [Series!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+input SeriesCondition {
+  name: String
+  universeId: UUID
+}
+enum SeriesOrderBy {
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
+"""Input to create a new Story"""
+input CreateStoryInput {
+  name: String!
+  description: JSONObject
+  universeId: UUID!
+}
+"""Input to update an existing Story"""
+input UpdateStoryInput {
+  name: String
+  description: JSONObject
+  universeId: UUID
+}
+type MutateStoryResult {
+  Story: Story
+}
+"""A Story"""
+type Story {
+  id: UUID!
+  """The Story name"""
+  name: String!
+  """The Story volume number"""
+  volume: Int
+  """The Story issue number within the volume"""
+  issue: Int
+  """Editor json content for the Story summary"""
+  summary: JSONObject
+  """Editor json content for the Story content"""
+  content: JSONObject
+  """The id of the Series that the Story belongs to"""
+  seriesId: UUID!
+  """The Series that the Story belongs to"""
+  series: Series!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type StoriesPage {
+  data: [Story!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+input StoryCondition {
+  name: String
+  universeId: UUID
+}
+enum StoriesOrderBy {
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
   CREATED_AT_ASC
   CREATED_AT_DESC
   UPDATED_AT_ASC
@@ -98,6 +231,56 @@ scalar DateTime
 scalar JSON
 scalar JSONObject
 scalar UUID
+"""Input to create a new Universe"""
+input CreateUniverseInput {
+  name: String!
+  description: JSONObject
+  ownerProfileId: UUID!
+}
+"""Input to update an existing Universe"""
+input UpdateUniverseInput {
+  name: String
+  description: JSONObject
+  ownerProfileId: UUID
+}
+type MutateUniverseResult {
+  universe: Universe
+}
+"""A Universe"""
+type Universe {
+  id: UUID!
+  """The Universe's name"""
+  name: String!
+  """Editor json content for the Universe's description"""
+  description: JSONObject
+  """The id of the Profile that owns the Universe"""
+  ownerProfileId: UUID!
+  """The Profile that owns the Universe"""
+  ownerProfile: Profile!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type UniversesPage {
+  data: [Universe!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+input UniverseCondition {
+  name: String
+  ownerProfileId: UUID
+}
+enum UniversesOrderBy {
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
 """Input to create a new User"""
 input CreateUserInput {
   username: String!
@@ -119,28 +302,4 @@ type User {
   isActive: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-type UsersPage {
-  data: [User!]!
-  count: Int!
-  total: Int!
-  page: Int!
-  pageCount: Int!
-}
-input UserCondition {
-  id: UUID
-  username: String
-  isActive: Boolean
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-enum UsersOrderBy {
-  ID_ASC
-  ID_DESC
-  USERNAME_ASC
-  USERNAME_DESC
-  IS_ACTIVE_ASC
-  IS_ACTIVE_DESC
-  UPDATED_AT_ASC
-  UPDATED_AT_DESC
 }

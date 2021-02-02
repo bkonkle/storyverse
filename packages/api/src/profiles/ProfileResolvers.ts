@@ -1,58 +1,77 @@
-import {fromOrderBy} from '../lib/resolvers'
-
-import {QueryResolvers, MutationResolvers} from '../Schema'
+import {Resolvers, QueryResolvers, MutationResolvers, Profile} from '../Schema'
 import {Context} from '../utils/Context'
-import * as Validate from './ProfileValidation'
-import ProfileService from './ProfileService'
-import Profile from './Profile.entity'
 
-export const queries = ({service = ProfileService.init} = {}): QueryResolvers<
-  Context
-> => ({
-  getProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {id} = await Validate.get(args)
+export default class ProfileResolvers {
+  getResolvers = (): Resolvers => ({
+    Query: {
+      getProfile: this.getProfile,
+      getManyProfiles: this.getManyProfiles,
+    },
+    Mutation: {
+      createProfile: this.createProfile,
+      updateProfile: this.updateProfile,
+      deleteProfile: this.deleteProfile,
+    },
+  })
 
-    return service().findOne({where: {id}})
-  },
+  getProfile: QueryResolvers<Context>['getProfile'] = async (
+    _parent,
+    args,
+    _context,
+    _resolveInfo
+  ) => {
+    console.log(`>- ProfileResolvers.getProfile -<`, args)
 
-  getManyProfiles: async (_parent, args, _context, _resolveInfo) => {
-    const {where, orderBy, pageSize, page} = await Validate.getMany(args)
+    return {} as Profile
+  }
 
-    return service().find({
-      where,
-      order: fromOrderBy(orderBy),
-      pageSize,
-      page,
-    })
-  },
-})
+  getManyProfiles: QueryResolvers<Context>['getManyProfiles'] = async (
+    _parent,
+    args,
+    _context,
+    _resolveInfo
+  ) => {
+    console.log('>- ProfileResolvers.getManyProfiles -<', args)
 
-export const mutations = ({
-  service = ProfileService.init,
-} = {}): MutationResolvers<Context> => ({
-  createProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {input} = await Validate.create(args)
+    return {
+      data: [] as Profile[],
+      count: 0,
+      total: 0,
+      page: 0,
+      pageCount: 0,
+    }
+  }
 
-    const profile = await service().create(input)
-
-    return {profile}
-  },
-
-  updateProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {id, input} = await Validate.update(args)
-
-    const profile = await service().update(id, input)
-
-    return {profile}
-  },
-
-  deleteProfile: async (_parent, args, _context, _resolveInfo) => {
-    const {id} = await Validate.remove(args)
-
-    await service().delete(id)
+  createProfile: MutationResolvers<Context>['createProfile'] = async (
+    _parent,
+    args,
+    _context,
+    _resolveInfo
+  ) => {
+    console.log('>- ProfileResolvers.createProfile -<', args)
 
     return {}
-  },
-})
+  }
 
-export default {queries, mutations}
+  updateProfile: MutationResolvers<Context>['updateProfile'] = async (
+    _parent,
+    args,
+    _context,
+    _resolveInfo
+  ) => {
+    console.log('>- ProfileResolvers.updateProfile -<', args)
+
+    return {}
+  }
+
+  deleteProfile: MutationResolvers<Context>['deleteProfile'] = async (
+    _parent,
+    args,
+    _context,
+    _resolveInfo
+  ) => {
+    console.log('>- ProfileResolvers.deleteProfile -<', args)
+
+    return {}
+  }
+}

@@ -1,78 +1,31 @@
-import {InitOptions, start} from './lib/express'
-import {gql} from './lib/graphql'
-import {readFileSync} from 'fs'
-import GraphQLDateTime from 'graphql-type-datetime'
-import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
-import GraphQLUUID from 'graphql-type-uuid'
-import {join} from 'path'
+import chalk from 'chalk'
+import {Application} from 'express'
+import http from 'http'
 
-import dbConfig from './config/Database'
-import {Vars, getVars} from './config/Environment'
-import ProfileResolvers from './profiles/ProfileResolvers'
-import {Resolvers} from './Schema'
-import UserResolvers from './users/UserResolvers'
-import {getContext} from './utils/Context'
+import {init} from './App'
 
-const typeDefs = gql(
-  readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
-)
+export function run(label: string, app: Application, port: number): void {
+  const portStr = chalk.yellow(port.toString())
 
-const resolvers: Resolvers = {
-  Query: {
-    ...UserResolvers.queries(),
-    ...ProfileResolvers.queries(),
-  },
-  Mutation: {
-    ...UserResolvers.mutations(),
-    ...ProfileResolvers.mutations(),
-  },
-  DateTime: GraphQLDateTime,
-  JSON: GraphQLJSON,
-  JSONObject: GraphQLJSONObject,
-  UUID: GraphQLUUID,
+  const server = http.createServer(app)
+
+  server.listen(port, () => {
+    console.log(chalk.cyan(`> Started ${label} on port ${portStr}`))
+  })
+
+  server.on('close', () => {
+    console.log(chalk.cyan(`> ${label} shutting down`))
+  })
 }
 
-export const getOptions = (env = process.env): InitOptions => {
-  const [
-    nodeEnv = 'production',
-    audience = 'production',
-    issuer = 'https://storyverse.auth0.com/',
-    jwksUri = 'https://storyverse.auth0.com/.well-known/jwks.json',
-  ] = getVars(
-    [Vars.NodeEnv, Vars.Auth0Audience, Vars.Auth0Issuer, Vars.Auth0JwksUri],
-    env
-  )
+export const start = async (): Promise<void> => {
+  const {PORT} = process.env
+  const port = PORT ? Number(PORT) : 3000
+  const app = await init()
 
-  return {
-    label: 'Storyverse',
-    nodeEnv,
-    db: {
-      config: dbConfig,
-    },
-    auth: {
-      config: {
-        jwt: {
-          audience,
-          issuer,
-          credentialsRequired: false,
-        },
-        jwks: {
-          jwksUri,
-        },
-      },
-    },
-    apollo: {
-      config: {
-        typeDefs,
-        resolvers,
-        context: getContext,
-      },
-    },
-  }
+  run('Storyverse', app, port)
 }
-
-export const run = async () => start(getOptions())
 
 if (require.main === module) {
-  run().catch(console.error)
+  start().catch(console.error)
 }

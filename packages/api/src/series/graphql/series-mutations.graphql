@@ -1,0 +1,38 @@
+extend type Mutation {
+  """
+  Create a new Series
+  """
+  createSeries(input: CreateSeriesInput!): MutateSeriesResult!
+
+  """
+  Update an existing Series by ID
+  """
+  updateSeries(id: UUID!, input: UpdateSeriesInput!): MutateSeriesResult!
+
+  """
+  Remove an existing Series by ID
+  """
+  deleteSeries(id: UUID!): MutateSeriesResult!
+}
+
+"""
+Input to create a new Series
+"""
+input CreateSeriesInput {
+  name: String!
+  description: JSONObject
+  universeId: UUID!
+}
+
+"""
+Input to update an existing Series
+"""
+input UpdateSeriesInput {
+  name: String
+  description: JSONObject
+  universeId: UUID
+}
+
+type MutateSeriesResult {
+  series: Series
+}

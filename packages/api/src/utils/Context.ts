@@ -1,6 +1,7 @@
-import {Token} from '../lib/express'
 import {Request, Response} from 'express'
 import {GraphQLExtensionStack} from 'graphql-extensions'
+
+import {Token} from '../JwtMiddleware'
 
 export interface AppRequest extends Request {
   user?: Token

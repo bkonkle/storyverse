@@ -24,7 +24,7 @@ type Profile {
   """
   An email address
   """
-  email: String!
+  email: String
 
   """
   A display name
@@ -42,9 +42,14 @@ type Profile {
   content: JSONObject
 
   """
+  The id of the User that created the Profile
+  """
+  userId: UUID
+
+  """
   The User that created the Profile
   """
-  userId: String!
+  user: User
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -64,7 +69,7 @@ input ProfileCondition {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String
+  userId: UUID
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -76,8 +81,6 @@ enum ProfilesOrderBy {
   EMAIL_DESC
   DISPLAY_NAME_ASC
   DISPLAY_NAME_DESC
-  USER_ID_ASC
-  USER_ID_DESC
   CREATED_AT_ASC
   CREATED_AT_DESC
   UPDATED_AT_ASC

@@ -1,0 +1,85 @@
+extend type Query {
+  """
+  Get an existing Story by ID
+  """
+  getStory(id: UUID!): Story
+
+  """
+  Get many Stories, with optional filtering conditions
+  """
+  getManyStories(
+    where: StoryCondition
+    orderBy: [StoriesOrderBy!]
+    pageSize: Int
+    page: Int
+  ): StoriesPage!
+}
+
+"""
+A Story
+"""
+type Story {
+  id: UUID!
+
+  """
+  The Story name
+  """
+  name: String!
+
+  """
+  The Story volume number
+  """
+  volume: Int
+
+  """
+  The Story issue number within the volume
+  """
+  issue: Int
+
+  """
+  Editor json content for the Story summary
+  """
+  summary: JSONObject
+
+  """
+  Editor json content for the Story content
+  """
+  content: JSONObject
+
+  """
+  The id of the Series that the Story belongs to
+  """
+  seriesId: UUID!
+
+  """
+  The Series that the Story belongs to
+  """
+  series: Series!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type StoriesPage {
+  data: [Story!]!
+  count: Int!
+  total: Int!
+  page: Int!
+  pageCount: Int!
+}
+
+input StoryCondition {
+  name: String
+  universeId: UUID
+}
+
+enum StoriesOrderBy {
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  UPDATED_AT_ASC
+  UPDATED_AT_DESC
+}
