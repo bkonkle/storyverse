@@ -1,11 +1,79 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model RoleGrant {
+  id           String   @id @default(dbgenerated("uuid_generate_v4()"))
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  roleKey      String
+  profile      Profile  @relation(fields: [profileId], references: [id])
+  profileId    String
+  subjectTable String
+  subjectId    String
+}
+
+model User {
+  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+  isActive  Boolean  @default(true)
+  profile   Profile?
+}
+
+model Profile {
+  id            String      @id @default(dbgenerated("uuid_generate_v4()"))
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  email         String
+  displayName   String?
+  picture       String?
+  content       Json?
+  city          String?
+  stateProvince String?
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String      @unique
+  roleGrants    RoleGrant[]
+  universes     Universe[]
+}
+
+model Universe {
+  id             String   @id @default(dbgenerated("uuid_generate_v4()"))
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String
+  description    Json?
+  ownerProfile   Profile  @relation(fields: [ownerProfileId], references: [id])
+  ownerProfileId String
+  series         Series[]
+}
+
+model Series {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()"))
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description Json?
+  universe    Universe @relation(fields: [universeId], references: [id])
+  universeId  String
+  stories     Story[]
+}
+
+model Story {
+  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  volume    Int?
+  issue     Int?
+  summary   Json?
+  content   Json?
+  series    Series   @relation(fields: [seriesId], references: [id])
+  seriesId  String
 }
