@@ -1,6 +1,9 @@
 schema: ./src/**/*.graphql
 generates:
   src/Schema.ts:
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
     plugins:
       - add:
           content: '/* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-explicit-any */'
@@ -11,7 +14,6 @@ generates:
     config:
       preResolveTypes: true
       useIndexSignature: true
-      maybeValue: T | undefined
       noSchemaStitching: true
       scalars:
         DateTime: Date

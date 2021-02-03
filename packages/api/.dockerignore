@@ -4,6 +4,7 @@
 # Package management
 !package.json
 !yarn.lock
+!package-lock.json
 !.yarnrc
 !.npmrc
 

@@ -4,7 +4,7 @@ import faker from 'faker'
 import {CreateRoleGrantInput, RoleGrant} from '../../../Schema'
 
 export const makeRoleGrantInput = (
-  overrides?: Partial<CreateRoleGrantInput>
+  overrides?: Partial<CreateRoleGrantInput> | null
 ): CreateRoleGrantInput => {
   return {
     ...overrides,
@@ -15,7 +15,7 @@ export const makeRoleGrantInput = (
   }
 }
 
-export const make = (overrides?: Partial<RoleGrant>): RoleGrant => {
+export const make = (overrides?: Partial<RoleGrant> | null): RoleGrant => {
   return {
     id: faker.random.uuid(),
     createdAt: faker.date.recent(),

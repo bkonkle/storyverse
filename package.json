@@ -27,7 +27,7 @@
   "scripts": {
     "check.types": "tsc --pretty --noEmit",
     "format": "prettier --write",
-    "format.all": "yarn format \"{src,packages}/**/*.{js,jsx,ts,tsx}\""
+    "format.all": "npm run format \"{src,packages}/**/*.{js,jsx,ts,tsx}\""
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
@@ -47,6 +47,6 @@
     "typescript": "^4.1.3"
   },
   "resolutions": {
-    "graphql": "^15.3.0"
+    "graphql": "^15.5.0"
   }
 }

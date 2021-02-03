@@ -1,5 +1,5 @@
 import {readFileSync} from 'fs'
-import GraphQLDateTime from 'graphql-type-datetime'
+import GraphQLDateTime from './utils/GraphQLDateTime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
 import GraphQLUUID from 'graphql-type-uuid'
 import gql from 'graphql-tag'

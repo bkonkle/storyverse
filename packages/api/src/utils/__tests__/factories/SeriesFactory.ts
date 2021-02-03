@@ -4,7 +4,7 @@ import faker from 'faker'
 import {CreateSeriesInput, Series} from '../../../Schema'
 
 export const makeCreateInput = (
-  overrides?: Partial<CreateSeriesInput>
+  overrides?: Partial<CreateSeriesInput> | null
 ): CreateSeriesInput => {
   return {
     name: faker.name.findName(),
@@ -14,7 +14,7 @@ export const makeCreateInput = (
   }
 }
 
-export const make = (overrides?: Partial<Series>): Series => {
+export const make = (overrides?: Partial<Series> | null): Series => {
   const Universes: typeof import('./UniverseFactory') = require('./UniverseFactory')
 
   const universe = Universes.make(overrides?.universe)

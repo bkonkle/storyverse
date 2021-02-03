@@ -1,7 +1,14 @@
 import {Resolvers, QueryResolvers, MutationResolvers, Universe} from '../Schema'
 import {Context} from '../utils/Context'
+import UniversesService from './UniversesService'
 
 export default class UniverseResolvers {
+  private readonly service: UniversesService
+
+  constructor(service?: UniversesService) {
+    this.service = service || new UniversesService()
+  }
+
   getResolvers = (): Resolvers => ({
     Query: {
       getUniverse: this.getUniverse,
@@ -44,13 +51,17 @@ export default class UniverseResolvers {
 
   createUniverse: MutationResolvers<Context>['createUniverse'] = async (
     _parent,
-    args,
+    {input},
     _context,
     _resolveInfo
   ) => {
-    console.log('>- UniverseResolvers.createUniverse -<', args)
+    // console.log(
+    //   `>- resolveInfo.operation.selectionSet.selections ->`,
+    //   resolveInfo.operation.selectionSet.selections
+    // )
+    const universe = await this.service.createUniverse(input)
 
-    return {universe: undefined}
+    return {universe}
   }
 
   updateUniverse: MutationResolvers<Context>['updateUniverse'] = async (

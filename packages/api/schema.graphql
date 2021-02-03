@@ -3,16 +3,6 @@ schema {
   query: Query
   mutation: Mutation
 }
-"""Input to grant a Role to a User Profile"""
-input CreateRoleGrantInput {
-  roleKey: String!
-  profileId: UUID!
-  subjectTable: String
-  subjectId: UUID
-}
-type MutateRoleGrantResult {
-  roleGrant: RoleGrant
-}
 type Mutation {
   """Create a new User Profile"""
   createProfile(input: CreateProfileInput!): MutateProfileResult!
@@ -46,6 +36,16 @@ type Mutation {
   updateStory(id: UUID!, input: UpdateStoryInput!): MutateStoryResult!
   """Update an existing Universe by ID"""
   updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
+}
+"""Input to grant a Role to a User Profile"""
+input CreateRoleGrantInput {
+  roleKey: String!
+  profileId: UUID!
+  subjectTable: String
+  subjectId: UUID
+}
+type MutateRoleGrantResult {
+  roleGrant: RoleGrant
 }
 type Permission {
   """A unique key to represent the Permission"""
@@ -112,8 +112,7 @@ input CreateProfileInput {
   displayName: String
   picture: String
   content: JSONObject
-  userId: String
-  user: CreateUserInput
+  userId: String!
 }
 """Input to update an existing User Profile"""
 input UpdateProfileInput {

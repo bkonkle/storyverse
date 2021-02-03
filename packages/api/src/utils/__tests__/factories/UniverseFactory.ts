@@ -4,7 +4,7 @@ import faker from 'faker'
 import {CreateUniverseInput, Universe} from '../../../Schema'
 
 export const makeCreateInput = (
-  overrides?: Partial<CreateUniverseInput>
+  overrides?: Partial<CreateUniverseInput> | null
 ): CreateUniverseInput => {
   return {
     name: faker.name.findName(),
@@ -14,7 +14,7 @@ export const makeCreateInput = (
   }
 }
 
-export const make = (overrides?: Partial<Universe>): Universe => {
+export const make = (overrides?: Partial<Universe> | null): Universe => {
   const Profiles: typeof import('./ProfileFactory') = require('./ProfileFactory')
 
   const ownerProfile = Profiles.make(overrides?.ownerProfile)

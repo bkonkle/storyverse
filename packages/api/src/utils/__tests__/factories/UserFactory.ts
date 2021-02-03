@@ -4,7 +4,7 @@ import faker from 'faker'
 import {CreateUserInput, User} from '../../../Schema'
 
 export const makeCreateInput = (
-  overrides?: Partial<CreateUserInput>
+  overrides?: Partial<CreateUserInput> | null
 ): CreateUserInput => {
   return {
     ...overrides,
@@ -12,7 +12,7 @@ export const makeCreateInput = (
   }
 }
 
-export const make = (overrides?: Partial<User>): User => {
+export const make = (overrides?: Partial<User> | null): User => {
   return {
     id: faker.random.uuid(),
     createdAt: faker.date.recent(),
