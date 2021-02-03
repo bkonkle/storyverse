@@ -2,5 +2,5 @@ const baseConfig = require('../../jest.config')
 
 module.exports = {
   ...baseConfig,
-  roots: ['<rootDir>/test'],
+  testRegex: '/__tests__/.+\\.integration\\.(js|ts)$',
 }

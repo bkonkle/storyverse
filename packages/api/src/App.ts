@@ -9,7 +9,7 @@ import {ApolloServer} from 'apollo-server-express'
 import express, {Application} from 'express'
 import morgan from 'morgan'
 
-import {jwtMiddleware} from './JwtMiddleware'
+import {jwtMiddleware} from './authentication/JwtMiddleware'
 
 import {Vars, getVars} from './config/Environment'
 import {Resolvers} from './Schema'
@@ -53,7 +53,7 @@ export async function init(
   const [
     nodeEnv = 'production',
     audience = 'production',
-    issuer = 'https://storyverse.auth0.com',
+    issuer = 'https://storyverse.auth0.com/',
   ] = getVars([Vars.NodeEnv, Vars.OAuth2Audience, Vars.OAuth2Issuer], env)
 
   const isDev = nodeEnv === 'development'
@@ -70,7 +70,7 @@ export async function init(
         credentialsRequired: false,
       },
       jwks: {
-        jwksUri: `${issuer}/.well-known/jwks.json`,
+        jwksUri: `${issuer}.well-known/jwks.json`,
       },
     })
   )
@@ -94,3 +94,5 @@ export async function init(
 
   return app
 }
+
+export default {init}

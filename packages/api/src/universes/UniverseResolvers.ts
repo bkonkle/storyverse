@@ -50,7 +50,7 @@ export default class UniverseResolvers {
   ) => {
     console.log('>- UniverseResolvers.createUniverse -<', args)
 
-    return {}
+    return {universe: undefined}
   }
 
   updateUniverse: MutationResolvers<Context>['updateUniverse'] = async (

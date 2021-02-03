@@ -1,0 +1,32 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import faker from 'faker'
+
+import {CreateSeriesInput, Series} from '../../../Schema'
+
+export const makeCreateInput = (
+  overrides?: Partial<CreateSeriesInput>
+): CreateSeriesInput => {
+  return {
+    name: faker.name.findName(),
+    description: {text: faker.lorem.paragraph()},
+    universeId: faker.random.uuid(),
+    ...overrides,
+  }
+}
+
+export const make = (overrides?: Partial<Series>): Series => {
+  const Universes: typeof import('./UniverseFactory') = require('./UniverseFactory')
+
+  const universe = Universes.make(overrides?.universe)
+
+  return {
+    id: faker.random.uuid(),
+    createdAt: faker.date.recent(),
+    updatedAt: faker.date.recent(),
+    ...makeCreateInput(overrides),
+    ...overrides,
+    universe,
+  }
+}
+
+export default {make, makeCreateInput}

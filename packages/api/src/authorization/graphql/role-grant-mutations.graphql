@@ -1,0 +1,25 @@
+extend type Mutation {
+  """
+  Grant a new Role to a User Profile
+  """
+  createRoleGrant(input: CreateRoleGrantInput!): MutateRoleGrantResult!
+
+  """
+  Remove an existing RoleGrant from a User Profile
+  """
+  deleteRoleGrant(id: UUID!): MutateRoleGrantResult!
+}
+
+"""
+Input to grant a Role to a User Profile
+"""
+input CreateRoleGrantInput {
+  roleKey: String!
+  profileId: UUID!
+  subjectTable: String
+  subjectId: UUID
+}
+
+type MutateRoleGrantResult {
+  roleGrant: RoleGrant
+}
