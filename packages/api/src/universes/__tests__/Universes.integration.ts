@@ -1,14 +1,14 @@
-import {PrismaClient} from '@prisma/client'
 import {omit, pick} from 'lodash'
 
 import App from '../../App'
-import OAuth2 from '../../../test/OAuth2'
-import GraphQL from '../../../test/GraphQL'
-import Validation from '../../../test/Validation'
-import {dbCleaner} from '../../../test/Prisma'
-import ProfileFactory from '../../../test/factories/ProfileFactory'
-import UniverseFactory from '../../../test/factories/UniverseFactory'
+import OAuth2 from '../../test/OAuth2'
+import GraphQL from '../../test/GraphQL'
+import Validation from '../../test/Validation'
+import {dbCleaner} from '../../test/Prisma'
+import ProfileFactory from '../../test/factories/ProfileFactory'
+import UniverseFactory from '../../test/factories/UniverseFactory'
 import {Mutation, User, Profile} from '../../Schema'
+import Prisma from '../../utils/Prisma'
 
 describe('Universes', () => {
   let graphql: GraphQL
@@ -20,7 +20,7 @@ describe('Universes', () => {
   let otherProfile: Profile
 
   const {altCredentials, credentials} = OAuth2.init()
-  const prisma = new PrismaClient()
+  const prisma = Prisma.init()
 
   const tables = ['User', 'Profile', 'Universe']
 

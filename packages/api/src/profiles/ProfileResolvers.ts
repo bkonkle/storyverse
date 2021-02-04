@@ -2,6 +2,7 @@ import {PrismaClient} from '@prisma/client'
 import {Resolvers, QueryResolvers, MutationResolvers} from '../Schema'
 import {getUsername, maybeUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
+import Prisma from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import ProfileAuthz from './ProfileAuthz'
 import {
@@ -17,7 +18,7 @@ export default class ProfileResolvers {
   private readonly authz: ProfileAuthz
 
   constructor(prisma?: PrismaClient, authz?: ProfileAuthz) {
-    this.prisma = prisma || new PrismaClient()
+    this.prisma = prisma || Prisma.init()
     this.authz = authz || new ProfileAuthz()
   }
 
@@ -72,6 +73,7 @@ export default class ProfileResolvers {
     }
     const total = await this.prisma.profile.count(options)
     const profiles = await this.prisma.profile.findMany({
+      include: {user: true},
       ...options,
       ...getOffset(pageSize, page),
     })
@@ -120,14 +122,20 @@ export default class ProfileResolvers {
     context,
     _resolveInfo
   ) => {
+    console.log(`>- context ->`, context)
     const username = getUsername(context)
+    console.log(`>- username ->`, username)
     await this.authz.update(username, id)
+    console.log(`>- id ->`, id)
 
+    const data = fromProfileInput(input)
+    console.log(`>- data ->`, data)
     const profile = await this.prisma.profile.update({
       include: {user: true},
       where: {id},
-      data: fromProfileInput(input),
+      data,
     })
+    console.log(`>- profile ->`, profile)
 
     return {profile}
   }

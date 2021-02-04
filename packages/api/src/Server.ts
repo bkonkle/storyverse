@@ -3,6 +3,7 @@ import {Application} from 'express'
 import http from 'http'
 
 import {init} from './App'
+import Prisma from './utils/Prisma'
 
 export function run(label: string, app: Application, port: number): void {
   const portStr = chalk.yellow(port.toString())
@@ -15,6 +16,7 @@ export function run(label: string, app: Application, port: number): void {
 
   server.on('close', () => {
     console.log(chalk.cyan(`> ${label} shutting down`))
+    Prisma.disconnect()
   })
 }
 

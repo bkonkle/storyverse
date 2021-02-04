@@ -2,12 +2,13 @@ import {PrismaClient} from '@prisma/client'
 import {ForbiddenError, UserInputError} from 'apollo-server-core'
 
 import {Profile} from '../Schema'
+import Prisma from '../utils/Prisma'
 
 export default class UniverseAuthz {
   private readonly prisma: PrismaClient
 
   constructor(prisma?: PrismaClient) {
-    this.prisma = prisma || new PrismaClient()
+    this.prisma = prisma || Prisma.init()
   }
 
   create = async (

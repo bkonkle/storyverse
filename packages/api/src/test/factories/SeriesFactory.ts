@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateSeriesInput, Series} from '../../src/Schema'
+import {CreateSeriesInput, Series} from '../../Schema'
 
 export const makeCreateInput = (
   overrides?: Partial<CreateSeriesInput> | null

@@ -5,6 +5,7 @@ import {get} from 'lodash'
 import {Resolvers, QueryResolvers, MutationResolvers, Universe} from '../Schema'
 import {Context} from '../utils/Context'
 import {includeFromSelections} from '../utils/DbUtils'
+import Prisma from '../utils/Prisma'
 import UniverseAuthz from './UniverseAuthz'
 
 export default class UniverseResolvers {
@@ -12,7 +13,7 @@ export default class UniverseResolvers {
   private readonly authz: UniverseAuthz
 
   constructor(prisma?: PrismaClient, authz?: UniverseAuthz) {
-    this.prisma = prisma || new PrismaClient()
+    this.prisma = prisma || Prisma.init()
     this.authz = authz || new UniverseAuthz()
   }
 

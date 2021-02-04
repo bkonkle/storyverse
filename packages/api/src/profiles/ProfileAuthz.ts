@@ -2,6 +2,7 @@ import {ForbiddenError, UserInputError} from 'apollo-server-core'
 import {PrismaClient} from '@prisma/client'
 
 import {User, Profile} from '../Schema'
+import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import {isOwner} from './ProfileUtils'
 
@@ -9,7 +10,7 @@ export default class ProfileAuthz {
   private readonly prisma: PrismaClient
 
   constructor(prisma?: PrismaClient) {
-    this.prisma = prisma || new PrismaClient()
+    this.prisma = prisma || Prisma.init()
   }
 
   create = (username: string) => (user?: User | null): User => {
@@ -37,7 +38,10 @@ export default class ProfileAuthz {
   delete = this.update
 
   private getExisting = async (id: string): Promise<Profile> => {
-    const existing = await this.prisma.profile.findFirst({where: {id}})
+    const existing = await this.prisma.profile.findFirst({
+      include: {user: true},
+      where: {id},
+    })
 
     if (!existing) {
       throw new NotFoundError('Not found')

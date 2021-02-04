@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateUniverseInput, Universe} from '../../src/Schema'
+import {CreateUniverseInput, Universe} from '../../Schema'
 
 export const makeCreateInput = (
   overrides?: Partial<CreateUniverseInput> | null

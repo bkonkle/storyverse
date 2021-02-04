@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateRoleGrantInput, RoleGrant} from '../../src/Schema'
+import {CreateRoleGrantInput, RoleGrant} from '../../Schema'
 
 export const makeRoleGrantInput = (
   overrides?: Partial<CreateRoleGrantInput> | null

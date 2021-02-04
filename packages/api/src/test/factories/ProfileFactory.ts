@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateProfileInput, Profile} from '../../src/Schema'
+import {CreateProfileInput, Profile} from '../../Schema'
 
 export const makeCreateInput = (
   overrides?: Partial<CreateProfileInput> | null

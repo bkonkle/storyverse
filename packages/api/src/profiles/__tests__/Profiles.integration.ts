@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import faker from 'faker'
-import {PrismaClient} from '@prisma/client'
 import {omit, pick} from 'lodash'
 
 import App from '../../App'
-import OAuth2 from '../../../test/OAuth2'
-import GraphQL from '../../../test/GraphQL'
-import Validation from '../../../test/Validation'
-import {dbCleaner} from '../../../test/Prisma'
-import ProfileFactory from '../../../test/factories/ProfileFactory'
+import OAuth2 from '../../test/OAuth2'
+import GraphQL from '../../test/GraphQL'
+import Validation from '../../test/Validation'
+import {dbCleaner} from '../../test/Prisma'
+import ProfileFactory from '../../test/factories/ProfileFactory'
 import {Mutation, Query, User, Profile, CreateProfileInput} from '../../Schema'
-import TestData from '../../../test/TestData'
+import TestData from '../../test/TestData'
+import Prisma from '../../utils/Prisma'
 
 describe('Profile', () => {
   let graphql: GraphQL
@@ -19,7 +19,7 @@ describe('Profile', () => {
   let otherUser: User
 
   const {altCredentials, credentials} = OAuth2.init()
-  const prisma = new PrismaClient()
+  const prisma = Prisma.init()
 
   const tables = ['User', 'Profile']
 
@@ -397,7 +397,7 @@ describe('Profile', () => {
     })
   })
 
-  describe('Mutation: updateProfile', () => {
+  describe.only('Mutation: updateProfile', () => {
     const mutation = `
       mutation UpdateProfile($id: UUID!, $input: UpdateProfileInput!) {
         updateProfile(id: $id, input: $input) {
@@ -454,7 +454,7 @@ describe('Profile', () => {
       expect(updated).toMatchObject(expected)
     })
 
-    it('requires the id to be a uuid', async () => {
+    it.only('requires the id to be a uuid', async () => {
       const {token} = credentials
       const variables = {
         id: 'test-id',

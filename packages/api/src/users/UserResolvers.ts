@@ -3,13 +3,14 @@ import {PrismaClient} from '@prisma/client'
 import {Resolvers, QueryResolvers, MutationResolvers} from '../Schema'
 import {Context} from '../utils/Context'
 import {NotFoundError} from '../utils/Errors'
+import Prisma from '../utils/Prisma'
 import {getUsername, requireMatchingUsername} from './UserUtils'
 
 export default class UserResolvers {
   private readonly prisma: PrismaClient
 
   constructor(prisma?: PrismaClient) {
-    this.prisma = prisma || new PrismaClient()
+    this.prisma = prisma || Prisma.init()
   }
 
   getResolvers = (): Resolvers => ({

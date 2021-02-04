@@ -1,19 +1,20 @@
-import {PrismaClient, Prisma} from '@prisma/client'
+import {Prisma} from '@prisma/client'
 
 import App from '../../App'
-import OAuth2 from '../../../test/OAuth2'
-import GraphQL from '../../../test/GraphQL'
-import Validation from '../../../test/Validation'
-import {dbCleaner} from '../../../test/Prisma'
-import UserFactory from '../../../test/factories/UserFactory'
+import OAuth2 from '../../test/OAuth2'
+import GraphQL from '../../test/GraphQL'
+import Validation from '../../test/Validation'
+import {dbCleaner} from '../../test/Prisma'
+import UserFactory from '../../test/factories/UserFactory'
 import {Mutation, Query} from '../../Schema'
-import TestData from '../../../test/TestData'
+import TestData from '../../test/TestData'
+import PrismaUtils from '../../utils/Prisma'
 
 describe('Users', () => {
   let graphql: GraphQL
 
   const {credentials} = OAuth2.init()
-  const prisma = new PrismaClient()
+  const prisma = PrismaUtils.init()
 
   const tables = ['User']
 
