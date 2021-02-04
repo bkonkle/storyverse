@@ -1,14 +1,15 @@
+import {PrismaClient} from '@prisma/client'
+
 import {Resolvers, QueryResolvers, MutationResolvers} from '../Schema'
 import {Context} from '../utils/Context'
 import {NotFoundError} from '../utils/Errors'
-import UsersService from './UsersService'
 import {getUsername, requireMatchingUsername} from './UserUtils'
 
 export default class UserResolvers {
-  private readonly service: UsersService
+  private readonly prisma: PrismaClient
 
-  constructor(service?: UsersService) {
-    this.service = service || new UsersService()
+  constructor(prisma?: PrismaClient) {
+    this.prisma = prisma || new PrismaClient()
   }
 
   getResolvers = (): Resolvers => ({
@@ -29,7 +30,7 @@ export default class UserResolvers {
   ) => {
     const username = getUsername(context)
 
-    return this.service.findFirst({where: {username}})
+    return this.prisma.user.findFirst({where: {username}})
   }
 
   createUser: MutationResolvers<Context>['createUser'] = async (
@@ -40,7 +41,7 @@ export default class UserResolvers {
   ) => {
     requireMatchingUsername(context, input.username)
 
-    const user = await this.service.create({
+    const user = await this.prisma.user.create({
       data: input,
     })
 
@@ -55,12 +56,12 @@ export default class UserResolvers {
   ) => {
     const username = getUsername(context)
 
-    const user = await this.service.findFirst({where: {username}})
+    const user = await this.prisma.user.findFirst({where: {username}})
     if (!user) {
       throw new NotFoundError('Not found')
     }
 
-    const updated = await this.service.update({
+    const updated = await this.prisma.user.update({
       where: {username},
       data: {
         username: input.username || undefined,

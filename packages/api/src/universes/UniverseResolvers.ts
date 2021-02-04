@@ -1,16 +1,18 @@
+import {PrismaClient} from '@prisma/client'
 import {AuthenticationError} from 'apollo-server-core'
+import {get} from 'lodash'
 
 import {Resolvers, QueryResolvers, MutationResolvers, Universe} from '../Schema'
 import {Context} from '../utils/Context'
+import {includeFromSelections} from '../utils/DbUtils'
 import UniverseAuthz from './UniverseAuthz'
-import UniversesService from './UniversesService'
 
 export default class UniverseResolvers {
-  private readonly service: UniversesService
+  private readonly prisma: PrismaClient
   private readonly authz: UniverseAuthz
 
-  constructor(service?: UniversesService, authz?: UniverseAuthz) {
-    this.service = service || new UniversesService()
+  constructor(prisma?: PrismaClient, authz?: UniverseAuthz) {
+    this.prisma = prisma || new PrismaClient()
     this.authz = authz || new UniverseAuthz()
   }
 
@@ -58,7 +60,7 @@ export default class UniverseResolvers {
     _parent,
     {input},
     {req: {user}},
-    _resolveInfo
+    resolveInfo
   ) => {
     if (!user) {
       throw new AuthenticationError('Authentication required')
@@ -67,11 +69,26 @@ export default class UniverseResolvers {
 
     await this.authz.create(username, input.ownerProfileId)
 
-    // console.log(
-    //   `>- resolveInfo.operation.selectionSet.selections ->`,
-    //   resolveInfo.operation.selectionSet.selections
-    // )
-    const universe = await this.service.createUniverse(input)
+    const include = get(
+      includeFromSelections(resolveInfo.operation.selectionSet),
+      'createUniverse.universe'
+    )
+    const includeOwnerProfile = get(include, 'ownerProfile') === true || false
+
+    const universe = await this.prisma.universe.create({
+      include: {
+        ownerProfile: includeOwnerProfile,
+      },
+      data: includeOwnerProfile
+        ? {
+            ...input,
+            ownerProfileId: undefined,
+            ownerProfile: {
+              connect: {id: input.ownerProfileId},
+            },
+          }
+        : input,
+    })
 
     return {universe}
   }

@@ -92,7 +92,7 @@ describe('Universes', () => {
       'ownerProfile.displayName',
     ]
 
-    it('creates a new universe', async () => {
+    it.only('creates a new universe', async () => {
       const {token} = credentials
       const universe = UniverseFactory.makeCreateInput({
         ownerProfileId: profile.id,
