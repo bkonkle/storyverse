@@ -1,12 +1,17 @@
+import {AuthenticationError} from 'apollo-server-core'
+
 import {Resolvers, QueryResolvers, MutationResolvers, Universe} from '../Schema'
 import {Context} from '../utils/Context'
+import UniverseAuthz from './UniverseAuthz'
 import UniversesService from './UniversesService'
 
 export default class UniverseResolvers {
   private readonly service: UniversesService
+  private readonly authz: UniverseAuthz
 
-  constructor(service?: UniversesService) {
+  constructor(service?: UniversesService, authz?: UniverseAuthz) {
     this.service = service || new UniversesService()
+    this.authz = authz || new UniverseAuthz()
   }
 
   getResolvers = (): Resolvers => ({
@@ -52,9 +57,16 @@ export default class UniverseResolvers {
   createUniverse: MutationResolvers<Context>['createUniverse'] = async (
     _parent,
     {input},
-    _context,
+    {req: {user}},
     _resolveInfo
   ) => {
+    if (!user) {
+      throw new AuthenticationError('Authentication required')
+    }
+    const {sub: username} = user
+
+    await this.authz.create(username, input.ownerProfileId)
+
     // console.log(
     //   `>- resolveInfo.operation.selectionSet.selections ->`,
     //   resolveInfo.operation.selectionSet.selections

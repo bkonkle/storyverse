@@ -1,5 +1,4 @@
 import {readFileSync} from 'fs'
-import GraphQLDateTime from './utils/GraphQLDateTime'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
 import GraphQLUUID from 'graphql-type-uuid'
 import gql from 'graphql-tag'
@@ -8,11 +7,12 @@ import {join} from 'path'
 import {ApolloServer} from 'apollo-server-express'
 import express, {Application} from 'express'
 import morgan from 'morgan'
-
-import {jwtMiddleware} from './authentication/JwtMiddleware'
+import jwt from 'express-jwt'
+import jwks from 'jwks-rsa'
 
 import {Vars, getVars} from './config/Environment'
 import {Resolvers} from './Schema'
+import GraphQLDateTime from './utils/GraphQLDateTime'
 import UserResolvers from './users/UserResolvers'
 import ProfileResolvers from './profiles/ProfileResolvers'
 import UniverseResolvers from './universes/UniverseResolvers'
@@ -63,15 +63,17 @@ export async function init(
     .use(morgan(isDev ? 'dev' : 'combined'))
 
   app.use(
-    jwtMiddleware({
-      jwt: {
-        audience,
-        issuer,
-        credentialsRequired: false,
-      },
-      jwks: {
+    jwt({
+      algorithms: ['RS256'],
+      audience,
+      issuer,
+      credentialsRequired: false,
+      secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
         jwksUri: `${issuer}.well-known/jwks.json`,
-      },
+      }),
     })
   )
 

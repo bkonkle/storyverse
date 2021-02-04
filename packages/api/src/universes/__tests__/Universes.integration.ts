@@ -1,4 +1,5 @@
 import {PrismaClient} from '@prisma/client'
+import {pick, omit} from 'lodash'
 
 import App from '../../App'
 import OAuth2 from '../../utils/__tests__/OAuth2'
@@ -7,7 +8,7 @@ import Validation from '../../utils/__tests__/Validation'
 import {dbCleaner} from '../../utils/__tests__/Prisma'
 import ProfileFactory from '../../utils/__tests__/factories/ProfileFactory'
 import UniverseFactory from '../../utils/__tests__/factories/UniverseFactory'
-import {Mutation, Universe, User, Profile} from '../../Schema'
+import {Mutation, User, Profile} from '../../Schema'
 
 describe('Universes', () => {
   let graphql: GraphQL
@@ -15,10 +16,10 @@ describe('Universes', () => {
   let user: User
   let profile: Profile
 
-  // let otherUser: User
-  // let otherProfile: Profile
+  let otherUser: User
+  let otherProfile: Profile
 
-  const {credentials} = OAuth2.init()
+  const {altCredentials, credentials} = OAuth2.init()
   const prisma = new PrismaClient()
 
   const tables = ['User', 'Profile', 'Universe']
@@ -47,21 +48,21 @@ describe('Universes', () => {
     })
   })
 
-  // beforeAll(async () => {
-  //   const {username} = altCredentials
+  beforeAll(async () => {
+    const {username} = altCredentials
 
-  //   if (!username) {
-  //     throw new Error('No username found in OAuth2 credentials')
-  //   }
+    if (!username) {
+      throw new Error('No username found in OAuth2 credentials')
+    }
 
-  //   otherUser = await prisma.user.create({data: {username, isActive: true}})
-  //   otherProfile = await prisma.profile.create({
-  //     include: {
-  //       user: true,
-  //     },
-  //     data: ProfileFactory.makeCreateInput({userId: otherUser.id}),
-  //   })
-  // })
+    otherUser = await prisma.user.create({data: {username, isActive: true}})
+    otherProfile = await prisma.profile.create({
+      include: {
+        user: true,
+      },
+      data: ProfileFactory.makeCreateInput({userId: otherUser.id}),
+    })
+  })
 
   afterEach(async () => {
     jest.resetAllMocks()
@@ -75,12 +76,21 @@ describe('Universes', () => {
             id
             name
             description
-            ownerProfileId
+            ownerProfile {
+              id
+              displayName
+            }
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'ownerProfileId'] as const
+    const fields = [
+      'id',
+      'name',
+      'description',
+      'ownerProfile.id',
+      'ownerProfile.displayName',
+    ]
 
     it('creates a new universe', async () => {
       const {token} = credentials
@@ -89,10 +99,13 @@ describe('Universes', () => {
       })
       const variables = {input: universe}
 
-      const expected: Pick<Universe, typeof fields[number]> = {
-        ...variables.input,
-        id: expect.stringMatching(Validation.uuidRegex),
-      }
+      const expected = pick(
+        {
+          ...universe,
+          id: expect.stringMatching(Validation.uuidRegex),
+        },
+        fields
+      )
 
       const {data} = await graphql.mutation<Pick<Mutation, 'createUniverse'>>(
         mutation,
@@ -125,6 +138,70 @@ describe('Universes', () => {
           id: created.id,
         },
       })
+    })
+
+    it('requires a name and an ownerProfileId', async () => {
+      const {token} = credentials
+      const universe = omit(
+        UniverseFactory.makeCreateInput({ownerProfileId: profile.id}),
+        ['name', 'ownerProfileId']
+      )
+      const variables = {input: universe}
+
+      const body = await graphql.mutation(mutation, variables, {
+        token,
+        statusCode: 400,
+        warn: false,
+      })
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'Field "name" of required type "String!" was not provided.'
+          ),
+        }),
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'Field "ownerProfileId" of required type "UUID!" was not provided.'
+          ),
+        }),
+      ])
+    })
+
+    it('requires authentication', async () => {
+      const universe = UniverseFactory.makeCreateInput({
+        ownerProfileId: profile.id,
+      })
+      const variables = {input: universe}
+
+      const body = await graphql.mutation(mutation, variables, {warn: false})
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Authentication required',
+          extensions: {code: 'UNAUTHENTICATED'},
+        }),
+      ])
+    })
+
+    it('requires authorization', async () => {
+      const {token} = credentials
+      const universe = UniverseFactory.makeCreateInput({
+        ownerProfileId: otherProfile.id,
+      })
+      const variables = {input: universe}
+
+      const body = await graphql.mutation(mutation, variables, {
+        token,
+        warn: false,
+      })
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Authorization required',
+          extensions: {code: 'FORBIDDEN'},
+        }),
+      ])
     })
   })
 })

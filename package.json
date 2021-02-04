@@ -27,7 +27,7 @@
   "scripts": {
     "check.types": "tsc --pretty --noEmit",
     "format": "prettier --write",
-    "format.all": "npm run format \"{src,packages}/**/*.{js,jsx,ts,tsx}\""
+    "format.all": "yarn format \"{src,packages}/**/*.{js,jsx,ts,tsx}\""
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
