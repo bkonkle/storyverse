@@ -46,7 +46,10 @@ export default class ProfileResolvers {
     const username = maybeUsername(context)
 
     return this.prisma.profile
-      .findFirst({where: {id}})
+      .findFirst({
+        include: {user: true},
+        where: {id},
+      })
       .then(maybeCensor(username))
   }
 
@@ -95,9 +98,7 @@ export default class ProfileResolvers {
       .then(this.authz.create(username))
 
     const profile = await this.prisma.profile.create({
-      include: {
-        user: true,
-      },
+      include: {user: true},
       data: {
         ...input,
         userId: undefined,
@@ -123,9 +124,7 @@ export default class ProfileResolvers {
     await this.authz.update(username, id)
 
     const profile = await this.prisma.profile.update({
-      include: {
-        user: true,
-      },
+      include: {user: true},
       where: {id},
       data: fromProfileInput(input),
     })

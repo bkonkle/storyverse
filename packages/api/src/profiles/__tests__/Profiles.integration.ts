@@ -23,8 +23,8 @@ describe('Profile', () => {
 
   const tables = ['User', 'Profile']
 
-  const createProfile = (input: CreateProfileInput) => () =>
-    prisma.profile.create({data: input})
+  const createProfile = (input: CreateProfileInput) =>
+    prisma.profile.create({include: {user: true}, data: input})
 
   const deleteProfile = (id: string) => prisma.profile.delete({where: {id}})
 
@@ -119,10 +119,10 @@ describe('Profile', () => {
       })
     })
 
-    it('requires an email address', async () => {
+    it('requires an email address and a userId', async () => {
       const {token} = credentials
-      const profile = omit(ProfileFactory.makeCreateInput({userId: user.id}), [
-        'user',
+      const profile = omit(ProfileFactory.makeCreateInput(), [
+        'userId',
         'email',
       ])
       const variables = {input: profile}
@@ -133,32 +133,21 @@ describe('Profile', () => {
         warn: false,
       })
 
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Field email of required type String! was not provided.'
-          ),
-        }),
-      ])
-    })
-
-    it('requires a userId or inline user input', async () => {
-      const {token} = credentials
-      const profile = ProfileFactory.makeCreateInput()
-      const variables = {input: profile}
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Field "userId" of type "String" or "user" of type "CreateUserInput" was not provided.'
-          ),
-        }),
-      ])
+      expect(body).toHaveProperty(
+        'errors',
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: expect.stringContaining(
+              'Field "email" of required type "String!" was not provided.'
+            ),
+          }),
+          expect.objectContaining({
+            message: expect.stringContaining(
+              'Field "userId" of required type "String!" was not provided.'
+            ),
+          }),
+        ])
+      )
     })
 
     it('requires authentication', async () => {
@@ -169,16 +158,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Unauthorized',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 401,
-              response: {
-                message: 'Unauthorized',
-                statusCode: 401,
-              },
-            }),
-          }),
+          message: 'Authentication required',
+          extensions: {code: 'UNAUTHENTICATED'},
         }),
       ])
     })
@@ -198,16 +179,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Forbidden',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 403,
-              response: {
-                message: 'Forbidden',
-                statusCode: 403,
-              },
-            }),
-          }),
+          message: 'Authorization required',
+          extensions: {code: 'FORBIDDEN'},
         }),
       ])
     })
@@ -238,7 +211,7 @@ describe('Profile', () => {
     ]
 
     const profile = new TestData(
-      createProfile(ProfileFactory.makeCreateInput({userId: user.id})),
+      () => createProfile(ProfileFactory.makeCreateInput({userId: user.id})),
       deleteProfile
     )
 
@@ -340,19 +313,21 @@ describe('Profile', () => {
     ]
 
     const profile = new TestData(
-      createProfile(
-        ProfileFactory.makeCreateInput({
-          userId: user.id,
-        })
-      ),
+      () =>
+        createProfile(
+          ProfileFactory.makeCreateInput({
+            userId: user.id,
+          })
+        ),
       deleteProfile
     )
     const otherProfile = new TestData(
-      createProfile(
-        ProfileFactory.makeCreateInput({
-          userId: otherUser.id,
-        })
-      ),
+      () =>
+        createProfile(
+          ProfileFactory.makeCreateInput({
+            userId: otherUser.id,
+          })
+        ),
       deleteProfile
     )
 
@@ -439,11 +414,12 @@ describe('Profile', () => {
     const fields = ['id', 'email', 'displayName', 'picture', 'userId']
 
     const profile = new TestData(
-      createProfile(
-        ProfileFactory.makeCreateInput({
-          userId: user.id,
-        })
-      ),
+      () =>
+        createProfile(
+          ProfileFactory.makeCreateInput({
+            userId: user.id,
+          })
+        ),
       deleteProfile
     )
 
@@ -600,11 +576,12 @@ describe('Profile', () => {
       `
 
     const profile = new TestData(
-      createProfile(
-        ProfileFactory.makeCreateInput({
-          userId: user.id,
-        })
-      ),
+      () =>
+        createProfile(
+          ProfileFactory.makeCreateInput({
+            userId: user.id,
+          })
+        ),
       deleteProfile
     )
 

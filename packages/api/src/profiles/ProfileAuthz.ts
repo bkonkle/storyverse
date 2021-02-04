@@ -14,9 +14,7 @@ export default class ProfileAuthz {
 
   create = (username: string) => (user?: User | null): User => {
     if (!user) {
-      throw new UserInputError(
-        'An existing User must be found or valid UserInput must be provided.'
-      )
+      throw new UserInputError('No user found with that id')
     }
 
     if (username !== user.username) {

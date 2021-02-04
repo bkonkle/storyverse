@@ -1,20 +1,20 @@
+import {PrismaClient} from '@prisma/client'
 import {ForbiddenError, UserInputError} from 'apollo-server-core'
 
 import {Profile} from '../Schema'
-import ProfilesService from '../profiles/ProfilesService'
 
 export default class UniverseAuthz {
-  private readonly profiles: ProfilesService
+  private readonly prisma: PrismaClient
 
-  constructor(profiles?: ProfilesService) {
-    this.profiles = profiles || new ProfilesService()
+  constructor(prisma?: PrismaClient) {
+    this.prisma = prisma || new PrismaClient()
   }
 
   create = async (
     username: string,
     ownerProfileId: string
   ): Promise<Profile> => {
-    const profile = await this.profiles.findFirst({
+    const profile = await this.prisma.profile.findFirst({
       include: {
         user: true,
       },
