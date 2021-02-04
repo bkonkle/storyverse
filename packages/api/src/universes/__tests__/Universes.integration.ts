@@ -2,12 +2,12 @@ import {PrismaClient} from '@prisma/client'
 import {pick, omit} from 'lodash'
 
 import App from '../../App'
-import OAuth2 from '../../utils/__tests__/OAuth2'
-import GraphQL from '../../utils/__tests__/GraphQL'
-import Validation from '../../utils/__tests__/Validation'
-import {dbCleaner} from '../../utils/__tests__/Prisma'
-import ProfileFactory from '../../utils/__tests__/factories/ProfileFactory'
-import UniverseFactory from '../../utils/__tests__/factories/UniverseFactory'
+import OAuth2 from '../../../test/OAuth2'
+import GraphQL from '../../../test/GraphQL'
+import Validation from '../../../test/Validation'
+import {dbCleaner} from '../../../test/Prisma'
+import ProfileFactory from '../../../test/factories/ProfileFactory'
+import UniverseFactory from '../../../test/factories/UniverseFactory'
 import {Mutation, User, Profile} from '../../Schema'
 
 describe('Universes', () => {
