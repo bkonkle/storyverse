@@ -7,9 +7,9 @@ export interface ManyResponse<Entity> {
 }
 
 export interface PaginationOptions {
-  pageSize?: number
-  page?: number
-  total?: number
+  pageSize?: number | null
+  page?: number | null
+  total?: number | null
 }
 
 export const paginateResponse = <Entity>(
@@ -40,4 +40,11 @@ export const paginateResponse = <Entity>(
     page,
     pageCount: pageCount || page,
   }
+}
+
+export const getOffset = (pageSize?: number | null, page?: number | null) => {
+  const skip =
+    (pageSize && page && page > 1 && (page - 1) * pageSize) || undefined
+
+  return {take: pageSize || undefined, skip}
 }

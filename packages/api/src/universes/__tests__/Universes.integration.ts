@@ -1,5 +1,5 @@
 import {PrismaClient} from '@prisma/client'
-import {pick, omit} from 'lodash'
+import {omit, pick} from 'lodash'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'
@@ -92,7 +92,7 @@ describe('Universes', () => {
       'ownerProfile.displayName',
     ]
 
-    it.only('creates a new universe', async () => {
+    it('creates a new universe', async () => {
       const {token} = credentials
       const universe = UniverseFactory.makeCreateInput({
         ownerProfileId: profile.id,
