@@ -122,20 +122,15 @@ export default class ProfileResolvers {
     context,
     _resolveInfo
   ) => {
-    console.log(`>- context ->`, context)
     const username = getUsername(context)
-    console.log(`>- username ->`, username)
     await this.authz.update(username, id)
-    console.log(`>- id ->`, id)
 
     const data = fromProfileInput(input)
-    console.log(`>- data ->`, data)
     const profile = await this.prisma.profile.update({
       include: {user: true},
       where: {id},
       data,
     })
-    console.log(`>- profile ->`, profile)
 
     return {profile}
   }

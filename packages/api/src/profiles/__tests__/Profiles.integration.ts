@@ -24,7 +24,12 @@ describe('Profile', () => {
   const tables = ['User', 'Profile']
 
   const createProfile = (input: CreateProfileInput) =>
-    prisma.profile.create({include: {user: true}, data: input})
+    prisma.profile.upsert({
+      include: {user: true},
+      where: {userId: input.userId},
+      create: input,
+      update: input,
+    })
 
   const deleteProfile = (id: string) => prisma.profile.delete({where: {id}})
 
@@ -397,7 +402,7 @@ describe('Profile', () => {
     })
   })
 
-  describe.only('Mutation: updateProfile', () => {
+  describe('Mutation: updateProfile', () => {
     const mutation = `
       mutation UpdateProfile($id: UUID!, $input: UpdateProfileInput!) {
         updateProfile(id: $id, input: $input) {
@@ -454,7 +459,7 @@ describe('Profile', () => {
       expect(updated).toMatchObject(expected)
     })
 
-    it.only('requires the id to be a uuid', async () => {
+    it('requires the id to be a uuid', async () => {
       const {token} = credentials
       const variables = {
         id: 'test-id',
@@ -464,19 +469,16 @@ describe('Profile', () => {
       const body = await graphql.mutation(mutation, variables, {
         token,
         warn: false,
+        statusCode: 400,
       })
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Validation failed (uuid  is expected)',
+          message: expect.stringContaining(
+            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
+          ),
           extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 400,
-              response: expect.objectContaining({
-                message: 'Validation failed (uuid  is expected)',
-                statusCode: 400,
-              }),
-            }),
+            code: 'INTERNAL_SERVER_ERROR',
           }),
         }),
       ])
@@ -492,16 +494,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Unauthorized',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 401,
-              response: {
-                message: 'Unauthorized',
-                statusCode: 401,
-              },
-            }),
-          }),
+          message: 'Authentication required',
+          extensions: {code: 'UNAUTHENTICATED'},
         }),
       ])
     })
@@ -521,16 +515,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Not Found',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 404,
-              response: {
-                message: 'Not Found',
-                statusCode: 404,
-              },
-            }),
-          }),
+          message: 'Not found',
+          extensions: {code: 'NOT_FOUND'},
         }),
       ])
     })
@@ -549,16 +535,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Forbidden',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 403,
-              response: {
-                message: 'Forbidden',
-                statusCode: 403,
-              },
-            }),
-          }),
+          message: 'Authorization required',
+          extensions: {code: 'FORBIDDEN'},
         }),
       ])
     })
@@ -606,7 +584,7 @@ describe('Profile', () => {
       const deleted = await prisma.profile.findFirst({
         where: {id: profile.id},
       })
-      expect(deleted).toBeUndefined()
+      expect(deleted).toBeNull()
     })
 
     it('requires the id to be a uuid', async () => {
@@ -616,19 +594,16 @@ describe('Profile', () => {
       const body = await graphql.mutation(mutation, variables, {
         token,
         warn: false,
+        statusCode: 400,
       })
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Validation failed (uuid  is expected)',
+          message: expect.stringContaining(
+            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
+          ),
           extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 400,
-              response: expect.objectContaining({
-                message: 'Validation failed (uuid  is expected)',
-                statusCode: 400,
-              }),
-            }),
+            code: 'INTERNAL_SERVER_ERROR',
           }),
         }),
       ])
@@ -641,16 +616,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Unauthorized',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 401,
-              response: {
-                message: 'Unauthorized',
-                statusCode: 401,
-              },
-            }),
-          }),
+          message: 'Authentication required',
+          extensions: {code: 'UNAUTHENTICATED'},
         }),
       ])
     })
@@ -667,16 +634,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Not Found',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 404,
-              response: {
-                message: 'Not Found',
-                statusCode: 404,
-              },
-            }),
-          }),
+          message: 'Not found',
+          extensions: {code: 'NOT_FOUND'},
         }),
       ])
     })
@@ -692,16 +651,8 @@ describe('Profile', () => {
 
       expect(body).toHaveProperty('errors', [
         expect.objectContaining({
-          message: 'Forbidden',
-          extensions: expect.objectContaining({
-            exception: expect.objectContaining({
-              status: 403,
-              response: {
-                message: 'Forbidden',
-                statusCode: 403,
-              },
-            }),
-          }),
+          message: 'Authorization required',
+          extensions: {code: 'FORBIDDEN'},
         }),
       ])
     })
