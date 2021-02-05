@@ -58,6 +58,8 @@ export default class UniverseAuthz {
     return existing
   }
 
+  remove = this.update
+
   private getExisting = async (id: string) => {
     const existing = await this.prisma.universe.findFirst({
       include: {ownerProfile: {include: {user: true}}},

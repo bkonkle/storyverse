@@ -34,6 +34,10 @@ export const maybeCensor = (username?: string | null) => (
   return censor(username)(profile)
 }
 
+/**
+ * These required fields cannot be set to `null`, they can only be `undefined` in order for Prisma
+ * to ignore them. Force them to `undefined` if they are `null`.
+ */
 const requiredFields = [
   'id',
   'createdAt',

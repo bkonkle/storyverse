@@ -125,11 +125,20 @@ export default class ProfileResolvers {
     const username = getUsername(context)
     await this.authz.update(username, id)
 
-    const data = fromProfileInput(input)
+    const data = input.userId
+      ? {
+          ...input,
+          userId: undefined,
+          user: {
+            connect: {id: input.userId},
+          },
+        }
+      : input
+
     const profile = await this.prisma.profile.update({
       include: {user: true},
       where: {id},
-      data,
+      data: fromProfileInput(data),
     })
 
     return {profile}
@@ -148,6 +157,7 @@ export default class ProfileResolvers {
     await this.authz.delete(username, id)
 
     const profile = await this.prisma.profile.delete({
+      include: {user: true},
       where: {id},
     })
 

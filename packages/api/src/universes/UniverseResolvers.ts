@@ -1,12 +1,20 @@
 import {PrismaClient} from '@prisma/client'
-import {AuthenticationError} from 'apollo-server-core'
-import {get} from 'lodash'
 
 import {Resolvers, QueryResolvers, MutationResolvers, Universe} from '../Schema'
+import {getUsername, maybeUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
 import {includeFromSelections} from '../utils/DbUtils'
+import {NotFoundError} from '../utils/Errors'
+import {getOffset, paginateResponse} from '../utils/Pagination'
 import Prisma from '../utils/Prisma'
 import UniverseAuthz from './UniverseAuthz'
+import {
+  censor,
+  fromOrderByInput,
+  fromUniverseCondition,
+  fromUniverseInput,
+  maybeCensor,
+} from './UniverseUtils'
 
 export default class UniverseResolvers {
   private readonly prisma: PrismaClient
@@ -31,88 +39,182 @@ export default class UniverseResolvers {
 
   getUniverse: QueryResolvers<Context>['getUniverse'] = async (
     _parent,
-    args,
-    _context,
+    {id},
+    context,
     _resolveInfo
   ) => {
-    console.log(`>- UniverseResolvers.getUniverse -<`, args)
+    const username = maybeUsername(context)
 
-    return {} as Universe
+    return this.prisma.universe
+      .findFirst({
+        include: {ownerProfile: {include: {user: true}}},
+        where: {id},
+      })
+      .then(maybeCensor(username))
   }
 
   getManyUniverses: QueryResolvers<Context>['getManyUniverses'] = async (
     _parent,
     args,
-    _context,
+    context,
     _resolveInfo
   ) => {
-    console.log('>- UniverseResolvers.getManyUniverses -<', args)
+    const username = maybeUsername(context)
+    const {where, orderBy, pageSize, page} = args
 
-    return {
-      data: [] as Universe[],
-      count: 0,
-      total: 0,
-      page: 0,
-      pageCount: 0,
+    const options = {
+      where: fromUniverseCondition(where),
+      orderBy: fromOrderByInput(orderBy),
     }
+    const total = await this.prisma.universe.count(options)
+    const profiles = await this.prisma.universe.findMany({
+      include: {ownerProfile: {include: {user: true}}},
+      ...options,
+      ...getOffset(pageSize, page),
+    })
+
+    return paginateResponse(profiles.map(censor(username)), {
+      total,
+      pageSize,
+      page,
+    })
   }
 
   createUniverse: MutationResolvers<Context>['createUniverse'] = async (
     _parent,
     {input},
-    {req: {user}},
+    context,
     resolveInfo
   ) => {
-    if (!user) {
-      throw new AuthenticationError('Authentication required')
-    }
-    const {sub: username} = user
+    const username = getUsername(context)
 
     await this.authz.create(username, input.ownerProfileId)
 
-    const include = get(
-      includeFromSelections(resolveInfo.operation.selectionSet),
-      'createUniverse.universe'
+    const [
+      includeOwnerProfile,
+      includeOwnerUser,
+    ] = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'createUniverse.universe',
+      ['ownerProfile', 'ownerProfile.user']
     )
-    const includeOwnerProfile = get(include, 'ownerProfile') === true || false
+
+    if (includeOwnerProfile) {
+      const universe = await this.prisma.universe.create({
+        include: {ownerProfile: {include: {user: includeOwnerUser}}},
+        data: {
+          ...input,
+          ownerProfileId: undefined,
+          ownerProfile: {
+            connect: {id: input.ownerProfileId},
+          },
+        },
+      })
+
+      return {universe}
+    }
 
     const universe = await this.prisma.universe.create({
-      include: {
-        ownerProfile: includeOwnerProfile,
-      },
-      data: includeOwnerProfile
-        ? {
-            ...input,
-            ownerProfileId: undefined,
-            ownerProfile: {
-              connect: {id: input.ownerProfileId},
-            },
-          }
-        : input,
+      data: input,
     })
 
-    return {universe}
+    return {universe: universe as Universe}
   }
 
   updateUniverse: MutationResolvers<Context>['updateUniverse'] = async (
     _parent,
-    args,
-    _context,
-    _resolveInfo
+    {id, input},
+    context,
+    resolveInfo
   ) => {
-    console.log('>- UniverseResolvers.updateUniverse -<', args)
+    const username = getUsername(context)
+    const existing = await this.getExisting(id)
 
-    return {}
+    await this.authz.update(username, existing.ownerProfile.id)
+
+    const [
+      includeOwnerProfile,
+      includeOwnerUser,
+    ] = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'updateUniverse.universe',
+      ['ownerProfile', 'ownerProfile.user']
+    )
+
+    if (includeOwnerProfile) {
+      const data = input.ownerProfileId
+        ? {
+            ...input,
+            ownerProfileId: undefined,
+            ownerProfile: {
+              connect: {id: existing.ownerProfile.id},
+            },
+          }
+        : input
+
+      const universe = await this.prisma.universe.update({
+        include: {ownerProfile: {include: {user: includeOwnerUser}}},
+        where: {id},
+        data: fromUniverseInput(data),
+      })
+
+      return {universe}
+    }
+
+    const universe = await this.prisma.universe.update({
+      where: {id},
+      data: fromUniverseInput(input),
+    })
+
+    return {universe: universe as Universe}
   }
 
   deleteUniverse: MutationResolvers<Context>['deleteUniverse'] = async (
     _parent,
-    args,
-    _context,
-    _resolveInfo
+    {id},
+    context,
+    resolveInfo
   ) => {
-    console.log('>- UniverseResolvers.deleteUniverse -<', args)
+    const username = getUsername(context)
+    const existing = await this.getExisting(id)
 
-    return {}
+    await this.authz.remove(username, existing.ownerProfile.id)
+
+    const [
+      includeOwnerProfile,
+      includeOwnerUser,
+    ] = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'updateUniverse.universe',
+      ['ownerProfile', 'ownerProfile.user']
+    )
+
+    if (includeOwnerProfile) {
+      const universe = await this.prisma.universe.delete({
+        include: {ownerProfile: {include: {user: includeOwnerUser}}},
+        where: {id},
+      })
+
+      return {universe}
+    }
+
+    const universe = await this.prisma.universe.delete({
+      where: {id},
+    })
+
+    return {universe: universe as Universe}
+  }
+
+  private getExisting = async (id: string) => {
+    const existing = await this.prisma.universe.findFirst({
+      include: {ownerProfile: true},
+      where: {id},
+    })
+
+    if (!existing) {
+      throw new NotFoundError('Not found')
+    }
+
+    return existing
   }
 }
