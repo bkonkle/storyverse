@@ -67,7 +67,6 @@ export default class SeriesResolvers {
       resolveInfo.operation.selectionSet,
       'getManySeries.data'
     ) as IncludeAll
-    console.log(`>- include ->`, include)
 
     const series = await this.prisma.series.findMany({
       include,

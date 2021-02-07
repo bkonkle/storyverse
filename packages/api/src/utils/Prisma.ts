@@ -36,7 +36,11 @@ const fromSelections = (
     }
 
     if (!selection.selectionSet) {
-      return parent ? {...memo, [parent]: true} : memo
+      if (parent && !memo[parent]) {
+        return {...memo, [parent]: true}
+      }
+
+      return memo
     }
 
     if (parent) {
@@ -52,7 +56,7 @@ const fromSelections = (
       ...memo,
       ...fromSelections(selection.selectionSet, selection.name.value),
     }
-  }, {})
+  }, {} as JsonObject)
 
 /**
  * Given a GraphQL SelectionSetNode, a prefix, and a set of paths, derive the include statement for

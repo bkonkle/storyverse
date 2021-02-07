@@ -294,7 +294,7 @@ describe('Series', () => {
     })
   })
 
-  describe('Query: getManySeries', () => {
+  describe.only('Query: getManySeries', () => {
     const query = `
       query GetManySeries(
         $where: SeriesCondition
@@ -312,7 +312,9 @@ describe('Series', () => {
             id
             name
             description
-            universeId
+            universe {
+              id
+            }
           }
           count
           total
@@ -321,7 +323,7 @@ describe('Series', () => {
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'universeId']
+    const fields = ['id', 'name', 'description', 'universe.id']
 
     const series = new TestData(
       () =>
