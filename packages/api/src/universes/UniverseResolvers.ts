@@ -16,7 +16,9 @@ import {
 
 // A special type to unify the dynamic includes with the Resolver return type expectations
 type IncludeAll = {
-  ownerProfile: true
+  ownerProfile: {
+    include: {user: true}
+  }
   series: true
 }
 
@@ -97,7 +99,7 @@ export default class UniverseResolvers {
     const universe = await this.prisma.universe.create({
       include: includeFromSelections(
         resolveInfo.operation.selectionSet,
-        'updateUniverse.universe'
+        'createUniverse.universe'
       ) as IncludeAll,
       data: {
         ...input,
@@ -144,7 +146,7 @@ export default class UniverseResolvers {
     const universe = await this.prisma.universe.delete({
       include: includeFromSelections(
         resolveInfo.operation.selectionSet,
-        'updateUniverse.universe'
+        'deleteUniverse.universe'
       ) as IncludeAll,
       where: {id},
     })

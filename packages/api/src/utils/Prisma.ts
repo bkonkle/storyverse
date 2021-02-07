@@ -69,6 +69,13 @@ const fromSelections = (
 export const includeFromSelections = (
   selectionSet: SelectionSetNode,
   path: string
-) => _.get(fromSelections(selectionSet), path)
+) => {
+  const include = fromSelections(selectionSet)
+
+  // Translate the path to Prisma's "include" structure
+  const prismaPath = `${path.split('.').join('.include.')}.include`
+
+  return _.get(include, prismaPath)
+}
 
 export default {init, get, disconnect}

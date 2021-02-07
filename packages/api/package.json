@@ -19,7 +19,7 @@
     "db.reset": "yarn db.drop && yarn db.create && yarn db.migrate",
     "db.restore": "ts-node --transpile-only src/scripts/db/restore.ts",
     "db.tunnel": "ts-node --transpile-only src/scripts/db/tunnel.ts",
-    "generate.graphql": "graphql-codegen",
+    "generate.gql": "graphql-codegen",
     "generate.db": "prisma generate",
     "lint": "yarn eslint 'src/**/*{.js,.ts}'",
     "lint.fix": "yarn lint --fix",
@@ -27,7 +27,7 @@
     "start.dev": "concurrently --handle-input \"wait-on dist/Server.js && nodemon\" \"yarn build.watch\"",
     "test": "NODE_ENV=test jest",
     "test.cov": "NODE_ENV=test jest --coverage",
-    "test.int": "NODE_ENV=test jest -i -c ./jest.integration.config.js --forceExit",
+    "test.e2e": "NODE_ENV=test jest -i -c ./jest.e2e.config.js --forceExit",
     "test.watch": "yarn test --watch"
   },
   "dependencies": {
