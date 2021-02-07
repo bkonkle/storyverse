@@ -3,10 +3,8 @@ import {PrismaClient} from '@prisma/client'
 import {Resolvers, QueryResolvers, MutationResolvers, Universe} from '../Schema'
 import {getUsername, maybeUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
-import {includeFromSelections} from '../utils/DbUtils'
-import {NotFoundError} from '../utils/Errors'
+import Prisma, {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
-import Prisma from '../utils/Prisma'
 import UniverseAuthz from './UniverseAuthz'
 import {
   censor,
@@ -15,6 +13,12 @@ import {
   fromUniverseInput,
   maybeCensor,
 } from './UniverseUtils'
+
+// A special type to unify the dynamic includes with the Resolver return type expectations
+type IncludeAll = {
+  ownerProfile: true
+  series: true
+}
 
 export default class UniverseResolvers {
   private readonly prisma: PrismaClient
@@ -128,46 +132,18 @@ export default class UniverseResolvers {
     resolveInfo
   ) => {
     const username = getUsername(context)
-    const existing = await this.authz.update(username, id)
-
-    const [
-      includeOwnerProfile,
-      includeOwnerUser,
-    ] = includeFromSelections(
-      resolveInfo.operation.selectionSet,
-      'updateUniverse.universe',
-      ['ownerProfile', 'ownerProfile.user']
-    )
-
-    console.log(`>- includeOwnerProfile ->`, includeOwnerProfile)
-    console.log(`>- includeOwnerUser ->`, includeOwnerUser)
-
-    if (includeOwnerProfile) {
-      const data = input.ownerProfileId
-        ? {
-            ...input,
-            ownerProfileId: undefined,
-            ownerProfile: {
-              connect: {id: existing.ownerProfile.id},
-            },
-          }
-        : input
-
-      const universe = await this.prisma.universe.update({
-        include: {ownerProfile: {include: {user: includeOwnerUser}}},
-        where: {id},
-        data: fromUniverseInput(data),
-      })
-
-      return {universe}
-    }
+    await this.authz.update(username, id)
 
     const universe = await this.prisma.universe.update({
+      include: includeFromSelections(
+        resolveInfo.operation.selectionSet,
+        'updateUniverse.universe'
+      ) as IncludeAll,
       where: {id},
       data: fromUniverseInput(input),
     })
 
-    return {universe: universe as Universe}
+    return {universe}
   }
 
   deleteUniverse: MutationResolvers<Context>['deleteUniverse'] = async (
@@ -179,41 +155,14 @@ export default class UniverseResolvers {
     const username = getUsername(context)
     await this.authz.remove(username, id)
 
-    const [
-      includeOwnerProfile,
-      includeOwnerUser,
-    ] = includeFromSelections(
-      resolveInfo.operation.selectionSet,
-      'updateUniverse.universe',
-      ['ownerProfile', 'ownerProfile.user']
-    )
-
-    if (includeOwnerProfile) {
-      const universe = await this.prisma.universe.delete({
-        include: {ownerProfile: {include: {user: includeOwnerUser}}},
-        where: {id},
-      })
-
-      return {universe}
-    }
-
     const universe = await this.prisma.universe.delete({
+      include: includeFromSelections(
+        resolveInfo.operation.selectionSet,
+        'updateUniverse.universe'
+      ) as IncludeAll,
       where: {id},
     })
 
-    return {universe: universe as Universe}
-  }
-
-  private getExisting = async (id: string) => {
-    const existing = await this.prisma.universe.findFirst({
-      include: {ownerProfile: true},
-      where: {id},
-    })
-
-    if (!existing) {
-      throw new NotFoundError('Not found')
-    }
-
-    return existing
+    return {universe}
   }
 }
