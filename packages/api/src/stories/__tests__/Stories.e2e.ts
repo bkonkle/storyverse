@@ -8,14 +8,15 @@ import GraphQL from '../../test/GraphQL'
 import Validation from '../../test/Validation'
 import {dbCleaner} from '../../test/Prisma'
 import ProfileFactory from '../../test/factories/ProfileFactory'
-import SeriesFactory from '../../test/factories/SeriesFactory'
+import StoryFactory from '../../test/factories/StoryFactory'
 import {
   Mutation,
   User,
   Profile,
-  CreateSeriesInput,
-  Series,
+  CreateStoryInput,
+  Story,
   Query,
+  Series,
   Universe,
 } from '../../Schema'
 import Prisma from '../../utils/Prisma'
@@ -23,30 +24,39 @@ import TestData from '../../test/TestData'
 import UniverseFactory from '../../test/factories/UniverseFactory'
 import * as UniverseRoles from '../../universes/UniverseRoles'
 import * as UniverseUtils from '../../universes/UniverseUtils'
+import SeriesFactory from '../../test/factories/SeriesFactory'
 
-describe('Series', () => {
+describe('Story', () => {
   let graphql: GraphQL
 
   let user: User
   let profile: Profile
   let universe: Universe
+  let series: Series
 
   let otherUser: User
   let otherProfile: Profile
   let otherUniverse: Universe
+  let otherSeries: Series
 
   const {altCredentials, credentials} = OAuth2.init()
   const prisma = Prisma.init()
 
-  const tables = ['User', 'Profile', 'Series']
+  const tables = ['User', 'Profile', 'Story']
 
-  const createSeries = (input: CreateSeriesInput) =>
-    prisma.series.create({
-      include: {universe: {include: {ownerProfile: {include: {user: true}}}}},
+  const createStory = (input: CreateStoryInput) =>
+    prisma.story.create({
+      include: {
+        series: {
+          include: {
+            universe: {include: {ownerProfile: {include: {user: true}}}},
+          },
+        },
+      },
       data: input,
     })
 
-  const deleteSeries = (id: string) => prisma.series.delete({where: {id}})
+  const deleteStory = (id: string) => prisma.story.delete({where: {id}})
 
   beforeAll(async () => {
     await dbCleaner(prisma, tables)
@@ -72,6 +82,12 @@ describe('Series', () => {
       include: {ownerProfile: {include: {user: true}}},
       data: UniverseFactory.makeCreateInput({ownerProfileId: profile.id}),
     })
+    series = await prisma.series.create({
+      include: {
+        universe: {include: {ownerProfile: {include: {user: true}}}},
+      },
+      data: SeriesFactory.makeCreateInput({universeId: universe.id}),
+    })
   })
 
   beforeAll(async () => {
@@ -92,37 +108,43 @@ describe('Series', () => {
       include: {ownerProfile: {include: {user: true}}},
       data: UniverseFactory.makeCreateInput({ownerProfileId: otherProfile.id}),
     })
+    otherSeries = await prisma.series.create({
+      include: {
+        universe: {include: {ownerProfile: {include: {user: true}}}},
+      },
+      data: SeriesFactory.makeCreateInput({universeId: otherUniverse.id}),
+    })
   })
 
   afterEach(async () => {
     jest.resetAllMocks()
   })
 
-  describe('Mutation: createSeries', () => {
+  describe('Mutation: createStory', () => {
     const mutation = `
-      mutation CreateSeries($input: CreateSeriesInput!) {
-        createSeries(input: $input) {
-          series {
+      mutation CreateStory($input: CreateStoryInput!) {
+        createStory(input: $input) {
+          story {
             id
             name
-            description
-            universeId
+            summary
+            seriesId
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'universeId']
+    const fields = ['id', 'name', 'summary', 'seriesId']
 
-    it('creates a new series', async () => {
+    it('creates a new story', async () => {
       const {token} = credentials
-      const series = SeriesFactory.makeCreateInput({
-        universeId: universe.id,
+      const story = StoryFactory.makeCreateInput({
+        seriesId: series.id,
       })
-      const variables = {input: series}
+      const variables = {input: story}
 
       const expected = pick(
         {
-          ...series,
+          ...story,
           id: expect.stringMatching(Validation.uuidRegex),
         },
         fields
@@ -143,49 +165,47 @@ describe('Series', () => {
         fail('Grant not created')
       }
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'createSeries'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'createStory'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data?.createSeries).toHaveProperty(
-        'series',
+      expect(data?.createStory).toHaveProperty(
+        'story',
         expect.objectContaining(expected)
       )
 
-      const created = await prisma.series.findFirst({
+      const created = await prisma.story.findFirst({
         where: {
-          id: data?.createSeries?.series?.id,
+          id: data?.createStory?.story?.id,
         },
       })
 
       if (!created) {
-        fail('No series created.')
+        fail('No story created.')
       }
 
       expect(created).toMatchObject({
         ...expected,
-        id: data.createSeries.series?.id,
+        id: data.createStory.story?.id,
       })
 
-      await prisma.series.delete({
-        where: {
-          id: created.id,
-        },
+      await prisma.story.delete({
+        where: {id: created.id},
       })
       await prisma.roleGrant.delete({
         where: {id: grant.id},
       })
     })
 
-    it('requires a name and a universeId', async () => {
+    it('requires a name and a seriesId', async () => {
       const {token} = credentials
-      const series = omit(
-        SeriesFactory.makeCreateInput({universeId: universe.id}),
-        ['name', 'universeId']
-      )
-      const variables = {input: series}
+      const story = omit(StoryFactory.makeCreateInput({seriesId: series.id}), [
+        'name',
+        'seriesId',
+      ])
+      const variables = {input: story}
 
       const body = await graphql.mutation(mutation, variables, {
         token,
@@ -201,17 +221,17 @@ describe('Series', () => {
         }),
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "universeId" of required type "UUID!" was not provided.'
+            'Field "seriesId" of required type "UUID!" was not provided.'
           ),
         }),
       ])
     })
 
     it('requires authentication', async () => {
-      const series = SeriesFactory.makeCreateInput({
-        universeId: universe.id,
+      const story = StoryFactory.makeCreateInput({
+        seriesId: series.id,
       })
-      const variables = {input: series}
+      const variables = {input: story}
 
       const body = await graphql.mutation(mutation, variables, {warn: false})
 
@@ -225,10 +245,10 @@ describe('Series', () => {
 
     it('requires authorization', async () => {
       const {token} = credentials
-      const series = SeriesFactory.makeCreateInput({
-        universeId: otherUniverse.id,
+      const story = StoryFactory.makeCreateInput({
+        seriesId: series.id,
       })
-      const variables = {input: series}
+      const variables = {input: story}
 
       const body = await graphql.mutation(mutation, variables, {
         token,
@@ -244,63 +264,62 @@ describe('Series', () => {
     })
   })
 
-  describe('Query: getSeries', () => {
+  describe('Query: getStory', () => {
     const query = `
-      query GetSeries($id: UUID!) {
-        getSeries(id: $id) {
+      query GetStory($id: UUID!) {
+        getStory(id: $id) {
           id
           name
-          description
-          universeId
+          summary
+          seriesId
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'universeId']
+    const fields = ['id', 'name', 'summary', 'seriesId']
 
-    const series = new TestData(
-      () =>
-        createSeries(SeriesFactory.makeCreateInput({universeId: universe.id})),
-      deleteSeries
+    const story = new TestData(
+      () => createStory(StoryFactory.makeCreateInput({seriesId: series.id})),
+      deleteStory
     )
 
-    it('retrieves an existing series', async () => {
+    it('retrieves an existing story', async () => {
       const {token} = credentials
-      const variables = {id: series.id}
+      const variables = {id: story.id}
 
-      const {data} = await graphql.query<Pick<Query, 'getSeries'>>(
+      const {data} = await graphql.query<Pick<Query, 'getStory'>>(
         query,
         variables,
         {token}
       )
 
-      expect(data.getSeries).toEqual(pick(series.value, fields))
+      expect(data.getStory).toEqual(pick(story.value, fields))
     })
 
-    it('returns nothing when no series is found', async () => {
+    it('returns nothing when no story is found', async () => {
       const {token} = credentials
-      const variables = {id: series.id}
+      const variables = {id: story.id}
 
-      await series.delete()
+      await story.delete()
 
-      const {data} = await graphql.query<Pick<Query, 'getSeries'>>(
+      const {data} = await graphql.query<Pick<Query, 'getStory'>>(
         query,
         variables,
         {token}
       )
 
-      expect(data.getSeries).toBeFalsy()
+      expect(data.getStory).toBeFalsy()
     })
   })
 
-  describe('Query: getManySeries', () => {
+  describe('Query: getManyStories', () => {
     const query = `
-      query GetManySeries(
-        $where: SeriesCondition
-        $orderBy: [SeriesOrderBy!]
+      query GetManyStories(
+        $where: StoryCondition
+        $orderBy: [StoriesOrderBy!]
         $pageSize: Int
         $page: Int
       ) {
-        getManySeries(
+        getManyStories(
         where: $where
         orderBy: $orderBy
         pageSize: $pageSize
@@ -309,8 +328,8 @@ describe('Series', () => {
           data {
             id
             name
-            description
-            universe {
+            summary
+            series {
               id
             }
           }
@@ -321,35 +340,32 @@ describe('Series', () => {
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'universe.id']
+    const fields = ['id', 'name', 'summary', 'series.id']
 
-    const series = new TestData(
-      () =>
-        createSeries(SeriesFactory.makeCreateInput({universeId: universe.id})),
-      deleteSeries
+    const story = new TestData(
+      () => createStory(StoryFactory.makeCreateInput({seriesId: series.id})),
+      deleteStory
     )
-    const otherSeries = new TestData(
+    const otherStory = new TestData(
       () =>
-        createSeries(
-          SeriesFactory.makeCreateInput({universeId: otherUniverse.id})
-        ),
-      deleteSeries
+        createStory(StoryFactory.makeCreateInput({seriesId: otherSeries.id})),
+      deleteStory
     )
 
-    it('queries existing series', async () => {
+    it('queries existing stories', async () => {
       const {token} = credentials
       const variables = {}
 
-      const {data} = await graphql.query<Pick<Query, 'getManySeries'>>(
+      const {data} = await graphql.query<Pick<Query, 'getManyStories'>>(
         query,
         variables,
         {token}
       )
 
-      expect(data.getManySeries).toEqual({
+      expect(data.getManyStories).toEqual({
         data: expect.arrayContaining([
-          pick(series.value, fields),
-          pick(otherSeries.value, fields),
+          pick(story.value, fields),
+          pick(otherStory.value, fields),
         ]),
         count: 2,
         page: 1,
@@ -359,40 +375,39 @@ describe('Series', () => {
     })
   })
 
-  describe('Mutation: updateSeries', () => {
+  describe('Mutation: updateStory', () => {
     const mutation = `
-      mutation UpdateSeries($id: UUID!, $input: UpdateSeriesInput!) {
-        updateSeries(id: $id, input: $input) {
-          series {
+      mutation UpdateStory($id: UUID!, $input: UpdateStoryInput!) {
+        updateStory(id: $id, input: $input) {
+          story {
             id
             name
-            description
-            universeId
+            summary
+            seriesId
           }
         }
       }
     `
-    const fields = ['id', 'name', 'description', 'universeId'] as const
+    const fields = ['id', 'name', 'summary', 'seriesId'] as const
 
-    const series = new TestData(
-      () =>
-        createSeries(SeriesFactory.makeCreateInput({universeId: universe.id})),
-      deleteSeries
+    const story = new TestData(
+      () => createStory(StoryFactory.makeCreateInput({seriesId: series.id})),
+      deleteStory
     )
 
-    it('updates an existing series', async () => {
+    it('updates an existing story', async () => {
       const {token} = credentials
       const variables = {
-        id: series.id,
+        id: story.id,
         input: {name: faker.random.word()},
       }
 
-      const expected: Pick<Series, typeof fields[number]> = {
-        ...pick(series.value!, fields),
+      const expected: Pick<Story, typeof fields[number]> = {
+        ...pick(story.value!, fields),
         name: variables.input.name,
       }
 
-      series.resetAfter()
+      story.resetAfter()
 
       const subj = UniverseUtils.subject(universe.id)
 
@@ -409,19 +424,19 @@ describe('Series', () => {
         fail('Grant not created')
       }
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'updateSeries'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'updateStory'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.updateSeries).toHaveProperty(
-        'series',
+      expect(data.updateStory).toHaveProperty(
+        'story',
         expect.objectContaining(expected)
       )
 
-      const updated = await prisma.series.findFirst({
-        where: {id: series.id},
+      const updated = await prisma.story.findFirst({
+        where: {id: story.id},
       })
       expect(updated).toMatchObject(expected)
 
@@ -455,14 +470,14 @@ describe('Series', () => {
       ])
     })
 
-    it('returns an error if no existing series was found', async () => {
+    it('returns an error if no existing story was found', async () => {
       const {token} = credentials
       const variables = {
         id: faker.random.uuid(),
         input: {name: faker.random.word()},
       }
 
-      const body = await graphql.mutation<Pick<Mutation, 'updateSeries'>>(
+      const body = await graphql.mutation<Pick<Mutation, 'updateStory'>>(
         mutation,
         variables,
         {token, warn: false}
@@ -478,7 +493,7 @@ describe('Series', () => {
 
     it('requires authentication', async () => {
       const variables = {
-        id: series.id,
+        id: story.id,
         input: {name: faker.random.word()},
       }
 
@@ -495,7 +510,7 @@ describe('Series', () => {
     it('requires authorization', async () => {
       const {token} = altCredentials
       const variables = {
-        id: series.id,
+        id: story.id,
         input: {name: faker.random.word()},
       }
 
@@ -513,28 +528,27 @@ describe('Series', () => {
     })
   })
 
-  describe('Mutation: deleteSeries', () => {
+  describe('Mutation: deleteStory', () => {
     const mutation = `
-      mutation DeleteSeries($id: UUID!) {
-        deleteSeries(id: $id) {
-          series {
+      mutation DeleteStory($id: UUID!) {
+        deleteStory(id: $id) {
+          story {
             id
           }
         }
       }
     `
 
-    const series = new TestData(
-      () =>
-        createSeries(SeriesFactory.makeCreateInput({universeId: universe.id})),
-      deleteSeries
+    const story = new TestData(
+      () => createStory(StoryFactory.makeCreateInput({seriesId: series.id})),
+      deleteStory
     )
 
-    it('deletes an existing series', async () => {
+    it('deletes an existing story', async () => {
       const {token} = credentials
-      const variables = {id: series.id}
+      const variables = {id: story.id}
 
-      series.resetAfter()
+      story.resetAfter()
 
       const subj = UniverseUtils.subject(universe.id)
 
@@ -551,20 +565,20 @@ describe('Series', () => {
         fail('Grant not created')
       }
 
-      const {data} = await graphql.mutation<Pick<Mutation, 'deleteSeries'>>(
+      const {data} = await graphql.mutation<Pick<Mutation, 'deleteStory'>>(
         mutation,
         variables,
         {token}
       )
 
-      expect(data.deleteSeries).toEqual({
-        series: {
-          id: series.id,
+      expect(data.deleteStory).toEqual({
+        story: {
+          id: story.id,
         },
       })
 
-      const deleted = await prisma.series.findFirst({
-        where: {id: series.id},
+      const deleted = await prisma.story.findFirst({
+        where: {id: story.id},
       })
       expect(deleted).toBeNull()
 
@@ -595,11 +609,11 @@ describe('Series', () => {
       ])
     })
 
-    it('returns an error if no existing series was found', async () => {
+    it('returns an error if no existing story was found', async () => {
       const {token} = credentials
       const variables = {id: faker.random.uuid()}
 
-      const body = await graphql.mutation<Pick<Mutation, 'deleteSeries'>>(
+      const body = await graphql.mutation<Pick<Mutation, 'deleteStory'>>(
         mutation,
         variables,
         {token, warn: false}
@@ -614,7 +628,7 @@ describe('Series', () => {
     })
 
     it('requires authentication', async () => {
-      const variables = {id: series.id}
+      const variables = {id: story.id}
 
       const body = await graphql.mutation(mutation, variables, {warn: false})
 
@@ -628,7 +642,7 @@ describe('Series', () => {
 
     it('requires authorization', async () => {
       const {token} = altCredentials
-      const variables = {id: series.id}
+      const variables = {id: story.id}
 
       const body = await graphql.mutation(mutation, variables, {
         token,

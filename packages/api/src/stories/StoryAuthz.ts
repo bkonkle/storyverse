@@ -4,10 +4,10 @@ import {ForbiddenError} from 'apollo-server-core'
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authorization/AuthzService'
-import {ManageSeries} from '../universes/UniverseRoles'
 import * as UniverseUtils from '../universes/UniverseUtils'
+import {ManageSeries} from '../universes/UniverseRoles'
 
-export default class SeriesAuthz {
+export default class StoryAuthz {
   private readonly prisma: PrismaClient
   private readonly authz: AuthzService
 
@@ -16,48 +16,48 @@ export default class SeriesAuthz {
     this.authz = authz || new AuthzService()
   }
 
-  create = async (username: string, universeId: string): Promise<Profile> => {
+  create = async (username: string, seriesId: string): Promise<Profile> => {
     const profile = await this.getProfile(username)
-    const universe = await this.getUniverse(universeId)
+    const series = await this.getSeries(seriesId)
 
     await this.authz.requirePermissions(
       [ManageSeries],
       profile.id,
-      UniverseUtils.subject(universe.id)
+      UniverseUtils.subject(series.universeId)
     )
 
     return profile
   }
 
   update = async (username: string, id: string) => {
-    const existing = await this.getExisting(id)
     const profile = await this.getProfile(username)
+    const existing = await this.getExisting(id)
 
     await this.authz.requirePermissions(
       [ManageSeries],
       profile.id,
-      UniverseUtils.subject(existing.universeId)
+      UniverseUtils.subject(existing.series.universeId)
     )
 
     return existing
   }
 
   delete = async (username: string, id: string) => {
-    const existing = await this.getExisting(id)
     const profile = await this.getProfile(username)
-    const universe = await this.getUniverse(existing.universeId)
+    const existing = await this.getExisting(id)
 
     await this.authz.requirePermissions(
       [ManageSeries],
       profile.id,
-      UniverseUtils.subject(universe.id)
+      UniverseUtils.subject(existing.series.universeId)
     )
 
     return existing
   }
 
   private getExisting = async (id: string) => {
-    const existing = await this.prisma.series.findFirst({
+    const existing = await this.prisma.story.findFirst({
+      include: {series: true},
       where: {id},
     })
     if (!existing) {
@@ -79,13 +79,13 @@ export default class SeriesAuthz {
     return profile
   }
 
-  private getUniverse = async (id: string) => {
-    const universe = await this.prisma.universe.findFirst({
+  private getSeries = async (id: string) => {
+    const universe = await this.prisma.series.findFirst({
       where: {id},
     })
 
     if (!universe) {
-      throw new NotFoundError('Universe not found')
+      throw new NotFoundError('Series not found')
     }
 
     return universe

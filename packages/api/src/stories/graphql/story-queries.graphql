@@ -70,7 +70,7 @@ type StoriesPage {
 
 input StoryCondition {
   name: String
-  universeId: UUID
+  seriesId: UUID
 }
 
 enum StoriesOrderBy {

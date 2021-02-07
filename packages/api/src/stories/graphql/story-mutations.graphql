@@ -20,8 +20,11 @@ Input to create a new Story
 """
 input CreateStoryInput {
   name: String!
-  description: JSONObject
-  universeId: UUID!
+  volume: Int
+  issue: Int
+  summary: JSONObject
+  content: JSONObject
+  seriesId: UUID!
 }
 
 """
@@ -29,10 +32,13 @@ Input to update an existing Story
 """
 input UpdateStoryInput {
   name: String
-  description: JSONObject
-  universeId: UUID
+  volume: Int
+  issue: Int
+  summary: JSONObject
+  content: JSONObject
+  seriesId: UUID
 }
 
 type MutateStoryResult {
-  Story: Story
+  story: Story
 }
