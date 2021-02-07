@@ -128,9 +128,7 @@ export default class UniverseResolvers {
     resolveInfo
   ) => {
     const username = getUsername(context)
-    const existing = await this.getExisting(id)
-
-    await this.authz.update(username, existing.ownerProfile.id)
+    const existing = await this.authz.update(username, id)
 
     const [
       includeOwnerProfile,
@@ -140,6 +138,9 @@ export default class UniverseResolvers {
       'updateUniverse.universe',
       ['ownerProfile', 'ownerProfile.user']
     )
+
+    console.log(`>- includeOwnerProfile ->`, includeOwnerProfile)
+    console.log(`>- includeOwnerUser ->`, includeOwnerUser)
 
     if (includeOwnerProfile) {
       const data = input.ownerProfileId
@@ -176,9 +177,7 @@ export default class UniverseResolvers {
     resolveInfo
   ) => {
     const username = getUsername(context)
-    const existing = await this.getExisting(id)
-
-    await this.authz.remove(username, existing.ownerProfile.id)
+    await this.authz.remove(username, id)
 
     const [
       includeOwnerProfile,

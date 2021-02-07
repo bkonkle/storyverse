@@ -21,9 +21,7 @@ export const fromSelections = (
     if (parent) {
       return {
         ...memo,
-        [parent]: {
-          include: fromSelections(selection.selectionSet, selection.name.value),
-        },
+        [parent]: fromSelections(selection.selectionSet, selection.name.value),
       }
     }
 
