@@ -94,35 +94,21 @@ export default class UniverseResolvers {
 
     await this.authz.create(username, input.ownerProfileId)
 
-    const [
-      includeOwnerProfile,
-      includeOwnerUser,
-    ] = includeFromSelections(
-      resolveInfo.operation.selectionSet,
-      'createUniverse.universe',
-      ['ownerProfile', 'ownerProfile.user']
-    )
-
-    if (includeOwnerProfile) {
-      const universe = await this.prisma.universe.create({
-        include: {ownerProfile: {include: {user: includeOwnerUser}}},
-        data: {
-          ...input,
-          ownerProfileId: undefined,
-          ownerProfile: {
-            connect: {id: input.ownerProfileId},
-          },
-        },
-      })
-
-      return {universe}
-    }
-
     const universe = await this.prisma.universe.create({
-      data: input,
+      include: includeFromSelections(
+        resolveInfo.operation.selectionSet,
+        'updateUniverse.universe'
+      ) as IncludeAll,
+      data: {
+        ...input,
+        ownerProfileId: undefined,
+        ownerProfile: {
+          connect: {id: input.ownerProfileId},
+        },
+      },
     })
 
-    return {universe: universe as Universe}
+    return {universe}
   }
 
   updateUniverse: MutationResolvers<Context>['updateUniverse'] = async (
