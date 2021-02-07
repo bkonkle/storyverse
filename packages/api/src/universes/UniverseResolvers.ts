@@ -7,20 +7,13 @@ import Prisma, {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import UniverseAuthz from './UniverseAuthz'
 import {
+  IncludeAll,
   censor,
   fromOrderByInput,
   fromUniverseCondition,
   fromUniverseInput,
   maybeCensor,
 } from './UniverseUtils'
-
-// A special type to unify the dynamic includes with the Resolver return type expectations
-type IncludeAll = {
-  ownerProfile: {
-    include: {user: true}
-  }
-  series: true
-}
 
 export default class UniverseResolvers {
   private readonly prisma: PrismaClient
@@ -96,11 +89,13 @@ export default class UniverseResolvers {
 
     await this.authz.create(username, input.ownerProfileId)
 
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'createUniverse.universe'
+    ) as IncludeAll
+
     const universe = await this.prisma.universe.create({
-      include: includeFromSelections(
-        resolveInfo.operation.selectionSet,
-        'createUniverse.universe'
-      ) as IncludeAll,
+      include,
       data: {
         ...input,
         ownerProfileId: undefined,
@@ -122,11 +117,13 @@ export default class UniverseResolvers {
     const username = getUsername(context)
     await this.authz.update(username, id)
 
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'updateUniverse.universe'
+    ) as IncludeAll
+
     const universe = await this.prisma.universe.update({
-      include: includeFromSelections(
-        resolveInfo.operation.selectionSet,
-        'updateUniverse.universe'
-      ) as IncludeAll,
+      include,
       where: {id},
       data: fromUniverseInput(input),
     })
@@ -143,11 +140,13 @@ export default class UniverseResolvers {
     const username = getUsername(context)
     await this.authz.delete(username, id)
 
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'deleteUniverse.universe'
+    ) as IncludeAll
+
     const universe = await this.prisma.universe.delete({
-      include: includeFromSelections(
-        resolveInfo.operation.selectionSet,
-        'deleteUniverse.universe'
-      ) as IncludeAll,
+      include,
       where: {id},
     })
 

@@ -9,6 +9,13 @@ import {
   UpdateUniverseInput,
 } from '../Schema'
 
+export type IncludeAll = {
+  ownerProfile: {
+    include: ProfileUtils.IncludeAll
+  }
+  series: true
+}
+
 export const TABLE_NAME = 'Universe'
 
 export interface UniverseWithAuthInfo extends Universe {

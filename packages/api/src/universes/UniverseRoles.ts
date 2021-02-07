@@ -25,6 +25,8 @@ export const ManageRoles: Permission = {
   description: 'Grant or revoke User Roles for a particular Universe',
 }
 
+Registry.registerPermissions([Update, Delete, ManageSeries, ManageRoles])
+
 export const Manager: Role = {
   key: 'UNIVERSE_MANAGER',
   name: 'Universe Manager',
@@ -40,5 +42,4 @@ export const Admin: Role = {
   permissions: [...Manager.permissions, Delete, ManageRoles],
 }
 
-Registry.registerPermissions([Update, Delete, ManageSeries, ManageRoles])
 Registry.registerRoles([Manager, Admin])

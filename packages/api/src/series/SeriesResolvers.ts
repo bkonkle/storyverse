@@ -1,7 +1,27 @@
-import {Resolvers, QueryResolvers, MutationResolvers, Series} from '../Schema'
+import {PrismaClient} from '@prisma/client'
+
+import {Resolvers, QueryResolvers, MutationResolvers} from '../Schema'
+import {getUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
+import Prisma, {includeFromSelections} from '../utils/Prisma'
+import {getOffset, paginateResponse} from '../utils/Pagination'
+import SeriesAuthz from './SeriesAuthz'
+import {
+  IncludeAll,
+  fromOrderByInput,
+  fromSeriesCondition,
+  fromSeriesInput,
+} from './SeriesUtils'
 
 export default class SeriesResolvers {
+  private readonly prisma: PrismaClient
+  private readonly authz: SeriesAuthz
+
+  constructor(prisma?: PrismaClient, authz?: SeriesAuthz) {
+    this.prisma = prisma || Prisma.init()
+    this.authz = authz || new SeriesAuthz()
+  }
+
   getResolvers = (): Resolvers => ({
     Query: {
       getSeries: this.getSeries,
@@ -16,62 +36,123 @@ export default class SeriesResolvers {
 
   getSeries: QueryResolvers<Context>['getSeries'] = async (
     _parent,
-    args,
+    {id},
     _context,
-    _resolveInfo
+    resolveInfo
   ) => {
-    console.log(`>- SeriesResolvers.getSeries -<`, args)
-
-    return {} as Series
+    return this.prisma.series.findFirst({
+      include: includeFromSelections(
+        resolveInfo.operation.selectionSet,
+        'getSeries'
+      ) as IncludeAll,
+      where: {id},
+    })
   }
 
   getManySeries: QueryResolvers<Context>['getManySeries'] = async (
     _parent,
     args,
     _context,
-    _resolveInfo
+    resolveInfo
   ) => {
-    console.log('>- SeriesResolvers.getManySeries -<', args)
+    const {where, orderBy, pageSize, page} = args
 
-    return {
-      data: [] as Series[],
-      count: 0,
-      total: 0,
-      page: 0,
-      pageCount: 0,
+    const options = {
+      where: fromSeriesCondition(where),
+      orderBy: fromOrderByInput(orderBy),
     }
+    const total = await this.prisma.series.count(options)
+
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'getManySeries.data'
+    ) as IncludeAll
+    console.log(`>- include ->`, include)
+
+    const series = await this.prisma.series.findMany({
+      include,
+      ...options,
+      ...getOffset(pageSize, page),
+    })
+
+    return paginateResponse(series, {
+      total,
+      pageSize,
+      page,
+    })
   }
 
   createSeries: MutationResolvers<Context>['createSeries'] = async (
     _parent,
-    args,
-    _context,
-    _resolveInfo
+    {input},
+    context,
+    resolveInfo
   ) => {
-    console.log('>- SeriesResolvers.createSeries -<', args)
+    const username = getUsername(context)
 
-    return {}
+    await this.authz.create(username, input.universeId)
+
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'createSeries.series'
+    ) as IncludeAll
+
+    const series = await this.prisma.series.create({
+      include,
+      data: {
+        ...input,
+        universeId: undefined,
+        universe: {
+          connect: {id: input.universeId},
+        },
+      },
+    })
+
+    return {series}
   }
 
   updateSeries: MutationResolvers<Context>['updateSeries'] = async (
     _parent,
-    args,
-    _context,
-    _resolveInfo
+    {id, input},
+    context,
+    resolveInfo
   ) => {
-    console.log('>- SeriesResolvers.updateSeries -<', args)
+    const username = getUsername(context)
+    await this.authz.update(username, id)
 
-    return {}
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'updateSeries.series'
+    ) as IncludeAll
+
+    const series = await this.prisma.series.update({
+      include,
+      where: {id},
+      data: fromSeriesInput(input),
+    })
+
+    return {series}
   }
 
   deleteSeries: MutationResolvers<Context>['deleteSeries'] = async (
     _parent,
-    args,
-    _context,
-    _resolveInfo
+    {id},
+    context,
+    resolveInfo
   ) => {
-    console.log('>- SeriesResolvers.deleteSeries -<', args)
+    const username = getUsername(context)
+    await this.authz.delete(username, id)
 
-    return {}
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'deleteSeries.series'
+    ) as IncludeAll
+
+    const series = await this.prisma.series.delete({
+      include,
+      where: {id},
+    })
+
+    return {series}
   }
 }

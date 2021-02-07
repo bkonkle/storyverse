@@ -8,6 +8,10 @@ import {
   UpdateProfileInput,
 } from '../Schema'
 
+export type IncludeAll = {
+  user: true
+}
+
 export const isOwner = (profile: Profile, username?: string | null) =>
   username && profile.user && username === profile.user?.username
 
