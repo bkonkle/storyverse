@@ -1,4 +1,5 @@
 import {Permission, Role} from '../authorization/Roles'
+import Registry from '../authorization/RolesRegistry'
 
 export const Update: Permission = {
   key: 'UNIVERSE_UPDATE',
@@ -39,8 +40,5 @@ export const Admin: Role = {
   permissions: [...Manager.permissions, Delete, ManageRoles],
 }
 
-export const permissions = [Update, Delete, ManageSeries, ManageRoles]
-
-export const roles = [Manager, Admin]
-
-export default {roles, permissions}
+Registry.registerPermissions([Update, Delete, ManageSeries, ManageRoles])
+Registry.registerRoles([Manager, Admin])

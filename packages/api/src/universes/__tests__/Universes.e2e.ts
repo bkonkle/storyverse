@@ -588,7 +588,7 @@ describe('Universes', () => {
       ])
     })
 
-    it.skip('allows users with the Update permission', async () => {
+    it('allows users with the Update permission', async () => {
       const {token} = altCredentials
       const variables = {
         id: universe.id,
@@ -746,7 +746,7 @@ describe('Universes', () => {
       ])
     })
 
-    it.skip('allows users with the Delete permission', async () => {
+    it('allows users with the Delete permission', async () => {
       const {token} = altCredentials
       const variables = {id: universe.id}
       const subj = subject(universe.id)

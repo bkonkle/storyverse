@@ -5,7 +5,8 @@ import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authorization/AuthzService'
 import {isOwner, subject} from './UniverseUtils'
-import {Update} from './UniverseRoles'
+import {Update, Delete} from './UniverseRoles'
+import {Permission} from '../authorization/Roles'
 
 export default class UniverseAuthz {
   private readonly prisma: PrismaClient
@@ -40,7 +41,17 @@ export default class UniverseAuthz {
     return profile
   }
 
-  update = async (username: string, id: string) => {
+  update = (username: string, id: string) =>
+    this.requirePermissions(username, id, [Update])
+
+  delete = (username: string, id: string) =>
+    this.requirePermissions(username, id, [Delete])
+
+  private requirePermissions = async (
+    username: string,
+    id: string,
+    permissions: Permission[]
+  ) => {
     const existing = await this.getExisting(id)
 
     if (isOwner(existing, username)) {
@@ -50,15 +61,13 @@ export default class UniverseAuthz {
     const profile = await this.getProfile(username)
 
     await this.authz.requirePermissions(
-      [Update],
+      permissions,
       profile.id,
       subject(existing.id)
     )
 
     return existing
   }
-
-  remove = this.update
 
   private getExisting = async (id: string) => {
     const existing = await this.prisma.universe.findFirst({

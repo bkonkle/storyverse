@@ -141,7 +141,7 @@ export default class UniverseResolvers {
     resolveInfo
   ) => {
     const username = getUsername(context)
-    await this.authz.remove(username, id)
+    await this.authz.delete(username, id)
 
     const universe = await this.prisma.universe.delete({
       include: includeFromSelections(
