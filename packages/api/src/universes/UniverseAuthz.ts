@@ -3,10 +3,10 @@ import {ForbiddenError, UserInputError} from 'apollo-server-core'
 
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
-import AuthzService from '../authorization/AuthzService'
+import AuthzService from '../authz/AuthzService'
 import {isOwner, subject} from './UniverseUtils'
 import {Update, Delete} from './UniverseRoles'
-import {Permission} from '../authorization/Roles'
+import {Permission} from '../authz/Roles'
 
 export default class UniverseAuthz {
   private readonly prisma: PrismaClient

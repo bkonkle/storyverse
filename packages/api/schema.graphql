@@ -6,8 +6,6 @@ schema {
 type Mutation {
   """Create a new User Profile"""
   createProfile(input: CreateProfileInput!): MutateProfileResult!
-  """Grant a new Role to a User Profile"""
-  createRoleGrant(input: CreateRoleGrantInput!): MutateRoleGrantResult!
   """Create a new Series"""
   createSeries(input: CreateSeriesInput!): MutateSeriesResult!
   """Create a new Story"""
@@ -18,8 +16,6 @@ type Mutation {
   createUser(input: CreateUserInput!): MutateUserResult!
   """Remove an existing User Profile by ID"""
   deleteProfile(id: UUID!): MutateProfileResult!
-  """Remove an existing RoleGrant from a User Profile"""
-  deleteRoleGrant(id: UUID!): MutateRoleGrantResult!
   """Remove an existing Series by ID"""
   deleteSeries(id: UUID!): MutateSeriesResult!
   """Remove an existing Story by ID"""
@@ -36,73 +32,6 @@ type Mutation {
   updateStory(id: UUID!, input: UpdateStoryInput!): MutateStoryResult!
   """Update an existing Universe by ID"""
   updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
-}
-"""Input to grant a Role to a User Profile"""
-input CreateRoleGrantInput {
-  roleKey: String!
-  profileId: UUID!
-  subjectTable: String
-  subjectId: UUID
-}
-type MutateRoleGrantResult {
-  roleGrant: RoleGrant
-}
-type Permission {
-  """A unique key to represent the Permission"""
-  key: String!
-  """A display name for the Permission"""
-  name: String!
-  """A description of the Permission"""
-  description: String!
-}
-type Role {
-  """A unique key to represent the Role"""
-  key: String!
-  """A display name for the Role"""
-  name: String!
-  """A description of the Role"""
-  description: String!
-  """The Permissions granted by the Role"""
-  permissions: [Permission!]!
-}
-type RoleGrant {
-  id: UUID!
-  """The key of the granted Role"""
-  roleKey: String!
-  """The id of the Profile the Role is granted to"""
-  profileId: UUID!
-  """An optional content id from another table that this Role is constrained to"""
-  subjectId: UUID
-  """The table that the optional subjectId is from"""
-  subjectTable: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-"""A User Profile"""
-type Profile {
-  """Editor json content for the Profile body"""
-  content: JSONObject
-  createdAt: DateTime!
-  """A display name"""
-  displayName: String
-  """An email address"""
-  email: String
-  id: UUID!
-  """
-  Retrieve all Permissions granted to the Profile, optionally in the context of content from another
-  table.
-  """
-  permissions(subjectTable: String, subjectId: UUID): [Permission!]
-  """A Profile photo"""
-  picture: String
-  """
-  Retrieve all Roles granted to the Profile, optionally in the context of content from another
-  table.
-  """
-  roles(subjectTable: String, subjectId: UUID): [Role!]
-  updatedAt: DateTime!
-  """The id of the User that created the Profile"""
-  userId: UUID
 }
 """Input to create a new User Profile"""
 input CreateProfileInput {
@@ -142,6 +71,22 @@ type Query {
   getStory(id: UUID!): Story
   """Get an existing Universe by ID"""
   getUniverse(id: UUID!): Universe
+}
+"""A User Profile"""
+type Profile {
+  id: UUID!
+  """An email address"""
+  email: String
+  """A display name"""
+  displayName: String
+  """A Profile photo"""
+  picture: String
+  """Editor json content for the Profile body"""
+  content: JSONObject
+  """The id of the User that created the Profile"""
+  userId: UUID
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 type ProfilesPage {
   data: [Profile!]!

@@ -2,7 +2,7 @@ import {camelCase} from 'lodash'
 import {Prisma, Profile, Universe, User} from '@prisma/client'
 
 import * as ProfileUtils from '../profiles/ProfileUtils'
-import {Subject} from '../authorization/AuthzService'
+import {Subject} from '../authz/AuthzService'
 import {
   UniverseCondition,
   UniversesOrderBy,

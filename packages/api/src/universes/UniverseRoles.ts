@@ -1,5 +1,5 @@
-import Registry from '../authorization/RolesRegistry'
-import {Permission, Role} from '../authorization/Roles'
+import Registry from '../authz/RolesRegistry'
+import {Permission, Role} from '../authz/Roles'
 
 export const Update: Permission = {
   key: 'UNIVERSE_UPDATE',

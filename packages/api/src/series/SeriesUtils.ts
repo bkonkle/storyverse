@@ -1,7 +1,7 @@
 import {camelCase} from 'lodash'
 import {Prisma} from '@prisma/client'
 
-import {Subject} from '../authorization/AuthzService'
+import {Subject} from '../authz/AuthzService'
 import * as UniverseUtils from '../universes/UniverseUtils'
 import {SeriesCondition, SeriesOrderBy, UpdateSeriesInput} from '../Schema'
 
