@@ -718,6 +718,14 @@
     "@graphql-tools/utils" "^6"
     tslib "~2.0.1"
 
+"@graphql-codegen/introspection@^1.18.1":
+  version "1.18.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/introspection/-/introspection-1.18.1.tgz#fe3f781b2b60cc69a0cf535a3cfe912c71e32770"
+  integrity sha512-M8kLUYF+YA/oj378RHh7BN5hO2wdplBfL2oyRL9sxjtNY30iYGn7To3TRijDCNoXaak5jLwgwUURZ0BZgX6IJA==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.18.2"
+    tslib "~2.0.1"
+
 "@graphql-codegen/plugin-helpers@^1.18.2":
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.18.2.tgz#57011076cb8b8f5d04d37d226a5eda300c01be94"
@@ -744,6 +752,17 @@
     "@graphql-tools/utils" "^6"
     tslib "~2.0.1"
 
+"@graphql-codegen/typescript-operations@^1.17.14":
+  version "1.17.14"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-1.17.14.tgz#69b4bee4d66f2ea7e288f1be889e08946ef3452a"
+  integrity sha512-jf1KnkA0i5hQNwc7bdMg5G6305DMSeTGDJSDoFryA2Tt9czWxY78m10/6GueUWo3zP6FIEhW1QRSve8ewTKEMg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.18.2"
+    "@graphql-codegen/typescript" "^1.20.1"
+    "@graphql-codegen/visitor-plugin-common" "^1.18.1"
+    auto-bind "~4.0.0"
+    tslib "~2.1.0"
+
 "@graphql-codegen/typescript-resolvers@^1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-1.18.1.tgz#ee63c4b8243d002d617b3df17752f3ddacf5916a"
@@ -756,7 +775,18 @@
     auto-bind "~4.0.0"
     tslib "~2.0.1"
 
-"@graphql-codegen/typescript@^1.19.0", "@graphql-codegen/typescript@^1.20.2":
+"@graphql-codegen/typescript-urql@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-urql/-/typescript-urql-2.0.3.tgz#b710e236b2fef5f5a837c23048ec4153e8a5d179"
+  integrity sha512-NAHV/FrDrrK5Cynje0GocDbcvc0CYSNuIm43T7LEM0zPxFF3nlKb2hVrNlo6JEzSQEEloNhdqFweIXSXPByTIQ==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.18.2"
+    "@graphql-codegen/visitor-plugin-common" "^1.17.20"
+    auto-bind "~4.0.0"
+    pascal-case "^3.1.1"
+    tslib "~2.0.1"
+
+"@graphql-codegen/typescript@^1.19.0", "@graphql-codegen/typescript@^1.20.1", "@graphql-codegen/typescript@^1.20.2":
   version "1.20.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.20.2.tgz#223327a8aea929e772f481e264c5aa3a36707fcb"
   integrity sha512-D/DMUz4O2UEoFucUVu2K2xoaMPAn68BwYGnCAKnSDqtFKsOEqmTjHFwcgyEnpucQ5xFeG0pKGMb1SlS2Go9J8Q==
@@ -766,7 +796,7 @@
     auto-bind "~4.0.0"
     tslib "~2.1.0"
 
-"@graphql-codegen/visitor-plugin-common@^1.17.22", "@graphql-codegen/visitor-plugin-common@^1.18.2":
+"@graphql-codegen/visitor-plugin-common@^1.17.20", "@graphql-codegen/visitor-plugin-common@^1.17.22", "@graphql-codegen/visitor-plugin-common@^1.18.1", "@graphql-codegen/visitor-plugin-common@^1.18.2":
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-1.18.2.tgz#1a30bd33f011b4fb976e0f8462d160126db875ea"
   integrity sha512-A8yBJGq7A7gxaVVXK4QXwV1ZpzZ64fH7U7JTGeq86o3jA7QNV2rmCRXCY0JttS2fu+olV18NjsWRwAXuAb1g9A==
@@ -1006,6 +1036,11 @@
     "@graphql-tools/utils" "^7.2.1"
     is-promise "4.0.0"
     tslib "~2.0.1"
+
+"@graphql-typed-document-node/core@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
+  integrity sha512-wYn6r8zVZyQJ6rQaALBEln5B1pzxb9shV5Ef97kTvn6yVGrqyXVnDqnU24MXnFubR+rZjBY9NWuxX3FB2sTsjg==
 
 "@hapi/accept@5.0.1":
   version "5.0.1"
@@ -1604,6 +1639,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/isomorphic-fetch@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.35.tgz#c1c0d402daac324582b6186b91f8905340ea3361"
+  integrity sha512-DaZNUvLDCAnCTjgwxgiL1eQdxIKEpNLOlTNtAgnZc50bG2copGhRrFN9/PxPBuJe+tZVLCbQ7ls0xveXVRPkvw==
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.3.tgz#4ba8ddb720221f432e443bd5f9117fd22cfd4762"
@@ -1916,6 +1956,22 @@
   dependencies:
     "@typescript-eslint/types" "4.15.0"
     eslint-visitor-keys "^2.0.0"
+
+"@urql/core@>=1.16.1", "@urql/core@^1.16.0":
+  version "1.16.2"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-1.16.2.tgz#e404b7f66c163245f44e7ef3c736707b7fb20234"
+  integrity sha512-Be2ekFcRovpLx6EKu/w7M3jJdC32Ev3eXJgXcJD7pVDgjv/RfUbYC4tGU87VrvQDJOg+t4gHFtIR6Vr9ws7mbg==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.0"
+    wonka "^4.0.14"
+
+"@urql/exchange-graphcache@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-3.4.0.tgz#b8ef8be8c314b1ab4cae0aaddc68b1f5e5077dc2"
+  integrity sha512-biTs8GZkELjVjdl2rieFptB6TdfnJpxxfgPqEJgna2OnzcW4s1iebD1Opp8W9TR8WuEaE/wcOYB1bVXgUXEg7g==
+  dependencies:
+    "@urql/core" ">=1.16.1"
+    wonka "^4.0.14"
 
 "@wry/equality@^0.1.2":
   version "0.1.11"
@@ -10080,6 +10136,14 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+urql@^1.11.6:
+  version "1.11.6"
+  resolved "https://registry.yarnpkg.com/urql/-/urql-1.11.6.tgz#6b6b60093fc9ef142915938a8dbd3cc84e2dd195"
+  integrity sha512-PpXzZiCKStcg52M9hJZTbcU5wIvQlYqu0vVofdaEv144JbvOhKIwzcX0+qkc3yJMyDm2isYo4D1vQQY+meRVqg==
+  dependencies:
+    "@urql/core" "^1.16.0"
+    wonka "^4.0.14"
+
 use-subscription@1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.5.1.tgz#73501107f02fad84c6dd57965beb0b75c68c42d1"
@@ -10328,6 +10392,11 @@ widest-line@^3.1.0:
   integrity sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==
   dependencies:
     string-width "^4.0.0"
+
+wonka@^4.0.14:
+  version "4.0.15"
+  resolved "https://registry.yarnpkg.com/wonka/-/wonka-4.0.15.tgz#9aa42046efa424565ab8f8f451fcca955bf80b89"
+  integrity sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==
 
 word-wrap@^1.2.3, word-wrap@~1.2.3:
   version "1.2.3"

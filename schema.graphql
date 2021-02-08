@@ -312,6 +312,8 @@ type User {
   username: String!
   """If false, the User is suspended"""
   isActive: Boolean!
+  """The User's current Profile, if one is associated."""
+  profile: Profile
   createdAt: DateTime!
   updatedAt: DateTime!
 }

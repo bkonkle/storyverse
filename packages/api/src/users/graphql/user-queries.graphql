@@ -21,6 +21,11 @@ type User {
   """
   isActive: Boolean!
 
+  """
+  The User's current Profile, if one is associated.
+  """
+  profile: Profile
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }

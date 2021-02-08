@@ -1,0 +1,22 @@
+fragment UserData on User {
+  id
+  username
+  isActive
+  profile {
+    ...ProfileData
+  }
+}
+
+query GetCurrentUser {
+  getCurrentUser {
+    ...UserData
+  }
+}
+
+mutation createUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      ...UserData
+    }
+  }
+}

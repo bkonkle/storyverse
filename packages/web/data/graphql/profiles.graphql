@@ -1,0 +1,14 @@
+fragment ProfileData on Profile {
+  id
+  displayName
+  email
+  picture
+}
+
+mutation createProfile($input: CreateProfileInput!) {
+  createProfile(input: $input) {
+    profile {
+      ...ProfileData
+    }
+  }
+}
