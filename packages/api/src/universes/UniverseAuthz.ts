@@ -4,9 +4,10 @@ import {ForbiddenError, UserInputError} from 'apollo-server-core'
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'
-import {isOwner, subject} from './UniverseUtils'
-import {Update, Delete} from './UniverseRoles'
-import {Permission} from '../authz/Roles'
+import {isOwner, getSubject} from './UniverseUtils'
+import {Update, Delete, ManageRoles} from './UniverseRoles'
+import {Permission} from '../authz/RolesRegistry'
+import {UniverseRoles} from '../Schema'
 
 export default class UniverseAuthz {
   private readonly prisma: PrismaClient
@@ -40,6 +41,38 @@ export default class UniverseAuthz {
   delete = (username: string, id: string) =>
     this.requirePermissions(username, id, [Delete])
 
+  /**
+   * Authorize the ability to grant Roles
+   */
+  grant = async (username: string, id: string): Promise<void> => {
+    const existing = await this.getExisting(id)
+
+    if (isOwner(existing, username)) {
+      return
+    }
+
+    const profile = await this.getProfile({username})
+
+    await this.authz.requirePermissions(profile.id, getSubject(existing.id), [
+      ManageRoles,
+    ])
+  }
+
+  /**
+   * Grant Roles to a particular Profile
+   */
+  grantRoles = async (
+    username: string,
+    universeId: string,
+    profileId: string,
+    roles: UniverseRoles[]
+  ) => {
+    await this.grant(username, universeId)
+    const subject = getSubject(universeId)
+
+    await this.authz.grantRoles(profileId, subject, roles)
+  }
+
   private requirePermissions = async (
     username: string,
     id: string,
@@ -55,7 +88,7 @@ export default class UniverseAuthz {
 
     await this.authz.requirePermissions(
       profile.id,
-      subject(existing.id),
+      getSubject(existing.id),
       permissions
     )
 
@@ -90,7 +123,7 @@ export default class UniverseAuthz {
       where,
     })
     if (!profile) {
-      throw new ForbiddenError('Authorization required')
+      throw new NotFoundError('Profile not found')
     }
 
     return profile

@@ -20,7 +20,7 @@ import {
 import Prisma from '../../utils/Prisma'
 import TestData from '../../test/TestData'
 import {Admin, Manager} from '../UniverseRoles'
-import {subject} from '../UniverseUtils'
+import {getSubject} from '../UniverseUtils'
 
 describe('Universes', () => {
   let graphql: GraphQL
@@ -502,14 +502,14 @@ describe('Universes', () => {
         id: universe.id,
         input: {name: faker.random.word()},
       }
-      const subj = subject(universe.id)
+      const subject = getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: Manager.key,
           profileId: otherProfile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -657,14 +657,14 @@ describe('Universes', () => {
     it('allows users with the Delete permission', async () => {
       const {token} = altCredentials
       const variables = {id: universe.id}
-      const subj = subject(universe.id)
+      const subject = getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: Admin.key,
           profileId: otherProfile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -691,5 +691,13 @@ describe('Universes', () => {
       })
       expect(deleted).toBeNull()
     })
+  })
+
+  describe('Mutation: grantUniverseRoles', () => {
+    it.skip('grants roles for a particular universe')
+
+    it.skip('requires authentication')
+
+    it.skip('requires authorization')
   })
 })

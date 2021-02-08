@@ -63,3 +63,8 @@ enum UniversesOrderBy {
   UPDATED_AT_ASC
   UPDATED_AT_DESC
 }
+
+enum UniverseRoles {
+  UNIVERSE_MANAGER
+  UNIVERSE_ADMIN
+}

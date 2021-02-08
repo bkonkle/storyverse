@@ -152,14 +152,14 @@ describe('Story', () => {
         fields
       )
 
-      const subj = SeriesUtils.subject(series.id)
+      const subject = SeriesUtils.getSubject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: SeriesRoles.Manager.key,
           profileId: profile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -280,14 +280,14 @@ describe('Story', () => {
         fields
       )
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subject = UniverseUtils.getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: UniverseRoles.Manager.key,
           profileId: otherProfile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -460,14 +460,14 @@ describe('Story', () => {
 
       story.resetAfter()
 
-      const subj = SeriesUtils.subject(series.id)
+      const subject = SeriesUtils.getSubject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: SeriesRoles.Manager.key,
           profileId: profile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -592,14 +592,14 @@ describe('Story', () => {
 
       story.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subject = UniverseUtils.getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: UniverseRoles.Manager.key,
           profileId: otherProfile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -646,14 +646,14 @@ describe('Story', () => {
 
       story.resetAfter()
 
-      const subj = SeriesUtils.subject(series.id)
+      const subject = SeriesUtils.getSubject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: SeriesRoles.Manager.key,
           profileId: profile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -759,14 +759,14 @@ describe('Story', () => {
 
       story.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subject = UniverseUtils.getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: UniverseRoles.Manager.key,
           profileId: otherProfile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 

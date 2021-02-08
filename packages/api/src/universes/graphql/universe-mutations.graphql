@@ -13,6 +13,15 @@ extend type Mutation {
   Remove an existing Universe by ID
   """
   deleteUniverse(id: UUID!): MutateUniverseResult!
+
+  """
+  Grant a Role to a Profile for a Universe
+  """
+  grantUniverseRoles(
+    profileId: UUID!
+    universeId: UUID!
+    roles: [UniverseRoles!]!
+  ): Boolean
 }
 
 """

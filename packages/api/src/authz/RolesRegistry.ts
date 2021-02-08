@@ -1,16 +1,27 @@
-import * as Roles from './Roles'
+export interface Permission {
+  key: string
+  name: string
+  description: string
+}
+
+export interface Role {
+  key: string
+  name: string
+  description: string
+  permissions: Permission[]
+}
 
 /**
  * A registry to manage pluggable Roles and Permissions.
  */
 export class RolesRegistry {
-  permissions: Record<string, Roles.Permission> = {}
-  roles: Record<string, Roles.Role> = {}
+  permissions: Record<string, Permission> = {}
+  roles: Record<string, Role> = {}
 
   /**
    * Add a new Permission to the registry with a unique key.
    */
-  registerPermission = (permission: Roles.Permission): void => {
+  registerPermission = (permission: Permission): void => {
     if (this.permissions[permission.key]) {
       throw new Error(
         `A Permission with key ${permission.key} has already been registered.`
@@ -23,7 +34,7 @@ export class RolesRegistry {
   /**
    * Add a new Role to the registry with a unique key.
    */
-  registerRole = (role: Roles.Role): void => {
+  registerRole = (role: Role): void => {
     if (this.roles[role.key]) {
       throw new Error(
         `A Role with key ${role.key} has already been registered.`
@@ -36,32 +47,32 @@ export class RolesRegistry {
   /**
    * Add many Permissions to the registry at once.
    */
-  registerPermissions = (permissions: Roles.Permission[]): void => {
+  registerPermissions = (permissions: Permission[]): void => {
     permissions.map(this.registerPermission)
   }
 
   /**
    * Add many Roles to the registry at once.
    */
-  registerRoles = (roles: Roles.Role[]): void => {
+  registerRoles = (roles: Role[]): void => {
     roles.map(this.registerRole)
   }
 
   /**
    * Finds a Permission from the registry or returns nothing.
    */
-  findPermission = (key: string): Roles.Permission | undefined =>
+  findPermission = (key: string): Permission | undefined =>
     this.permissions[key]
 
   /**
    * Finds a Role from the registry or returns nothing.
    */
-  findRole = (key: string): Roles.Role | undefined => this.roles[key]
+  findRole = (key: string): Role | undefined => this.roles[key]
 
   /**
    * Gets a Permission from the registry, or throws an error if it does not exist.
    */
-  getPermission = (key: string): Roles.Permission => {
+  getPermission = (key: string): Permission => {
     const permission = this.findPermission(key)
 
     if (!permission) {
@@ -74,7 +85,7 @@ export class RolesRegistry {
   /**
    * Gets a Role from the registry, or throws an error if it does not exist.
    */
-  getRole = (key: string): Roles.Role => {
+  getRole = (key: string): Role => {
     const role = this.findRole(key)
 
     if (!role) {
@@ -99,9 +110,6 @@ export class RolesRegistry {
   }
 }
 
-// Export a Node module-scoped default registry preloaded with the built-in roles and permissions
+// Export a default registry held in Node module scope as a singleton
 const registry = new RolesRegistry()
-registry.registerPermissions(Roles.permissions)
-registry.registerRoles(Roles.roles)
-
 export default registry

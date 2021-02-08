@@ -145,4 +145,16 @@ export default class UniverseResolvers {
 
     return {universe}
   }
+
+  grantUniverseRoles: MutationResolvers<Context>['grantUniverseRoles'] = async (
+    _parent,
+    {universeId, profileId, roles},
+    context,
+    _resolveInfo
+  ) => {
+    const username = getUsername(context)
+    await this.authz.grantRoles(username, universeId, profileId, roles)
+
+    return true
+  }
 }

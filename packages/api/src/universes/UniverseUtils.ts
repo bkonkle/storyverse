@@ -18,7 +18,7 @@ export type IncludeAll = {
 
 export const TABLE_NAME = 'Universe'
 
-export const subject = (id: string): Subject => ({
+export const getSubject = (id: string): Subject => ({
   table: TABLE_NAME,
   id,
 })

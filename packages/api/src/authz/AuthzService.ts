@@ -3,8 +3,7 @@ import {ForbiddenError} from 'apollo-server-core'
 import {uniqBy} from 'lodash'
 
 import Prisma from '../utils/Prisma'
-import {Permission, Role} from './Roles'
-import defaultRegistry, {RolesRegistry} from './RolesRegistry'
+import defaultRegistry, {RolesRegistry, Permission, Role} from './RolesRegistry'
 
 export interface Subject {
   table: string
@@ -32,7 +31,7 @@ export default class AuthzService {
       where: {profileId, subjectId: subject.id, subjectTable: subject.table},
     })
 
-    return grants.map(this.toRoles)
+    return grants.map(this.fromGrant)
   }
 
   /**
@@ -125,17 +124,44 @@ export default class AuthzService {
   }
 
   /**
-   * Map RoleGrants to Role objects.
+   * Grant the given Roles to the given Profile for the given Subject. Should only be used if the
+   * grantor is fully authorized.
    */
-  private toRoles = (grant: RoleGrant): Role => {
-    const role = this.registry.findRole(grant.roleKey)
+  async grantRoles(
+    profileId: string,
+    subject: Subject,
+    roleKeys: string[]
+  ): Promise<void> {
+    await Promise.all(
+      roleKeys.map(this.fromRoleKey).map((role) =>
+        this.prisma.roleGrant.create({
+          data: {
+            roleKey: role.key,
+            profileId,
+            subjectTable: subject.table,
+            subjectId: subject.id,
+          },
+        })
+      )
+    )
+  }
+
+  /**
+   * Map a Role key to a Role object.
+   */
+  private fromRoleKey = (roleKey: string): Role => {
+    const role = this.registry.findRole(roleKey)
 
     if (!role) {
-      throw new Error(
-        `Unable to find a registered Role with key ${grant.roleKey}`
-      )
+      throw new Error(`Unable to find a registered Role with key ${roleKey}`)
     }
 
     return role
   }
+
+  /**
+   * Map a RoleGrants to a Role object.
+   */
+  private fromGrant = (grant: RoleGrant): Role =>
+    this.fromRoleKey(grant.roleKey)
 }

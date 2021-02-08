@@ -6,7 +6,7 @@ import AuthzService from '../authz/AuthzService'
 import {ManageSeries} from '../universes/UniverseRoles'
 import * as UniverseUtils from '../universes/UniverseUtils'
 import {Update} from './SeriesRoles'
-import {subject} from './SeriesUtils'
+import {getSubject} from './SeriesUtils'
 
 export default class SeriesAuthz {
   private readonly prisma: PrismaClient
@@ -23,7 +23,7 @@ export default class SeriesAuthz {
 
     await this.authz.requirePermissions(
       profile.id,
-      UniverseUtils.subject(universe.id),
+      UniverseUtils.getSubject(universe.id),
       [ManageSeries]
     )
 
@@ -36,7 +36,7 @@ export default class SeriesAuthz {
 
     const bySeries = await this.authz.hasPermissions(
       profile.id,
-      subject(existing.id),
+      getSubject(existing.id),
       [Update]
     )
     if (bySeries) {
@@ -45,7 +45,7 @@ export default class SeriesAuthz {
 
     await this.authz.requirePermissions(
       profile.id,
-      UniverseUtils.subject(existing.universeId),
+      UniverseUtils.getSubject(existing.universeId),
       [ManageSeries]
     )
 
@@ -58,7 +58,7 @@ export default class SeriesAuthz {
 
     await this.authz.requirePermissions(
       profile.id,
-      UniverseUtils.subject(existing.universeId),
+      UniverseUtils.getSubject(existing.universeId),
       [ManageSeries]
     )
 

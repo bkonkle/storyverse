@@ -24,7 +24,7 @@ import UniverseFactory from '../../test/factories/UniverseFactory'
 import * as UniverseRoles from '../../universes/UniverseRoles'
 import * as UniverseUtils from '../../universes/UniverseUtils'
 import {Manager} from '../SeriesRoles'
-import {subject} from '../SeriesUtils'
+import {getSubject} from '../SeriesUtils'
 
 describe('Series', () => {
   let graphql: GraphQL
@@ -130,14 +130,14 @@ describe('Series', () => {
         fields
       )
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subject = UniverseUtils.getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: UniverseRoles.Manager.key,
           profileId: profile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -396,14 +396,14 @@ describe('Series', () => {
 
       series.resetAfter()
 
-      const subj = subject(series.id)
+      const subject = getSubject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: Manager.key,
           profileId: profile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -528,14 +528,14 @@ describe('Series', () => {
 
       series.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subject = UniverseUtils.getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: UniverseRoles.Manager.key,
           profileId: otherProfile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 
@@ -583,14 +583,14 @@ describe('Series', () => {
 
       series.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subject = UniverseUtils.getSubject(universe.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
           roleKey: UniverseRoles.Manager.key,
           profileId: profile.id,
-          subjectTable: subj.table,
-          subjectId: subj.id,
+          subjectTable: subject.table,
+          subjectId: subject.id,
         },
       })
 

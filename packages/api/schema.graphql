@@ -22,6 +22,8 @@ type Mutation {
   deleteStory(id: UUID!): MutateStoryResult!
   """Remove an existing Universe by ID"""
   deleteUniverse(id: UUID!): MutateUniverseResult!
+  """Grant a Role to a Profile for a Universe"""
+  grantUniverseRoles(profileId: UUID!, universeId: UUID!, roles: [UniverseRoles!]!): Boolean
   """Update the currently authenticated User"""
   updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
   """Update an existing User Profile by ID"""
@@ -281,6 +283,10 @@ enum UniversesOrderBy {
   CREATED_AT_DESC
   UPDATED_AT_ASC
   UPDATED_AT_DESC
+}
+enum UniverseRoles {
+  UNIVERSE_MANAGER
+  UNIVERSE_ADMIN
 }
 """Input to create a new User"""
 input CreateUserInput {
