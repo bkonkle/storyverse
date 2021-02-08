@@ -12,14 +12,20 @@ export const ManageStories: Permission = {
   description: 'Create, update, or delete a Story for particular Series',
 }
 
+export const ManageRoles: Permission = {
+  key: 'SERIES_MANAGE_ROLES',
+  name: 'Manage Series Roles',
+  description: 'Grant or revoke User Roles for a particular Series',
+}
+
 Registry.registerPermissions([Update, ManageStories])
 
 export const Manager: Role = {
   key: 'SERIES_MANAGER',
   name: 'Series Manager',
   description:
-    'Able to manage Stories, and update details for a particular Series',
-  permissions: [Update, ManageStories],
+    'Able to manage Stories, update details, and manage Roles for a particular Series',
+  permissions: [Update, ManageStories, ManageRoles],
 }
 
 Registry.registerRoles([Manager])

@@ -169,6 +169,9 @@ enum SeriesOrderBy {
   UPDATED_AT_ASC
   UPDATED_AT_DESC
 }
+enum SeriesRoles {
+  SERIES_MANAGER
+}
 """Input to create a new Story"""
 input CreateStoryInput {
   name: String!

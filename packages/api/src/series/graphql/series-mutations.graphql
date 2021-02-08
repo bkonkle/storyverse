@@ -13,6 +13,15 @@ extend type Mutation {
   Remove an existing Series by ID
   """
   deleteSeries(id: UUID!): MutateSeriesResult!
+
+  """
+  Grant Roles to a Profile for a Series
+  """
+  grantSeriesRoles(
+    profileId: UUID!
+    universeId: UUID!
+    roles: [SeriesRoles!]!
+  ): Boolean
 }
 
 """

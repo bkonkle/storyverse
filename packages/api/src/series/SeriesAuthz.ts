@@ -5,8 +5,9 @@ import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'
 import {ManageSeries} from '../universes/UniverseRoles'
 import * as UniverseUtils from '../universes/UniverseUtils'
-import {Update} from './SeriesRoles'
+import {Update, ManageRoles} from './SeriesRoles'
 import {getSubject} from './SeriesUtils'
+import {SeriesRoles} from '../Schema'
 
 export default class SeriesAuthz {
   private readonly prisma: PrismaClient
@@ -63,6 +64,25 @@ export default class SeriesAuthz {
     )
 
     return existing
+  }
+
+  /**
+   * Grant Roles to a particular Profile
+   */
+  grantRoles = async (
+    username: string,
+    universeId: string,
+    profileId: string,
+    roles: SeriesRoles[]
+  ) => {
+    const universe = await this.getExisting(universeId)
+
+    const profile = await this.getProfile(username)
+    const subject = getSubject(universe.id)
+
+    await this.authz.requirePermissions(profile.id, subject, [ManageRoles])
+
+    await this.authz.grantRoles(profileId, subject, roles)
   }
 
   private getExisting = async (id: string) => {

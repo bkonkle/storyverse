@@ -13,7 +13,12 @@ export type IncludeAll = {
 
 export const TABLE_NAME = 'Story'
 
-export const getSubject = (id: string): Subject => ({
+export interface StorySubject extends Subject {
+  readonly __tag__: 'Story'
+}
+
+export const getSubject = (id: string): StorySubject => ({
+  __tag__: 'Story',
   table: TABLE_NAME,
   id,
 })

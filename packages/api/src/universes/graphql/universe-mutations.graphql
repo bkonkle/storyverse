@@ -15,7 +15,7 @@ extend type Mutation {
   deleteUniverse(id: UUID!): MutateUniverseResult!
 
   """
-  Grant a Role to a Profile for a Universe
+  Grant Roles to a Profile for a Universe
   """
   grantUniverseRoles(
     profileId: UUID!

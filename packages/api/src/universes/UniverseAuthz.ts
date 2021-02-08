@@ -42,23 +42,6 @@ export default class UniverseAuthz {
     this.requirePermissions(username, id, [Delete])
 
   /**
-   * Authorize the ability to grant Roles
-   */
-  grant = async (username: string, id: string): Promise<void> => {
-    const existing = await this.getExisting(id)
-
-    if (isOwner(existing, username)) {
-      return
-    }
-
-    const profile = await this.getProfile({username})
-
-    await this.authz.requirePermissions(profile.id, getSubject(existing.id), [
-      ManageRoles,
-    ])
-  }
-
-  /**
    * Grant Roles to a particular Profile
    */
   grantRoles = async (
@@ -67,8 +50,14 @@ export default class UniverseAuthz {
     profileId: string,
     roles: UniverseRoles[]
   ) => {
-    await this.grant(username, universeId)
-    const subject = getSubject(universeId)
+    const universe = await this.getExisting(universeId)
+    const subject = getSubject(universe.id)
+
+    if (!isOwner(universe, username)) {
+      const profile = await this.getProfile({username})
+
+      await this.authz.requirePermissions(profile.id, subject, [ManageRoles])
+    }
 
     await this.authz.grantRoles(profileId, subject, roles)
   }
