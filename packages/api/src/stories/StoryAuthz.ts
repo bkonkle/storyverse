@@ -6,6 +6,8 @@ import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'
 import * as UniverseUtils from '../universes/UniverseUtils'
 import {ManageSeries} from '../universes/UniverseRoles'
+import * as SeriesUtils from '../series/SeriesUtils'
+import {ManageStories} from '../series/SeriesRoles'
 
 export default class StoryAuthz {
   private readonly prisma: PrismaClient
@@ -18,6 +20,16 @@ export default class StoryAuthz {
 
   create = async (username: string, seriesId: string): Promise<Profile> => {
     const profile = await this.getProfile(username)
+
+    const bySeries = await this.authz.hasPermissions(
+      profile.id,
+      SeriesUtils.subject(seriesId),
+      [ManageStories]
+    )
+    if (bySeries) {
+      return profile
+    }
+
     const series = await this.getSeries(seriesId)
 
     await this.authz.requirePermissions(
@@ -33,6 +45,15 @@ export default class StoryAuthz {
     const profile = await this.getProfile(username)
     const existing = await this.getExisting(id)
 
+    const bySeries = await this.authz.hasPermissions(
+      profile.id,
+      SeriesUtils.subject(existing.series.id),
+      [ManageStories]
+    )
+    if (bySeries) {
+      return profile
+    }
+
     await this.authz.requirePermissions(
       profile.id,
       UniverseUtils.subject(existing.series.universeId),
@@ -45,6 +66,15 @@ export default class StoryAuthz {
   delete = async (username: string, id: string) => {
     const profile = await this.getProfile(username)
     const existing = await this.getExisting(id)
+
+    const bySeries = await this.authz.hasPermissions(
+      profile.id,
+      SeriesUtils.subject(existing.series.id),
+      [ManageStories]
+    )
+    if (bySeries) {
+      return profile
+    }
 
     await this.authz.requirePermissions(
       profile.id,

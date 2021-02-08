@@ -24,6 +24,8 @@ import TestData from '../../test/TestData'
 import UniverseFactory from '../../test/factories/UniverseFactory'
 import * as UniverseRoles from '../../universes/UniverseRoles'
 import * as UniverseUtils from '../../universes/UniverseUtils'
+import * as SeriesRoles from '../../series/SeriesRoles'
+import * as SeriesUtils from '../../series/SeriesUtils'
 import SeriesFactory from '../../test/factories/SeriesFactory'
 
 describe('Story', () => {
@@ -150,11 +152,11 @@ describe('Story', () => {
         fields
       )
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subj = SeriesUtils.subject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
-          roleKey: UniverseRoles.Manager.key,
+          roleKey: SeriesRoles.Manager.key,
           profileId: profile.id,
           subjectTable: subj.table,
           subjectId: subj.id,
@@ -261,6 +263,55 @@ describe('Story', () => {
           extensions: {code: 'FORBIDDEN'},
         }),
       ])
+    })
+
+    it('allows those with the ManageSeries permission', async () => {
+      const {token} = altCredentials
+      const story = StoryFactory.makeCreateInput({
+        seriesId: series.id,
+      })
+      const variables = {input: story}
+
+      const expected = pick(
+        {
+          ...story,
+          id: expect.stringMatching(Validation.uuidRegex),
+        },
+        fields
+      )
+
+      const subj = UniverseUtils.subject(universe.id)
+
+      const grant = await prisma.roleGrant.create({
+        data: {
+          roleKey: UniverseRoles.Manager.key,
+          profileId: otherProfile.id,
+          subjectTable: subj.table,
+          subjectId: subj.id,
+        },
+      })
+
+      if (!grant) {
+        fail('Grant not created')
+      }
+
+      const {data} = await graphql.mutation<Pick<Mutation, 'createStory'>>(
+        mutation,
+        variables,
+        {token}
+      )
+
+      expect(data?.createStory).toHaveProperty(
+        'story',
+        expect.objectContaining(expected)
+      )
+
+      await prisma.story.delete({
+        where: {id: data?.createStory?.story?.id},
+      })
+      await prisma.roleGrant.delete({
+        where: {id: grant.id},
+      })
     })
   })
 
@@ -409,11 +460,11 @@ describe('Story', () => {
 
       story.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subj = SeriesUtils.subject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
-          roleKey: UniverseRoles.Manager.key,
+          roleKey: SeriesRoles.Manager.key,
           profileId: profile.id,
           subjectTable: subj.table,
           subjectId: subj.id,
@@ -526,6 +577,51 @@ describe('Story', () => {
         }),
       ])
     })
+
+    it('allows users with the ManageSeries permission', async () => {
+      const {token} = altCredentials
+      const variables = {
+        id: story.id,
+        input: {name: faker.random.word()},
+      }
+
+      const expected: Pick<Story, typeof fields[number]> = {
+        ...pick(story.value!, fields),
+        name: variables.input.name,
+      }
+
+      story.resetAfter()
+
+      const subj = UniverseUtils.subject(universe.id)
+
+      const grant = await prisma.roleGrant.create({
+        data: {
+          roleKey: UniverseRoles.Manager.key,
+          profileId: otherProfile.id,
+          subjectTable: subj.table,
+          subjectId: subj.id,
+        },
+      })
+
+      if (!grant) {
+        fail('Grant not created')
+      }
+
+      const {data} = await graphql.mutation<Pick<Mutation, 'updateStory'>>(
+        mutation,
+        variables,
+        {token}
+      )
+
+      expect(data.updateStory).toHaveProperty(
+        'story',
+        expect.objectContaining(expected)
+      )
+
+      await prisma.roleGrant.delete({
+        where: {id: grant.id},
+      })
+    })
   })
 
   describe('Mutation: deleteStory', () => {
@@ -550,11 +646,11 @@ describe('Story', () => {
 
       story.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subj = SeriesUtils.subject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
-          roleKey: UniverseRoles.Manager.key,
+          roleKey: SeriesRoles.Manager.key,
           profileId: profile.id,
           subjectTable: subj.table,
           subjectId: subj.id,
@@ -655,6 +751,44 @@ describe('Story', () => {
           extensions: {code: 'FORBIDDEN'},
         }),
       ])
+    })
+
+    it('allows users with the ManageSeries permission', async () => {
+      const {token} = altCredentials
+      const variables = {id: story.id}
+
+      story.resetAfter()
+
+      const subj = UniverseUtils.subject(universe.id)
+
+      const grant = await prisma.roleGrant.create({
+        data: {
+          roleKey: UniverseRoles.Manager.key,
+          profileId: otherProfile.id,
+          subjectTable: subj.table,
+          subjectId: subj.id,
+        },
+      })
+
+      if (!grant) {
+        fail('Grant not created')
+      }
+
+      const {data} = await graphql.mutation<Pick<Mutation, 'deleteStory'>>(
+        mutation,
+        variables,
+        {token}
+      )
+
+      expect(data.deleteStory).toEqual({
+        story: {
+          id: story.id,
+        },
+      })
+
+      await prisma.roleGrant.delete({
+        where: {id: grant.id},
+      })
     })
   })
 })

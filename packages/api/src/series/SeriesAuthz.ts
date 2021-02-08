@@ -1,5 +1,4 @@
 import {PrismaClient, Profile} from '@prisma/client'
-import {ForbiddenError} from 'apollo-server-core'
 
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
@@ -44,16 +43,13 @@ export default class SeriesAuthz {
       return existing
     }
 
-    const byUniverse = await this.authz.hasPermissions(
+    await this.authz.requirePermissions(
       profile.id,
       UniverseUtils.subject(existing.universeId),
       [ManageSeries]
     )
-    if (byUniverse) {
-      return existing
-    }
 
-    throw new ForbiddenError('Authorization required')
+    return existing
   }
 
   delete = async (username: string, id: string) => {
@@ -86,7 +82,7 @@ export default class SeriesAuthz {
       where: {user: {username}},
     })
     if (!profile) {
-      throw new ForbiddenError('Authorization required')
+      throw new NotFoundError('Profile not found')
     }
 
     return profile
