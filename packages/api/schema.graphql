@@ -101,8 +101,6 @@ type Profile {
   """
   roles(subjectTable: String, subjectId: UUID): [Role!]
   updatedAt: DateTime!
-  """The User that created the Profile"""
-  user: User
   """The id of the User that created the Profile"""
   userId: UUID
 }
@@ -315,8 +313,6 @@ type Universe {
   description: JSONObject
   """The id of the Profile that owns the Universe"""
   ownerProfileId: UUID!
-  """The Profile that owns the Universe"""
-  ownerProfile: Profile!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

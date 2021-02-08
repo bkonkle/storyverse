@@ -21,24 +21,17 @@ export default class UniverseAuthz {
     username: string,
     ownerProfileId: string
   ): Promise<Profile> => {
-    const profile = await this.prisma.profile.findFirst({
-      include: {
-        user: true,
-      },
-      where: {id: ownerProfileId},
-    })
+    const ownerProfile = await this.getProfile({profileId: ownerProfileId})
 
-    if (!profile) {
-      throw new UserInputError(
-        'The specified owned-by `Profile` was not found.'
-      )
+    if (!ownerProfile) {
+      throw new UserInputError('The specified owner `Profile` was not found.')
     }
 
-    if (username !== profile.user.username) {
+    if (username !== ownerProfile.user.username) {
       throw new ForbiddenError('Authorization required')
     }
 
-    return profile
+    return ownerProfile
   }
 
   update = (username: string, id: string) =>
@@ -58,7 +51,7 @@ export default class UniverseAuthz {
       return existing
     }
 
-    const profile = await this.getProfile(username)
+    const profile = await this.getProfile({username})
 
     await this.authz.requirePermissions(
       permissions,
@@ -81,10 +74,20 @@ export default class UniverseAuthz {
     return existing
   }
 
-  private getProfile = async (username: string) => {
+  private getProfile = async (criteria: {
+    username?: string
+    profileId?: string
+  }) => {
+    const {username, profileId} = criteria
+    if (!username && !profileId) {
+      throw new Error('A username or profileId must be provided.')
+    }
+
+    const where = username ? {user: {username}} : {id: profileId}
+
     const profile = await this.prisma.profile.findFirst({
       include: {user: true},
-      where: {user: {username}},
+      where,
     })
     if (!profile) {
       throw new ForbiddenError('Authorization required')

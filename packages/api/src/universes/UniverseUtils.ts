@@ -18,6 +18,11 @@ export type IncludeAll = {
 
 export const TABLE_NAME = 'Universe'
 
+export const subject = (id: string): Subject => ({
+  table: TABLE_NAME,
+  id,
+})
+
 export interface UniverseWithAuthInfo extends Universe {
   ownerProfile: Profile & {
     user: User
@@ -29,44 +34,6 @@ export const isOwner = (
   username?: string | null
 ) => username && username === universe.ownerProfile.user.username
 
-export const subject = (id: string): Subject => ({
-  table: TABLE_NAME,
-  id,
-})
-
-export type CensoredUniverse = Omit<UniverseWithAuthInfo, 'ownerProfile'> & {
-  ownerProfile: ProfileUtils.CensoredProfile
-}
-
-/**
- * Censor details about the ownerProfile if unauthorized.
- */
-export const censor = (username?: string | null) => (
-  universe: UniverseWithAuthInfo
-): CensoredUniverse => {
-  if (isOwner(universe, username)) {
-    return universe
-  }
-
-  return {
-    ...universe,
-    ownerProfile: ProfileUtils.censor(username)(universe.ownerProfile),
-  }
-}
-
-/**
- * Censor details about the ownerProfile is unauthorized, handling absent universes.
- */
-export const maybeCensor = (username?: string | null) => (
-  universe?: UniverseWithAuthInfo | null
-): CensoredUniverse | null => {
-  if (!universe) {
-    return null
-  }
-
-  return censor(username)(universe)
-}
-
 /**
  * These required fields cannot be set to `null`, they can only be `undefined` in order for Prisma
  * to ignore them. Force them to `undefined` if they are `null`.
@@ -77,7 +44,6 @@ const requiredFields = [
   'updatedAt',
   'name',
   'description',
-  'ownerProfile',
   'ownerProfileId',
   'series',
 ] as const

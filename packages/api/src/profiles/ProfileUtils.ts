@@ -1,42 +1,38 @@
-import {camelCase, omit} from 'lodash'
+import {camelCase, curry, omit} from 'lodash'
 import {Prisma} from '@prisma/client'
 
 import {
-  Profile,
   ProfileCondition,
   ProfilesOrderBy,
   UpdateProfileInput,
+  Profile,
+  User,
 } from '../Schema'
 
 export type IncludeAll = {
   user: true
 }
 
-export const isOwner = (profile: Profile, username?: string | null) =>
-  username && profile.user && username === profile.user?.username
+export const isOwner = (
+  profile: Profile & {user?: User},
+  username?: string | null
+) => username && profile.user && username === profile.user?.username
 
-export const censoredFields = ['email', 'userId', 'user'] as const
+export const censoredFields = ['email', 'userId'] as const
 export type CensoredProfile = Omit<Profile, typeof censoredFields[number]>
 
-export const censor = (username?: string | null) => (
-  profile: Profile
-): CensoredProfile => {
-  if (isOwner(profile, username)) {
-    return profile
+/**
+ * If the given username isn't from the User that owns the Profile, censor it.
+ */
+export const censor = curry(
+  (username: string | undefined | null, profile: Profile): CensoredProfile => {
+    if (isOwner(profile, username)) {
+      return profile
+    }
+
+    return omit(profile, censoredFields)
   }
-
-  return omit(profile, censoredFields)
-}
-
-export const maybeCensor = (username?: string | null) => (
-  profile?: Profile | null
-): CensoredProfile | null => {
-  if (!profile) {
-    return null
-  }
-
-  return censor(username)(profile)
-}
+)
 
 /**
  * These required fields cannot be set to `null`, they can only be `undefined` in order for Prisma

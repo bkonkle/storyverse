@@ -1,7 +1,7 @@
 import {ForbiddenError, UserInputError} from 'apollo-server-core'
 import {PrismaClient} from '@prisma/client'
 
-import {User, Profile} from '../Schema'
+import {User} from '../Schema'
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import {isOwner} from './ProfileUtils'
@@ -13,7 +13,7 @@ export default class ProfileAuthz {
     this.prisma = prisma || Prisma.init()
   }
 
-  create = (username: string) => (user?: User | null): User => {
+  create = (username: string) => (user?: User | null) => {
     if (!user) {
       throw new UserInputError('No user found with that id')
     }
@@ -25,7 +25,7 @@ export default class ProfileAuthz {
     return user
   }
 
-  update = async (username: string, id: string): Promise<Profile> => {
+  update = async (username: string, id: string) => {
     const existing = await this.getExisting(id)
 
     if (isOwner(existing, username)) {
@@ -37,7 +37,7 @@ export default class ProfileAuthz {
 
   delete = this.update
 
-  private getExisting = async (id: string): Promise<Profile> => {
+  private getExisting = async (id: string) => {
     const existing = await this.prisma.profile.findFirst({
       include: {user: true},
       where: {id},

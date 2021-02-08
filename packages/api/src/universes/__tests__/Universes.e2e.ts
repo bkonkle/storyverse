@@ -44,16 +44,6 @@ describe('Universes', () => {
 
   const deleteUniverse = (id: string) => prisma.universe.delete({where: {id}})
 
-  const mockCensor = (universe: Partial<Universe>) => ({
-    ...universe,
-    ownerProfile: {
-      ...universe.ownerProfile,
-      email: null,
-      userId: null,
-      user: null,
-    },
-  })
-
   beforeAll(async () => {
     await dbCleaner(prisma, tables)
 
@@ -106,21 +96,12 @@ describe('Universes', () => {
             id
             name
             description
-            ownerProfile {
-              id
-              displayName
-            }
+            ownerProfileId
           }
         }
       }
     `
-    const fields = [
-      'id',
-      'name',
-      'description',
-      'ownerProfile.id',
-      'ownerProfile.displayName',
-    ]
+    const fields = ['id', 'name', 'description', 'ownerProfileId']
 
     it('creates a new universe', async () => {
       const {token} = credentials
@@ -243,25 +224,10 @@ describe('Universes', () => {
           name
           description
           ownerProfileId
-          ownerProfile {
-            email
-            userId
-            user {
-              id
-            }
-          }
         }
       }
     `
-    const fields = [
-      'id',
-      'name',
-      'description',
-      'ownerProfileId',
-      'ownerProfile.email',
-      'ownerProfile.userId',
-      'ownerProfile.user.id',
-    ]
+    const fields = ['id', 'name', 'description', 'ownerProfileId']
 
     const universe = new TestData(
       () =>
@@ -309,7 +275,7 @@ describe('Universes', () => {
         {}
       )
 
-      expect(data.getUniverse).toEqual(mockCensor(expected))
+      expect(data.getUniverse).toEqual(expected)
     })
 
     it('censors the profile.user for unauthorized users', async () => {
@@ -323,7 +289,7 @@ describe('Universes', () => {
         {token}
       )
 
-      expect(data.getUniverse).toEqual(mockCensor(expected))
+      expect(data.getUniverse).toEqual(expected)
     })
   })
 
@@ -346,13 +312,6 @@ describe('Universes', () => {
             name
             description
             ownerProfileId
-            ownerProfile {
-              email
-              userId
-              user {
-                id
-              }
-            }
           }
           count
           total
@@ -361,15 +320,7 @@ describe('Universes', () => {
         }
       }
     `
-    const fields = [
-      'id',
-      'name',
-      'description',
-      'ownerProfileId',
-      'ownerProfile.email',
-      'ownerProfile.userId',
-      'ownerProfile.user.id',
-    ]
+    const fields = ['id', 'name', 'description', 'ownerProfileId']
 
     const universe = new TestData(
       () =>
@@ -399,49 +350,6 @@ describe('Universes', () => {
       expect(data.getManyUniverses).toEqual({
         data: expect.arrayContaining([
           pick(universe.value, fields),
-          mockCensor(pick(otherUniverse.value, fields)),
-        ]),
-        count: 2,
-        page: 1,
-        pageCount: 1,
-        total: 2,
-      })
-    })
-
-    it('censors the profile.user for anonymous users', async () => {
-      const variables = {}
-
-      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
-        query,
-        variables,
-        {}
-      )
-
-      expect(data.getManyUniverses).toEqual({
-        data: expect.arrayContaining([
-          mockCensor(pick(universe.value, fields)),
-          mockCensor(pick(otherUniverse.value, fields)),
-        ]),
-        count: 2,
-        page: 1,
-        pageCount: 1,
-        total: 2,
-      })
-    })
-
-    it('censors the profile.user for unauthorized users', async () => {
-      const {token} = altCredentials
-      const variables = {}
-
-      const {data} = await graphql.query<Pick<Query, 'getManyUniverses'>>(
-        query,
-        variables,
-        {token}
-      )
-
-      expect(data.getManyUniverses).toEqual({
-        data: expect.arrayContaining([
-          mockCensor(pick(universe.value, fields)),
           pick(otherUniverse.value, fields),
         ]),
         count: 2,

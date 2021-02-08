@@ -46,11 +46,6 @@ type Profile {
   """
   userId: UUID
 
-  """
-  The User that created the Profile
-  """
-  user: User
-
   createdAt: DateTime!
   updatedAt: DateTime!
 }

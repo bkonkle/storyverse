@@ -36,11 +36,6 @@ type Universe {
   """
   ownerProfileId: UUID!
 
-  """
-  The Profile that owns the Universe
-  """
-  ownerProfile: Profile!
-
   createdAt: DateTime!
   updatedAt: DateTime!
 }

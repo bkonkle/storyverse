@@ -10,7 +10,6 @@ import {
   fromOrderByInput,
   fromProfileCondition,
   fromProfileInput,
-  maybeCensor,
 } from './ProfileUtils'
 
 export default class ProfileResolvers {
@@ -46,12 +45,16 @@ export default class ProfileResolvers {
   ) => {
     const username = maybeUsername(context)
 
-    return this.prisma.profile
-      .findFirst({
-        include: {user: true},
-        where: {id},
-      })
-      .then(maybeCensor(username))
+    const profile = await this.prisma.profile.findFirst({
+      include: {user: true},
+      where: {id},
+    })
+
+    if (!profile) {
+      return null
+    }
+
+    return censor(username, profile)
   }
 
   /**

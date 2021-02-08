@@ -8,7 +8,7 @@ import GraphQL from '../../test/GraphQL'
 import Validation from '../../test/Validation'
 import {dbCleaner} from '../../test/Prisma'
 import ProfileFactory from '../../test/factories/ProfileFactory'
-import {Mutation, Query, User, Profile, CreateProfileInput} from '../../Schema'
+import {Mutation, Query, CreateProfileInput, Profile, User} from '../../Schema'
 import TestData from '../../test/TestData'
 import Prisma from '../../utils/Prisma'
 
@@ -37,7 +37,6 @@ describe('Profile', () => {
     ...profile,
     email: null,
     userId: null,
-    user: null,
   })
 
   beforeAll(async () => {
@@ -200,20 +199,10 @@ describe('Profile', () => {
           displayName
           picture
           userId
-          user {
-            id
-          }
         }
       }
     `
-    const fields = [
-      'id',
-      'email',
-      'displayName',
-      'picture',
-      'userId',
-      'user.id',
-    ]
+    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
 
     const profile = new TestData(
       () => createProfile(ProfileFactory.makeCreateInput({userId: user.id})),
@@ -297,9 +286,6 @@ describe('Profile', () => {
             displayName
             picture
             userId
-            user {
-              id
-            }
           }
           count
           total
@@ -308,14 +294,7 @@ describe('Profile', () => {
         }
       }
     `
-    const fields = [
-      'id',
-      'email',
-      'displayName',
-      'picture',
-      'userId',
-      'user.id',
-    ]
+    const fields = ['id', 'email', 'displayName', 'picture', 'userId']
 
     const profile = new TestData(
       () =>

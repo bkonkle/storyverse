@@ -1,18 +1,16 @@
 import {PrismaClient} from '@prisma/client'
 
 import {Resolvers, QueryResolvers, MutationResolvers} from '../Schema'
-import {getUsername, maybeUsername} from '../users/UserUtils'
+import {getUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
 import Prisma, {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import UniverseAuthz from './UniverseAuthz'
 import {
   IncludeAll,
-  censor,
   fromOrderByInput,
   fromUniverseCondition,
   fromUniverseInput,
-  maybeCensor,
 } from './UniverseUtils'
 
 export default class UniverseResolvers {
@@ -39,26 +37,21 @@ export default class UniverseResolvers {
   getUniverse: QueryResolvers<Context>['getUniverse'] = async (
     _parent,
     {id},
-    context,
+    _context,
     _resolveInfo
   ) => {
-    const username = maybeUsername(context)
-
-    return this.prisma.universe
-      .findFirst({
-        include: {ownerProfile: {include: {user: true}}},
-        where: {id},
-      })
-      .then(maybeCensor(username))
+    return this.prisma.universe.findFirst({
+      include: {ownerProfile: {include: {user: true}}},
+      where: {id},
+    })
   }
 
   getManyUniverses: QueryResolvers<Context>['getManyUniverses'] = async (
     _parent,
     args,
-    context,
+    _context,
     _resolveInfo
   ) => {
-    const username = maybeUsername(context)
     const {where, orderBy, pageSize, page} = args
 
     const options = {
@@ -66,13 +59,13 @@ export default class UniverseResolvers {
       orderBy: fromOrderByInput(orderBy),
     }
     const total = await this.prisma.universe.count(options)
-    const profiles = await this.prisma.universe.findMany({
+    const universes = await this.prisma.universe.findMany({
       include: {ownerProfile: {include: {user: true}}},
       ...options,
       ...getOffset(pageSize, page),
     })
 
-    return paginateResponse(profiles.map(censor(username)), {
+    return paginateResponse(universes, {
       total,
       pageSize,
       page,
