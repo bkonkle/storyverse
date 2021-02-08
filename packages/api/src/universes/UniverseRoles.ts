@@ -1,5 +1,5 @@
-import {Permission, Role} from '../authorization/Roles'
 import Registry from '../authorization/RolesRegistry'
+import {Permission, Role} from '../authorization/Roles'
 
 export const Update: Permission = {
   key: 'UNIVERSE_UPDATE',
@@ -31,7 +31,7 @@ export const Manager: Role = {
   key: 'UNIVERSE_MANAGER',
   name: 'Universe Manager',
   description:
-    "Able to curate content, manage series', and update details for a particular Universe",
+    'Able to manage Series and update details for a particular Universe',
   permissions: [Update, ManageSeries],
 }
 

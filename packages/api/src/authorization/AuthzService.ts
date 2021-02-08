@@ -36,8 +36,8 @@ export default class AuthzService {
   }
 
   /**
-   * Return an array of distinct Permissions granted via Roles for the given Profile id, optionally
-   * in the context of a specific subject item.
+   * Return an array of distinct Permissions granted via Roles for the given Profile id in the
+   * context of a specific subject item.
    */
   async getPermissionsByProfile(
     profileId: string,
@@ -54,17 +54,42 @@ export default class AuthzService {
   }
 
   /**
+   * Return an array of distinct Permission keys granted via Roles for the given Profile id, in the
+   * context of a specific subject item.
+   */
+  async getPermissionKeysByProfile(
+    profileId: string,
+    subject: Subject
+  ): Promise<string[]> {
+    const profilePerms = await this.getPermissionsByProfile(profileId, subject)
+
+    return profilePerms.map((permission) => permission.key)
+  }
+
+  /**
    * Check for specific Permissions and return true if they were all found for the given Profile.
    */
   async hasPermissions(
-    permissions: Permission[],
     profileId: string,
-    subject: Subject
+    subject: Subject,
+    permissions: Permission[]
   ): Promise<boolean> {
-    const profilePerms = await this.getPermissionsByProfile(profileId, subject)
-    const keys = profilePerms.map((permission) => permission.key)
+    const keys = await this.getPermissionKeysByProfile(profileId, subject)
 
     return permissions.every((permission) => keys.includes(permission.key))
+  }
+
+  /**
+   * Check for specific Permissions and return true if any were found for the given Profile.
+   */
+  async anyPermission(
+    profileId: string,
+    subject: Subject,
+    permissions: Permission[]
+  ): Promise<boolean> {
+    const keys = await this.getPermissionKeysByProfile(profileId, subject)
+
+    return permissions.some((permission) => keys.includes(permission.key))
   }
 
   /**
@@ -72,11 +97,27 @@ export default class AuthzService {
    * Profile.
    */
   async requirePermissions(
-    permissions: Permission[],
     profileId: string,
-    subject: Subject
+    subject: Subject,
+    permissions: Permission[]
   ): Promise<void> {
-    const success = await this.hasPermissions(permissions, profileId, subject)
+    const success = await this.hasPermissions(profileId, subject, permissions)
+
+    if (!success) {
+      throw new ForbiddenError('Authorization required')
+    }
+  }
+
+  /**
+   * Check for specific Permissions and throw an error if none of them were found for the given
+   * Profile.
+   */
+  async requireAnyPermission(
+    profileId: string,
+    subject: Subject,
+    permissions: Permission[]
+  ): Promise<void> {
+    const success = await this.anyPermission(profileId, subject, permissions)
 
     if (!success) {
       throw new ForbiddenError('Authorization required')

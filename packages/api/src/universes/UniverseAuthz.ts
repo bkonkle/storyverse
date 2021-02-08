@@ -54,9 +54,9 @@ export default class UniverseAuthz {
     const profile = await this.getProfile({username})
 
     await this.authz.requirePermissions(
-      permissions,
       profile.id,
-      subject(existing.id)
+      subject(existing.id),
+      permissions
     )
 
     return existing

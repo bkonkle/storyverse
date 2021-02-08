@@ -21,9 +21,9 @@ export default class StoryAuthz {
     const series = await this.getSeries(seriesId)
 
     await this.authz.requirePermissions(
-      [ManageSeries],
       profile.id,
-      UniverseUtils.subject(series.universeId)
+      UniverseUtils.subject(series.universeId),
+      [ManageSeries]
     )
 
     return profile
@@ -34,9 +34,9 @@ export default class StoryAuthz {
     const existing = await this.getExisting(id)
 
     await this.authz.requirePermissions(
-      [ManageSeries],
       profile.id,
-      UniverseUtils.subject(existing.series.universeId)
+      UniverseUtils.subject(existing.series.universeId),
+      [ManageSeries]
     )
 
     return existing
@@ -47,9 +47,9 @@ export default class StoryAuthz {
     const existing = await this.getExisting(id)
 
     await this.authz.requirePermissions(
-      [ManageSeries],
       profile.id,
-      UniverseUtils.subject(existing.series.universeId)
+      UniverseUtils.subject(existing.series.universeId),
+      [ManageSeries]
     )
 
     return existing

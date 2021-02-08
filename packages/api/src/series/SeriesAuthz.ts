@@ -6,6 +6,8 @@ import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authorization/AuthzService'
 import {ManageSeries} from '../universes/UniverseRoles'
 import * as UniverseUtils from '../universes/UniverseUtils'
+import {Update} from './SeriesRoles'
+import {subject} from './SeriesUtils'
 
 export default class SeriesAuthz {
   private readonly prisma: PrismaClient
@@ -21,9 +23,9 @@ export default class SeriesAuthz {
     const universe = await this.getUniverse(universeId)
 
     await this.authz.requirePermissions(
-      [ManageSeries],
       profile.id,
-      UniverseUtils.subject(universe.id)
+      UniverseUtils.subject(universe.id),
+      [ManageSeries]
     )
 
     return profile
@@ -33,24 +35,35 @@ export default class SeriesAuthz {
     const existing = await this.getExisting(id)
     const profile = await this.getProfile(username)
 
-    await this.authz.requirePermissions(
-      [ManageSeries],
+    const bySeries = await this.authz.hasPermissions(
       profile.id,
-      UniverseUtils.subject(existing.universeId)
+      subject(existing.id),
+      [Update]
     )
+    if (bySeries) {
+      return existing
+    }
 
-    return existing
+    const byUniverse = await this.authz.hasPermissions(
+      profile.id,
+      UniverseUtils.subject(existing.universeId),
+      [ManageSeries]
+    )
+    if (byUniverse) {
+      return existing
+    }
+
+    throw new ForbiddenError('Authorization required')
   }
 
   delete = async (username: string, id: string) => {
     const existing = await this.getExisting(id)
     const profile = await this.getProfile(username)
-    const universe = await this.getUniverse(existing.universeId)
 
     await this.authz.requirePermissions(
-      [ManageSeries],
       profile.id,
-      UniverseUtils.subject(universe.id)
+      UniverseUtils.subject(existing.universeId),
+      [ManageSeries]
     )
 
     return existing

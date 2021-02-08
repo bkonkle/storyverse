@@ -23,6 +23,8 @@ import TestData from '../../test/TestData'
 import UniverseFactory from '../../test/factories/UniverseFactory'
 import * as UniverseRoles from '../../universes/UniverseRoles'
 import * as UniverseUtils from '../../universes/UniverseUtils'
+import {Manager} from '../SeriesRoles'
+import {subject} from '../SeriesUtils'
 
 describe('Series', () => {
   let graphql: GraphQL
@@ -394,11 +396,11 @@ describe('Series', () => {
 
       series.resetAfter()
 
-      const subj = UniverseUtils.subject(universe.id)
+      const subj = subject(series.id)
 
       const grant = await prisma.roleGrant.create({
         data: {
-          roleKey: UniverseRoles.Manager.key,
+          roleKey: Manager.key,
           profileId: profile.id,
           subjectTable: subj.table,
           subjectId: subj.id,
@@ -510,6 +512,51 @@ describe('Series', () => {
           extensions: {code: 'FORBIDDEN'},
         }),
       ])
+    })
+
+    it('allows users with the ManageSeries permission', async () => {
+      const {token} = altCredentials
+      const variables = {
+        id: series.id,
+        input: {name: faker.random.word()},
+      }
+
+      const expected: Pick<Series, typeof fields[number]> = {
+        ...pick(series.value!, fields),
+        name: variables.input.name,
+      }
+
+      series.resetAfter()
+
+      const subj = UniverseUtils.subject(universe.id)
+
+      const grant = await prisma.roleGrant.create({
+        data: {
+          roleKey: UniverseRoles.Manager.key,
+          profileId: otherProfile.id,
+          subjectTable: subj.table,
+          subjectId: subj.id,
+        },
+      })
+
+      if (!grant) {
+        fail('Grant not created')
+      }
+
+      const {data} = await graphql.mutation<Pick<Mutation, 'updateSeries'>>(
+        mutation,
+        variables,
+        {token}
+      )
+
+      expect(data.updateSeries).toHaveProperty(
+        'series',
+        expect.objectContaining(expected)
+      )
+
+      await prisma.roleGrant.delete({
+        where: {id: grant.id},
+      })
     })
   })
 
