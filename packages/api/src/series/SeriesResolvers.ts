@@ -40,11 +40,13 @@ export default class SeriesResolvers {
     _context,
     resolveInfo
   ) => {
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'getSeries'
+    ) as IncludeAll
+
     return this.prisma.series.findFirst({
-      include: includeFromSelections(
-        resolveInfo.operation.selectionSet,
-        'getSeries'
-      ) as IncludeAll,
+      include,
       where: {id},
     })
   }

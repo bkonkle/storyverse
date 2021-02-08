@@ -40,11 +40,13 @@ export default class StoryResolvers {
     _context,
     resolveInfo
   ) => {
+    const include = includeFromSelections(
+      resolveInfo.operation.selectionSet,
+      'getStory'
+    ) as IncludeAll
+
     return this.prisma.story.findFirst({
-      include: includeFromSelections(
-        resolveInfo.operation.selectionSet,
-        'getStory'
-      ) as IncludeAll,
+      include,
       where: {id},
     })
   }
