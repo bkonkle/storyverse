@@ -16,21 +16,12 @@ export const makeCreateInput = (
 }
 
 export const make = (overrides?: Partial<Profile> | null): Profile => {
-  const Users: typeof import('./UserFactory') = require('./UserFactory')
-
-  const user = Users.make(overrides?.user)
-
   return {
     id: faker.random.uuid(),
     createdAt: faker.date.recent(),
     updatedAt: faker.date.recent(),
-    ...makeCreateInput({
-      ...overrides,
-      userId: user.id,
-      email: overrides?.email || undefined,
-    }),
+    ...makeCreateInput(overrides as Partial<CreateProfileInput>),
     ...overrides,
-    ...(user ? {user} : {}),
   }
 }
 
