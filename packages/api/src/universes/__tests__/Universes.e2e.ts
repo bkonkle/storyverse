@@ -694,10 +694,10 @@ describe('Universes', () => {
   })
 
   describe('Mutation: grantUniverseRoles', () => {
-    it.skip('grants roles for a particular universe')
+    it.todo('grants roles for a particular universe')
 
-    it.skip('requires authentication')
+    it.todo('requires authentication')
 
-    it.skip('requires authorization')
+    it.todo('requires authorization')
   })
 })
