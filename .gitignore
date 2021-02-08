@@ -61,4 +61,10 @@ yarn-error.log
 # Yarn Integrity file
 .yarn-integrity
 
-dist
+# build files
+build
+
+# terraform files
+.terraform
+terraform.tfstate
+terraform.tfstate.backup

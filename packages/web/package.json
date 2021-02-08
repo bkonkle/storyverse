@@ -8,10 +8,28 @@
   },
   "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
   "license": "MIT",
-  "scripts": {},
-  "dependencies": {},
-  "devDependencies": {},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.2.4",
+    "clsx": "^1.1.1",
+    "date-fns": "^2.11.1",
+    "gray-matter": "^4.0.2",
+    "next": "^10.0.0",
+    "postcss": "^8.2.5",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "remark": "^13.0.0",
+    "remark-html": "^13.0.1",
+    "tailwindcss": "^2.0.3"
+  },
   "resolutions": {
     "graphql": "^15.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.1"
   }
 }
