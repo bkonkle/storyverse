@@ -21,7 +21,7 @@ import StoryResolvers from './stories/StoryResolvers'
 import {getContext} from './utils/Context'
 
 const typeDefs = gql(
-  readFileSync(join(__dirname, '..', 'schema.graphql'), 'utf8')
+  readFileSync(join(__dirname, '..', '..', '..', 'schema.graphql'), 'utf8')
 )
 
 export const getResolvers = (): Resolvers => {

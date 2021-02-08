@@ -3,12 +3,12 @@ import faker from 'faker'
 import {omit, pick} from 'lodash'
 
 import App from '../../App'
-import OAuth2 from '../../test/OAuth2'
-import GraphQL from '../../test/GraphQL'
-import Validation from '../../test/Validation'
-import {dbCleaner} from '../../test/Prisma'
-import ProfileFactory from '../../test/factories/ProfileFactory'
-import StoryFactory from '../../test/factories/StoryFactory'
+import OAuth2 from '../../../test/OAuth2'
+import GraphQL from '../../../test/GraphQL'
+import Validation from '../../../test/Validation'
+import {dbCleaner} from '../../../test/Prisma'
+import ProfileFactory from '../../../test/factories/ProfileFactory'
+import StoryFactory from '../../../test/factories/StoryFactory'
 import {
   Mutation,
   User,
@@ -20,13 +20,13 @@ import {
   Universe,
 } from '../../Schema'
 import Prisma from '../../utils/Prisma'
-import TestData from '../../test/TestData'
-import UniverseFactory from '../../test/factories/UniverseFactory'
+import TestData from '../../../test/TestData'
+import UniverseFactory from '../../../test/factories/UniverseFactory'
 import * as UniverseRoles from '../../universes/UniverseRoles'
 import * as UniverseUtils from '../../universes/UniverseUtils'
 import * as SeriesRoles from '../../series/SeriesRoles'
 import * as SeriesUtils from '../../series/SeriesUtils'
-import SeriesFactory from '../../test/factories/SeriesFactory'
+import SeriesFactory from '../../../test/factories/SeriesFactory'
 
 describe('Story', () => {
   let graphql: GraphQL

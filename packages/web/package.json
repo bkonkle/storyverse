@@ -1,0 +1,17 @@
+{
+  "name": "@bkonkle/storyverse-web",
+  "version": "1.0.0",
+  "description": "The Storyverse web application",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bkonkle/storyverse.git"
+  },
+  "author": "Brandon Konkle <brandon@konkle.us> (http://konkle.us)",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "resolutions": {
+    "graphql": "^15.5.0"
+  }
+}

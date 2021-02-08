@@ -22,7 +22,9 @@ type Mutation {
   deleteStory(id: UUID!): MutateStoryResult!
   """Remove an existing Universe by ID"""
   deleteUniverse(id: UUID!): MutateUniverseResult!
-  """Grant a Role to a Profile for a Universe"""
+  """Grant Roles to a Profile for a Series"""
+  grantSeriesRoles(profileId: UUID!, universeId: UUID!, roles: [SeriesRoles!]!): Boolean
+  """Grant Roles to a Profile for a Universe"""
   grantUniverseRoles(profileId: UUID!, universeId: UUID!, roles: [UniverseRoles!]!): Boolean
   """Update the currently authenticated User"""
   updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
