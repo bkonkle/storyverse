@@ -1,16 +1,16 @@
 import React from 'react'
 import Head from 'next/head'
 
-import {siteTitle} from '../components/Layout'
+import Layout, {siteTitle} from '../components/Layout'
 
 export const Home = () => {
   return (
-    <>
+    <Layout>
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section></section>
-    </>
+      <section>Welcome to Storyverse!</section>
+    </Layout>
   )
 }
 

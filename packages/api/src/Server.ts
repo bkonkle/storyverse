@@ -22,7 +22,7 @@ export function run(label: string, app: Application, port: number): void {
 
 export const start = async (): Promise<void> => {
   const {PORT} = process.env
-  const port = PORT ? Number(PORT) : 3000
+  const port = PORT ? Number(PORT) : 4000
   const app = await init()
 
   run('Storyverse', app, port)

@@ -1,11 +1,13 @@
 import React, {ReactNode} from 'react'
 import Head from 'next/head'
 
+import Navigation from './nav/Navigation'
+
 export const siteTitle = 'Storyverse'
 
 export const Layout = ({children}: {children: ReactNode}) => {
   return (
-    <div>
+    <div className="relative bg-white">
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -21,8 +23,10 @@ export const Layout = ({children}: {children: ReactNode}) => {
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <header></header>
-      <main>{children}</main>
+      <Navigation />
+      <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+        {children}
+      </main>
     </div>
   )
 }
