@@ -5,11 +5,25 @@ export interface NavLinkProps {
   href: string
   current?: boolean
   mobile?: boolean
+  profile?: boolean
   children?: ReactNode
 }
 
 export const getClasses = (props: NavLinkProps) => {
-  const {current, mobile} = props
+  const {current, mobile, profile} = props
+
+  if (profile) {
+    return {
+      link: clsx(
+        'block',
+        'px-4',
+        'py-2',
+        'text-sm',
+        'text-gray-700',
+        'hover:bg-gray-100'
+      ),
+    }
+  }
 
   return {
     link: clsx(

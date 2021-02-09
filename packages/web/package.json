@@ -15,6 +15,7 @@
     "generate.gql": "graphql-codegen"
   },
   "dependencies": {
+    "@headlessui/react": "^0.3.0",
     "@urql/exchange-graphcache": "^3.4.0",
     "autoprefixer": "^10.2.4",
     "clsx": "^1.1.1",
