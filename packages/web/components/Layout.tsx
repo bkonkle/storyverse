@@ -5,7 +5,7 @@ import Navigation from './nav/Navigation'
 import clsx from 'clsx'
 
 export interface LayoutProps {
-  children: ReactNode
+  children?: ReactNode
 }
 
 export const siteTitle = 'Storyverse'

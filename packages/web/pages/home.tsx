@@ -37,13 +37,13 @@ export const Home = () => {
   const classes = getClasses()
 
   return (
-    <App>
+    <App requireUser>
       <Head>
         <title>Storyverse</title>
       </Head>
       <header className={classes.header}>
         <div className={classes.titleContainer}>
-          <h1 className={classes.title}>Dashboard</h1>
+          <h1 className={classes.title}>Home</h1>
         </div>
       </header>
       <main>
