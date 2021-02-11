@@ -53,8 +53,8 @@ export async function init(
   const [
     nodeEnv = 'production',
     audience = 'production',
-    issuer = 'https://storyverse.auth0.com/',
-  ] = getVars([Vars.NodeEnv, Vars.OAuth2Audience, Vars.OAuth2Issuer], env)
+    domain = 'storyverse.auth0.com',
+  ] = getVars([Vars.NodeEnv, Vars.OAuth2Audience, Vars.OAuth2Domain], env)
 
   const isDev = nodeEnv === 'development'
 
@@ -66,13 +66,13 @@ export async function init(
     jwt({
       algorithms: ['RS256'],
       audience,
-      issuer,
+      issuer: `https://${domain}/`,
       credentialsRequired: false,
       secret: jwks.expressJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `${issuer}.well-known/jwks.json`,
+        jwksUri: `https://${domain}/.well-known/jwks.json`,
       }),
     })
   )

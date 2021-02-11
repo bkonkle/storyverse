@@ -1,4 +1,5 @@
 import React, {ReactNode} from 'react'
+import Link from 'next/link'
 import clsx from 'clsx'
 
 export interface NavLinkProps {
@@ -30,9 +31,9 @@ export const NavLink = (props: NavLinkProps) => {
   const {href, children} = props
 
   return (
-    <a href={href} className={classes.link}>
-      {children}
-    </a>
+    <Link href={href}>
+      <a className={classes.link}>{children}</a>
+    </Link>
   )
 }
 

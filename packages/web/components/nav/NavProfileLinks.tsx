@@ -49,7 +49,7 @@ export const NavProfileLinks = (props: NavProfileLinksProps) => {
       <NavProfileLink dropdown={dropdown} href="#">
         Settings
       </NavProfileLink>
-      <NavProfileLink dropdown={dropdown} href="#">
+      <NavProfileLink dropdown={dropdown} href="/api/logout">
         Sign out
       </NavProfileLink>
     </div>

@@ -2,10 +2,9 @@ import React, {useState} from 'react'
 import clsx from 'clsx'
 
 import MenuButton from './MenuButton'
-import NavProfile from './NavProfile'
 import SlideMenu from './SlideMenu'
-import Notifications from './Notifications'
 import MenuLinks from './MenuLinks'
+import NavUser from './NavUser'
 
 export const getClasses = () => {
   return {
@@ -22,10 +21,6 @@ export const getClasses = () => {
     title: clsx('text-3xl', 'font-bold', 'leading-tight', 'text-white'),
 
     menuLinks: clsx('hidden', 'md:block'),
-
-    profileContainer: clsx('hidden', 'md:block'),
-
-    profile: clsx('ml-4', 'flex', 'items-center', 'md:ml-6'),
   }
 }
 
@@ -47,12 +42,7 @@ export const Navigation = () => {
             </div>
           </div>
 
-          <div className={classes.profileContainer}>
-            <div className={classes.profile}>
-              <Notifications />
-              <NavProfile />
-            </div>
-          </div>
+          <NavUser />
 
           <MenuButton open={menuOpen} setOpen={setMenuOpen} />
         </div>

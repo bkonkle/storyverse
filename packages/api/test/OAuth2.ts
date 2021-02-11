@@ -14,7 +14,7 @@ export const init = (processEnv = process.env) => {
     OAUTH2_TEST_PASS,
     OAUTH2_TEST_USER_ALT,
     OAUTH2_TEST_PASS_ALT,
-    OAUTH2_ISSUER,
+    OAUTH2_DOMAIN,
     OAUTH2_AUDIENCE,
     OAUTH2_CLIENT_ID,
     OAUTH2_CLIENT_SECRET,
@@ -24,7 +24,7 @@ export const init = (processEnv = process.env) => {
     if (!credentials.token) {
       const {
         data: {access_token: accessToken},
-      } = await axios.post(`${OAUTH2_ISSUER}oauth/token`, {
+      } = await axios.post(`https://${OAUTH2_DOMAIN}/oauth/token`, {
         grant_type: 'password',
         username: OAUTH2_TEST_USER,
         password: OAUTH2_TEST_PASS,
@@ -39,7 +39,7 @@ export const init = (processEnv = process.env) => {
     if (!credentials.username) {
       const {
         data: {sub},
-      } = await axios.get(`${OAUTH2_ISSUER}userinfo`, {
+      } = await axios.get(`https://${OAUTH2_DOMAIN}/userinfo`, {
         headers: {Authorization: `Bearer ${credentials.token}`},
       })
       credentials.username = sub
@@ -48,7 +48,7 @@ export const init = (processEnv = process.env) => {
     if (!altCredentials.token) {
       const {
         data: {access_token: altAccessToken},
-      } = await axios.post(`${OAUTH2_ISSUER}oauth/token`, {
+      } = await axios.post(`https://${OAUTH2_DOMAIN}/oauth/token`, {
         grant_type: 'password',
         username: OAUTH2_TEST_USER_ALT,
         password: OAUTH2_TEST_PASS_ALT,
@@ -63,7 +63,7 @@ export const init = (processEnv = process.env) => {
     if (!altCredentials.username) {
       const {
         data: {sub: altSub},
-      } = await axios.get(`${OAUTH2_ISSUER}userinfo`, {
+      } = await axios.get(`https://${OAUTH2_DOMAIN}/userinfo`, {
         headers: {Authorization: `Bearer ${altCredentials.token}`},
       })
       altCredentials.username = altSub

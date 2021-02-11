@@ -33,7 +33,7 @@ export const getClasses = () => {
   }
 }
 
-export const Index = () => {
+export const Home = () => {
   const classes = getClasses()
 
   return (
@@ -43,7 +43,7 @@ export const Index = () => {
       </Head>
       <header className={classes.header}>
         <div className={classes.titleContainer}>
-          <h1 className={classes.title}>Welcome to Storyverse!</h1>
+          <h1 className={classes.title}>Dashboard</h1>
         </div>
       </header>
       <main>
@@ -57,4 +57,4 @@ export const Index = () => {
   )
 }
 
-export default Index
+export default Home
