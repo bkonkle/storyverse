@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {RefObject} from 'react'
 import clsx from 'clsx'
-import NavProfileLink from './NavProfileLink'
+
+import NavLink from './NavLink'
 
 export interface NavProfileLinksProps {
   dropdown?: boolean
+  profileLinks: RefObject<HTMLDivElement>
 }
 
 export const getClasses = (props: NavProfileLinksProps) => {
@@ -34,7 +36,7 @@ export const getClasses = (props: NavProfileLinksProps) => {
 }
 
 export const NavProfileLinks = (props: NavProfileLinksProps) => {
-  const {dropdown} = props
+  const {dropdown, profileLinks} = props
   const classes = getClasses(props)
 
   return (
@@ -43,16 +45,17 @@ export const NavProfileLinks = (props: NavProfileLinksProps) => {
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="user-menu"
+      ref={profileLinks}
     >
-      <NavProfileLink dropdown={dropdown} href="#">
+      <NavLink dropdown={dropdown} href="#" profile>
         Your Profile
-      </NavProfileLink>
-      <NavProfileLink dropdown={dropdown} href="#">
+      </NavLink>
+      <NavLink dropdown={dropdown} href="#" profile>
         Settings
-      </NavProfileLink>
-      <NavProfileLink dropdown={dropdown} href="/api/logout">
+      </NavLink>
+      <NavLink dropdown={dropdown} href="/api/logout" profile>
         Sign out
-      </NavProfileLink>
+      </NavLink>
     </div>
   )
 }

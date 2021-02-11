@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {FocusEvent, RefObject, useRef, useState} from 'react'
 import clsx from 'clsx'
 import {Transition} from '@headlessui/react'
 
@@ -32,9 +32,26 @@ export const getClasses = (_props: NavProfileProps) => {
   }
 }
 
+export const handleBlur = (
+  profileLinks: RefObject<HTMLDivElement>,
+  setShow: (state: boolean) => void
+) => (event: FocusEvent<HTMLButtonElement>) => {
+  // Workaround an issue where links clicked on the menu don't activate because the
+  // element disappears too quickly.
+  if (
+    (event.relatedTarget as HTMLAnchorElement)?.parentElement ===
+    profileLinks.current
+  ) {
+    return setTimeout(() => setShow(false), 500)
+  }
+
+  setShow(false)
+}
+
 export const NavProfile = (props: NavProfileProps) => {
   const {image} = props
   const [show, setShow] = useState(false)
+  const profileLinks = useRef<HTMLDivElement>(null)
   const classes = getClasses(props)
 
   return (
@@ -45,7 +62,7 @@ export const NavProfile = (props: NavProfileProps) => {
           id="user-menu"
           aria-haspopup="true"
           onClick={() => setShow(!show)}
-          onBlur={() => setShow(false)}
+          onBlur={handleBlur(profileLinks, setShow)}
         >
           <span className={classes.open}>Open user menu</span>
           <img className={classes.avatar} src={image} alt="" />
@@ -60,7 +77,7 @@ export const NavProfile = (props: NavProfileProps) => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <NavProfileLinks dropdown />
+          <NavProfileLinks profileLinks={profileLinks} dropdown />
         </Transition.Child>
       </Transition>
     </div>
