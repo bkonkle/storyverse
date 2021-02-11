@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import Head from 'next/head'
 
 import App from '../components/App'
+import Component from '../components/home/Home'
 
 export const getClasses = () => {
   return {
@@ -22,14 +23,6 @@ export const getClasses = () => {
     pageContainer: clsx('max-w-7xl', 'mx-auto', 'py-6', 'sm:px-6', 'lg:px-8'),
 
     page: clsx('px-4', 'py-6', 'sm:px-0'),
-
-    pageContent: clsx(
-      'border-4',
-      'border-dashed',
-      'border-gray-200',
-      'rounded-lg',
-      'h-96'
-    ),
   }
 }
 
@@ -49,7 +42,7 @@ export const Home = () => {
       <main>
         <div className={classes.pageContainer}>
           <div className={classes.page}>
-            <div className={classes.pageContent}></div>
+            <Component />
           </div>
         </div>
       </main>

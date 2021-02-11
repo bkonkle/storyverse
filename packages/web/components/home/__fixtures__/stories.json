@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Lifetime Achievement: Part Two",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/81Aw0lD4TAL.jpg",
+    "volume": 5,
+    "issue": 12,
+    "summary": "Turns out Spider-Man isn’t the only one getting attacked, as JJJ himself is in deep trouble. BUT WHO IS ATTACKING HIM? And what more will we learn about the mysterious bandaged figure circling Spider-Man?!",
+    "series": {
+      "name": "Amazing Spider-Man"
+    }
+  },
+  {
+    "name": "Lifetime Achievement: Part Three",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/81UI0gTT9SL.jpg",
+    "volume": 5,
+    "issue": 13,
+    "summary": "You know what’s annoying? Having to save J. Jonah Jameson’s life. Sure, he’s been on Spidey’s side for a little while, but that’s after YEARS of him making Spider-Man’s life a living heck. I feel like this amount of responsibility should come with even more power. Anyway, who, other than most of New York, would want to punish J. Jonah Jameson?",
+    "series": {
+      "name": "Amazing Spider-Man"
+    }
+  },
+  {
+    "name": "Summoner",
+    "image": "https://cdn.shopify.com/s/files/1/1620/8083/products/STL114113_1024x1024.jpg?v=1578612687",
+    "volume": 5,
+    "issue": 2,
+    "summary": "When an island full of unspeakable horrors appears on the horizon, the X-Men have their work cut out for themselves keeping Krakoa safe!",
+    "series": {
+      "name": "X-Men"
+    }
+  },
+  {
+    "name": "Or Is He Both",
+    "image": "https://m.media-amazon.com/images/I/51yku4DCjQL.jpg",
+    "volume": 1,
+    "issue": 1,
+    "summary": "You’d never notice the man. He doesn’t like to be noticed. He’s quiet. Calm. Never complains. If someone were to walk up and shoot him in the head... all he’d do is die. Until night falls. And someone else gets up again. The man’s name is Banner. The horror is THE IMMORTAL HULK.",
+    "series": {
+      "name": "Immortal Hulk"
+    }
+  }
+]
