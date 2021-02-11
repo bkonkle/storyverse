@@ -23,7 +23,11 @@ export const NavUser = () => {
   }
 
   if (!user) {
-    return <NavLink href="/api/login">Login</NavLink>
+    return (
+      <div className={classes.profileContainer}>
+        <NavLink href="/api/login">Login</NavLink>
+      </div>
+    )
   }
 
   return (

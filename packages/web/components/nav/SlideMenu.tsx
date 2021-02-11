@@ -1,13 +1,16 @@
-import React from 'react'
+import React, {RefObject} from 'react'
 import clsx from 'clsx'
 import MenuLinks from './MenuLinks'
 import Nameplate from './Nameplate'
 
 import NavProfileLinks from './NavProfileLinks'
 import Notifications from './Notifications'
+import {useUser} from '../../data/UserData'
+import NavLink from './NavLink'
 
 export interface SlideMenuProps {
   open: boolean
+  slideMenu: RefObject<HTMLDivElement>
   image?: string
 }
 
@@ -24,6 +27,8 @@ export const getClasses = (props: SlideMenuProps) => {
     image: clsx('flex-shrink-0'),
 
     avatar: clsx('h-10', 'w-10', 'rounded-full'),
+
+    login: clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3'),
   }
 }
 
@@ -31,21 +36,36 @@ export const getClasses = (props: SlideMenuProps) => {
  * The SlideMenu slides down from the top on devices with smaller screens.
  */
 export const SlideMenu = (props: SlideMenuProps) => {
-  const {image} = props
+  const {image, slideMenu} = props
   const classes = getClasses(props)
+  const {user, loading} = useUser()
+
+  if (loading) {
+    return null
+  }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} ref={slideMenu}>
       <MenuLinks slide />
       <div className={classes.profileContainer}>
-        <div className={classes.profile}>
-          <div className={classes.image}>
-            <img className={classes.avatar} src={image} alt="" />
+        {user ? (
+          <>
+            <div className={classes.profile}>
+              <div className={classes.image}>
+                <img className={classes.avatar} src={image} alt="" />
+              </div>
+              <Nameplate />
+              <Notifications slide />
+            </div>
+            <NavProfileLinks />
+          </>
+        ) : (
+          <div className={classes.login}>
+            <NavLink slide href="/api/login">
+              Login
+            </NavLink>
           </div>
-          <Nameplate />
-          <Notifications slide />
-        </div>
-        <NavProfileLinks />
+        )}
       </div>
     </div>
   )

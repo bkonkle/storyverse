@@ -39,8 +39,10 @@ export const handleBlur = (
   // Workaround an issue where links clicked on the menu don't activate because the
   // element disappears too quickly.
   if (
-    (event.relatedTarget as HTMLAnchorElement)?.parentElement ===
-    profileLinks.current
+    profileLinks.current &&
+    Array.from(profileLinks.current.querySelectorAll('*')).includes(
+      event.relatedTarget as HTMLElement
+    )
   ) {
     return setTimeout(() => setShow(false), 500)
   }

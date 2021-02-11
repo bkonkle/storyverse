@@ -5,7 +5,7 @@ import NavLink from './NavLink'
 
 export interface NavProfileLinksProps {
   dropdown?: boolean
-  profileLinks: RefObject<HTMLDivElement>
+  profileLinks?: RefObject<HTMLDivElement>
 }
 
 export const getClasses = (props: NavProfileLinksProps) => {

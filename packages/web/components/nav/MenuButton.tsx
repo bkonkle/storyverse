@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {RefObject, FocusEvent} from 'react'
 import clsx from 'clsx'
 
 export interface MenuButtonProps {
   open: boolean
+  slideMenu: RefObject<HTMLDivElement>
   setOpen: (state: boolean) => void
 }
 
@@ -35,11 +36,30 @@ export const getClasses = (props: MenuButtonProps) => {
   }
 }
 
+export const handleBlur = (
+  slideMenu: RefObject<HTMLDivElement>,
+  setOpen: (state: boolean) => void
+) => (event: FocusEvent<HTMLButtonElement>) => {
+  // Workaround an issue where links clicked on the menu don't activate because the
+  // element disappears too quickly.
+  if (
+    slideMenu.current &&
+    Array.from(slideMenu.current.querySelectorAll('*')).includes(
+      event.relatedTarget as HTMLElement
+    )
+  ) {
+    console.log('FOUND')
+    return setTimeout(() => setOpen(false), 500)
+  }
+
+  setOpen(false)
+}
+
 /**
  * Menu Button - only on small screens
  */
 export const MenuButton = (props: MenuButtonProps) => {
-  const {open, setOpen} = props
+  const {open, setOpen, slideMenu} = props
   const classes = getClasses(props)
 
   return (
@@ -48,7 +68,7 @@ export const MenuButton = (props: MenuButtonProps) => {
         className={classes.button}
         aria-expanded="false"
         onClick={() => setOpen(!open)}
-        onBlur={() => setOpen(false)}
+        onBlur={handleBlur(slideMenu, setOpen)}
       >
         <span className={classes.open}>Open main menu</span>
         <svg

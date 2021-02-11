@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import clsx from 'clsx'
 
 import MenuButton from './MenuButton'
@@ -27,6 +27,7 @@ export const getClasses = () => {
 export const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const classes = getClasses()
+  const slideMenu = useRef<HTMLDivElement>(null)
 
   return (
     <nav className={classes.container}>
@@ -44,11 +45,15 @@ export const Navigation = () => {
 
           <NavUser />
 
-          <MenuButton open={menuOpen} setOpen={setMenuOpen} />
+          <MenuButton
+            open={menuOpen}
+            setOpen={setMenuOpen}
+            slideMenu={slideMenu}
+          />
         </div>
       </div>
 
-      <SlideMenu open={menuOpen} />
+      <SlideMenu open={menuOpen} slideMenu={slideMenu} />
     </nav>
   )
 }
