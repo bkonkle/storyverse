@@ -4,26 +4,12 @@ import clsx from 'clsx'
 export interface NavLinkProps {
   href: string
   current?: boolean
-  mobile?: boolean
-  profile?: boolean
+  slide?: boolean
   children?: ReactNode
 }
 
 export const getClasses = (props: NavLinkProps) => {
-  const {current, mobile, profile} = props
-
-  if (profile) {
-    return {
-      link: clsx(
-        'block',
-        'px-4',
-        'py-2',
-        'text-sm',
-        'text-gray-700',
-        'hover:bg-gray-100'
-      ),
-    }
-  }
+  const {current, slide} = props
 
   return {
     link: clsx(
@@ -31,7 +17,7 @@ export const getClasses = (props: NavLinkProps) => {
       'py-2',
       'rounded-md',
       'font-medium',
-      mobile ? ['block', 'text-base'] : ['text-sm'],
+      slide ? ['block', 'text-base'] : ['text-sm'],
       current
         ? ['bg-gray-900', 'text-white']
         : ['text-gray-300', 'hover:bg-gray-700', 'hover:text-white']
@@ -41,10 +27,10 @@ export const getClasses = (props: NavLinkProps) => {
 
 export const NavLink = (props: NavLinkProps) => {
   const classes = getClasses(props)
-  const {children} = props
+  const {href, children} = props
 
   return (
-    <a href="#" className={classes.link}>
+    <a href={href} className={classes.link}>
       {children}
     </a>
   )

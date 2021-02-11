@@ -2,12 +2,26 @@ import React, {ReactNode} from 'react'
 import Head from 'next/head'
 
 import Navigation from './nav/Navigation'
+import clsx from 'clsx'
+
+export interface LayoutProps {
+  children: ReactNode
+}
 
 export const siteTitle = 'Storyverse'
 
-export const Layout = ({children}: {children: ReactNode}) => {
+export const getClasses = () => {
+  return {
+    page: clsx('bg-gray-100'),
+  }
+}
+
+export const Layout = (props: LayoutProps) => {
+  const {children} = props
+  const classes = getClasses()
+
   return (
-    <div className="relative bg-white">
+    <div className={classes.page}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -24,9 +38,7 @@ export const Layout = ({children}: {children: ReactNode}) => {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Navigation />
-      <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-        {children}
-      </main>
+      <main>{children}</main>
     </div>
   )
 }
