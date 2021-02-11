@@ -1,3 +1,4 @@
+import React from 'react'
 import clsx from 'clsx'
 import MenuLinks from './MenuLinks'
 import Nameplate from './Nameplate'
