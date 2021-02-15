@@ -44,8 +44,8 @@ export const getClasses = (props: NavLinkProps) => {
       'font-medium',
       slide ? ['block', 'text-base'] : ['text-sm'],
       current
-        ? ['bg-gray-900', 'text-white']
-        : ['text-gray-300', 'hover:bg-gray-700', 'hover:text-white']
+        ? ['bg-teal-400', 'text-white']
+        : ['text-teal-800', 'hover:bg-teal-200']
     ),
   }
 }

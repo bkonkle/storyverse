@@ -14,20 +14,18 @@ export const getClasses = (props: MenuButtonProps) => {
     container: clsx('-mr-2', 'flex', 'md:hidden'),
 
     button: clsx(
-      'bg-gray-800',
+      'bg-teal-100',
       'inline-flex',
       'items-center',
       'justify-center',
       'p-2',
       'rounded-md',
-      'text-gray-400',
+      'text-teal-400',
       'hover:text-white',
-      'hover:bg-gray-700',
+      'hover:bg-teal-400',
       'focus:outline-none',
       'focus:ring-2',
-      'focus:ring-offset-2',
-      'focus:ring-offset-gray-800',
-      'focus:ring-white'
+      'focus:ring-teal-400'
     ),
 
     open: clsx('sr-only'),

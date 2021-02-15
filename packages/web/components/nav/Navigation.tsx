@@ -8,7 +8,7 @@ import NavUser from './NavUser'
 
 export const getClasses = () => {
   return {
-    container: clsx('bg-blue-900'),
+    container: clsx('bg-teal-100'),
 
     header: clsx('max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8'),
 
@@ -18,7 +18,7 @@ export const getClasses = () => {
 
     titleContainer: clsx('flex-shrink-0'),
 
-    title: clsx('text-3xl', 'font-bold', 'leading-tight', 'text-white'),
+    title: clsx('text-3xl', 'font-bold', 'leading-tight', 'text-teal-900'),
 
     menuLinks: clsx('hidden', 'md:block'),
   }
