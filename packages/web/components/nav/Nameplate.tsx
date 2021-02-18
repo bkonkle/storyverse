@@ -5,9 +5,9 @@ export const getClasses = () => {
   return {
     container: clsx('ml-3'),
 
-    name: clsx('text-base', 'font-medium', 'leading-none', 'text-white'),
+    name: clsx('text-base', 'font-medium', 'leading-none', 'text-teal-800'),
 
-    email: clsx('text-sm', 'font-medium', 'leading-none', 'text-gray-400'),
+    email: clsx('text-sm', 'font-medium', 'leading-none', 'text-teal-600'),
   }
 }
 

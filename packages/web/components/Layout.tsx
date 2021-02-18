@@ -1,11 +1,13 @@
 import React, {ReactNode} from 'react'
 import Head from 'next/head'
+import clsx from 'clsx'
 
 import Navigation from './nav/Navigation'
-import clsx from 'clsx'
+import {Pages} from './nav/NavLinks'
 
 export interface LayoutProps {
   children?: ReactNode
+  currentPage?: Pages
 }
 
 export const siteTitle = 'Storyverse'
@@ -17,7 +19,7 @@ export const getClasses = () => {
 }
 
 export const Layout = (props: LayoutProps) => {
-  const {children} = props
+  const {children, currentPage} = props
   const classes = getClasses()
 
   return (
@@ -38,7 +40,7 @@ export const Layout = (props: LayoutProps) => {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <Navigation />
+      <Navigation currentPage={currentPage} />
 
       <main>{children}</main>
     </div>

@@ -3,8 +3,12 @@ import clsx from 'clsx'
 
 import MenuButton from './MenuButton'
 import SlideMenu from './SlideMenu'
-import MenuLinks from './MenuLinks'
+import NavLinks, {Pages} from './NavLinks'
 import NavUser from './NavUser'
+
+export interface NavigationProps {
+  currentPage?: Pages
+}
 
 export const getClasses = () => {
   return {
@@ -24,7 +28,8 @@ export const getClasses = () => {
   }
 }
 
-export const Navigation = () => {
+export const Navigation = (props: NavigationProps) => {
+  const {currentPage} = props
   const [menuOpen, setMenuOpen] = useState(false)
   const classes = getClasses()
   const slideMenu = useRef<HTMLDivElement>(null)
@@ -39,7 +44,7 @@ export const Navigation = () => {
             </div>
 
             <div className={classes.menuLinks}>
-              <MenuLinks />
+              <NavLinks currentPage={currentPage} />
             </div>
           </div>
 

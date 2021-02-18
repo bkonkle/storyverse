@@ -1,25 +1,21 @@
 import clsx from 'clsx'
 import React from 'react'
 
+import {Controls} from '../Styles'
+
 export interface NotificationsProps {
   slide?: boolean
+  active?: boolean
 }
 
 export const getClasses = (props: NotificationsProps) => {
-  const {slide} = props
+  const {active, slide} = props
 
   return {
     button: clsx(
-      'bg-gray-800',
       'p-1',
       'rounded-full',
-      'text-gray-400',
-      'hover:text-white',
-      'focus:outline-none',
-      'focus:ring-2',
-      'focus:ring-offset-2',
-      'focus:ring-offset-gray-800',
-      'focus:ring-white',
+      Controls.button({active}),
       slide && ['ml-auto', 'flex-shrink-0']
     ),
   }

@@ -2,29 +2,29 @@ import React from 'react'
 import Head from 'next/head'
 
 import App from '../components/App'
-import Home from '../components/home/Home'
+import Universes from '../components/universes/Universes'
 import {Pages} from '../components/nav/NavLinks'
 import {Page} from '../components/Styles'
 
 export const getClasses = () => Page.pageHeader
 
-export const HomePage = () => {
+export const UniversesPage = () => {
   const classes = getClasses()
 
   return (
-    <App requireUser currentPage={Pages.Home}>
+    <App requireUser currentPage={Pages.Universes}>
       <Head>
-        <title>Storyverse - Home</title>
+        <title>Storyverse - Universes</title>
       </Head>
       <header className={classes.header}>
         <div className={classes.titleContainer}>
-          <h1 className={classes.title}>Home</h1>
+          <h1 className={classes.title}>Universes</h1>
         </div>
       </header>
       <main>
         <div className={classes.pageContainer}>
           <div className={classes.page}>
-            <Home />
+            <Universes />
           </div>
         </div>
       </main>
@@ -32,4 +32,4 @@ export const HomePage = () => {
   )
 }
 
-export default HomePage
+export default UniversesPage

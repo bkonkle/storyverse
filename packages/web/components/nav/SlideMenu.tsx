@@ -1,6 +1,6 @@
 import React, {RefObject} from 'react'
 import clsx from 'clsx'
-import MenuLinks from './MenuLinks'
+import NavLinks from './NavLinks'
 import Nameplate from './Nameplate'
 
 import NavProfileLinks from './NavProfileLinks'
@@ -46,7 +46,7 @@ export const SlideMenu = (props: SlideMenuProps) => {
 
   return (
     <div className={classes.container} ref={slideMenu}>
-      <MenuLinks slide />
+      <NavLinks slide />
       <div className={classes.profileContainer}>
         {user ? (
           <>

@@ -1,6 +1,8 @@
 import React, {RefObject, FocusEvent} from 'react'
 import clsx from 'clsx'
 
+import {Controls} from '../Styles'
+
 export interface MenuButtonProps {
   open: boolean
   slideMenu: RefObject<HTMLDivElement>
@@ -14,18 +16,12 @@ export const getClasses = (props: MenuButtonProps) => {
     container: clsx('-mr-2', 'flex', 'md:hidden'),
 
     button: clsx(
-      'bg-teal-100',
       'inline-flex',
       'items-center',
       'justify-center',
       'p-2',
       'rounded-md',
-      'text-teal-400',
-      'hover:text-white',
-      'hover:bg-teal-400',
-      'focus:outline-none',
-      'focus:ring-2',
-      'focus:ring-teal-400'
+      Controls.button({active: true})
     ),
 
     open: clsx('sr-only'),

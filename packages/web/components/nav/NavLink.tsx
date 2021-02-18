@@ -28,9 +28,8 @@ export const getClasses = (props: NavLinkProps) => {
               'rounded-md',
               'text-base',
               'font-medium',
-              'text-gray-400',
-              'hover:text-white',
-              'hover:bg-gray-700',
+              'text-teal-800',
+              'hover:bg-teal-200',
             ]
       ),
     }

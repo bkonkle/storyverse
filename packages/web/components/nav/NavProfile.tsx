@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import {Transition} from '@headlessui/react'
 
 import NavProfileLinks from './NavProfileLinks'
+import {Controls} from '../Styles'
 
 interface NavProfileProps {
   image: string
@@ -14,16 +15,11 @@ export const getClasses = (_props: NavProfileProps) => {
 
     button: clsx(
       'max-w-xs',
-      'bg-gray-800',
       'rounded-full',
       'flex',
       'items-center',
       'text-sm',
-      'focus:outline-none',
-      'focus:ring-2',
-      'focus:ring-offset-2',
-      'focus:ring-offset-gray-800',
-      'focus:ring-white'
+      Controls.button()
     ),
 
     open: clsx('sr-only'),
