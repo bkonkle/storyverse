@@ -32,6 +32,11 @@ type Universe {
   description: JSONObject
 
   """
+  A cover image for the Universe
+  """
+  picture: String
+
+  """
   The id of the Profile that owns the Universe
   """
   ownerProfileId: UUID!

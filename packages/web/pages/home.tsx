@@ -1,18 +1,23 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Head from 'next/head'
 
 import App from '../components/App'
 import Home from '../components/home/Home'
-import {Pages} from '../components/nav/NavLinks'
 import {Page} from '../components/Styles'
+import {Pages, useStore} from '../data/Store'
 
 export const getClasses = () => Page.pageHeader
 
 export const HomePage = () => {
   const classes = getClasses()
+  const {setPage} = useStore((state) => state.pages)
+
+  useEffect(() => {
+    setPage(Pages.Home)
+  })
 
   return (
-    <App requireUser currentPage={Pages.Home}>
+    <App requireUser>
       <Head>
         <title>Storyverse - Home</title>
       </Head>

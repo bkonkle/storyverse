@@ -13,7 +13,6 @@ generates:
       - typescript-operations
       - typescript-urql
     config:
-      maybeValue: T | undefined
       withComponent: false
       withHOC: false
       withHooks: true

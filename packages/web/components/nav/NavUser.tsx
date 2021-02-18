@@ -1,10 +1,10 @@
 import React from 'react'
 import clsx from 'clsx'
 
-import {useUser} from '../../data/UserData'
 import NavProfile from './NavProfile'
 import Notifications from './Notifications'
 import NavLink from './NavLink'
+import {useStore} from '../../data/Store'
 
 export const getClasses = () => {
   return {
@@ -16,7 +16,7 @@ export const getClasses = () => {
 
 export const NavUser = () => {
   const classes = getClasses()
-  const {user, loading} = useUser()
+  const {user, loading} = useStore((state) => state.users)
 
   if (loading) {
     return null

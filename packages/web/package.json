@@ -12,7 +12,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "generate.gql": "graphql-codegen"
+    "gql.generate": "graphql-codegen"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^0.16.1",
@@ -33,7 +33,8 @@
     "remark": "^13.0.0",
     "remark-html": "^13.0.1",
     "tailwindcss": "^2.0.3",
-    "urql": "^1.11.6"
+    "urql": "^1.11.6",
+    "zustand": "^3.3.2"
   },
   "resolutions": {
     "graphql": "^15.5.0"

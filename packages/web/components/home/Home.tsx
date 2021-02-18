@@ -1,8 +1,17 @@
 import clsx from 'clsx'
 import React from 'react'
+import {Story} from '../../data/Schema'
 
 import Card from '../cards/Card'
-import stories from './__fixtures__/stories.json'
+import * as Fixtures from '../../test/Fixtures'
+
+export interface HomeProps {
+  stories: Story[]
+}
+
+const defaultProps: HomeProps = {
+  stories: Fixtures.stories,
+}
 
 export const getClasses = () => {
   return {
@@ -12,7 +21,8 @@ export const getClasses = () => {
   }
 }
 
-export const Home = () => {
+export const Home = (props: HomeProps) => {
+  const {stories} = props
   const classes = getClasses()
 
   return (
@@ -22,14 +32,17 @@ export const Home = () => {
         {stories &&
           stories.map((story) => (
             <Card
-              image={story.image}
+              key={story.id}
+              image={story.picture}
               title={story.name}
-              summary={story.summary}
+              summary={story.summary?.text}
             />
           ))}
       </dl>
     </div>
   )
 }
+
+Home.defaultProps = defaultProps
 
 export default Home

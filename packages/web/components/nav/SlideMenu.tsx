@@ -5,7 +5,7 @@ import Nameplate from './Nameplate'
 
 import NavProfileLinks from './NavProfileLinks'
 import Notifications from './Notifications'
-import {useUser} from '../../data/UserData'
+import {useStore} from '../../data/Store'
 import NavLink from './NavLink'
 
 export interface SlideMenuProps {
@@ -38,7 +38,7 @@ export const getClasses = (props: SlideMenuProps) => {
 export const SlideMenu = (props: SlideMenuProps) => {
   const {image, slideMenu} = props
   const classes = getClasses(props)
-  const {user, loading} = useUser()
+  const {user, loading} = useStore((state) => state.users)
 
   if (loading) {
     return null

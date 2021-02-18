@@ -1,18 +1,11 @@
 import React from 'react'
 import clsx from 'clsx'
 
+import {Pages, useStore} from '../../data/Store'
 import NavLink from './NavLink'
-
-export enum Pages {
-  Home,
-  Stories,
-  Series,
-  Universes,
-}
 
 export interface NavLinksProps {
   slide?: boolean
-  currentPage?: Pages
 }
 
 export const getClasses = (props: NavLinksProps) => {
@@ -30,33 +23,26 @@ export const getClasses = (props: NavLinksProps) => {
 }
 
 export const NavLinks = (props: NavLinksProps) => {
-  const {currentPage, slide} = props
+  const {slide} = props
   const classes = getClasses(props)
+  const {page} = useStore((state) => state.pages)
 
   return (
     <div className={classes.links}>
-      <NavLink slide={slide} href="/home" current={currentPage === Pages.Home}>
+      <NavLink slide={slide} href="/home" current={page === Pages.Home}>
         Home
       </NavLink>
       <NavLink
         slide={slide}
         href="/universes"
-        current={currentPage === Pages.Universes}
+        current={page === Pages.Universes}
       >
         Universes
       </NavLink>
-      <NavLink
-        slide={slide}
-        href="/series"
-        current={currentPage === Pages.Series}
-      >
+      <NavLink slide={slide} href="/series" current={page === Pages.Series}>
         Series
       </NavLink>
-      <NavLink
-        slide={slide}
-        href="/stories"
-        current={currentPage === Pages.Stories}
-      >
+      <NavLink slide={slide} href="/stories" current={page === Pages.Stories}>
         Stories
       </NavLink>
     </div>

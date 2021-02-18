@@ -1,18 +1,23 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Head from 'next/head'
 
 import App from '../components/App'
 import Universes from '../components/universes/Universes'
-import {Pages} from '../components/nav/NavLinks'
 import {Page} from '../components/Styles'
+import {Pages, useStore} from '../data/Store'
 
 export const getClasses = () => Page.pageHeader
 
 export const UniversesPage = () => {
   const classes = getClasses()
+  const {setPage} = useStore((state) => state.pages)
+
+  useEffect(() => {
+    setPage(Pages.Universes)
+  })
 
   return (
-    <App requireUser currentPage={Pages.Universes}>
+    <App requireUser>
       <Head>
         <title>Storyverse - Universes</title>
       </Head>

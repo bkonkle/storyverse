@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import clsx from 'clsx'
 import Head from 'next/head'
 
 import App from '../components/App'
+import {useStore} from '../data/Store'
 
 export const getClasses = () => {
   return {
@@ -35,6 +36,11 @@ export const getClasses = () => {
 
 export const Index = () => {
   const classes = getClasses()
+  const {setPage} = useStore((state) => state.pages)
+
+  useEffect(() => {
+    setPage(null)
+  })
 
   return (
     <App>

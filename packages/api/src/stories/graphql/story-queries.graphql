@@ -47,6 +47,11 @@ type Story {
   content: JSONObject
 
   """
+  A cover image for the Universe
+  """
+  picture: String
+
+  """
   The id of the Series that the Story belongs to
   """
   seriesId: UUID!

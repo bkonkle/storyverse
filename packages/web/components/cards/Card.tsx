@@ -2,9 +2,9 @@ import React from 'react'
 import clsx from 'clsx'
 
 export interface CardProps {
-  image: string
+  image?: string | null
   title: string
-  summary: string
+  summary?: string
 }
 
 export const getClasses = (_props: CardProps) => {

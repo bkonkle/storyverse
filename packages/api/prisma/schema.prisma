@@ -8,7 +8,7 @@ datasource db {
 }
 
 model RoleGrant {
-  id           String   @id @default(dbgenerated("uuid_generate_v4()"))
+  id           String   @id @default(dbgenerated("ulid_generate()"))
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   roleKey      String
@@ -19,7 +19,7 @@ model RoleGrant {
 }
 
 model User {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
+  id        String   @id @default(dbgenerated("ulid_generate()"))
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   username  String   @unique
@@ -28,7 +28,7 @@ model User {
 }
 
 model Profile {
-  id            String      @id @default(dbgenerated("uuid_generate_v4()"))
+  id            String      @id @default(dbgenerated("ulid_generate()"))
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   email         String
@@ -44,29 +44,31 @@ model Profile {
 }
 
 model Universe {
-  id             String   @id @default(dbgenerated("uuid_generate_v4()"))
+  id             String   @id @default(dbgenerated("ulid_generate()"))
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   name           String
   description    Json?
+  picture        String?
   ownerProfile   Profile  @relation(fields: [ownerProfileId], references: [id])
   ownerProfileId String
   series         Series[]
 }
 
 model Series {
-  id          String   @id @default(dbgenerated("uuid_generate_v4()"))
+  id          String   @id @default(dbgenerated("ulid_generate()"))
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   name        String
   description Json?
+  picture     String?
   universe    Universe @relation(fields: [universeId], references: [id])
   universeId  String
   stories     Story[]
 }
 
 model Story {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
+  id        String   @id @default(dbgenerated("ulid_generate()"))
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
@@ -74,6 +76,7 @@ model Story {
   issue     Int?
   summary   Json?
   content   Json?
+  picture   String?
   series    Series   @relation(fields: [seriesId], references: [id])
   seriesId  String
 }

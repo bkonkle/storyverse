@@ -1,18 +1,23 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Head from 'next/head'
 
 import App from '../components/App'
 import Series from '../components/series/Series'
-import {Pages} from '../components/nav/NavLinks'
 import {Page} from '../components/Styles'
+import {Pages, useStore} from '../data/Store'
 
 export const getClasses = () => Page.pageHeader
 
 export const SeriesPage = () => {
   const classes = getClasses()
+  const {setPage} = useStore((state) => state.pages)
+
+  useEffect(() => {
+    setPage(Pages.Series)
+  })
 
   return (
-    <App requireUser currentPage={Pages.Series}>
+    <App requireUser>
       <Head>
         <title>Storyverse - Series</title>
       </Head>

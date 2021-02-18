@@ -143,6 +143,8 @@ type Series {
   name: String!
   """Editor json content for the Series description"""
   description: JSONObject
+  """A cover image for the Universe"""
+  picture: String
   """The id of the Universe that the Series belongs to"""
   universeId: UUID!
   """The Universe that the Series belongs to"""
@@ -208,6 +210,8 @@ type Story {
   summary: JSONObject
   """Editor json content for the Story content"""
   content: JSONObject
+  """A cover image for the Universe"""
+  picture: String
   """The id of the Series that the Story belongs to"""
   seriesId: UUID!
   """The Series that the Story belongs to"""
@@ -263,6 +267,8 @@ type Universe {
   name: String!
   """Editor json content for the Universe's description"""
   description: JSONObject
+  """A cover image for the Universe"""
+  picture: String
   """The id of the Profile that owns the Universe"""
   ownerProfileId: UUID!
   createdAt: DateTime!

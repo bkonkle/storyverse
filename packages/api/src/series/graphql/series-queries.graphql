@@ -32,6 +32,11 @@ type Series {
   description: JSONObject
 
   """
+  A cover image for the Universe
+  """
+  picture: String
+
+  """
   The id of the Universe that the Series belongs to
   """
   universeId: UUID!
