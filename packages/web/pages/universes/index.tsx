@@ -3,13 +3,11 @@ import Head from 'next/head'
 
 import App from '../../components/App'
 import Universes from '../../components/universes/Universes'
-import {Page} from '../../components/Styles'
 import {Pages, useStore} from '../../data/Store'
-
-export const getClasses = () => Page.pageHeader
+import PageHeader from '../../components/page/PageHeader'
+import PageContent from '../../components/page/PageContent'
 
 export const UniversesPage = () => {
-  const classes = getClasses()
   const {setPage} = useStore((state) => state.pages)
 
   useEffect(() => {
@@ -21,18 +19,10 @@ export const UniversesPage = () => {
       <Head>
         <title>Storyverse - Universes</title>
       </Head>
-      <header className={classes.header}>
-        <div className={classes.titleContainer}>
-          <h1 className={classes.title}>Universes</h1>
-        </div>
-      </header>
-      <main>
-        <div className={classes.pageContainer}>
-          <div className={classes.page}>
-            <Universes />
-          </div>
-        </div>
-      </main>
+      <PageHeader>Universes</PageHeader>
+      <PageContent>
+        <Universes />
+      </PageContent>
     </App>
   )
 }

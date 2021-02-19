@@ -8,12 +8,11 @@ export interface NavProfileLinksProps {
   profileLinks?: RefObject<HTMLDivElement>
 }
 
-export const getClasses = (props: NavProfileLinksProps) => {
-  const {dropdown} = props
+export const NavProfileLinks = (props: NavProfileLinksProps) => {
+  const {dropdown, profileLinks} = props
 
-  if (dropdown) {
-    return {
-      container: clsx(
+  const containerClasses = dropdown
+    ? clsx(
         'origin-top-right',
         'absolute',
         'right-0',
@@ -26,22 +25,12 @@ export const getClasses = (props: NavProfileLinksProps) => {
         'ring-1',
         'ring-black',
         'ring-opacity-5'
-      ),
-    }
-  }
-
-  return {
-    container: clsx('mt-3', 'px-2', 'space-y-1'),
-  }
-}
-
-export const NavProfileLinks = (props: NavProfileLinksProps) => {
-  const {dropdown, profileLinks} = props
-  const classes = getClasses(props)
+      )
+    : clsx('mt-3', 'px-2', 'space-y-1')
 
   return (
     <div
-      className={classes.container}
+      className={containerClasses}
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="user-menu"

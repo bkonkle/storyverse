@@ -1,33 +1,12 @@
 import React, {RefObject, FocusEvent} from 'react'
 import clsx from 'clsx'
 
-import {Controls} from '../Styles'
+import {Button} from '../controls/Button'
 
 export interface MenuButtonProps {
   open: boolean
   slideMenu: RefObject<HTMLDivElement>
   setOpen: (state: boolean) => void
-}
-
-export const getClasses = (props: MenuButtonProps) => {
-  const {open} = props
-
-  return {
-    container: clsx('-mr-2', 'flex', 'md:hidden'),
-
-    button: clsx(
-      'inline-flex',
-      'items-center',
-      'justify-center',
-      'p-2',
-      'rounded-md',
-      Controls.button({active: true})
-    ),
-
-    open: clsx('sr-only'),
-
-    icon: clsx('h-6', 'w-6', open && 'block'),
-  }
 }
 
 export const handleBlur = (
@@ -54,19 +33,25 @@ export const handleBlur = (
  */
 export const MenuButton = (props: MenuButtonProps) => {
   const {open, setOpen, slideMenu} = props
-  const classes = getClasses(props)
 
   return (
-    <div className={classes.container}>
-      <button
-        className={classes.button}
+    <div className={clsx('-mr-2', 'flex', 'md:hidden')}>
+      <Button
+        active
+        className={clsx(
+          'inline-flex',
+          'items-center',
+          'justify-center',
+          'p-2',
+          'rounded-md'
+        )}
         aria-expanded="false"
         onClick={() => setOpen(!open)}
         onBlur={handleBlur(slideMenu, setOpen)}
       >
-        <span className={classes.open}>Open main menu</span>
+        <span className={clsx('sr-only')}>Open main menu</span>
         <svg
-          className={classes.icon}
+          className={clsx('h-6', 'w-6', open && 'block')}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -89,7 +74,7 @@ export const MenuButton = (props: MenuButtonProps) => {
             />
           )}
         </svg>
-      </button>
+      </Button>
     </div>
   )
 }

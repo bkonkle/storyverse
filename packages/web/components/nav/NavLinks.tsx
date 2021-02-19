@@ -8,27 +8,16 @@ export interface NavLinksProps {
   slide?: boolean
 }
 
-export const getClasses = (props: NavLinksProps) => {
-  const {slide} = props
-
-  if (slide) {
-    return {
-      links: clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3'),
-    }
-  }
-
-  return {
-    links: clsx('ml-10', 'flex', 'items-baseline', 'space-x-4'),
-  }
-}
-
 export const NavLinks = (props: NavLinksProps) => {
   const {slide} = props
-  const classes = getClasses(props)
   const {page} = useStore((state) => state.pages)
 
+  const linkClasses = slide
+    ? clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3')
+    : clsx('ml-10', 'flex', 'items-baseline', 'space-x-4')
+
   return (
-    <div className={classes.links}>
+    <div className={linkClasses}>
       <NavLink slide={slide} href="/home" current={page === Pages.Home}>
         Home
       </NavLink>

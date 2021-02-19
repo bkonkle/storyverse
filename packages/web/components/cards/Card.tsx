@@ -7,33 +7,29 @@ export interface CardProps {
   summary?: string
 }
 
-export const getClasses = (_props: CardProps) => {
-  return {
-    container: clsx('rounded-t-lg', 'bg-white'),
-
-    image: clsx('rounded-t-lg', 'bg-cover', 'h-48'),
-
-    content: clsx('mb-4', 'p-5'),
-
-    title: clsx('text-lg', 'leading-6', 'font-medium', 'text-gray-900'),
-
-    detail: clsx('mt-2', 'text-base', 'text-gray-500'),
-  }
-}
-
 export const Card = (props: CardProps) => {
   const {image, title, summary} = props
-  const classes = getClasses(props)
 
   return (
-    <div className={classes.container}>
+    <div className={clsx('rounded-t-lg', 'bg-white')}>
       <div
-        className={classes.image}
+        className={clsx('rounded-t-lg', 'bg-cover', 'h-48')}
         style={{backgroundImage: `url(${image})`}}
       />
-      <div className={classes.content}>
-        <dt className={classes.title}>{title}</dt>
-        <dd className={classes.detail}>{summary}</dd>
+      <div className={clsx('mb-4', 'p-5')}>
+        <dt
+          className={clsx(
+            'text-lg',
+            'leading-6',
+            'font-medium',
+            'text-gray-900'
+          )}
+        >
+          {title}
+        </dt>
+        <dd className={clsx('mt-2', 'text-base', 'text-gray-500')}>
+          {summary}
+        </dd>
       </div>
     </div>
   )

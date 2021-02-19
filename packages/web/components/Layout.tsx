@@ -10,18 +10,11 @@ export interface LayoutProps {
 
 export const siteTitle = 'Storyverse'
 
-export const getClasses = () => {
-  return {
-    page: clsx('bg-gray-100'),
-  }
-}
-
 export const Layout = (props: LayoutProps) => {
   const {children} = props
-  const classes = getClasses()
 
   return (
-    <div className={classes.page}>
+    <div className={clsx('bg-gray-100')}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta

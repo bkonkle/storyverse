@@ -3,29 +3,10 @@ import clsx from 'clsx'
 import {Transition} from '@headlessui/react'
 
 import NavProfileLinks from './NavProfileLinks'
-import {Controls} from '../Styles'
+import {Button} from '../controls/Button'
 
 interface NavProfileProps {
   image: string
-}
-
-export const getClasses = (_props: NavProfileProps) => {
-  return {
-    container: clsx('ml-3', 'relative'),
-
-    button: clsx(
-      'max-w-xs',
-      'rounded-full',
-      'flex',
-      'items-center',
-      'text-sm',
-      Controls.button()
-    ),
-
-    open: clsx('sr-only'),
-
-    avatar: clsx('h-8', 'w-8', 'rounded-full'),
-  }
 }
 
 export const handleBlur = (
@@ -50,21 +31,30 @@ export const NavProfile = (props: NavProfileProps) => {
   const {image} = props
   const [show, setShow] = useState(false)
   const profileLinks = useRef<HTMLDivElement>(null)
-  const classes = getClasses(props)
 
   return (
-    <div className={classes.container}>
+    <div className={clsx('ml-3', 'relative')}>
       <div>
-        <button
-          className={classes.button}
+        <Button
+          className={clsx(
+            'max-w-xs',
+            'rounded-full',
+            'flex',
+            'items-center',
+            'text-sm'
+          )}
           id="user-menu"
           aria-haspopup="true"
           onClick={() => setShow(!show)}
           onBlur={handleBlur(profileLinks, setShow)}
         >
-          <span className={classes.open}>Open user menu</span>
-          <img className={classes.avatar} src={image} alt="" />
-        </button>
+          <span className={clsx('sr-only')}>Open user menu</span>
+          <img
+            className={clsx('h-8', 'w-8', 'rounded-full')}
+            src={image}
+            alt=""
+          />
+        </Button>
       </div>
       <Transition show={show}>
         <Transition.Child

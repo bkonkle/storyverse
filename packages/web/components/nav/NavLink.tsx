@@ -13,12 +13,11 @@ export interface NavLinkProps {
   children?: ReactNode
 }
 
-export const getClasses = (props: NavLinkProps) => {
-  const {current, slide, profile, dropdown} = props
+export const NavLink = (props: NavLinkProps) => {
+  const {children, href, profile, dropdown, slide, current, external} = props
 
-  if (profile) {
-    return {
-      link: clsx(
+  const classes = profile
+    ? clsx(
         'block',
         'py-2',
         dropdown
@@ -31,30 +30,20 @@ export const getClasses = (props: NavLinkProps) => {
               'text-teal-800',
               'hover:bg-teal-200',
             ]
-      ),
-    }
-  }
-
-  return {
-    link: clsx(
-      'px-3',
-      'py-2',
-      'rounded-md',
-      'font-medium',
-      slide ? ['block', 'text-base'] : ['text-sm'],
-      current
-        ? ['bg-teal-400', 'text-white']
-        : ['text-teal-800', 'hover:bg-teal-200']
-    ),
-  }
-}
-
-export const NavLink = (props: NavLinkProps) => {
-  const {href, children, external} = props
-  const classes = getClasses(props)
+      )
+    : clsx(
+        'px-3',
+        'py-2',
+        'rounded-md',
+        'font-medium',
+        slide ? ['block', 'text-base'] : ['text-sm'],
+        current
+          ? ['bg-teal-400', 'text-white']
+          : ['text-teal-800', 'hover:bg-teal-200']
+      )
 
   return (
-    <Link href={href} external={external} className={classes.link}>
+    <Link href={href} external={external} className={classes}>
       {children}
     </Link>
   )

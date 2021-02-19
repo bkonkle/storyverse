@@ -6,22 +6,19 @@ export interface CardListProps {
   title?: string
 }
 
-export const getClasses = () => {
-  return {
-    title: clsx('text-2xl', 'font-bold', 'leading-tight', 'mb-4'),
-
-    list: clsx('grid', 'grid-cols-3', 'grid-rows-3', 'gap-5'),
-  }
-}
-
 export const CardList = (props: CardListProps) => {
   const {children, title} = props
-  const classes = getClasses()
 
   return (
     <>
-      {title && <h2 className={classes.title}>{title}</h2>}
-      <dl className={classes.list}>{children}</dl>
+      {title && (
+        <h2 className={clsx('text-2xl', 'font-bold', 'leading-tight', 'mb-4')}>
+          {title}
+        </h2>
+      )}
+      <dl className={clsx('grid', 'grid-cols-3', 'grid-rows-3', 'gap-5')}>
+        {children}
+      </dl>
     </>
   )
 }

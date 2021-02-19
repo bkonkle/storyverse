@@ -14,30 +14,11 @@ export interface SlideMenuProps {
   image?: string
 }
 
-export const getClasses = (props: SlideMenuProps) => {
-  const {open} = props
-
-  return {
-    container: clsx(open ? 'block' : ['hidden', 'md:hidden']),
-
-    profileContainer: clsx('pt-4', 'pb-3', 'border-t', 'border-gray-700'),
-
-    profile: clsx('flex', 'items-center', 'px-5'),
-
-    image: clsx('flex-shrink-0'),
-
-    avatar: clsx('h-10', 'w-10', 'rounded-full'),
-
-    login: clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3'),
-  }
-}
-
 /**
  * The SlideMenu slides down from the top on devices with smaller screens.
  */
 export const SlideMenu = (props: SlideMenuProps) => {
-  const {image, slideMenu} = props
-  const classes = getClasses(props)
+  const {image, slideMenu, open} = props
   const {user, loading} = useStore((state) => state.users)
 
   if (loading) {
@@ -45,14 +26,21 @@ export const SlideMenu = (props: SlideMenuProps) => {
   }
 
   return (
-    <div className={classes.container} ref={slideMenu}>
+    <div
+      className={clsx(open ? 'block' : ['hidden', 'md:hidden'])}
+      ref={slideMenu}
+    >
       <NavLinks slide />
-      <div className={classes.profileContainer}>
+      <div className={clsx('pt-4', 'pb-3', 'border-t', 'border-gray-700')}>
         {user ? (
           <>
-            <div className={classes.profile}>
-              <div className={classes.image}>
-                <img className={classes.avatar} src={image} alt="" />
+            <div className={clsx('flex', 'items-center', 'px-5')}>
+              <div className={clsx('flex-shrink-0')}>
+                <img
+                  className={clsx('h-10', 'w-10', 'rounded-full')}
+                  src={image}
+                  alt=""
+                />
               </div>
               <Nameplate />
               <Notifications slide />
@@ -60,7 +48,7 @@ export const SlideMenu = (props: SlideMenuProps) => {
             <NavProfileLinks />
           </>
         ) : (
-          <div className={classes.login}>
+          <div className={clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3')}>
             <NavLink slide href="/api/login">
               Login
             </NavLink>
