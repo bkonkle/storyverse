@@ -1,35 +1,35 @@
 import React, {useEffect} from 'react'
 import Head from 'next/head'
 
-import App from '../components/App'
-import Series from '../components/series/Series'
-import {Page} from '../components/Styles'
-import {Pages, useStore} from '../data/Store'
+import App from '../../components/App'
+import Universes from '../../components/universes/Universes'
+import {Page} from '../../components/Styles'
+import {Pages, useStore} from '../../data/Store'
 
 export const getClasses = () => Page.pageHeader
 
-export const SeriesPage = () => {
+export const UniversesPage = () => {
   const classes = getClasses()
   const {setPage} = useStore((state) => state.pages)
 
   useEffect(() => {
-    setPage(Pages.Series)
+    setPage(Pages.Universes)
   }, [])
 
   return (
     <App requireUser>
       <Head>
-        <title>Storyverse - Series</title>
+        <title>Storyverse - Universes</title>
       </Head>
       <header className={classes.header}>
         <div className={classes.titleContainer}>
-          <h1 className={classes.title}>Series</h1>
+          <h1 className={classes.title}>Universes</h1>
         </div>
       </header>
       <main>
         <div className={classes.pageContainer}>
           <div className={classes.page}>
-            <Series />
+            <Universes />
           </div>
         </div>
       </main>
@@ -37,4 +37,4 @@ export const SeriesPage = () => {
   )
 }
 
-export default SeriesPage
+export default UniversesPage

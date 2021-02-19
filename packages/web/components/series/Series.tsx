@@ -1,22 +1,36 @@
-import clsx from 'clsx'
 import React from 'react'
 
-import {Section} from '../Styles'
+import * as Fixtures from '../../test/Fixtures'
+import {Series as SeriesData} from '../../data/Schema'
+import CardList from '../cards/CardList'
+import Card from '../cards/Card'
 
-export const getClasses = () => {
-  return {
-    title: clsx(Section.title),
-  }
+export interface SeriesProps {
+  series: SeriesData[]
 }
 
-export const Series = () => {
-  const classes = getClasses()
+const defaultProps: SeriesProps = {
+  series: Fixtures.series,
+}
+
+export const Series = (props: SeriesProps) => {
+  const {series} = props
 
   return (
-    <div>
-      <h2 className={classes.title}>Featured Series</h2>
-    </div>
+    <CardList title="Featured Series">
+      {series &&
+        series.map((series) => (
+          <Card
+            key={series.id}
+            image={series.picture}
+            title={series.name}
+            summary={series.description?.text}
+          />
+        ))}
+    </CardList>
   )
 }
+
+Series.defaultProps = defaultProps
 
 export default Series

@@ -40,18 +40,34 @@ export const useFetchUser = () => {
   useEffect(() => {
     let isMounted = true
 
-    if (__user && __user !== user) {
-      setUser(__user)
+    if (__user) {
+      if (__user !== user) {
+        setUser(__user)
+      } else {
+        setLoading(false)
+      }
+
+      return
     }
 
-    setLoading(true)
+    if (!loading) {
+      setLoading(true)
+    }
 
-    fetchUser().then((user) => {
-      // Only set the user if the component is still mounted
-      if (isMounted && user) {
-        setUser(user)
-      }
-    })
+    fetchUser()
+      .then((user) => {
+        // Only set the user if the component is still mounted
+        if (isMounted) {
+          setUser(user)
+        }
+      })
+      .catch((err) => {
+        console.error('fetchUser error:', err)
+
+        if (isMounted) {
+          setLoading(false)
+        }
+      })
 
     return () => {
       isMounted = false

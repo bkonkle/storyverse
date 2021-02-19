@@ -14,7 +14,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     setPage(Pages.Home)
-  })
+  }, [])
 
   return (
     <App requireUser>

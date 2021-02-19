@@ -1,22 +1,36 @@
-import clsx from 'clsx'
 import React from 'react'
 
-import {Section} from '../Styles'
+import * as Fixtures from '../../test/Fixtures'
+import {Universe} from '../../data/Schema'
+import CardList from '../cards/CardList'
+import Card from '../cards/Card'
 
-export const getClasses = () => {
-  return {
-    title: clsx(Section.title),
-  }
+export interface UniversesProps {
+  universes: Universe[]
 }
 
-export const Universes = () => {
-  const classes = getClasses()
+const defaultProps: UniversesProps = {
+  universes: Fixtures.universes,
+}
+
+export const Universes = (props: UniversesProps) => {
+  const {universes} = props
 
   return (
-    <div>
-      <h2 className={classes.title}>Featured Universes</h2>
-    </div>
+    <CardList title="Featured Universes">
+      {universes &&
+        universes.map((universe) => (
+          <Card
+            key={universe.id}
+            image={universe.picture}
+            title={universe.name}
+            summary={universe.description?.text}
+          />
+        ))}
+    </CardList>
   )
 }
+
+Universes.defaultProps = defaultProps
 
 export default Universes

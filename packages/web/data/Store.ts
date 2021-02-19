@@ -13,8 +13,8 @@ export interface State extends ZustandState {
   users: {
     user: User | null
     loading: boolean
-    setLoading: (state?: boolean) => void
-    setUser: (user: User) => void
+    setLoading: (state: boolean) => void
+    setUser: (user: User | null) => void
   }
   pages: {
     page: Pages | null
@@ -25,9 +25,8 @@ export interface State extends ZustandState {
 export const useStore = create<State>((set) => ({
   users: {
     user: null,
-    loading: false,
-    setLoading: (loading = true) =>
-      set(({users}) => ({users: {...users, loading}})),
+    loading: true,
+    setLoading: (loading) => set(({users}) => ({users: {...users, loading}})),
     setUser: (user) =>
       set(({users}) => ({
         users: {...users, user, loading: false},

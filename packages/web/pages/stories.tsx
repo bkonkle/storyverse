@@ -14,7 +14,7 @@ export const StoriesPage = () => {
 
   useEffect(() => {
     setPage(Pages.Stories)
-  })
+  }, [])
 
   return (
     <App requireUser>

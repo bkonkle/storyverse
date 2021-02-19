@@ -40,7 +40,7 @@ export const Index = () => {
 
   useEffect(() => {
     setPage(null)
-  })
+  }, [])
 
   return (
     <App>

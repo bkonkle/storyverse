@@ -1,22 +1,36 @@
-import clsx from 'clsx'
 import React from 'react'
 
-import {Section} from '../Styles'
+import * as Fixtures from '../../test/Fixtures'
+import {Story} from '../../data/Schema'
+import CardList from '../cards/CardList'
+import Card from '../cards/Card'
 
-export const getClasses = () => {
-  return {
-    title: clsx(Section.title),
-  }
+export interface StoriesProps {
+  stories: Story[]
 }
 
-export const Stories = () => {
-  const classes = getClasses()
+const defaultProps: StoriesProps = {
+  stories: Fixtures.stories,
+}
+
+export const Stories = (props: StoriesProps) => {
+  const {stories} = props
 
   return (
-    <div>
-      <h2 className={classes.title}>Featured Stories</h2>
-    </div>
+    <CardList title="Featured Stories">
+      {stories &&
+        stories.map((story) => (
+          <Card
+            key={story.id}
+            image={story.picture}
+            title={story.name}
+            summary={story.summary?.text}
+          />
+        ))}
+    </CardList>
   )
 }
+
+Stories.defaultProps = defaultProps
 
 export default Stories
