@@ -31,6 +31,7 @@ export const CreateUniverse = () => {
             <Input name="description" type="text" ref={register} />
           </Field>
           <Field label="Picture">
+            {/* TODO: https://github.com/odysseyscience/react-s3-uploader */}
             <Input
               name="picture"
               type="file"
