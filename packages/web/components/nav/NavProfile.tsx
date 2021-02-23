@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import {Transition} from '@headlessui/react'
 
 import NavProfileLinks from './NavProfileLinks'
-import {Button} from '../controls/Button'
+import NavButton from './NavButton'
 
 interface NavProfileProps {
   image: string
@@ -35,7 +35,7 @@ export const NavProfile = (props: NavProfileProps) => {
   return (
     <div className={clsx('ml-3', 'relative')}>
       <div>
-        <Button
+        <NavButton
           className={clsx(
             'max-w-xs',
             'rounded-full',
@@ -54,7 +54,7 @@ export const NavProfile = (props: NavProfileProps) => {
             src={image}
             alt=""
           />
-        </Button>
+        </NavButton>
       </div>
       <Transition show={show}>
         <Transition.Child

@@ -1,7 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 
-export interface ButtonProps
+export interface NavButtonProps
   extends React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
@@ -9,7 +9,7 @@ export interface ButtonProps
   active?: boolean
 }
 
-export const Button = (props: ButtonProps) => {
+export const NavButton = (props: NavButtonProps) => {
   const {active, children, className, ...rest} = props
 
   return (
@@ -30,3 +30,5 @@ export const Button = (props: ButtonProps) => {
     </button>
   )
 }
+
+export default NavButton

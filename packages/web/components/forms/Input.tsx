@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 import clsx from 'clsx'
 
 export type InputProps = React.DetailedHTMLProps<
@@ -6,29 +6,35 @@ export type InputProps = React.DetailedHTMLProps<
   HTMLInputElement
 >
 
-export const Input = (props: InputProps) => {
-  const {className, children, ...rest} = props
+export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const {className, children, type, ...rest} = props
+
+  const isFile = type === 'file'
 
   return (
     <input
+      type={type}
       className={clsx(
         'mt-1',
         'block',
         'w-full',
-        'rounded-md',
-        'border-gray-300',
-        'shadow-sm',
-        'focus:border-indigo-300',
-        'focus:ring',
-        'focus:ring-indigo-200',
-        'focus:ring-opacity-50',
+        isFile || [
+          'rounded-md',
+          'border-gray-300',
+          'shadow-sm',
+          'focus:border-teal-300',
+          'focus:ring',
+          'focus:ring-teal-200',
+          'focus:ring-opacity-50',
+        ],
         className
       )}
+      ref={ref}
       {...rest}
     >
       {children}
     </input>
   )
-}
+})
 
 export default Input

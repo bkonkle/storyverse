@@ -1,44 +1,50 @@
 import React from 'react'
 import clsx from 'clsx'
+import {useForm} from 'react-hook-form'
 
 import Field from '../forms/Field'
 import Input from '../forms/Input'
-import Select from '../forms/Select'
-import Textarea from '../forms/Textarea'
-import CheckboxField from '../forms/CheckboxField'
-import CheckboxItem from '../forms/CheckboxItem'
+import FormButton from '../forms/FormButton'
 
 export const CreateUniverse = () => {
+  const {register, handleSubmit, errors} = useForm()
+
+  console.log(`>- errors ->`, errors)
+
+  function onSubmit(data: unknown) {
+    console.log(`>- data ->`, data)
+  }
+
   return (
-    <>
-      <div className={clsx('mt-8', 'max-w-md')}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className={clsx('max-w-md')}>
         <div className={clsx('grid', 'grid-cols-1', 'gap-6')}>
-          <Field label="Full name">
-            <Input type="text" placeholder="" />
+          <Field label="Name">
+            <Input
+              name="name"
+              type="text"
+              placeholder="My Incredible Universe"
+              ref={register}
+            />
           </Field>
-          <Field label="Email address">
-            <Input type="email" placeholder="john@example.com" />
+          <Field label="Description">
+            <Input name="description" type="text" ref={register} />
           </Field>
-          <Field label="When is your event?">
-            <Input type="date" />
+          <Field label="Picture">
+            <Input
+              name="picture"
+              type="file"
+              accept="image/png, image/jpeg"
+              ref={register}
+            />
           </Field>
-          <Field label="What type of event is it?">
-            <Select>
-              <option>Corporate event</option>
-              <option>Wedding</option>
-              <option>Birthday</option>
-              <option>Other</option>
-            </Select>
-          </Field>
-          <Field label="Additional details">
-            <Textarea />
-          </Field>
-          <CheckboxField>
-            <CheckboxItem>Email me news and special offers</CheckboxItem>
-          </CheckboxField>
+          <div className={clsx('flex flex-row-reverse')}>
+            <FormButton primary>Create</FormButton>
+            <FormButton>Cancel</FormButton>
+          </div>
         </div>
       </div>
-    </>
+    </form>
   )
 }
 

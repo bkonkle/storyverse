@@ -1,7 +1,7 @@
 import React, {RefObject, FocusEvent} from 'react'
 import clsx from 'clsx'
 
-import {Button} from '../controls/Button'
+import NavButton from './NavButton'
 
 export interface MenuButtonProps {
   open: boolean
@@ -36,7 +36,7 @@ export const MenuButton = (props: MenuButtonProps) => {
 
   return (
     <div className={clsx('-mr-2', 'flex', 'md:hidden')}>
-      <Button
+      <NavButton
         active
         className={clsx(
           'inline-flex',
@@ -74,7 +74,7 @@ export const MenuButton = (props: MenuButtonProps) => {
             />
           )}
         </svg>
-      </Button>
+      </NavButton>
     </div>
   )
 }
