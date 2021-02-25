@@ -88,11 +88,25 @@ resource "aws_iam_policy" "developers" {
         Action = [
           "iam:Get*",
           "iam:List*",
-          "iam:*AccessKey*",
+          "iam:Generate*",
           "iam:*SSH*",
-          "iam:ChangePassword"
+          "iam:ChangePassword",
+          "iam:*AccessKey*",
+          "iam:CreateLoginProfile",
+          "iam:CreateVirtualMFADevice",
+          "iam:DeleteLoginProfile",
+          "iam:DeleteVirtualMFADevice",
+          "iam:EnableMFADevice",
+          "iam:ResyncMFADevice",
+          "iam:UpdateLoginProfile",
+          "iam:UpdateUser",
+          "iam:UploadSigningCertificate",
         ]
-        Resource = ["arn:aws:iam::*:user/$${aws:username}"]
+        Resource = [
+          "arn:aws:iam::*:user/*/$${aws:username}",
+          "arn:aws:iam::*:user/$${aws:username}",
+          "arn:aws:iam::*:mfa/$${aws:username}"
+        ]
       }
     ]
   })
