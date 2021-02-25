@@ -1,8 +1,6 @@
 # AWS Notes
 
-## Account Setup
-
-### Bootstrapping
+## Bootstrapping
 
 To build a new account from scratch, first create an `<account-name>-root` IAM user to create the initial S3 bucket and DynamoDB table for Terraform state. Replace `<account-name>` with a name for this account - such as "dev".
 
@@ -25,29 +23,29 @@ AWS_PROFILE=dev-root terraform apply
 
 Use the same name for the `account_name` variable that you used for `<account-name>` above.
 
-This will create a new `storyverse_root` IAM user for this account, and give it the necessary permissions for storyverse resources. You should see an access_key_id and secret_access_key in the output. Save them to `~/.aws/credentials` like this:
+This only needs to be done once per account. Once the bucket and table are in place, there's no longer a need to bootstrap.
+
+## Account Setup
+
+Now, it's time to initialize the resources shared across all environments within this account. Navigate to the `config/environments/bootstrap` directory and run:
+
+```sh
+AWS_PROFILE=dev-root terraform init
+AWS_PROFILE=dev-root terraform apply
+```
+
+This will create a new `storyverse-root` IAM user for this account, and give it the necessary permissions for storyverse resources. You should see a `root_access_key` `id` and `secret` in the outputs. Save them to `~/.aws/credentials` like this:
 
 ```ini
 [storyverse-root]
-aws_access_key_id = <key id>
-aws_secret_access_key = <access key>
+aws_access_key_id = <id>
+aws_secret_access_key = <secret>
 
 ```
-
-### Account Configuration
-
-Then, navigate to the `config/environments/bootstrap` directory and run:
-
-```sh
-AWS_PROFILE=storyverse-root terraform init
-AWS_PROFILE=storyverse-root terraform apply
-```
-
-This will use the newly created storyverse-root user to create resources shared across all environments within the account.
 
 ## Environment Setup
 
-To set up a new environment, navigate to the `config/environments/<env>` directory (replacing `<env>` with the tag for the new environment you want to set up, such as "dev").
+Now it's time to switch to the `storyverse-root` user. To set up a new environment, navigate to the `config/environments/<env>` directory (replacing `<env>` with the tag for the new environment you want to set up, such as "dev").
 
 ```sh
 AWS_PROFILE=storyverse-root terraform init

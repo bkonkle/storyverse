@@ -1,4 +1,4 @@
-module "label_iam" {
+module "label_root" {
   source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
   namespace = var.namespace
   name      = "root"
@@ -7,16 +7,16 @@ module "label_iam" {
 }
 
 resource "aws_iam_user" "root" {
-  name = module.label_iam.id
-  tags = module.label_iam.tags
+  name = module.label_root.id
+  tags = module.label_root.tags
 }
 
 resource "aws_iam_access_key" "root" {
   user = aws_iam_user.root.name
 }
 
-resource "aws_iam_policy" "policy" {
-  name        = "${module.label_iam.id}-access"
+resource "aws_iam_policy" "root" {
+  name        = "${module.label_root.id}-access"
   path        = "/"
   description = "${var.namespace} root account access for dev"
 
@@ -70,7 +70,7 @@ resource "aws_iam_policy" "policy" {
 }
 
 resource "aws_iam_policy_attachment" "policy_attach" {
-  name       = "${module.label_iam.id}-access"
+  name       = "${module.label_root.id}-access"
   users      = [aws_iam_user.root.name]
-  policy_arn = aws_iam_policy.policy.arn
+  policy_arn = aws_iam_policy.root.arn
 }
