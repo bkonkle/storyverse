@@ -36,6 +36,7 @@ export const NavProfile = (props: NavProfileProps) => {
     <div className={clsx('ml-3', 'relative')}>
       <div>
         <NavButton
+          active
           className={clsx(
             'max-w-xs',
             'rounded-full',

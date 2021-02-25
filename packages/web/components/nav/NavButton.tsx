@@ -15,7 +15,8 @@ export const NavButton = (props: NavButtonProps) => {
   return (
     <button
       className={clsx(
-        active ? 'text-teal-400' : 'text-gray-300',
+        'text-teal-400',
+        active || 'opacity-40',
         'bg-teal-100',
         'hover:text-white',
         'hover:bg-teal-400',

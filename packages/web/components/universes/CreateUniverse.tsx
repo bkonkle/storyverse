@@ -5,6 +5,7 @@ import {useForm} from 'react-hook-form'
 import Field from '../forms/Field'
 import Input from '../forms/Input'
 import FormButton from '../forms/FormButton'
+import Textarea from '../forms/Textarea'
 
 export const CreateUniverse = () => {
   const {register, handleSubmit, errors} = useForm()
@@ -28,7 +29,7 @@ export const CreateUniverse = () => {
             />
           </Field>
           <Field label="Description">
-            <Input name="description" type="text" ref={register} />
+            <Textarea name="description" ref={register} rows={10} />
           </Field>
           <Field label="Picture">
             {/* TODO: https://github.com/odysseyscience/react-s3-uploader */}

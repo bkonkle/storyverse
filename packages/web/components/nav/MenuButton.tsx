@@ -21,7 +21,6 @@ export const handleBlur = (
       event.relatedTarget as HTMLElement
     )
   ) {
-    console.log('FOUND')
     return setTimeout(() => setOpen(false), 500)
   }
 
