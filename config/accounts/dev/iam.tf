@@ -52,7 +52,32 @@ resource "aws_iam_policy" "policy" {
       },
       {
         Effect   = "Allow"
-        Action   = ["iam:GetUser", "iam:ListUserPolicies", "iam:ListGroupsForUser"]
+        Action   = "iam:ListRoles"
+        Resource = "arn:aws:iam::${local.account_id}:role/"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "iam:ListGroups"
+        Resource = "arn:aws:iam::${local.account_id}:group/"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["iam:GetGroup", "iam:ListGroupPolicies", "iam:ListAttachedGroupPolicies", "iam:ListGroupTags"]
+        Resource = "arn:aws:iam::${local.account_id}:group/storyverse-*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["iam:GetRole", "iam:ListRolePolicies", "iam:ListAttachedRolePolicies", "iam:ListRoleTags"]
+        Resource = "arn:aws:iam::${local.account_id}:role/storyverse-*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "iam:GetUser",
+          "iam:ListUserPolicies",
+          "iam:ListGroupsForUser",
+          "iam:ListUserTags",
+        ]
         Resource = "arn:aws:iam::${local.account_id}:user/$${aws:username}"
       }
     ]
