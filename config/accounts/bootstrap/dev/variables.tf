@@ -1,4 +1,6 @@
 locals {
+  account_id = data.aws_caller_identity.current.account_id
+
   common_tags = {
     ProvisionedBy = "terraform"
   }
@@ -12,14 +14,4 @@ variable "region" {
 variable "namespace" {
   type    = string
   default = "storyverse"
-}
-
-variable "account_name" {
-  type        = string
-  description = "The name of the AWS account to bootstrap"
-}
-
-variable "root_user" {
-  type = string
-  default = "storyverse-root"
 }

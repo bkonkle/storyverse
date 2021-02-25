@@ -10,15 +10,16 @@ locals {
 
 terraform {
   backend "s3" {
-    bucket         = "storyverse-${local.account_id}-tf-state"
+    bucket         = "storyverse-dev-tf-state"
     dynamodb_table = "storyverse-tf-locks"
     key            = "environments/dev/terraform.tfstate"
-    region         = var.region
+    region         = "us-west-2"
   }
 }
 
 module "storage" {
-  source      = "../modules/storage"
-  namespace   = var.namespace
-  environment = var.environment
+  source             = "../../modules/storage"
+  namespace          = var.namespace
+  environment        = var.environment
+  aws_iam_role_names = ["${var.namespace}-developer"]
 }

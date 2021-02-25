@@ -36,6 +36,7 @@ resource "aws_route53_record" "api_dev_validation" {
 }
 
 resource "aws_acm_certificate_validation" "api_dev_validation" {
+
   certificate_arn         = aws_acm_certificate.api_dev.arn
-  validation_record_fqdns = aws_route53_record.api_dev_validation.*.fqdn
+  validation_record_fqdns = [for record in aws_route53_record.api_dev_validation : record.fqdn]
 }

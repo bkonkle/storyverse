@@ -1,3 +1,9 @@
+locals {
+  common_tags = {
+    ProvisionedBy = "terraform"
+  }
+}
+
 variable "namespace" {
   type    = string
   default = "storyverse"
@@ -8,12 +14,7 @@ variable "environment" {
   default = "dev"
 }
 
-variable "name" {
-  type    = string
-  default = "storage"
-}
-
 variable "aws_iam_role_names" {
-  type        = array(string)
+  type        = list(string)
   description = "The IAM role names to give access to this bucket"
 }

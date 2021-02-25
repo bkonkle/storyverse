@@ -18,6 +18,6 @@ terraform {
 }
 
 module "domains" {
-  source    = "./modules/domains"
+  source    = "../../modules/domains/dev"
   namespace = var.namespace
 }

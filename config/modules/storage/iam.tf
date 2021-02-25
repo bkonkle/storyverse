@@ -1,28 +1,15 @@
-module "label_iam" {
-  source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
-  namespace = var.namespace
-  stage     = var.environment
-  name      = var.name
-  tags      = local.common_tags
-  delimiter = "-"
-}
-
 resource "aws_iam_policy" "policy" {
-  name        = module.label_iam.id
+  name        = module.label_storage.id
   path        = "/"
-  description = "${var.name} S3 bucket access for ${var.environment}"
+  description = "storage S3 bucket access for ${var.environment}"
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = [
-          "s3:ListBucket",
-        ]
-        Resource = [
-          "arn:aws:s3:::${module.label.id}"
-        ]
+        Effect   = "Allow"
+        Action   = "s3:ListBucket"
+        Resource = "arn:aws:s3:::${module.label_storage.id}"
       },
       {
         Effect = "Allow"
@@ -32,16 +19,14 @@ resource "aws_iam_policy" "policy" {
           "s3:DeleteObject",
           "s3:PutObjectAcl"
         ]
-        Resource = [
-          "arn:aws:s3:::${module.label.id}/*"
-        ]
+        Resource = "arn:aws:s3:::${module.label_storage.id}/*"
       }
     ]
   })
 }
 
 resource "aws_iam_policy_attachment" "policy_attach" {
-  name       = module.label_iam.id
+  name       = module.label_storage.id
   roles      = var.aws_iam_role_names
   policy_arn = aws_iam_policy.policy.arn
 }

@@ -4,10 +4,6 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-locals {
-  account_id = data.aws_caller_identity.current.account_id
-}
-
 # Create a locking table for terraform runs
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = "${var.namespace}-tf-locks"
@@ -21,7 +17,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 
 # Create a state bucket for terraform
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "${var.namespace}-${var.account_name}-tf-state"
+  bucket = "${var.namespace}-dev-tf-state"
 
   lifecycle {
     prevent_destroy = true
@@ -36,7 +32,3 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
-# Export the name so we can use it later
-output "state_bucket" {
-  value = aws_s3_bucket.terraform_state.id
-}
