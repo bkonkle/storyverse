@@ -14,7 +14,8 @@ variable "environment" {
   default = "dev"
 }
 
-variable "aws_iam_role_names" {
+variable "groups" {
+  description = "The IAM group names to give access to this bucket"
   type        = list(string)
-  description = "The IAM role names to give access to this bucket"
+  default = []
 }

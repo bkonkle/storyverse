@@ -18,8 +18,8 @@ terraform {
 }
 
 module "storage" {
-  source             = "../../modules/storage"
-  namespace          = var.namespace
-  environment        = var.environment
-  aws_iam_role_names = ["${var.namespace}-developer"]
+  source      = "../../modules/storage"
+  namespace   = var.namespace
+  environment = var.environment
+  groups      = ["${var.namespace}-developers"]
 }

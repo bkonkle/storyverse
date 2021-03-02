@@ -16,8 +16,8 @@ module "domains" {
   namespace = var.namespace
 }
 
-module "roles" {
-  source    = "../../modules/roles"
+module "root" {
+  source    = "../../modules/root"
   region    = var.region
   namespace = var.namespace
 }

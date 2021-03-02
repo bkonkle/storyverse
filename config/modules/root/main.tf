@@ -1,4 +1,4 @@
-module "label_root" {
+module "label" {
   source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
   namespace = var.namespace
   name      = "root"
@@ -7,8 +7,8 @@ module "label_root" {
 }
 
 resource "aws_iam_user" "root" {
-  name = module.label_root.id
-  tags = module.label_root.tags
+  name = module.label.id
+  tags = module.label.tags
 }
 
 resource "aws_iam_access_key" "root" {
@@ -16,7 +16,7 @@ resource "aws_iam_access_key" "root" {
 }
 
 resource "aws_iam_policy" "root" {
-  name        = "${module.label_root.id}-access"
+  name        = "${module.label.id}-access"
   path        = "/"
   description = "${var.namespace} root account access for dev"
 
@@ -26,7 +26,7 @@ resource "aws_iam_policy" "root" {
       {
         Effect   = "Allow"
         Action   = "dynamodb:*"
-        Resource = "arn:aws:dynamodb:us-west-2:${local.account_id}:table/${var.namespace}-tf-locks"
+        Resource = "arn:aws:dynamodb:${var.region}:${local.account_id}:table/${var.namespace}-tf-locks"
       },
       {
         Effect   = "Allow"
@@ -70,7 +70,7 @@ resource "aws_iam_policy" "root" {
 }
 
 resource "aws_iam_policy_attachment" "policy_attach" {
-  name       = "${module.label_root.id}-access"
+  name       = "${module.label.id}-access"
   users      = [aws_iam_user.root.name]
   policy_arn = aws_iam_policy.root.arn
 }

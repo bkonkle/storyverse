@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "policy" {
-  name        = module.label_storage.id
+  name        = module.label.id
   path        = "/"
   description = "storage S3 bucket access for ${var.environment}"
 
@@ -9,7 +9,7 @@ resource "aws_iam_policy" "policy" {
       {
         Effect   = "Allow"
         Action   = "s3:ListBucket"
-        Resource = "arn:aws:s3:::${module.label_storage.id}"
+        Resource = "arn:aws:s3:::${module.label.id}"
       },
       {
         Effect = "Allow"
@@ -19,14 +19,15 @@ resource "aws_iam_policy" "policy" {
           "s3:DeleteObject",
           "s3:PutObjectAcl"
         ]
-        Resource = "arn:aws:s3:::${module.label_storage.id}/*"
+        Resource = "arn:aws:s3:::${module.label.id}/*"
       }
     ]
   })
 }
 
-resource "aws_iam_policy_attachment" "policy_attach" {
-  name       = module.label_storage.id
-  roles      = var.aws_iam_role_names
+resource "aws_iam_group_policy_attachment" "developers" {
+  for_each = toset(var.groups)
+
+  group      = each.key
   policy_arn = aws_iam_policy.policy.arn
 }

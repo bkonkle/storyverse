@@ -1,4 +1,4 @@
-module "label_storage" {
+module "label" {
   source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.24.1"
   namespace = var.namespace
   stage     = var.environment
@@ -9,6 +9,6 @@ module "label_storage" {
 
 # Create a state bucket for terraform
 resource "aws_s3_bucket" "storage" {
-  bucket = module.label_storage.id
-  tags   = module.label_storage.tags
+  bucket = module.label.id
+  tags   = module.label.tags
 }
