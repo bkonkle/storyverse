@@ -20,7 +20,7 @@ resource "aws_iam_policy" "developers" {
     Statement = [
       {
         Effect   = "Allow"
-        Action   = ["s3:ListAllMyBuckets"]
+        Action   = ["s3:ListAllMyBuckets", "s3:getBucketVersioning"]
         Resource = ["*"]
       },
     ]
