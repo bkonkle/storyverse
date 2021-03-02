@@ -6,6 +6,7 @@ import Field from '../forms/Field'
 import Input from '../forms/Input'
 import FormButton from '../forms/FormButton'
 import Textarea from '../forms/Textarea'
+import ReactS3Uploader from 'react-s3-uploader'
 
 export const CreateUniverse = () => {
   const {register, handleSubmit, errors} = useForm()
@@ -32,13 +33,16 @@ export const CreateUniverse = () => {
             <Textarea name="description" ref={register} rows={10} />
           </Field>
           <Field label="Picture">
-            {/* TODO: https://github.com/odysseyscience/react-s3-uploader */}
-            <Input
-              name="picture"
-              type="file"
-              accept="image/png, image/jpeg"
-              ref={register}
-            />
+            <div className={clsx('mt-1', 'block', 'w-full')}>
+              <ReactS3Uploader
+                signingUrl="/api/s3/sign"
+                signingUrlMethod="GET"
+                accept="image/*"
+                s3path="/uploads/"
+                autoUpload={true}
+                inputRef={register}
+              />
+            </div>
           </Field>
           <div className={clsx('flex flex-row-reverse')}>
             <FormButton primary>Create</FormButton>
