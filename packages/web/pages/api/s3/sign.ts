@@ -12,6 +12,15 @@ export default function sign(req: NextApiRequest, res: NextApiResponse) {
 
     res.setHeader('Access-Control-Allow-Origin', '*')
 
+    const {AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} = process.env
+
+    const config = {
+      region: AWS_REGION || 'us-west-2',
+      accessKeyId: AWS_ACCESS_KEY_ID,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    }
+    AWS.config.update(config)
+
     const s3 = new AWS.S3()
     const params = {
       Bucket: S3_BUCKET,

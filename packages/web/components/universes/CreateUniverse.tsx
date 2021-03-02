@@ -33,16 +33,17 @@ export const CreateUniverse = () => {
             <Textarea name="description" ref={register} rows={10} />
           </Field>
           <Field label="Picture">
-            <div className={clsx('mt-1', 'block', 'w-full')}>
-              <ReactS3Uploader
-                signingUrl="/api/s3/sign"
-                signingUrlMethod="GET"
-                accept="image/*"
-                s3path="/uploads/"
-                autoUpload={true}
-                inputRef={register}
-              />
-            </div>
+            <ReactS3Uploader
+              className={clsx('mt-1', 'block', 'w-full')}
+              signingUrl="/api/s3/sign"
+              signingUrlMethod="GET"
+              accept="image/*"
+              s3path="/uploads/"
+              autoUpload={true}
+              onProgress={(...args) => {
+                console.log(args)
+              }}
+            />
           </Field>
           <div className={clsx('flex flex-row-reverse')}>
             <FormButton primary>Create</FormButton>
