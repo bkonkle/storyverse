@@ -1,25 +1,19 @@
 import {NextApiRequest, NextApiResponse} from 'next'
-import {v4 as uuidv4} from 'uuid'
-import AWS from 'aws-sdk'
+import {ulid} from 'ulid'
+
+import {getAws} from '../../../data/Aws'
 
 const S3_BUCKET = 'storyverse-dev-storage'
 
 export default function sign(req: NextApiRequest, res: NextApiResponse) {
   return new Promise<void>((resolve, reject) => {
     const filename =
-      (req.query.path || '') + (uuidv4() + '_') + req.query.objectName
+      (req.query.path || '') + (ulid() + '_') + req.query.objectName
     const mimeType = req.query.contentType
 
     res.setHeader('Access-Control-Allow-Origin', '*')
 
-    const {AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} = process.env
-
-    const config = {
-      region: AWS_REGION || 'us-west-2',
-      accessKeyId: AWS_ACCESS_KEY_ID,
-      secretAccessKey: AWS_SECRET_ACCESS_KEY,
-    }
-    AWS.config.update(config)
+    const AWS = getAws()
 
     const s3 = new AWS.S3()
     const params = {
@@ -37,7 +31,7 @@ export default function sign(req: NextApiRequest, res: NextApiResponse) {
       } else {
         res.json({
           signedUrl: data,
-          publicUrl: '/s3/uploads/' + filename,
+          publicUrl: '/api/s3/uploads/' + filename,
           filename: filename,
           fileKey: filename,
         })

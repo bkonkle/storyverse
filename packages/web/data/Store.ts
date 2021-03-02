@@ -1,6 +1,12 @@
 import create, {State as ZustandState} from 'zustand'
 
-export type User = Record<string, unknown>
+export interface User {
+  name: string
+  nickname: string
+  picture: string
+  sub: string
+  updated_at: string
+}
 
 export enum Pages {
   Home,

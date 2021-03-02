@@ -7,11 +7,12 @@ import Input from '../forms/Input'
 import FormButton from '../forms/FormButton'
 import Textarea from '../forms/Textarea'
 import ReactS3Uploader from 'react-s3-uploader'
+import {useStore} from '../../data/Store'
 
 export const CreateUniverse = () => {
-  const {register, handleSubmit, errors} = useForm()
+  const {user} = useStore((state) => state.users)
 
-  console.log(`>- errors ->`, errors)
+  const {register, handleSubmit} = useForm()
 
   function onSubmit(data: unknown) {
     console.log(`>- data ->`, data)
@@ -33,17 +34,19 @@ export const CreateUniverse = () => {
             <Textarea name="description" ref={register} rows={10} />
           </Field>
           <Field label="Picture">
-            <ReactS3Uploader
-              className={clsx('mt-1', 'block', 'w-full')}
-              signingUrl="/api/s3/sign"
-              signingUrlMethod="GET"
-              accept="image/*"
-              s3path="/uploads/"
-              autoUpload={true}
-              onProgress={(...args) => {
-                console.log(args)
-              }}
-            />
+            {user && (
+              <ReactS3Uploader
+                className={clsx('mt-1', 'block', 'w-full')}
+                signingUrl="/api/s3/sign"
+                signingUrlMethod="GET"
+                accept="image/*"
+                s3path={`uploads/${user.sub}/`}
+                autoUpload={true}
+                onProgress={(...args) => {
+                  console.log(args)
+                }}
+              />
+            )}
           </Field>
           <div className={clsx('flex flex-row-reverse')}>
             <FormButton primary>Create</FormButton>

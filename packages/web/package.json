@@ -37,8 +37,8 @@
     "remark": "^13.0.0",
     "remark-html": "^13.0.1",
     "tailwindcss": "^2.0.3",
+    "ulid": "^2.3.0",
     "urql": "^1.11.6",
-    "uuid": "^8.3.2",
     "zustand": "^3.3.2"
   },
   "resolutions": {

@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next'
-import AWS from 'aws-sdk'
+
+import {getAws} from '../../../../data/Aws'
 
 const S3_BUCKET = 'storyverse-dev-storage'
 
@@ -7,6 +8,8 @@ export default async function sign(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: {all},
   } = req
+
+  const AWS = getAws()
 
   const s3 = new AWS.S3()
   const params = {
