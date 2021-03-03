@@ -20,26 +20,22 @@ export const init = () => {
       throw new Error('OAuth2 configuration not found')
     }
 
-    const redirectUri = `${BASE_URL}/api/login/callback`
-    const postLogoutRedirectUri = `${BASE_URL}/`
-
     auth0 = initAuth0({
-      domain: OAUTH2_DOMAIN,
-      clientId: OAUTH2_CLIENT_ID,
+      baseURL: BASE_URL,
+      issuerBaseURL: `https://${OAUTH2_DOMAIN}`,
+      clientID: OAUTH2_CLIENT_ID,
       clientSecret: OAUTH2_CLIENT_SECRET,
-      scope: 'openid profile',
-      redirectUri,
-      postLogoutRedirectUri,
-      session: {
-        cookieSecret: OAUTH2_COOKIE_SECRET,
-        cookieLifetime: 60 * 60 * 8,
-        storeIdToken: false,
-        storeAccessToken: false,
-        storeRefreshToken: false,
+      secret: OAUTH2_COOKIE_SECRET,
+      authorizationParams: {
+        scope: 'openid profile email',
       },
-      oidcClient: {
-        httpTimeout: 2500,
-        clockTolerance: 10000,
+      routes: {
+        callback: '/api/login/callback',
+        postLogoutRedirect: '/',
+      },
+      session: {
+        rollingDuration: 60 * 60 * 24,
+        absoluteDuration: 60 * 60 * 24 * 7,
       },
     })
   }
