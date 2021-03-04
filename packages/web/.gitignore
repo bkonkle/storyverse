@@ -1,7 +1,0 @@
-# next.js
-/.next/
-/out/
-
-# build files
-/data/Schema.tsx
-/schema.json

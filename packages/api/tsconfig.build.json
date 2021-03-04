@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./build",
-    "target": "es2017"
-  },
-  "include": ["src/**/*"],
-  "exclude": ["test", "**/__tests__"]
-}

@@ -6,9 +6,8 @@ A collaborative storytelling app. Create a story universe, invite friends to con
 
 This project is packaged with Yarn workspaces. The following packages are available:
 
-- [Server](packages/server) - An Express app using Postgraphile to create an automatic, database-first, extensible GraphQL server.
-- [Web](packages/web) - A Gatsby web client for the Server.
-- [Mobile](packages/mobile) - An Expo mobile client for the Server.
+- [Api](packages/api) - TODO
+- [Web](packages/web) - TODO
 
 ## Screencasts
 
@@ -21,9 +20,14 @@ The following tools are used to build the server and client applications:
 - [TypeScript](https://www.typescriptlang.org/) - A typed superset of JavaScript for powerful static analysis.
 - [Node](https://nodejs.org/) - A JavaScript runtime built on Chrome's V8 engine.
 - [Express](https://expressjs.com/) - A fast, unopinionated, minimalist web framework for Node.
-- [Postgraphile](https://www.graphile.org/postgraphile/) - An automatic, database-first, extensible GraphQL interface for PostgreSQL.
 - [GraphQL Code Generator](https://graphql-code-generator.com/) - Generate code and types directly from your GraphQL schema.
 - [React](https://reactjs.org/) - A JavaScript library for declarative and performant user interfaces.
 - [Urql](https://formidable.com/open-source/urql/) - A blazing-fast GraphQL client using React components and hooks.
-- [Gatsby](https://www.gatsbyjs.org/) - An open source framework based on React that helps developers build blazing fast websites and apps.
-- [Expo](https://expo.io) - A set of tools to build, deploy, and quickly iterate on native mobile apps with a shared codebase.
+
+## Thanks
+
+The nx build tools were borrowed from:
+
+- [https://github.com/erkobridee/nx-nextjs](https://github.com/erkobridee/nx-nextjs)
+
+Thanks, Erko Bridee!
