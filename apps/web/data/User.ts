@@ -1,10 +1,10 @@
 import {ReactNode, useEffect} from 'react'
 import axios from 'axios'
 
-import {User, useStore} from './Store'
+import {AuthUser, useStore} from './Store'
 
 export interface UserState {
-  user: User | null
+  user: AuthUser | null
   loading: boolean
 }
 
@@ -14,15 +14,15 @@ export interface UserProviderProps {
 }
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
-let __user: User | null = null
+let __user: AuthUser | null = null
 
-export const fetchUser = async (): Promise<User | null> => {
+export const fetchUser = async (): Promise<AuthUser | null> => {
   if (__user) {
     return __user
   }
 
   try {
-    const {data} = await axios.get<User>('/api/user')
+    const {data} = await axios.get<AuthUser>('/api/user')
     __user = data
   } catch (error) {
     if (error.response.status !== 401) {
@@ -34,7 +34,7 @@ export const fetchUser = async (): Promise<User | null> => {
 }
 
 export const useFetchUser = () => {
-  const {user, loading, setUser, setLoading} = useStore((state) => state.users)
+  const {user, loading, setUser, setLoading} = useStore((state) => state.auth)
 
   useEffect(() => {
     let isMounted = true

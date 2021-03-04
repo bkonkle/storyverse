@@ -7,7 +7,7 @@
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": {"defaultBase": "master"},
+  "affected": {"defaultBase": "develop"},
   "npmScope": "storyverse",
   "tasksRunnerOptions": {
     "default": {
@@ -15,5 +15,8 @@
       "options": {"cacheableOperations": ["build", "lint", "test", "e2e"]}
     }
   },
-  "projects": {"web": {"tags": []}, "api": {"tags": []}}
+  "projects": {
+    "web": {"tags": []},
+    "api": {"tags": []}
+  }
 }

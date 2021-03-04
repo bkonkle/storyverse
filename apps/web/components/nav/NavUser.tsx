@@ -7,7 +7,7 @@ import NavLink from './NavLink'
 import {useStore} from '../../data/Store'
 
 export const NavUser = () => {
-  const {user, loading} = useStore((state) => state.users)
+  const {user, loading} = useStore((state) => state.auth)
 
   if (loading) {
     return null

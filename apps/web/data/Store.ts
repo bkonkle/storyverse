@@ -1,12 +1,8 @@
 import create, {State as ZustandState} from 'zustand'
 
-export interface User {
-  name: string
-  nickname: string
-  picture: string
-  sub: string
-  updated_at: string
-}
+import * as AuthClient from './AuthClient'
+
+export type AuthUser = AuthClient.User
 
 export enum Pages {
   Home,
@@ -16,11 +12,11 @@ export enum Pages {
 }
 
 export interface State extends ZustandState {
-  users: {
-    user: User | null
+  auth: {
+    user: AuthUser | null
     loading: boolean
     setLoading: (state: boolean) => void
-    setUser: (user: User | null) => void
+    setUser: (user: AuthUser | null) => void
   }
   pages: {
     page: Pages | null
@@ -29,13 +25,13 @@ export interface State extends ZustandState {
 }
 
 export const useStore = create<State>((set) => ({
-  users: {
+  auth: {
     user: null,
     loading: true,
-    setLoading: (loading) => set(({users}) => ({users: {...users, loading}})),
+    setLoading: (loading) => set(({auth}) => ({auth: {...auth, loading}})),
     setUser: (user) =>
-      set(({users}) => ({
-        users: {...users, user, loading: false},
+      set(({auth}) => ({
+        auth: {...auth, user, loading: false},
       })),
   },
   pages: {

@@ -1,4 +1,7 @@
-schema: apps/api/src/**/*.graphql
+schema:
+  - apps/api/src/**/*.graphql
+documents:
+  - apps/web/**/*.graphql
 generates:
   apps/api/src/Schema.ts:
     hooks:

@@ -19,7 +19,7 @@ export interface SlideMenuProps {
  */
 export const SlideMenu = (props: SlideMenuProps) => {
   const {image, slideMenu, open} = props
-  const {user, loading} = useStore((state) => state.users)
+  const {user, loading} = useStore((state) => state.auth)
 
   if (loading) {
     return null

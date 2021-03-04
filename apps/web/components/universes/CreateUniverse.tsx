@@ -10,7 +10,7 @@ import ReactS3Uploader from 'react-s3-uploader'
 import {useStore} from '../../data/Store'
 
 export const CreateUniverse = () => {
-  const {user} = useStore((state) => state.users)
+  const {user} = useStore((state) => state.auth)
 
   const {register, handleSubmit} = useForm()
 

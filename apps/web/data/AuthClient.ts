@@ -1,5 +1,13 @@
 import {initAuth0} from '@auth0/nextjs-auth0'
 
+export interface User {
+  name: string
+  nickname: string
+  picture: string
+  sub: string
+  updated_at: string
+}
+
 let auth0: ReturnType<typeof initAuth0>
 
 export const init = () => {
@@ -36,6 +44,9 @@ export const init = () => {
       session: {
         rollingDuration: 60 * 60 * 24,
         absoluteDuration: 60 * 60 * 24 * 7,
+        cookie: {
+          httpOnly: false,
+        },
       },
     })
   }

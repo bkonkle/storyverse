@@ -21,13 +21,12 @@ export function run(label: string, app: Application, port: number): void {
 }
 
 export const start = async (): Promise<void> => {
-  const {PORT} = process.env
+  const PORT = process.env.port || process.env.PORT
   const port = PORT ? Number(PORT) : 4000
+
   const app = await init()
 
   run('Storyverse', app, port)
 }
 
-if (require.main === module) {
-  start().catch(console.error)
-}
+start().catch(console.error)

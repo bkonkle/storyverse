@@ -1,9 +1,11 @@
 import React, {useEffect} from 'react'
 import clsx from 'clsx'
 import Head from 'next/head'
+import {withUrqlClient} from 'next-urql'
 
 import App from '../components/App'
 import {useStore} from '../data/Store'
+import {api} from '../data/ApiClient'
 
 export const Index = () => {
   const {setPage} = useStore((state) => state.pages)
@@ -61,4 +63,4 @@ export const Index = () => {
   )
 }
 
-export default Index
+export default withUrqlClient(api, {ssr: true})(Index)
