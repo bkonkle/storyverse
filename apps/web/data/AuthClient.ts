@@ -44,9 +44,6 @@ export const init = () => {
       session: {
         rollingDuration: 60 * 60 * 24,
         absoluteDuration: 60 * 60 * 24 * 7,
-        cookie: {
-          httpOnly: false,
-        },
       },
     })
   }

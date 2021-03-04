@@ -7,10 +7,11 @@ import Input from '../forms/Input'
 import FormButton from '../forms/FormButton'
 import Textarea from '../forms/Textarea'
 import ReactS3Uploader from 'react-s3-uploader'
-import {useStore} from '../../data/Store'
+import {useGetCurrentUserQuery} from '../../data/Schema'
 
 export const CreateUniverse = () => {
-  const {user} = useStore((state) => state.auth)
+  const [{data}] = useGetCurrentUserQuery()
+  const user = data?.getCurrentUser
 
   const {register, handleSubmit} = useForm()
 
@@ -40,7 +41,7 @@ export const CreateUniverse = () => {
                 signingUrl="/api/s3/sign"
                 signingUrlMethod="GET"
                 accept="image/*"
-                s3path={`uploads/${user.sub}/`}
+                s3path={`uploads/${user.username}/`}
                 autoUpload={true}
                 onProgress={(...args) => {
                   console.log(args)

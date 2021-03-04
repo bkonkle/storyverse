@@ -4,14 +4,16 @@ import clsx from 'clsx'
 import NavProfile from './NavProfile'
 import Notifications from './Notifications'
 import NavLink from './NavLink'
-import {useStore} from '../../data/Store'
+import {useGetCurrentUserQuery} from '../../data/Schema'
 
 export const NavUser = () => {
-  const {user, loading} = useStore((state) => state.auth)
+  const [{fetching, data}] = useGetCurrentUserQuery()
 
-  if (loading) {
+  if (fetching) {
     return null
   }
+
+  const user = data?.getCurrentUser
 
   const containerClasses = clsx('hidden', 'md:block')
 

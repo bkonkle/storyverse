@@ -5,8 +5,8 @@ import Nameplate from './Nameplate'
 
 import NavProfileLinks from './NavProfileLinks'
 import Notifications from './Notifications'
-import {useStore} from '../../data/Store'
 import NavLink from './NavLink'
+import {useGetCurrentUserQuery} from '../../data/Schema'
 
 export interface SlideMenuProps {
   open: boolean
@@ -19,11 +19,13 @@ export interface SlideMenuProps {
  */
 export const SlideMenu = (props: SlideMenuProps) => {
   const {image, slideMenu, open} = props
-  const {user, loading} = useStore((state) => state.auth)
+  const [{fetching, data}] = useGetCurrentUserQuery()
 
-  if (loading) {
+  if (fetching) {
     return null
   }
+
+  const user = data?.getCurrentUser
 
   return (
     <div
