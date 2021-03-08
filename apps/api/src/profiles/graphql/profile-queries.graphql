@@ -2,7 +2,7 @@ extend type Query {
   """
   Get an existing User Profile by ID
   """
-  getProfile(id: UUID!): Profile
+  getProfile(id: ID!): Profile
 
   """
   Get many User Profiles, with optional filtering conditions
@@ -19,7 +19,7 @@ extend type Query {
 A User Profile
 """
 type Profile {
-  id: UUID!
+  id: ID!
 
   """
   An email address
@@ -44,7 +44,7 @@ type Profile {
   """
   The id of the User that created the Profile
   """
-  userId: UUID
+  userId: ID
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -59,12 +59,12 @@ type ProfilesPage {
 }
 
 input ProfileCondition {
-  id: UUID
+  id: ID
   email: String
   displayName: String
   picture: String
   content: JSONObject
-  userId: UUID
+  userId: ID
   createdAt: DateTime
   updatedAt: DateTime
 }

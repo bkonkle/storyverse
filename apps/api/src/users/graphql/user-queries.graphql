@@ -9,7 +9,7 @@ extend type Query {
 A User
 """
 type User {
-  id: UUID!
+  id: ID!
 
   """
   The User's login id - usually their email address

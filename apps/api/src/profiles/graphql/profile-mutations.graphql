@@ -7,12 +7,12 @@ extend type Mutation {
   """
   Update an existing User Profile by ID
   """
-  updateProfile(id: UUID!, input: UpdateProfileInput!): MutateProfileResult!
+  updateProfile(id: ID!, input: UpdateProfileInput!): MutateProfileResult!
 
   """
   Remove an existing User Profile by ID
   """
-  deleteProfile(id: UUID!): MutateProfileResult!
+  deleteProfile(id: ID!): MutateProfileResult!
 }
 
 """

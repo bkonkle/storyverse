@@ -128,21 +128,7 @@
           "executor": "@nrwl/workspace:run-commands",
           "outputs": [],
           "options": {
-            "command": "npm run migrate"
-          }
-        },
-        "migrate-deploy": {
-          "executor": "@nrwl/workspace:run-commands",
-          "outputs": [],
-          "options": {
             "command": "npm run migrate:deploy"
-          }
-        },
-        "migrate-reset": {
-          "executor": "@nrwl/workspace:run-commands",
-          "outputs": [],
-          "options": {
-            "command": "npm run migrate:reset"
           }
         }
       }

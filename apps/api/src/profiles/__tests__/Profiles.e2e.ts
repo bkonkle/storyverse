@@ -192,7 +192,7 @@ describe('Profile', () => {
 
   describe('Query: getProfile', () => {
     const query = `
-      query GetProfile($id: UUID!) {
+      query GetProfile($id: ID!) {
         getProfile(id: $id) {
           id
           email
@@ -383,7 +383,7 @@ describe('Profile', () => {
 
   describe('Mutation: updateProfile', () => {
     const mutation = `
-      mutation UpdateProfile($id: UUID!, $input: UpdateProfileInput!) {
+      mutation UpdateProfile($id: ID!, $input: UpdateProfileInput!) {
         updateProfile(id: $id, input: $input) {
           profile {
             id
@@ -436,31 +436,6 @@ describe('Profile', () => {
         where: {id: profile.id},
       })
       expect(updated).toMatchObject(expected)
-    })
-
-    it('requires the id to be a uuid', async () => {
-      const {token} = credentials
-      const variables = {
-        id: 'test-id',
-        input: {picture: faker.internet.avatar()},
-      }
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-        statusCode: 400,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
-          ),
-          extensions: expect.objectContaining({
-            code: 'INTERNAL_SERVER_ERROR',
-          }),
-        }),
-      ])
     })
 
     it('requires authentication', async () => {
@@ -523,7 +498,7 @@ describe('Profile', () => {
 
   describe('Mutation: deleteProfile', () => {
     const mutation = `
-        mutation DeleteProfile($id: UUID!) {
+        mutation DeleteProfile($id: ID!) {
           deleteProfile(id: $id) {
             profile {
               id
@@ -564,28 +539,6 @@ describe('Profile', () => {
         where: {id: profile.id},
       })
       expect(deleted).toBeNull()
-    })
-
-    it('requires the id to be a uuid', async () => {
-      const {token} = credentials
-      const variables = {id: 'test-id'}
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-        statusCode: 400,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
-          ),
-          extensions: expect.objectContaining({
-            code: 'INTERNAL_SERVER_ERROR',
-          }),
-        }),
-      ])
     })
 
     it('requires authentication', async () => {

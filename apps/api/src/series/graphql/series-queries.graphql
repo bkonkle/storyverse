@@ -2,7 +2,7 @@ extend type Query {
   """
   Get an existing Series by ID
   """
-  getSeries(id: UUID!): Series
+  getSeries(id: ID!): Series
 
   """
   Get many Series, with optional filtering conditions
@@ -19,7 +19,7 @@ extend type Query {
 A Series
 """
 type Series {
-  id: UUID!
+  id: ID!
 
   """
   The Series name
@@ -39,7 +39,7 @@ type Series {
   """
   The id of the Universe that the Series belongs to
   """
-  universeId: UUID!
+  universeId: ID!
 
   """
   The Universe that the Series belongs to
@@ -60,7 +60,7 @@ type SeriesPage {
 
 input SeriesCondition {
   name: String
-  universeId: UUID
+  universeId: ID
 }
 
 enum SeriesOrderBy {

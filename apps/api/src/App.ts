@@ -1,6 +1,5 @@
 import {readFileSync} from 'fs'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
-import GraphQLUUID from 'graphql-type-uuid'
 import gql from 'graphql-tag'
 import {merge} from 'lodash'
 import {join} from 'path'
@@ -36,7 +35,6 @@ export const getResolvers = (): Resolvers => {
       DateTime: GraphQLDateTime,
       JSON: GraphQLJSON,
       JSONObject: GraphQLJSONObject,
-      UUID: GraphQLUUID,
     },
     users.getResolvers(),
     profiles.getResolvers(),

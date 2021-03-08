@@ -7,19 +7,19 @@ extend type Mutation {
   """
   Update an existing Universe by ID
   """
-  updateUniverse(id: UUID!, input: UpdateUniverseInput!): MutateUniverseResult!
+  updateUniverse(id: ID!, input: UpdateUniverseInput!): MutateUniverseResult!
 
   """
   Remove an existing Universe by ID
   """
-  deleteUniverse(id: UUID!): MutateUniverseResult!
+  deleteUniverse(id: ID!): MutateUniverseResult!
 
   """
   Grant Roles to a Profile for a Universe
   """
   grantUniverseRoles(
-    profileId: UUID!
-    universeId: UUID!
+    profileId: ID!
+    universeId: ID!
     roles: [UniverseRoles!]!
   ): Boolean
 }
@@ -30,7 +30,7 @@ Input to create a new Universe
 input CreateUniverseInput {
   name: String!
   description: JSONObject
-  ownerProfileId: UUID!
+  ownerProfileId: ID!
 }
 
 """
@@ -39,7 +39,7 @@ Input to update an existing Universe
 input UpdateUniverseInput {
   name: String
   description: JSONObject
-  ownerProfileId: UUID
+  ownerProfileId: ID
 }
 
 type MutateUniverseResult {

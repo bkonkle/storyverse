@@ -173,7 +173,7 @@ describe('Universes', () => {
         }),
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "ownerProfileId" of required type "UUID!" was not provided.'
+            'Field "ownerProfileId" of required type "ID!" was not provided.'
           ),
         }),
       ])
@@ -218,7 +218,7 @@ describe('Universes', () => {
 
   describe('Query: getUniverse', () => {
     const query = `
-      query GetUniverse($id: UUID!) {
+      query GetUniverse($id: ID!) {
         getUniverse(id: $id) {
           id
           name
@@ -362,7 +362,7 @@ describe('Universes', () => {
 
   describe('Mutation: updateUniverse', () => {
     const mutation = `
-      mutation UpdateUniverse($id: UUID!, $input: UpdateUniverseInput!) {
+      mutation UpdateUniverse($id: ID!, $input: UpdateUniverseInput!) {
         updateUniverse(id: $id, input: $input) {
           universe {
             id
@@ -412,31 +412,6 @@ describe('Universes', () => {
         where: {id: universe.id},
       })
       expect(updated).toMatchObject(expected)
-    })
-
-    it('requires the id to be a uuid', async () => {
-      const {token} = credentials
-      const variables = {
-        id: 'test-id',
-        input: {name: faker.random.word()},
-      }
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-        statusCode: 400,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
-          ),
-          extensions: expect.objectContaining({
-            code: 'INTERNAL_SERVER_ERROR',
-          }),
-        }),
-      ])
     })
 
     it('requires authentication', async () => {
@@ -543,7 +518,7 @@ describe('Universes', () => {
 
   describe('Mutation: deleteUniverse', () => {
     const mutation = `
-      mutation DeleteUniverse($id: UUID!) {
+      mutation DeleteUniverse($id: ID!) {
         deleteUniverse(id: $id) {
           universe {
             id
@@ -582,28 +557,6 @@ describe('Universes', () => {
         where: {id: universe.id},
       })
       expect(deleted).toBeNull()
-    })
-
-    it('requires the id to be a uuid', async () => {
-      const {token} = credentials
-      const variables = {id: 'test-id'}
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-        statusCode: 400,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
-          ),
-          extensions: expect.objectContaining({
-            code: 'INTERNAL_SERVER_ERROR',
-          }),
-        }),
-      ])
     })
 
     it('requires authentication', async () => {

@@ -2,7 +2,7 @@ extend type Query {
   """
   Get an existing Universe by ID
   """
-  getUniverse(id: UUID!): Universe
+  getUniverse(id: ID!): Universe
 
   """
   Get many Universes, with optional filtering conditions
@@ -19,7 +19,7 @@ extend type Query {
 A Universe
 """
 type Universe {
-  id: UUID!
+  id: ID!
 
   """
   The Universe's name
@@ -39,7 +39,7 @@ type Universe {
   """
   The id of the Profile that owns the Universe
   """
-  ownerProfileId: UUID!
+  ownerProfileId: ID!
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -55,7 +55,7 @@ type UniversesPage {
 
 input UniverseCondition {
   name: String
-  ownerProfileId: UUID
+  ownerProfileId: ID
 }
 
 enum UniversesOrderBy {

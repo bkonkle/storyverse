@@ -22,7 +22,6 @@ generates:
         DateTime: Date
         JSON: JSON
         JSONObject: {}
-        UUID: string
   apps/web/data/Schema.tsx:
     hooks:
       afterOneFileWrite:

@@ -7,12 +7,12 @@ extend type Mutation {
   """
   Update an existing Story by ID
   """
-  updateStory(id: UUID!, input: UpdateStoryInput!): MutateStoryResult!
+  updateStory(id: ID!, input: UpdateStoryInput!): MutateStoryResult!
 
   """
   Remove an existing Story by ID
   """
-  deleteStory(id: UUID!): MutateStoryResult!
+  deleteStory(id: ID!): MutateStoryResult!
 }
 
 """
@@ -24,7 +24,7 @@ input CreateStoryInput {
   issue: Int
   summary: JSONObject
   content: JSONObject
-  seriesId: UUID!
+  seriesId: ID!
 }
 
 """
@@ -36,7 +36,7 @@ input UpdateStoryInput {
   issue: Int
   summary: JSONObject
   content: JSONObject
-  seriesId: UUID
+  seriesId: ID
 }
 
 type MutateStoryResult {

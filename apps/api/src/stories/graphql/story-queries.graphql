@@ -2,7 +2,7 @@ extend type Query {
   """
   Get an existing Story by ID
   """
-  getStory(id: UUID!): Story
+  getStory(id: ID!): Story
 
   """
   Get many Stories, with optional filtering conditions
@@ -19,7 +19,7 @@ extend type Query {
 A Story
 """
 type Story {
-  id: UUID!
+  id: ID!
 
   """
   The Story name
@@ -54,7 +54,7 @@ type Story {
   """
   The id of the Series that the Story belongs to
   """
-  seriesId: UUID!
+  seriesId: ID!
 
   """
   The Series that the Story belongs to
@@ -75,7 +75,7 @@ type StoriesPage {
 
 input StoryCondition {
   name: String
-  seriesId: UUID
+  seriesId: ID
 }
 
 enum StoriesOrderBy {

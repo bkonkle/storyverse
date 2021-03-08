@@ -223,7 +223,7 @@ describe('Story', () => {
         }),
         expect.objectContaining({
           message: expect.stringContaining(
-            'Field "seriesId" of required type "UUID!" was not provided.'
+            'Field "seriesId" of required type "ID!" was not provided.'
           ),
         }),
       ])
@@ -317,7 +317,7 @@ describe('Story', () => {
 
   describe('Query: getStory', () => {
     const query = `
-      query GetStory($id: UUID!) {
+      query GetStory($id: ID!) {
         getStory(id: $id) {
           id
           name
@@ -428,7 +428,7 @@ describe('Story', () => {
 
   describe('Mutation: updateStory', () => {
     const mutation = `
-      mutation UpdateStory($id: UUID!, $input: UpdateStoryInput!) {
+      mutation UpdateStory($id: ID!, $input: UpdateStoryInput!) {
         updateStory(id: $id, input: $input) {
           story {
             id
@@ -494,31 +494,6 @@ describe('Story', () => {
       await prisma.roleGrant.delete({
         where: {id: grant.id},
       })
-    })
-
-    it('requires the id to be a uuid', async () => {
-      const {token} = credentials
-      const variables = {
-        id: 'test-id',
-        input: {name: faker.random.word()},
-      }
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-        statusCode: 400,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
-          ),
-          extensions: expect.objectContaining({
-            code: 'INTERNAL_SERVER_ERROR',
-          }),
-        }),
-      ])
     })
 
     it('returns an error if no existing story was found', async () => {
@@ -626,7 +601,7 @@ describe('Story', () => {
 
   describe('Mutation: deleteStory', () => {
     const mutation = `
-      mutation DeleteStory($id: UUID!) {
+      mutation DeleteStory($id: ID!) {
         deleteStory(id: $id) {
           story {
             id
@@ -681,28 +656,6 @@ describe('Story', () => {
       await prisma.roleGrant.delete({
         where: {id: grant.id},
       })
-    })
-
-    it('requires the id to be a uuid', async () => {
-      const {token} = credentials
-      const variables = {id: 'test-id'}
-
-      const body = await graphql.mutation(mutation, variables, {
-        token,
-        warn: false,
-        statusCode: 400,
-      })
-
-      expect(body).toHaveProperty('errors', [
-        expect.objectContaining({
-          message: expect.stringContaining(
-            'Expected type "UUID". UUID cannot represent non-UUID value: test-id'
-          ),
-          extensions: expect.objectContaining({
-            code: 'INTERNAL_SERVER_ERROR',
-          }),
-        }),
-      ])
     })
 
     it('returns an error if no existing story was found', async () => {
