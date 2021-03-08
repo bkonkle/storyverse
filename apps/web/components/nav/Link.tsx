@@ -1,19 +1,17 @@
-import React, {ReactNode} from 'react'
+import React from 'react'
 import NextLink from 'next/link'
 
-export interface LinkProps {
-  children?: ReactNode
-  className: string
+export interface LinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   external?: boolean
-  href: string
 }
 
 export const Link = (props: LinkProps) => {
-  const {children, className, external, href} = props
+  const {children, external, href, ...rest} = props
 
-  if (external) {
+  if (external || !href) {
     return (
-      <a href={href} className={className}>
+      <a href={href} {...rest}>
         {children}
       </a>
     )
@@ -21,7 +19,7 @@ export const Link = (props: LinkProps) => {
 
   return (
     <NextLink href={href}>
-      <a href={href} className={className}>
+      <a href={href} {...rest}>
         {children}
       </a>
     </NextLink>

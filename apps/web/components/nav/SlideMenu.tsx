@@ -51,7 +51,7 @@ export const SlideMenu = (props: SlideMenuProps) => {
           </>
         ) : (
           <div className={clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3')}>
-            <NavLink slide href="/api/login">
+            <NavLink slide href="/api/auth/login">
               Login
             </NavLink>
           </div>

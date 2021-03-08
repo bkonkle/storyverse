@@ -1,10 +1,20 @@
 import React from 'react'
 import clsx from 'clsx'
+import {signIn} from 'next-auth/client'
 
 import NavProfile from './NavProfile'
 import Notifications from './Notifications'
 import NavLink from './NavLink'
 import {useGetCurrentUserQuery} from '../../data/Schema'
+
+export const handleLogin = (
+  event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+) => {
+  event.stopPropagation()
+  event.nativeEvent.stopImmediatePropagation()
+
+  signIn()
+}
 
 export const NavUser = () => {
   const [{fetching, data}] = useGetCurrentUserQuery()
@@ -20,7 +30,7 @@ export const NavUser = () => {
   if (!user) {
     return (
       <div className={containerClasses}>
-        <NavLink href="/api/login">Login</NavLink>
+        <NavLink onClick={handleLogin}>Login</NavLink>
       </div>
     )
   }

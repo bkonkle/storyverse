@@ -1,13 +1,13 @@
 import React from 'react'
 import {AppProps} from 'next/app'
-import {UserProvider} from '@auth0/nextjs-auth0'
 import 'tailwindcss/tailwind.css'
+import {Provider} from 'next-auth/client'
 
 export const NextApp = ({Component, pageProps}: AppProps) => {
   return (
-    <UserProvider>
+    <Provider session={pageProps.session}>
       <Component {...pageProps} />
-    </UserProvider>
+    </Provider>
   )
 }
 

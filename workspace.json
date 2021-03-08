@@ -39,7 +39,6 @@
           "options": {
             "buildTarget": "web:build",
             "dev": true,
-            "proxyConfig": "apps/web/proxy.conf.json",
             "port": 3000
           },
           "configurations": {
