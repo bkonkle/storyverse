@@ -13,8 +13,8 @@ query GetCurrentUser {
   }
 }
 
-mutation createUser($input: CreateUserInput!) {
-  createUser(input: $input) {
+mutation getOrCreateCurrentUser($input: CreateUserInput!) {
+  getOrCreateCurrentUser(input: $input) {
     user {
       ...UserData
     }

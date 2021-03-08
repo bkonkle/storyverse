@@ -1,5 +1,7 @@
-import NextAuth, {User} from 'next-auth'
+import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
+
+import {Auth0Token} from '../graphql'
 
 export default NextAuth({
   providers: [
@@ -13,7 +15,7 @@ export default NextAuth({
   ],
 
   jwt: {
-    secret: process.env.OAUTH2_COOKIE_SECRET,
+    secret: process.env.OAUTH2_JWT_SECRET,
   },
 
   callbacks: {
@@ -25,10 +27,14 @@ export default NextAuth({
       return token
     },
 
-    session: async (session, user: User & {accessToken?: string}) => {
-      session.accessToken = user.accessToken
-
-      return session
+    session: async (session, user: Auth0Token) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          sub: user.sub,
+        },
+      }
     },
   },
 })

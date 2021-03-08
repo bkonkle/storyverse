@@ -22,6 +22,8 @@ type Mutation {
   deleteStory(id: ID!): MutateStoryResult!
   """Remove an existing Universe by ID"""
   deleteUniverse(id: ID!): MutateUniverseResult!
+  """Get the current User if existing, or create one if not."""
+  getOrCreateCurrentUser(input: CreateUserInput!): MutateUserResult!
   """Grant Roles to a Profile for a Series"""
   grantSeriesRoles(profileId: ID!, universeId: ID!, roles: [SeriesRoles!]!): Boolean
   """Grant Roles to a Profile for a Universe"""
@@ -301,6 +303,13 @@ enum UniverseRoles {
 """Input to create a new User"""
 input CreateUserInput {
   username: String!
+  profile: CreateUserProfileInput
+}
+input CreateUserProfileInput {
+  email: String!
+  displayName: String
+  picture: String
+  content: JSONObject
 }
 """Input to update an existing User"""
 input UpdateUserInput {

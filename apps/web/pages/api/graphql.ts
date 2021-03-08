@@ -2,7 +2,17 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import httpProxy from 'http-proxy'
 import http from 'http'
-import {getSession} from 'next-auth/client'
+import {getToken} from 'next-auth/jwt'
+
+export interface Auth0Token {
+  sub: string
+  name: string
+  email: string
+  picture: string
+  accessToken: string
+  iat: number
+  exp: number
+}
 
 const proxy: httpProxy = httpProxy.createProxy()
 
@@ -39,7 +49,10 @@ const handleReq = (
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({req})
+  const token = (await getToken({
+    req,
+    secret: process.env.OAUTH2_JWT_SECRET || '',
+  })) as Auth0Token
 
   return new Promise((resolve, reject) => {
     req.url = rewritePath(req.url as string, {
@@ -53,10 +66,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       req.body = JSON.stringify(req.body)
     }
 
-    const headers = {
-      Authorization: session?.accessToken
-        ? `Bearer ${session.accessToken}`
-        : '',
+    const headers: Record<string, string> = {}
+    if (token?.accessToken) {
+      headers.Authorization = `Bearer ${token.accessToken}`
     }
 
     proxy

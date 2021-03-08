@@ -8,6 +8,11 @@ extend type Mutation {
   Update the currently authenticated User
   """
   updateCurrentUser(input: UpdateUserInput!): MutateUserResult!
+
+  """
+  Get the current User if existing, or create one if not.
+  """
+  getOrCreateCurrentUser(input: CreateUserInput!): MutateUserResult!
 }
 
 """
@@ -15,6 +20,14 @@ Input to create a new User
 """
 input CreateUserInput {
   username: String!
+  profile: CreateUserProfileInput
+}
+
+input CreateUserProfileInput {
+  email: String!
+  displayName: String
+  picture: String
+  content: JSONObject
 }
 
 """

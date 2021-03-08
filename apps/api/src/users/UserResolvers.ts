@@ -20,6 +20,7 @@ export default class UserResolvers {
     Mutation: {
       createUser: this.createUser,
       updateCurrentUser: this.updateCurrentUser,
+      getOrCreateCurrentUser: this.getOrCreateCurrentUser,
     },
   })
 
@@ -31,7 +32,10 @@ export default class UserResolvers {
   ) => {
     const username = getUsername(context)
 
-    return this.prisma.user.findFirst({where: {username}})
+    return this.prisma.user.findFirst({
+      include: {profile: true},
+      where: {username},
+    })
   }
 
   createUser: MutationResolvers<Context>['createUser'] = async (
@@ -43,7 +47,46 @@ export default class UserResolvers {
     requireMatchingUsername(context, input.username)
 
     const user = await this.prisma.user.create({
-      data: input,
+      include: {profile: true},
+      data: {
+        ...input,
+        profile: input.profile
+          ? {
+              create: input.profile,
+            }
+          : undefined,
+      },
+    })
+
+    return {user}
+  }
+
+  getOrCreateCurrentUser: MutationResolvers<Context>['getOrCreateCurrentUser'] = async (
+    _parent,
+    {input},
+    context,
+    _resolveInfo
+  ) => {
+    requireMatchingUsername(context, input.username)
+
+    const existing = await this.prisma.user.findFirst({
+      include: {profile: true},
+      where: {username: input.username},
+    })
+    if (existing) {
+      return {user: existing}
+    }
+
+    const user = await this.prisma.user.create({
+      include: {profile: true},
+      data: {
+        ...input,
+        profile: input.profile
+          ? {
+              create: input.profile,
+            }
+          : undefined,
+      },
     })
 
     return {user}
@@ -57,19 +100,22 @@ export default class UserResolvers {
   ) => {
     const username = getUsername(context)
 
-    const user = await this.prisma.user.findFirst({where: {username}})
-    if (!user) {
+    const existing = await this.prisma.user.findFirst({
+      where: {username},
+    })
+    if (!existing) {
       throw new NotFoundError('Not found')
     }
 
-    const updated = await this.prisma.user.update({
-      where: {username},
+    const user = await this.prisma.user.update({
+      include: {profile: true},
+      where: {id: existing.id},
       data: {
         username: input.username || undefined,
         isActive: input.isActive === null ? undefined : input.isActive,
       },
     })
 
-    return {user: updated}
+    return {user}
   }
 }
