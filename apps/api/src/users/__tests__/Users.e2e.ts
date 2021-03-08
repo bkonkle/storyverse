@@ -38,7 +38,18 @@ describe('Users', () => {
     })
   }
 
-  const deleteUser = (id: string) => prisma.user.delete({where: {id}})
+  const deleteUser = async (id: string) => {
+    const user = await prisma.user.findFirst({
+      include: {profile: true},
+      where: {id},
+    })
+
+    if (user?.profile?.id) {
+      await prisma.profile.delete({where: {id: user.profile.id}})
+    }
+
+    await prisma.user.delete({where: {id}})
+  }
 
   beforeAll(async () => {
     await dbCleaner(prisma, tables)
@@ -211,6 +222,146 @@ describe('Users', () => {
         expect.objectContaining({
           message: 'Authentication required',
           extensions: {code: 'UNAUTHENTICATED'},
+        }),
+      ])
+    })
+  })
+
+  describe('Mutation: getOrCreateCurrentUser', () => {
+    const mutation = `
+      mutation GetOrCreateCurrentUser($input: CreateUserInput!) {
+        getOrCreateCurrentUser(input: $input) {
+          user {
+            id
+            username
+            isActive
+            profile {
+              id
+              email
+            }
+          }
+        }
+      }
+    `
+
+    const email = 'test-email'
+    const user = new TestData(
+      createUser({isActive: true, profile: {create: {email}}}),
+      deleteUser
+    )
+
+    it('retrieves the currently authenticated user', async () => {
+      const {token, username} = credentials
+      const variables = {input: {username, profile: {email}}}
+
+      const {data} = await graphql.mutation<
+        Pick<Mutation, 'getOrCreateCurrentUser'>
+      >(mutation, variables, {token})
+
+      expect(data.getOrCreateCurrentUser.user).toEqual({
+        id: user.id,
+        username,
+        isActive: true,
+        profile: {
+          id: expect.any(String),
+          email,
+        },
+      })
+    })
+
+    it('uses the input to create one when no user is found', async () => {
+      const {token, username} = credentials
+      const variables = {input: {username, profile: {email}}}
+
+      const expected = {
+        id: expect.stringMatching(Validation.uuidRegex),
+        username,
+        isActive: true,
+      }
+
+      await user.delete()
+
+      const {data} = await graphql.mutation<
+        Pick<Mutation, 'getOrCreateCurrentUser'>
+      >(mutation, variables, {token})
+
+      expect(data.getOrCreateCurrentUser).toHaveProperty(
+        'user',
+        expect.objectContaining(expected)
+      )
+
+      const created = await prisma.user.findFirst({
+        where: {
+          id: data.getOrCreateCurrentUser.user?.id,
+        },
+      })
+
+      if (!created) {
+        fail('No user created.')
+      }
+
+      expect(created).toMatchObject({
+        ...expected,
+        id: data.getOrCreateCurrentUser.user?.id,
+      })
+
+      await prisma.user.delete({
+        where: {
+          id: created.id,
+        },
+      })
+    })
+
+    it('requires a username', async () => {
+      const {token} = credentials
+      const variables = {input: {profile: {email}}}
+
+      const body = await graphql.mutation(mutation, variables, {
+        token,
+        statusCode: 400,
+        warn: false,
+      })
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'Field "username" of required type "String!" was not provided.'
+          ),
+        }),
+      ])
+    })
+
+    it('requires authentication', async () => {
+      const {username} = credentials
+      const variables = {input: {username, profile: {email}}}
+
+      const body = await graphql.mutation(mutation, variables, {warn: false})
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Authentication required',
+          extensions: {code: 'UNAUTHENTICATED'},
+        }),
+      ])
+    })
+
+    it('requires authorization', async () => {
+      const {token} = credentials
+      const otherUser = UserFactory.make()
+
+      const variables = {
+        input: {username: otherUser.username, profile: {email}},
+      }
+
+      const body = await graphql.mutation(mutation, variables, {
+        token,
+        warn: false,
+      })
+
+      expect(body).toHaveProperty('errors', [
+        expect.objectContaining({
+          message: 'Authorization required',
+          extensions: {code: 'FORBIDDEN'},
         }),
       ])
     })

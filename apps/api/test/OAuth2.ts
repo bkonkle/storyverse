@@ -3,6 +3,7 @@ import axios from 'axios'
 export interface Credentials {
   token?: string
   username?: string
+  email?: string
 }
 
 const credentials: Credentials = {}
@@ -36,13 +37,14 @@ export const init = (processEnv = process.env) => {
       credentials.token = accessToken
     }
 
-    if (!credentials.username) {
+    if (!credentials.username || !credentials.email) {
       const {
-        data: {sub},
+        data: {sub, email},
       } = await axios.get(`https://${OAUTH2_DOMAIN}/userinfo`, {
         headers: {Authorization: `Bearer ${credentials.token}`},
       })
       credentials.username = sub
+      credentials.email = email
     }
 
     if (!altCredentials.token) {
@@ -60,13 +62,14 @@ export const init = (processEnv = process.env) => {
       altCredentials.token = altAccessToken
     }
 
-    if (!altCredentials.username) {
+    if (!altCredentials.username || !altCredentials.email) {
       const {
-        data: {sub: altSub},
+        data: {sub: altSub, email: altEmail},
       } = await axios.get(`https://${OAUTH2_DOMAIN}/userinfo`, {
         headers: {Authorization: `Bearer ${altCredentials.token}`},
       })
       altCredentials.username = altSub
+      altCredentials.email = altEmail
     }
   })
 
