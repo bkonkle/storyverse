@@ -13,7 +13,7 @@ export const handleLogin = (
   event.stopPropagation()
   event.nativeEvent.stopImmediatePropagation()
 
-  signIn()
+  signIn('auth0')
 }
 
 export const NavUser = () => {

@@ -8,7 +8,6 @@ import schema from '../../../schema.json'
 export const api = (ssrExchange: SSRExchange, _ctx?: NextUrqlContext) => {
   const {BASE_URL} = process.env
   const url = `${BASE_URL}/api/graphql`
-  console.log(`>- url ->`, url)
 
   return {
     url,

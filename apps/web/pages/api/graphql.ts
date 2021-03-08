@@ -39,10 +39,7 @@ const handleReq = (
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({
-    req,
-  })
-  console.log(`>- session ->`, session)
+  const session = await getSession({req})
 
   return new Promise((resolve, reject) => {
     req.url = rewritePath(req.url as string, {
@@ -59,10 +56,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const headers = {
       Authorization: session?.accessToken
         ? `Bearer ${session.accessToken}`
-        : 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiYnJhbmRvbi5rb25rbGUrc3Rvcnl2ZXJzZS1kZXYiLCJlbWFpbCI6ImJyYW5kb24ua29ua2xlK3N0b3J5dmVyc2UtZGV2QGdtYWlsLmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9jNzE4NjQyYzg2ZTNkOGZjMDNhMGExNWRhZjM5NDkwOT9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRmJyLnBuZyIsInN1YiI6ImF1dGgwfDVmY2VjMTkwOTQ1OTc5MDA3NTgyNDFjYyIsImlhdCI6MTYxNTIzMjQ2NiwiZXhwIjoxNjE3ODI0NDY2fQ.rfHQrMLhXCxXR7C565TXvEgnoKAZoIs3fryTdwZs2NQrNQ28F2VlR4mqYrK2y6URPIGtIlwjCUubTSDgfpQ9Hw',
+        : '',
     }
-
-    console.log(`>- headers ->`, headers)
 
     proxy
       .once('proxyReq', handleReq)
