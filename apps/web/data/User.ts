@@ -20,7 +20,6 @@ export const useInitUser = (options: {requireUser?: boolean}) => {
    */
   useEffect(() => {
     if (requireUser && !loading && !session) {
-      console.log('>- login redirect -<')
       router.push('/')
 
       return

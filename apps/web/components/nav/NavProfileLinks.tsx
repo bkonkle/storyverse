@@ -1,11 +1,16 @@
 import React, {RefObject} from 'react'
 import clsx from 'clsx'
+import {signOut} from 'next-auth/client'
 
 import NavLink from './NavLink'
 
 export interface NavProfileLinksProps {
   dropdown?: boolean
   profileLinks?: RefObject<HTMLDivElement>
+}
+
+const handleLogout = () => {
+  signOut()
 }
 
 export const NavProfileLinks = (props: NavProfileLinksProps) => {
@@ -42,7 +47,7 @@ export const NavProfileLinks = (props: NavProfileLinksProps) => {
       <NavLink dropdown={dropdown} href="#" profile>
         Settings
       </NavLink>
-      <NavLink dropdown={dropdown} href="/api/logout" profile>
+      <NavLink dropdown={dropdown} onClick={handleLogout} profile>
         Sign out
       </NavLink>
     </div>

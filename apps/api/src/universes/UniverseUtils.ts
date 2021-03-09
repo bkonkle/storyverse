@@ -30,14 +30,14 @@ export const getSubject = (id: string): UniverseSubject => ({
 
 export interface UniverseWithAuthInfo extends Universe {
   ownerProfile: Profile & {
-    user: User
+    user?: User | null
   }
 }
 
 export const isOwner = (
   universe: UniverseWithAuthInfo,
   username?: string | null
-) => username && username === universe.ownerProfile.user.username
+) => username && username === universe.ownerProfile.user?.username
 
 /**
  * These required fields cannot be set to `null`, they can only be `undefined` in order for Prisma

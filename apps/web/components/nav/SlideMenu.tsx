@@ -1,24 +1,33 @@
 import React, {RefObject} from 'react'
 import clsx from 'clsx'
-import NavLinks from './NavLinks'
-import Nameplate from './Nameplate'
+import {signIn} from 'next-auth/client'
 
+import {useGetCurrentUserQuery} from '../../data/Schema'
+import NavLinks from './NavLinks'
+import NavLink from './NavLink'
+import Nameplate from './Nameplate'
 import NavProfileLinks from './NavProfileLinks'
 import Notifications from './Notifications'
-import NavLink from './NavLink'
-import {useGetCurrentUserQuery} from '../../data/Schema'
 
 export interface SlideMenuProps {
   open: boolean
   slideMenu: RefObject<HTMLDivElement>
-  image?: string
+}
+
+export const handleLogin = (
+  event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+) => {
+  event.stopPropagation()
+  event.nativeEvent.stopImmediatePropagation()
+
+  signIn('auth0')
 }
 
 /**
  * The SlideMenu slides down from the top on devices with smaller screens.
  */
 export const SlideMenu = (props: SlideMenuProps) => {
-  const {image, slideMenu, open} = props
+  const {slideMenu, open} = props
   const [{fetching, data}] = useGetCurrentUserQuery()
 
   if (fetching) {
@@ -26,6 +35,7 @@ export const SlideMenu = (props: SlideMenuProps) => {
   }
 
   const user = data?.getCurrentUser
+  const image = user?.profile?.picture
 
   return (
     <div
@@ -38,20 +48,25 @@ export const SlideMenu = (props: SlideMenuProps) => {
           <>
             <div className={clsx('flex', 'items-center', 'px-5')}>
               <div className={clsx('flex-shrink-0')}>
-                <img
-                  className={clsx('h-10', 'w-10', 'rounded-full')}
-                  src={image}
-                  alt=""
-                />
+                {image && (
+                  <img
+                    className={clsx('h-10', 'w-10', 'rounded-full')}
+                    src={image}
+                    alt=""
+                  />
+                )}
               </div>
-              <Nameplate />
+              <Nameplate
+                name={user.profile?.displayName}
+                email={user.profile?.email}
+              />
               <Notifications slide />
             </div>
             <NavProfileLinks />
           </>
         ) : (
           <div className={clsx('px-2', 'pt-2', 'pb-3', 'space-y-1', 'sm:px-3')}>
-            <NavLink slide href="/api/auth/login">
+            <NavLink slide onClick={handleLogin}>
               Login
             </NavLink>
           </div>
@@ -59,11 +74,6 @@ export const SlideMenu = (props: SlideMenuProps) => {
       </div>
     </div>
   )
-}
-
-SlideMenu.defaultProps = {
-  image:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 
 export default SlideMenu

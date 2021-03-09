@@ -17,6 +17,7 @@ module.exports = configTailwind({
       white: colors.white,
       gray: colors.trueGray,
       teal: colors.teal,
+      red: colors.red,
     },
   },
 })

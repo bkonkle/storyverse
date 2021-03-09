@@ -6,11 +6,8 @@ import {NextUrqlContext, SSRExchange} from 'next-urql'
 import schema from '../../../schema.json'
 
 export const api = (ssrExchange: SSRExchange, _ctx?: NextUrqlContext) => {
-  const {BASE_URL} = process.env
-  const url = `${BASE_URL}/api/graphql`
-
   return {
-    url,
+    url: '/api/graphql',
     exchanges: [
       dedupExchange,
       cacheExchange({schema: (schema as unknown) as IntrospectionQuery}),

@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react'
 import Head from 'next/head'
+import {withUrqlClient} from 'next-urql'
 
 import App from '../components/App'
 import Home from '../components/home/Home'
 import {Pages, useStore} from '../data/Store'
 import PageHeader from '../components/page/PageHeader'
 import PageContent from '../components/page/PageContent'
+import {api} from '../data/ApiClient'
 
 export const HomePage = () => {
   const {setPage} = useStore((state) => state.pages)
@@ -27,4 +29,4 @@ export const HomePage = () => {
   )
 }
 
-export default HomePage
+export default withUrqlClient(api, {ssr: true})(HomePage)

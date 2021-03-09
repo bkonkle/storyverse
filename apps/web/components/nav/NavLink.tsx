@@ -50,6 +50,7 @@ export const NavLink = (props: NavLinkProps) => {
             ? ['bg-teal-400', 'text-white']
             : ['text-teal-800', 'hover:bg-teal-200'],
         ],
+    href || 'cursor-pointer',
     className
   )
 

@@ -1,22 +1,45 @@
 import React from 'react'
 import clsx from 'clsx'
 import {useForm} from 'react-hook-form'
+import ReactS3Uploader from 'react-s3-uploader'
+import * as z from 'zod'
 
 import Field from '../forms/Field'
 import Input from '../forms/Input'
 import FormButton from '../forms/FormButton'
 import Textarea from '../forms/Textarea'
-import ReactS3Uploader from 'react-s3-uploader'
-import {useGetCurrentUserQuery} from '../../data/Schema'
+import {
+  useGetCurrentUserQuery,
+  useCreateUniverseMutation,
+} from '../../data/Schema'
+import {zodResolver} from '../../utils/zod'
+
+const schema = z.object({
+  name: z.string().nonempty({message: 'A name is required.'}),
+  description: z.string(),
+  picture: z.string(),
+})
 
 export const CreateUniverse = () => {
-  const [{data}] = useGetCurrentUserQuery()
-  const user = data?.getCurrentUser
+  const [userData] = useGetCurrentUserQuery()
+  const [_, createUniverse] = useCreateUniverseMutation()
+  const user = userData.data?.getCurrentUser
 
-  const {register, handleSubmit} = useForm()
+  const {register, handleSubmit, setValue, errors} = useForm({
+    resolver: zodResolver(schema),
+  })
 
-  function onSubmit(data: unknown) {
-    console.log(`>- data ->`, data)
+  const onSubmit = (data: z.infer<typeof schema>) => {
+    if (!user?.profile?.id) {
+      throw new Error('No User profile id found')
+    }
+
+    createUniverse({
+      input: {
+        ...data,
+        ownerProfileId: user.profile.id,
+      },
+    })
   }
 
   return (
@@ -27,6 +50,7 @@ export const CreateUniverse = () => {
             <Input
               name="name"
               type="text"
+              error={errors.name}
               placeholder="My Incredible Universe"
               ref={register}
             />
@@ -41,13 +65,17 @@ export const CreateUniverse = () => {
                 signingUrl="/api/s3/sign"
                 signingUrlMethod="GET"
                 accept="image/*"
-                s3path={`uploads/${user.username}/`}
+                s3path={`${user.username}/`}
                 autoUpload={true}
-                onProgress={(...args) => {
-                  console.log(args)
+                onFinish={(response, _file) => {
+                  setValue(
+                    'picture',
+                    `${process.env.BASE_URL}${response.publicUrl}`
+                  )
                 }}
               />
             )}
+            <Input name="picture" type="hidden" ref={register} />
           </Field>
           <div className={clsx('flex flex-row-reverse')}>
             <FormButton primary>Create</FormButton>

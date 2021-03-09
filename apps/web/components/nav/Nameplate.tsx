@@ -2,13 +2,8 @@ import React from 'react'
 import clsx from 'clsx'
 
 export interface NameplateProps {
-  name: string
-  email: string
-}
-
-const defaultProps: NameplateProps = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
+  name?: string | null
+  email?: string | null
 }
 
 export const Nameplate = (props: NameplateProps) => {
@@ -39,7 +34,5 @@ export const Nameplate = (props: NameplateProps) => {
     </div>
   )
 }
-
-Nameplate.defaultProps = defaultProps
 
 export default Nameplate

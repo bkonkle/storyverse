@@ -1,0 +1,14 @@
+fragment UniverseData on Universe {
+  id
+  name
+  description
+  picture
+}
+
+mutation CreateUniverse($input: CreateUniverseInput!) {
+  createUniverse(input: $input) {
+    universe {
+      ...UniverseData
+    }
+  }
+}

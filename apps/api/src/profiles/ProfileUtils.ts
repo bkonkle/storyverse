@@ -14,7 +14,7 @@ export type IncludeAll = {
 }
 
 export const isOwner = (
-  profile: Profile & {user?: User},
+  profile: Profile & {user?: User | null},
   username?: string | null
 ) => username && profile.user && username === profile.user?.username
 

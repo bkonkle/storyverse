@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react'
 import Head from 'next/head'
+import {withUrqlClient} from 'next-urql'
 
 import App from '../../components/App'
 import Universes from '../../components/universes/Universes'
+import {api} from '../../data/ApiClient'
 import {Pages, useStore} from '../../data/Store'
 import PageHeader from '../../components/page/PageHeader'
 import PageContent from '../../components/page/PageContent'
@@ -15,7 +17,7 @@ export const UniversesPage = () => {
   }, [setPage])
 
   return (
-    <App requireUser>
+    <App>
       <Head>
         <title>Storyverse - Universes</title>
       </Head>
@@ -27,4 +29,4 @@ export const UniversesPage = () => {
   )
 }
 
-export default UniversesPage
+export default withUrqlClient(api, {ssr: true})(UniversesPage)

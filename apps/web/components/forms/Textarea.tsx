@@ -7,7 +7,7 @@ export type TextareaProps = React.DetailedHTMLProps<
 >
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  (props) => {
+  (props, ref) => {
     const {className, children, ...rest} = props
 
     return (
@@ -25,6 +25,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           'focus:ring-opacity-50',
           className
         )}
+        ref={ref}
         {...rest}
       >
         {children}

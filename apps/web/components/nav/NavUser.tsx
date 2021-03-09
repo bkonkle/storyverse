@@ -24,6 +24,7 @@ export const NavUser = () => {
   }
 
   const user = data?.getCurrentUser
+  const image = user?.profile?.picture
 
   const containerClasses = clsx('hidden', 'md:block')
 
@@ -39,7 +40,7 @@ export const NavUser = () => {
     <div className={containerClasses}>
       <div className={clsx('ml-4', 'flex', 'items-center', 'md:ml-6')}>
         <Notifications />
-        <NavProfile />
+        <NavProfile image={image || undefined} />
       </div>
     </div>
   )

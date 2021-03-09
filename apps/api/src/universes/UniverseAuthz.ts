@@ -28,7 +28,7 @@ export default class UniverseAuthz {
       throw new UserInputError('The specified owner `Profile` was not found.')
     }
 
-    if (username !== ownerProfile.user.username) {
+    if (username !== ownerProfile.user?.username) {
       throw new ForbiddenError('Authorization required')
     }
 
