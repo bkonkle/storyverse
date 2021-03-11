@@ -127,6 +127,7 @@ enum ProfilesOrderBy {
 input CreateSeriesInput {
   name: String!
   description: JSONObject
+  picture: String
   universeId: ID!
 }
 """Input to update an existing Series"""
@@ -185,6 +186,7 @@ input CreateStoryInput {
   issue: Int
   summary: JSONObject
   content: JSONObject
+  picture: String
   seriesId: ID!
 }
 """Input to update an existing Story"""
@@ -250,6 +252,7 @@ scalar JSONObject
 input CreateUniverseInput {
   name: String!
   description: JSONObject
+  picture: String
   ownerProfileId: ID!
 }
 """Input to update an existing Universe"""

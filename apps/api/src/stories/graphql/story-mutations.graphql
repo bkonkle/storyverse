@@ -24,6 +24,7 @@ input CreateStoryInput {
   issue: Int
   summary: JSONObject
   content: JSONObject
+  picture: String
   seriesId: ID!
 }
 
