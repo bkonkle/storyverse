@@ -30,6 +30,7 @@ Input to create a new Universe
 input CreateUniverseInput {
   name: String!
   description: JSONObject
+  picture: String
   ownerProfileId: ID!
 }
 

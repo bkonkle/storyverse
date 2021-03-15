@@ -30,6 +30,7 @@ Input to create a new Series
 input CreateSeriesInput {
   name: String!
   description: JSONObject
+  picture: String
   universeId: ID!
 }
 
