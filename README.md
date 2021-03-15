@@ -8,7 +8,7 @@ This application is being developed as a demo project for a screencast series. S
 
 ## Overview
 
-If text is more your style, head over to the [Overview](docs/Overview) doc for an article about the motivations for this project, details about the architecture and why it was chosen, and links to other articles (coming soon).
+If text is more your style, head over to the [Overview](docs/Overview.md) doc for an article about the motivations for this project, details about the architecture and why it was chosen, and links to other articles (coming soon).
 
 ## Project Layout
 
