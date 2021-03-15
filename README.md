@@ -2,6 +2,14 @@
 
 A collaborative storytelling app. Create a story universe, invite friends to contribute stories to series in your universe, and follow your favorites!
 
+## Screencasts
+
+This application is being developed as a demo project for a screencast series. Stay tuned for more info!
+
+## Overview
+
+If text is more your style, head over to the [Overview](docs/Overview) doc for an article about the motivations for this project, details about the architecture and why it was chosen, and links to other articles (coming soon).
+
 ## Project Layout
 
 This project is packaged with [nx](https://nx.dev/). The following apps are available:
@@ -15,10 +23,6 @@ A libs folder is also available for reusable modules available to use across mul
 - [components](libs/shared/components) - Shared React components for the front end.
 
 These are just stubs, and don't hold much yet.
-
-## Screencasts
-
-This application is being developed as a demo project for a screencast series. Stay tuned for more info!
 
 ## Tools
 

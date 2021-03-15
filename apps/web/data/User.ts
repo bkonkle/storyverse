@@ -12,6 +12,7 @@ export const useInitUser = (options: {requireUser?: boolean}) => {
   const router = useRouter()
 
   const user = userData.data?.getOrCreateCurrentUser.user
+  const error = userData.error
 
   const loading = sessionLoading || userData.fetching
 
@@ -26,6 +27,16 @@ export const useInitUser = (options: {requireUser?: boolean}) => {
     }
 
     if (session && !user && !loading) {
+      if (error) {
+        if (error.response?.status === 401) {
+          console.debug('Unauthorized')
+        } else {
+          console.log('Error while fetching current user:', error)
+        }
+
+        return
+      }
+
       const user = session.user as User & {sub: string}
       if (!user.email) {
         throw new Error('User email not found on session')
@@ -41,7 +52,15 @@ export const useInitUser = (options: {requireUser?: boolean}) => {
         },
       })
     }
-  }, [session, loading, user, requireUser, getOrCreateCurrentUser, router])
+  }, [
+    session,
+    loading,
+    error,
+    user,
+    requireUser,
+    getOrCreateCurrentUser,
+    router,
+  ])
 
   return {user, loading}
 }

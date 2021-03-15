@@ -2,7 +2,7 @@
 
 ## Bootstrapping
 
-To build a new account from scratch, first create a `<account-name>-root` IAM user to act as the "superadmin" for the account. Replace `<account-name>` with a name for this account - such as "dev". Pick "AdministratorAccess" from the "Set permissions" interface, and save the access key details to `~/.aws/credentials` like this:
+To build a new account from scratch, first create an `<account-name>-root` IAM user to act as the "superadmin" for the account. Replace `<account-name>` with a name for this account - such as "dev". Pick "AdministratorAccess" from the "Set permissions" interface, and save the access key details to `~/.aws/credentials` like this:
 
 ```ini
 [dev-root]
