@@ -71,7 +71,7 @@
         "generate": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "npm run generate"
+            "command": "yarn generate"
           }
         }
       }
@@ -121,14 +121,14 @@
         "generate": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "npm run generate:api"
+            "command": "yarn generate:api"
           }
         },
         "migrate": {
           "executor": "@nrwl/workspace:run-commands",
           "outputs": [],
           "options": {
-            "command": "npm run migrate:deploy"
+            "command": "yarn migrate:deploy"
           }
         }
       }
