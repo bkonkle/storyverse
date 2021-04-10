@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import App from '../components/App'
+import Deprecated from '../components/layouts/Deprecated'
 import {useStore} from '../data/Store'
 import {api} from '../data/ApiClient'
 
@@ -15,7 +15,7 @@ export const Index = () => {
   }, [setPage])
 
   return (
-    <App>
+    <Deprecated>
       <Head>
         <title>Storyverse</title>
       </Head>
@@ -59,7 +59,7 @@ export const Index = () => {
           </div>
         </div>
       </main>
-    </App>
+    </Deprecated>
   )
 }
 

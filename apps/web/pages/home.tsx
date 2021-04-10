@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import App from '../components/App'
+import Deprecated from '../components/layouts/Deprecated'
 import Home from '../components/home/Home'
 import {Pages, useStore} from '../data/Store'
 import PageHeader from '../components/page/PageHeader'
@@ -17,7 +17,7 @@ export const HomePage = () => {
   }, [setPage])
 
   return (
-    <App requireUser>
+    <Deprecated requireUser>
       <Head>
         <title>Storyverse - Home</title>
       </Head>
@@ -25,7 +25,7 @@ export const HomePage = () => {
       <PageContent>
         <Home />
       </PageContent>
-    </App>
+    </Deprecated>
   )
 }
 

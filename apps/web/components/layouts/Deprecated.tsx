@@ -2,16 +2,16 @@ import React, {ReactNode} from 'react'
 import Head from 'next/head'
 import clsx from 'clsx'
 
-import Navigation from './nav/Navigation'
+import {useInitUser} from '../../data/User'
+import Navigation from '../nav/Navigation'
 
-export interface LayoutProps {
-  children?: ReactNode
+export interface AppProps {
+  requireUser?: boolean
+  children: ReactNode
 }
-
-export const siteTitle = 'Storyverse'
-
-export const Layout = (props: LayoutProps) => {
-  const {children} = props
+export const App = (props: AppProps) => {
+  const {children, requireUser} = props
+  const {user, loading} = useInitUser({requireUser})
 
   return (
     <div className={clsx('bg-gray-100')}>
@@ -24,18 +24,18 @@ export const Layout = (props: LayoutProps) => {
         <meta
           property="og:image"
           content={`https://og-image.now.sh/${encodeURI(
-            siteTitle
+            'Storyverse'
           )}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.zeit.co%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
         />
-        <meta name="og:title" content={siteTitle} />
+        <meta name="og:title" content="Storyverse" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <Navigation />
 
-      <main>{children}</main>
+      <main>{(requireUser && loading) || !user ? null : children}</main>
     </div>
   )
 }
 
-export default Layout
+export default App
