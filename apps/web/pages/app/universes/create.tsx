@@ -3,11 +3,11 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import App from '../../components/layouts/App'
-import CardSettings from '../../components/cards/CardSettings'
-import CardProfile from '../../components/cards/CardProfile'
-import {Pages, useStore} from '../../data/Store'
-import {api} from '../../data/ApiClient'
+import App from '../../../components/layouts/App'
+import CardSettings from '../../../components/cards/CardSettings'
+import CardProfile from '../../../components/cards/CardProfile'
+import {Pages, useStore} from '../../../data/Store'
+import {api} from '../../../data/ApiClient'
 
 export function CreateUniversePage() {
   const {setPage} = useStore((state) => state.pages)

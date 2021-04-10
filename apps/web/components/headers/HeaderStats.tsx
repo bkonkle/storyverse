@@ -2,6 +2,10 @@ import React from 'react'
 
 import CardStats from '../cards/CardStats'
 
+/**
+ * DEPRECATED
+ */
+
 export default function HeaderStats() {
   return (
     <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">

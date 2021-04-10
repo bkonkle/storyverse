@@ -2,7 +2,9 @@ import React from 'react'
 import {AppProps} from 'next/app'
 import Head from 'next/head'
 import {Provider} from 'next-auth/client'
+
 import 'tailwindcss/tailwind.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 export default function NextApp({Component, pageProps}: AppProps) {
   return (

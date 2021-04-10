@@ -54,7 +54,7 @@ export default function UserDropdown() {
                 'border-none',
                 'shadow-lg'
               )}
-              src="/img/team-1-800x800.jpg"
+              src="https://demos.creative-tim.com/notus-nextjs/img/team-1-800x800.jpg"
             />
           </span>
         </div>
