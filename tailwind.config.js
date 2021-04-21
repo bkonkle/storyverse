@@ -1,7 +1,8 @@
-const {PURGE_MATCH_FILES} = require('./tools/config/tailwind/definitions')
-
 module.exports = {
-  purge: [`${__dirname}/libs/shared/components/src/${PURGE_MATCH_FILES}`],
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    content: [`${__dirname}/libs/shared/components/src/**/*.{js,ts,jsx,tsx}`],
+  },
   darkMode: false, // or 'media' or 'class'
   variants: [
     'responsive',

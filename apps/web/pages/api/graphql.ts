@@ -2,7 +2,7 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import httpProxy from 'http-proxy'
 import http from 'http'
-import {getToken} from 'next-auth/jwt'
+import jwt from 'next-auth/jwt'
 
 export interface Auth0Token {
   sub: string
@@ -49,10 +49,11 @@ const handleReq = (
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const token = (await getToken({
+  const response = await jwt.getToken({
     req,
     secret: process.env.OAUTH2_JWT_SECRET || '',
-  })) as Auth0Token
+  })
+  const token = (response as unknown) as Auth0Token
 
   return new Promise((resolve, reject) => {
     req.url = rewritePath(req.url as string, {

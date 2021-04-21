@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const {appRootPath} = require('@nrwl/workspace/src/utils/app-root')
 const colors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
-const {appRootPath} = require('@nrwl/workspace/src/utils/app-root')
 
-const {
-  PURGE_MATCH_FILES,
-} = require(`${appRootPath}/tools/config/tailwind/definitions`)
-const configTailwind = require(`${appRootPath}/tools/config/tailwind`)
+const rootConfig = require(`${appRootPath}/tailwind.config.js`)
 
-module.exports = configTailwind({
-  purge: [`${__dirname}/src/${PURGE_MATCH_FILES}`],
+module.exports = {
+  ...rootConfig,
+  purge: {
+    ...rootConfig.purge,
+    content: [
+      ...rootConfig.purge.content,
+      `${__dirname}/{components,pages}/**/*.{js,ts,jsx,tsx}`,
+    ],
+  },
   theme: {
     colors,
     extend: {
@@ -72,6 +76,7 @@ module.exports = configTailwind({
     },
   },
   plugins: [
+    ...rootConfig.plugins,
     plugin(function ({addComponents, theme}) {
       const screens = theme('screens', {})
       addComponents([
@@ -116,4 +121,4 @@ module.exports = configTailwind({
       ])
     }),
   ],
-})
+}

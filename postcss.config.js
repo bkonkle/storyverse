@@ -1,37 +1,21 @@
-const fs = require('fs');
-const workspaceConfig = require('./workspace.json');
+const fs = require('fs')
+const workspaceConfig = require('./workspace.json')
 
-const TAILWIND_CONFIG_FILE = 'tailwind.config.js';
+const PROCESS = process.argv[3]
+const [project] = PROCESS.split(':')
 
-const PROCESS = process.argv[3];
-const [project, runner] = PROCESS.split(':');
+const projectConfig = workspaceConfig.projects[project]
 
-const STORYBOOK_REGEX = /storybook/gi;
+const plugins = {autoprefixer: {}}
 
-let plugins = { autoprefixer: {} };
+if (projectConfig && projectConfig.projectType === 'application') {
+  const config = fs.existsSync(`${projectConfig.root}/tailwind.config.js`)
+    ? `./${projectConfig.root}/tailwind.config.js`
+    : './tailwind.config.js'
 
-const projectConfig = workspaceConfig.projects[project];
-
-if (
-  projectConfig &&
-  (STORYBOOK_REGEX.test(runner) || projectConfig.projectType === 'application')
-) {
-  let config = undefined;
-  if (fs.existsSync(`${projectConfig.root}/${TAILWIND_CONFIG_FILE}`)) {
-    config = `./${projectConfig.root}/${TAILWIND_CONFIG_FILE}`;
-  } else if (fs.existsSync(TAILWIND_CONFIG_FILE)) {
-    config = `./${TAILWIND_CONFIG_FILE}`;
-  }
-
-  if (config) {
-    plugins = {
-      'postcss-import': {},
-      tailwindcss: { config: `${config}` },
-      ...plugins,
-    };
-  }
+  plugins['@tailwindcss/jit'] = {config: `${config}`}
 }
 
 module.exports = {
   plugins,
-};
+}
