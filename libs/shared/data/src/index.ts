@@ -1,1 +1,5 @@
-export * from './lib/shared-data'
+export * as ApiClient from './ApiClient'
+export * as Aws from './Aws'
+export * as Schema from './Schema'
+export * as Store from './Store'
+export * as User from './User'

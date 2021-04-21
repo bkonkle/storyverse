@@ -27,6 +27,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "paths": {
+      "@storyverse/shared/data": ["libs/shared/data/src/index.ts"],
       "@storyverse/shared/data/*": ["libs/shared/data/src/*"]
     }
   },

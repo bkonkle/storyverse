@@ -20,7 +20,7 @@ This project is packaged with [nx](https://nx.dev/). The following apps are avai
 A libs folder is also available for reusable modules available to use across multiple apps:
 
 - [assets](libs/shared/assets) - Shared static assets for the front end.
-- [components](libs/shared/components) - Shared React components for the front end.
+- [data](libs/shared/data) - Shared GraphQL access for the front end.
 
 These are just stubs, and don't hold much yet.
 
