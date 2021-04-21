@@ -2,7 +2,7 @@ import React, {RefObject} from 'react'
 import clsx from 'clsx'
 import {signIn} from 'next-auth/client'
 
-import {useGetCurrentUserQuery} from '@storyverse/shared/data/Schema'
+import {useGetCurrentUserQuery} from '@storyverse/graphql/Schema'
 import NavLinks from './NavLinks'
 import NavLink from './NavLink'
 import Nameplate from './Nameplate'

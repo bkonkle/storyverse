@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateStoryInput, Story} from '../../src/Schema'
+import {CreateStoryInput, Story} from '@storyverse/graphql/ApiSchema'
 
 export const makeCreateInput = (
   overrides?: Partial<CreateStoryInput> | null

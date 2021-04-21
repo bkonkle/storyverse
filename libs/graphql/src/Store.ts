@@ -5,6 +5,7 @@ export enum Pages {
   Stories,
   Series,
   Universes,
+  User,
 }
 
 export interface State extends ZustandState {

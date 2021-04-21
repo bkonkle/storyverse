@@ -1,7 +1,8 @@
 import {ForbiddenError, UserInputError} from 'apollo-server-core'
 import {PrismaClient} from '@prisma/client'
 
-import {User} from '../Schema'
+import {User} from '@storyverse/graphql/ApiSchema'
+
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import {isOwner} from './ProfileUtils'

@@ -3,7 +3,7 @@ import {IntrospectionQuery} from 'graphql'
 import {dedupExchange, fetchExchange} from 'urql'
 import {NextUrqlContext, SSRExchange} from 'next-urql'
 
-import schema from '../../../../schema.json'
+import schema from '../../../schema.json'
 
 export const api = (ssrExchange: SSRExchange, _ctx?: NextUrqlContext) => {
   return {

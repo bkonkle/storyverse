@@ -7,7 +7,7 @@ import {
   UpdateProfileInput,
   Profile,
   User,
-} from '../Schema'
+} from '@storyverse/graphql/ApiSchema'
 
 export type IncludeAll = {
   user: true

@@ -27,8 +27,8 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "paths": {
-      "@storyverse/shared/data": ["libs/shared/data/src/index.ts"],
-      "@storyverse/shared/data/*": ["libs/shared/data/src/*"]
+      "@storyverse/graphql": ["libs/graphql/src/index.ts"],
+      "@storyverse/graphql/*": ["libs/graphql/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

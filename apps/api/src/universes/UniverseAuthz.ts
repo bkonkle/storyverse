@@ -1,13 +1,14 @@
 import {PrismaClient, Profile} from '@prisma/client'
 import {ForbiddenError, UserInputError} from 'apollo-server-core'
 
+import {UniverseRoles} from '@storyverse/graphql/ApiSchema'
+
 import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'
 import {isOwner, getSubject} from './UniverseUtils'
 import {Update, Delete, ManageRoles} from './UniverseRoles'
 import {Permission} from '../authz/RolesRegistry'
-import {UniverseRoles} from '../Schema'
 
 export default class UniverseAuthz {
   private readonly prisma: PrismaClient

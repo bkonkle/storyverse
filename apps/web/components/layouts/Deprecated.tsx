@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react'
 import Head from 'next/head'
 import clsx from 'clsx'
 
-import {useInitUser} from '@storyverse/shared/data/User'
+import {useInitUser} from '@storyverse/graphql/User'
 import Navigation from '../nav/Navigation'
 
 export interface AppProps {

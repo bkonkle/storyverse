@@ -1,9 +1,14 @@
 import {camelCase} from 'lodash'
 import {Prisma} from '@prisma/client'
 
+import {
+  StoryCondition,
+  StoriesOrderBy,
+  UpdateStoryInput,
+} from '@storyverse/graphql/ApiSchema'
+
 import {Subject} from '../authz/AuthzService'
 import * as SeriesUtils from '../series/SeriesUtils'
-import {StoryCondition, StoriesOrderBy, UpdateStoryInput} from '../Schema'
 
 export type IncludeAll = {
   series: {

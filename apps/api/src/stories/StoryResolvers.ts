@@ -1,6 +1,11 @@
 import {PrismaClient} from '@prisma/client'
 
-import {Resolvers, QueryResolvers, MutationResolvers} from '../Schema'
+import {
+  Resolvers,
+  QueryResolvers,
+  MutationResolvers,
+} from '@storyverse/graphql/ApiSchema'
+
 import {getUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
 import Prisma, {includeFromSelections} from '../utils/Prisma'

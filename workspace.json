@@ -1,10 +1,21 @@
 {
   "version": 2,
-  "cli": {"defaultCollection": "@nrwl/next"},
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
   "defaultProject": "web",
   "generators": {
-    "@nrwl/react": {"application": {"babel": true}},
-    "@nrwl/next": {"application": {"style": "css", "linter": "eslint"}}
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
   },
   "projects": {
     "web": {
@@ -16,19 +27,33 @@
         "build": {
           "executor": "@nrwl/next:build",
           "outputs": ["{options.outputPath}"],
-          "options": {"root": "apps/web", "outputPath": "dist/apps/web"},
-          "configurations": {"production": {}}
+          "options": {
+            "root": "apps/web",
+            "outputPath": "dist/apps/web"
+          },
+          "configurations": {
+            "production": {}
+          }
         },
         "serve": {
           "executor": "@nrwl/next:server",
-          "options": {"buildTarget": "web:build", "dev": true, "port": 3000},
+          "options": {
+            "buildTarget": "web:build",
+            "dev": true,
+            "port": 3000
+          },
           "configurations": {
-            "production": {"buildTarget": "web:build:production", "dev": false}
+            "production": {
+              "buildTarget": "web:build:production",
+              "dev": false
+            }
           }
         },
         "export": {
           "executor": "@nrwl/next:export",
-          "options": {"buildTarget": "web:build:production"}
+          "options": {
+            "buildTarget": "web:build:production"
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -40,11 +65,15 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {"lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]}
+          "options": {
+            "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]
+          }
         },
         "generate": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": {"command": "yarn generate"}
+          "options": {
+            "command": "yarn generate"
+          }
         }
       }
     },
@@ -72,11 +101,15 @@
         },
         "serve": {
           "executor": "@nrwl/node:execute",
-          "options": {"buildTarget": "api:build"}
+          "options": {
+            "buildTarget": "api:build"
+          }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {"lintFilePatterns": ["apps/api/**/*.ts"]}
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -88,32 +121,36 @@
         },
         "generate": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": {"command": "yarn generate:api"}
+          "options": {
+            "command": "yarn generate:api"
+          }
         },
         "migrate": {
           "executor": "@nrwl/workspace:run-commands",
           "outputs": [],
-          "options": {"command": "yarn migrate:deploy"}
+          "options": {
+            "command": "yarn migrate:deploy"
+          }
         }
       }
     },
-    "shared-data": {
+    "graphql": {
       "projectType": "library",
-      "root": "libs/shared/data",
-      "sourceRoot": "libs/shared/data/src",
+      "root": "libs/graphql",
+      "sourceRoot": "libs/graphql/src",
       "prefix": "storyverse",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/data/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/graphql/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/data"],
+          "outputs": ["coverage/libs/graphql"],
           "options": {
-            "jestConfig": "libs/shared/data/jest.config.js",
+            "jestConfig": "libs/graphql/jest.config.js",
             "passWithNoTests": true
           }
         }

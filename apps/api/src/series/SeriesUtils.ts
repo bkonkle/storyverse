@@ -1,9 +1,14 @@
 import {camelCase} from 'lodash'
 import {Prisma} from '@prisma/client'
 
+import {
+  SeriesCondition,
+  SeriesOrderBy,
+  UpdateSeriesInput,
+} from '@storyverse/graphql/ApiSchema'
+
 import {Subject} from '../authz/AuthzService'
 import * as UniverseUtils from '../universes/UniverseUtils'
-import {SeriesCondition, SeriesOrderBy, UpdateSeriesInput} from '../Schema'
 
 export type IncludeAll = {
   universe: {

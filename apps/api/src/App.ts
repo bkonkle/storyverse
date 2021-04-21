@@ -9,8 +9,9 @@ import morgan from 'morgan'
 import jwt from 'express-jwt'
 import jwks from 'jwks-rsa'
 
+import {Resolvers} from '@storyverse/graphql/ApiSchema'
+
 import {Vars, getVars} from './config/Environment'
-import {Resolvers} from './Schema'
 import GraphQLDateTime from './utils/GraphQLDateTime'
 import UserResolvers from './users/UserResolvers'
 import ProfileResolvers from './profiles/ProfileResolvers'

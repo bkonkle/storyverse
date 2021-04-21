@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as Fixtures from '../../test/Fixtures'
-import {Story} from '@storyverse/shared/data/Schema'
+import {Story} from '@storyverse/graphql/Schema'
 import CardList from '../cards/CardList'
 import Card from '../cards/Card'
 

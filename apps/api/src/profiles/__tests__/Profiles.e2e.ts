@@ -2,13 +2,20 @@
 import faker from 'faker'
 import {omit, pick} from 'lodash'
 
+import {
+  Mutation,
+  Query,
+  CreateProfileInput,
+  Profile,
+  User,
+} from '@storyverse/graphql/ApiSchema'
+
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'
 import GraphQL from '../../../test/GraphQL'
 import Validation from '../../../test/Validation'
 import {dbCleaner} from '../../../test/Prisma'
 import ProfileFactory from '../../../test/factories/ProfileFactory'
-import {Mutation, Query, CreateProfileInput, Profile, User} from '../../Schema'
 import TestData from '../../../test/TestData'
 import Prisma from '../../utils/Prisma'
 

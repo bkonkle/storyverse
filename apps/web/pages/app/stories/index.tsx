@@ -7,17 +7,17 @@ import App from '../../../components/layouts/App'
 import {Pages, useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
 
-export function CreateUniversePage() {
+export function StoriesPage() {
   const {setPage} = useStore((state) => state.pages)
 
   useEffect(() => {
-    setPage(Pages.Universes)
+    setPage(Pages.Stories)
   }, [setPage])
 
   return (
     <App>
       <Head>
-        <title>Storyverse - Create Universe</title>
+        <title>Storyverse - Stories</title>
       </Head>
       <div className={clsx('flex', 'flex-wrap')}>
         <div className={clsx('w-full', 'lg:w-8/12', 'px-4')}></div>
@@ -27,4 +27,4 @@ export function CreateUniversePage() {
   )
 }
 
-export default withUrqlClient(api, {ssr: true})(CreateUniversePage)
+export default withUrqlClient(api, {ssr: true})(StoriesPage)

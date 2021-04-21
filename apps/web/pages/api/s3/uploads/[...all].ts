@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 
-import {getAws} from '@storyverse/shared/data/Aws'
+import {getAws} from '@storyverse/graphql/Aws'
 
 const S3_BUCKET = 'storyverse-dev-storage'
 
