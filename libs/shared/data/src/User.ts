@@ -3,7 +3,7 @@ import {useRouter} from 'next/router'
 import {User} from 'next-auth'
 import {useSession} from 'next-auth/client'
 
-import {useGetOrCreateCurrentUserMutation} from '../data/Schema'
+import {useGetOrCreateCurrentUserMutation} from './Schema'
 
 export const useInitUser = (options: {requireUser?: boolean}) => {
   const {requireUser} = options

@@ -11,7 +11,7 @@ import Textarea from '../forms/Textarea'
 import {
   useGetCurrentUserQuery,
   useCreateUniverseMutation,
-} from '../../data/Schema'
+} from '@storyverse/shared/data/Schema'
 import {zodResolver} from '../../utils/zod'
 
 const schema = z.object({

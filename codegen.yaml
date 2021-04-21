@@ -1,7 +1,7 @@
 schema:
   - apps/api/src/**/*.graphql
 documents:
-  - apps/web/**/*.graphql
+  - libs/shared/data/**/*.graphql
 generates:
   apps/api/src/Schema.ts:
     hooks:
@@ -22,7 +22,7 @@ generates:
         DateTime: Date
         JSON: JSON
         JSONObject: {}
-  apps/web/data/Schema.tsx:
+  libs/shared/data/src/Schema.tsx:
     hooks:
       afterOneFileWrite:
         - prettier --write

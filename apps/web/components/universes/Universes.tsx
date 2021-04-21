@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as Fixtures from '../../test/Fixtures'
-import {Universe} from '../../data/Schema'
+import {Universe} from '@storyverse/shared/data/Schema'
 import CardList from '../cards/CardList'
 import Card from '../cards/Card'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as Fixtures from '../../test/Fixtures'
-import {Series as SeriesData} from '../../data/Schema'
+import {Series as SeriesData} from '@storyverse/shared/data/Schema'
 import CardList from '../cards/CardList'
 import Card from '../cards/Card'
 

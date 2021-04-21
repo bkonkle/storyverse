@@ -4,10 +4,10 @@ import {withUrqlClient} from 'next-urql'
 
 import Deprecated from '../components/layouts/Deprecated'
 import Home from '../components/home/Home'
-import {Pages, useStore} from '../data/Store'
+import {Pages, useStore} from '@storyverse/shared/data/Store'
 import PageHeader from '../components/page/PageHeader'
 import PageContent from '../components/page/PageContent'
-import {api} from '../data/ApiClient'
+import {api} from '@storyverse/shared/data/ApiClient'
 
 export const HomePage = () => {
   const {setPage} = useStore((state) => state.pages)

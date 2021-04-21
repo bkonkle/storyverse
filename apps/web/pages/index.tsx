@@ -4,8 +4,8 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
 import Deprecated from '../components/layouts/Deprecated'
-import {useStore} from '../data/Store'
-import {api} from '../data/ApiClient'
+import {useStore} from '@storyverse/shared/data/Store'
+import {api} from '@storyverse/shared/data/ApiClient'
 
 export const Index = () => {
   const {setPage} = useStore((state) => state.pages)

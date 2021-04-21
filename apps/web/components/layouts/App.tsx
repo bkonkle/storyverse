@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react'
 
-import {useInitUser} from '../../data/User'
+import {useInitUser} from '@storyverse/shared/data/User'
 import AdminNavbar from '../../components/navbars/AdminNavbar'
 import Sidebar from '../../components/sidebars/Sidebar'
 import FooterAdmin from '../../components/footers/FooterAdmin'

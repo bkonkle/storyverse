@@ -13,6 +13,7 @@
   },
   "projects": {
     "web": {"tags": []},
-    "api": {"tags": []}
+    "api": {"tags": []},
+    "shared-data": {"tags": []}
   }
 }

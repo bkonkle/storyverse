@@ -4,8 +4,8 @@ import {withUrqlClient} from 'next-urql'
 
 import Deprecated from '../components/layouts/Deprecated'
 import Stories from '../components/stories/Stories'
-import {api} from '../data/ApiClient'
-import {Pages, useStore} from '../data/Store'
+import {api} from '@storyverse/shared/data/ApiClient'
+import {Pages, useStore} from '@storyverse/shared/data/Store'
 import PageHeader from '../components/page/PageHeader'
 import PageContent from '../components/page/PageContent'
 

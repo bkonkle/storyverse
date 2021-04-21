@@ -6,8 +6,8 @@ import {withUrqlClient} from 'next-urql'
 import App from '../../../components/layouts/App'
 import CardSettings from '../../../components/cards/CardSettings'
 import CardProfile from '../../../components/cards/CardProfile'
-import {Pages, useStore} from '../../../data/Store'
-import {api} from '../../../data/ApiClient'
+import {Pages, useStore} from '@storyverse/shared/data/Store'
+import {api} from '@storyverse/shared/data/ApiClient'
 
 export function CreateUniversePage() {
   const {setPage} = useStore((state) => state.pages)

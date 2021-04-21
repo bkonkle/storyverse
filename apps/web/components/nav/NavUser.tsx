@@ -5,7 +5,7 @@ import {signIn} from 'next-auth/client'
 import NavProfile from './NavProfile'
 import Notifications from './Notifications'
 import NavLink from './NavLink'
-import {useGetCurrentUserQuery} from '../../data/Schema'
+import {useGetCurrentUserQuery} from '@storyverse/shared/data/Schema'
 
 export const handleLogin = (
   event: React.MouseEvent<HTMLAnchorElement, MouseEvent>

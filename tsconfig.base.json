@@ -14,8 +14,6 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {},
-
     "downlevelIteration": true,
     "noErrorTruncation": true,
     "noFallthroughCasesInSwitch": true,
@@ -27,7 +25,10 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "strictPropertyInitialization": true
+    "strictPropertyInitialization": true,
+    "paths": {
+      "@storyverse/shared/data/*": ["libs/shared/data/src/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

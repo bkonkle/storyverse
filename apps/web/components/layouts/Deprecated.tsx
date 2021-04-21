@@ -2,13 +2,14 @@ import React, {ReactNode} from 'react'
 import Head from 'next/head'
 import clsx from 'clsx'
 
-import {useInitUser} from '../../data/User'
+import {useInitUser} from '@storyverse/shared/data/User'
 import Navigation from '../nav/Navigation'
 
 export interface AppProps {
   requireUser?: boolean
   children: ReactNode
 }
+
 export const App = (props: AppProps) => {
   const {children, requireUser} = props
   const {user, loading} = useInitUser({requireUser})
