@@ -3,6 +3,7 @@ import Head from 'next/head'
 import clsx from 'clsx'
 
 import {useInitUser} from '@storyverse/graphql/User'
+
 import Navigation from '../nav/Navigation'
 
 export interface AppProps {

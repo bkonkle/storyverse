@@ -3,12 +3,11 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
+import App from '@storyverse/components/layouts/App'
+import CardSettings from '@storyverse/components/cards/CardSettings'
+import CardProfile from '@storyverse/components/cards/CardProfile'
 import {Pages, useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
-
-import App from '../../../components/layouts/App'
-import CardSettings from '../../../components/cards/CardSettings'
-import CardProfile from '../../../components/cards/CardProfile'
 
 export function UserProfilePage() {
   const {setPage} = useStore((state) => state.pages)

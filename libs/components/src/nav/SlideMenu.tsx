@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import {signIn} from 'next-auth/client'
 
 import {useGetCurrentUserQuery} from '@storyverse/graphql/Schema'
+
 import NavLinks from './NavLinks'
 import NavLink from './NavLink'
 import Nameplate from './Nameplate'

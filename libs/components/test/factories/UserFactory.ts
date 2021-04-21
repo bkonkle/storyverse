@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateUserInput, User} from '@storyverse/graphql/Schema'
+import {CreateUserInput, User} from '@storyverse/graphql/ApiSchema'
 
 export const makeCreateInput = (
-  overrides?: Partial<CreateUserInput> | null
-): CreateUserInput => ({
+  overrides?: Partial<Omit<CreateUserInput, 'profile'>> | null
+): Omit<CreateUserInput, 'profile'> => ({
   ...overrides,
   username: faker.random.alphaNumeric(10),
 })

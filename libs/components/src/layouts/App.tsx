@@ -2,9 +2,9 @@ import React, {ReactNode} from 'react'
 
 import {useInitUser} from '@storyverse/graphql/User'
 
-import AdminNavbar from '../../components/navbars/AdminNavbar'
-import Sidebar from '../../components/sidebars/Sidebar'
-import FooterAdmin from '../../components/footers/FooterAdmin'
+import AdminNavbar from '../navbars/AdminNavbar'
+import Sidebar from '../sidebars/Sidebar'
+import FooterAdmin from '../footers/FooterAdmin'
 
 export interface AppProps {
   children: ReactNode

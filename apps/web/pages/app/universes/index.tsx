@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import App from '../../../components/layouts/App'
+import App from '@storyverse/components/layouts/App'
 import {Pages, useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
 

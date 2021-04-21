@@ -2,6 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 
 import {Pages, useStore} from '@storyverse/graphql/Store'
+
 import NavLink from './NavLink'
 
 export interface NavLinksProps {

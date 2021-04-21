@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import Deprecated from '../components/layouts/Deprecated'
+import Deprecated from '@storyverse/components/layouts/Deprecated'
 import {useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
 

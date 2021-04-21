@@ -2,10 +2,11 @@ import React from 'react'
 import clsx from 'clsx'
 import {signIn} from 'next-auth/client'
 
+import {useGetCurrentUserQuery} from '@storyverse/graphql/Schema'
+
 import NavProfile from './NavProfile'
 import Notifications from './Notifications'
 import NavLink from './NavLink'
-import {useGetCurrentUserQuery} from '@storyverse/graphql/Schema'
 
 export const handleLogin = (
   event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
