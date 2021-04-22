@@ -1,5 +1,3 @@
-import React from 'react'
-
 import SidebarHeading from './SidebarHeading'
 import SidebarLink from './SidebarLink'
 
@@ -29,7 +27,7 @@ export default function SidebarHeader() {
       <SidebarHeading>User</SidebarHeading>
 
       <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-        <SidebarLink href="/auth/login" icon="fa-user-circle">
+        <SidebarLink href="/app/user/profile" icon="fa-user-circle">
           Profile
         </SidebarLink>
 

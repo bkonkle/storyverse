@@ -1,4 +1,4 @@
-import React, {useState, createRef} from 'react'
+import {useState, createRef} from 'react'
 import clsx from 'clsx'
 import {createPopper} from '@popperjs/core'
 

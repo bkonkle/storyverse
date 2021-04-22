@@ -39,3 +39,4 @@ The following tools are used to build the server and client applications:
 - [Next.js](https://nextjs.org/) - A full-featured front end React application framework.
 - [next-auth](https://next-auth.js.org/) - A flexible authentication stack for Next.js.
 - [Urql](https://formidable.com/open-source/urql/) - A blazing-fast GraphQL client using React components and hooks.
+- [Notus NextJS](https://github.com/creativetimofficial/notus-nextjs) - A Tailwind template that forms the basis of the Admin UI.

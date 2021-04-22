@@ -10,7 +10,7 @@ export interface SidebarLinkProps {
   children: ReactNode
 }
 
-const NARROW_ICONS = ['fa-clipboard-list']
+const NARROW_ICONS = ['fa-clipboard-list', 'fa-book']
 
 export default function SidebarLink({
   href,
@@ -24,7 +24,7 @@ export default function SidebarLink({
     <li className="items-center">
       <Link href={href}>
         <a
-          href="#pablo"
+          href={href}
           className={clsx(
             'text-xs',
             'uppercase',

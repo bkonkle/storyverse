@@ -1,7 +1,5 @@
-import React from 'react'
-
-import NotificationDropdown from '../dropdowns/NotificationDropdown'
-import UserDropdown from '../dropdowns/UserDropdown'
+import NotificationDropdown from '../../dropdowns/NotificationDropdown'
+import UserDropdown from '../../dropdowns/UserDropdown'
 
 export default function SidebarUser() {
   return (

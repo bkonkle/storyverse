@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
 
@@ -11,7 +11,7 @@ export interface SidebarProps {
   title: string
 }
 
-export default function Sidebar({title}: SidebarProps) {
+export default function NavSidebar({title}: SidebarProps) {
   const [collapseShow, setCollapseShow] = useState(['hidden'])
 
   return (
@@ -178,6 +178,6 @@ export default function Sidebar({title}: SidebarProps) {
   )
 }
 
-Sidebar.defaultProps = {
+NavSidebar.defaultProps = {
   title: 'Storyverse',
 }

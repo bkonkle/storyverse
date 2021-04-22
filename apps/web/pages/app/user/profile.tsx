@@ -5,7 +5,7 @@ import {withUrqlClient} from 'next-urql'
 
 import App from '@storyverse/components/layouts/App'
 import CardSettings from '@storyverse/components/cards/CardSettings'
-import CardProfile from '@storyverse/components/cards/CardProfile'
+import CardProfile from '@storyverse/components/cards/profile/CardProfile'
 import {Pages, useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
 

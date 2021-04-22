@@ -1,5 +1,3 @@
-import React from 'react'
-
 export interface CardStatsProps {
   statSubtitle: string
   statTitle: string
