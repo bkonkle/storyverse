@@ -1,8 +1,8 @@
 import {useEffect} from 'react'
 import {withUrqlClient} from 'next-urql'
 
-import {useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
+import {useStore} from '@storyverse/graphql/Store'
 
 export const Index = () => {
   const {setPage} = useStore((state) => state.pages)

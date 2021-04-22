@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import App from '@storyverse/components/layouts/App'
+import Admin from '@storyverse/components/layouts/Admin'
 import {Pages, useStore} from '@storyverse/graphql/Store'
 import {api} from '@storyverse/graphql/ApiClient'
 
@@ -15,7 +15,7 @@ export function CreateUniversePage() {
   }, [setPage])
 
   return (
-    <App>
+    <Admin>
       <Head>
         <title>Storyverse - Create Universe</title>
       </Head>
@@ -23,7 +23,7 @@ export function CreateUniversePage() {
         <div className={clsx('w-full', 'lg:w-8/12', 'px-4')}></div>
         <div className={clsx('w-full', 'lg:w-4/12', 'px-4')}></div>
       </div>
-    </App>
+    </Admin>
   )
 }
 

@@ -3,15 +3,15 @@ import Head from 'next/head'
 
 import {useInitUser} from '@storyverse/graphql/User'
 
-import AdminNavbar from '../navbars/AdminNavbar'
-import NavSidebar from '../sidebars/nav/NavSidebar'
-import FooterAdmin from '../footers/FooterAdmin'
+import AdminNavbar from '../admin/navbars/AdminNavbar'
+import NavSidebar from '../admin/sidebars/nav/NavSidebar'
+import FooterAdmin from '../admin/footers/FooterAdmin'
 
-export interface AppProps {
+export interface AdminProps {
   children: ReactNode
 }
 
-export const App = (props: AppProps) => {
+export const Admin = (props: AdminProps) => {
   const {children} = props
   const {user, loading} = useInitUser({requireUser: true})
 
@@ -49,4 +49,4 @@ export const App = (props: AppProps) => {
   )
 }
 
-export default App
+export default Admin
