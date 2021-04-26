@@ -1,11 +1,12 @@
 import create, {State as ZustandState} from 'zustand'
 
+/**
+ * This isn't actually needed yet - the router already maintains the state we need to figure out
+ * what page we're on.  It's here to demonstrate how to wire in state when it /is/ needed.
+ */
+
 export enum Pages {
   Home,
-  Stories,
-  Series,
-  Universes,
-  User,
 }
 
 export interface State extends ZustandState {

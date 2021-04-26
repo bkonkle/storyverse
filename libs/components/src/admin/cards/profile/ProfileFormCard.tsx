@@ -1,9 +1,15 @@
+import {useGetCurrentUserQuery} from '@storyverse/graphql/Schema'
+
 import TextInput from '../../forms/TextInput'
 import TextAreaInput from '../../forms/TextAreaInput'
 import Forms from '../../forms/Forms'
 import FormCard from '../FormCard'
 
 export const ProfileFormCard = () => {
+  const [{data}] = useGetCurrentUserQuery()
+
+  const profile = data?.getCurrentUser?.profile
+
   return (
     <FormCard title="My Profile">
       <Forms.Header>User Information</Forms.Header>
@@ -11,16 +17,16 @@ export const ProfileFormCard = () => {
       <div className="flex flex-wrap">
         <div className="w-full lg:w-6/12 px-4">
           <TextInput
-            name="username"
-            label="Username"
-            defaultValue="lucky.jesse"
+            name="displayName"
+            label="Display Name"
+            defaultValue={profile?.displayName || undefined}
           />
         </div>
         <div className="w-full lg:w-6/12 px-4">
           <TextInput
             name="email"
-            label="Email address"
-            defaultValue="jesse@example.com"
+            label="Email Address"
+            defaultValue={profile?.email || undefined}
           />
         </div>
         <div className="w-full lg:w-6/12 px-4">

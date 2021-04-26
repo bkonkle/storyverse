@@ -5,11 +5,11 @@ import {withUrqlClient} from 'next-urql'
 import Admin from '@storyverse/components/layouts/Admin'
 import {api} from '@storyverse/graphql/ApiClient'
 
-export function StoriesPage() {
+export function AdminPage() {
   return (
     <Admin>
       <Head>
-        <title>Storyverse - Stories</title>
+        <title>Storyverse - Admin</title>
       </Head>
       <div className={clsx('flex', 'flex-wrap')}>
         <div className={clsx('w-full', 'lg:w-8/12', 'px-4')}></div>
@@ -19,4 +19,4 @@ export function StoriesPage() {
   )
 }
 
-export default withUrqlClient(api, {ssr: true})(StoriesPage)
+export default withUrqlClient(api, {ssr: true})(AdminPage)

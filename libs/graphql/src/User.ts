@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import {useRouter} from 'next/router'
 import {User} from 'next-auth'
-import {useSession} from 'next-auth/client'
+import {useSession, signOut} from 'next-auth/client'
 
 import {useGetOrCreateCurrentUserMutation} from './Schema'
 
@@ -26,10 +26,11 @@ export const useInitUser = (options: {requireUser?: boolean}) => {
       return
     }
 
-    if (session && !user && !loading) {
+    if (session && !loading && !user) {
       if (error) {
         if (error.response?.status === 401) {
-          console.debug('Unauthorized')
+          // The session isn't valid, so reset it
+          signOut()
         } else {
           console.log('Error while fetching current user:', error)
         }

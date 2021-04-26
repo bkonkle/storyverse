@@ -1,17 +1,29 @@
-import {useEffect} from 'react'
+import {MouseEventHandler, useEffect} from 'react'
 import {withUrqlClient} from 'next-urql'
+import {signIn} from 'next-auth/client'
 
 import {api} from '@storyverse/graphql/ApiClient'
-import {useStore} from '@storyverse/graphql/Store'
+import {Pages, useStore} from '@storyverse/graphql/Store'
+
+export const handleLogin: MouseEventHandler<HTMLButtonElement> = (event) => {
+  event.stopPropagation()
+  event.nativeEvent.stopImmediatePropagation()
+
+  signIn('auth0')
+}
 
 export const Index = () => {
   const {setPage} = useStore((state) => state.pages)
 
   useEffect(() => {
-    setPage(null)
+    setPage(Pages.Home)
   }, [setPage])
 
-  return null
+  return (
+    <button className="m-4" onClick={handleLogin}>
+      Login
+    </button>
+  )
 }
 
 export default withUrqlClient(api, {ssr: true})(Index)

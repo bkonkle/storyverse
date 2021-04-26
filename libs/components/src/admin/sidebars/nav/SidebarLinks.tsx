@@ -1,5 +1,15 @@
+import {MouseEventHandler} from 'react'
+import {signOut} from 'next-auth/client'
+
 import SidebarHeading from './SidebarHeading'
 import SidebarLink from './SidebarLink'
+
+export const handleLogout: MouseEventHandler<HTMLAnchorElement> = (event) => {
+  event.stopPropagation()
+  event.nativeEvent.stopImmediatePropagation()
+
+  signOut()
+}
 
 export default function SidebarHeader() {
   return (
@@ -7,15 +17,15 @@ export default function SidebarHeader() {
       <SidebarHeading>Story Management</SidebarHeading>
 
       <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-        <SidebarLink href="/app/universes" icon="fa-sun">
+        <SidebarLink href="/admin/universes" icon="fa-sun">
           Universes
         </SidebarLink>
 
-        <SidebarLink href="/app/series" icon="fa-book">
+        <SidebarLink href="/admin/series" icon="fa-book">
           Series
         </SidebarLink>
 
-        <SidebarLink href="/app/stories" icon="fa-book-open">
+        <SidebarLink href="/admin/stories" icon="fa-book-open">
           Stories
         </SidebarLink>
 
@@ -27,15 +37,15 @@ export default function SidebarHeader() {
       <SidebarHeading>User</SidebarHeading>
 
       <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-        <SidebarLink href="/app/user/profile" icon="fa-user-circle">
+        <SidebarLink href="/admin/user/profile" icon="fa-user-circle">
           Profile
         </SidebarLink>
 
-        <SidebarLink href="/auth/login" icon="fa-tools">
+        <SidebarLink href="/admin/user/settings" icon="fa-tools">
           Settings
         </SidebarLink>
 
-        <SidebarLink href="/auth/register" icon="fa-sign-out-alt">
+        <SidebarLink onClick={handleLogout} icon="fa-sign-out-alt">
           Log Out
         </SidebarLink>
       </ul>
