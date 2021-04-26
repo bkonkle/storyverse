@@ -7,13 +7,13 @@ fragment UserData on User {
   }
 }
 
-query GetCurrentUser {
+query getCurrentUser {
   getCurrentUser {
     ...UserData
   }
 }
 
-mutation GetOrCreateCurrentUser($input: CreateUserInput!) {
+mutation getOrCreateCurrentUser($input: CreateUserInput!) {
   getOrCreateCurrentUser(input: $input) {
     user {
       ...UserData

@@ -5,8 +5,16 @@ fragment ProfileData on Profile {
   picture
 }
 
-mutation CreateProfile($input: CreateProfileInput!) {
+mutation createProfile($input: CreateProfileInput!) {
   createProfile(input: $input) {
+    profile {
+      ...ProfileData
+    }
+  }
+}
+
+mutation updateProfile($id: ID!, $input: UpdateProfileInput!) {
+  updateProfile(id: $id, input: $input) {
     profile {
       ...ProfileData
     }

@@ -1,9 +1,9 @@
-export interface CardProfileStatProps {
+export interface ProfilePreviewStatProps {
   name: string
   value: string
 }
 
-export const CardProfileStat = ({name, value}: CardProfileStatProps) => {
+export const ProfilePreviewStat = ({name, value}: ProfilePreviewStatProps) => {
   return (
     <div className="mr-4 p-3 text-center">
       <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
@@ -14,4 +14,4 @@ export const CardProfileStat = ({name, value}: CardProfileStatProps) => {
   )
 }
 
-export default CardProfileStat
+export default ProfilePreviewStat

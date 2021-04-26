@@ -13,7 +13,7 @@ import Field from '../forms/Field'
 import Input from '../forms/Input'
 import FormButton from '../forms/FormButton'
 import Textarea from '../forms/Textarea'
-import {zodResolver} from '../utils/zod'
+import {zodResolver} from '../../src/utils/zod'
 
 const schema = z.object({
   name: z.string().nonempty({message: 'A name is required.'}),

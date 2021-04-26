@@ -5,7 +5,7 @@ fragment UniverseData on Universe {
   picture
 }
 
-mutation CreateUniverse($input: CreateUniverseInput!) {
+mutation createUniverse($input: CreateUniverseInput!) {
   createUniverse(input: $input) {
     universe {
       ...UniverseData
