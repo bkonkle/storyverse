@@ -8,12 +8,12 @@ export const makeCreateInput = (
 ): CreateUniverseInput => ({
   name: faker.name.findName(),
   description: {text: faker.lorem.paragraph()},
-  ownerProfileId: faker.random.uuid(),
+  ownerProfileId: faker.datatype.uuid(),
   ...overrides,
 })
 
 export const make = (overrides?: Partial<Universe> | null): Universe => ({
-  id: faker.random.uuid(),
+  id: faker.datatype.uuid(),
   createdAt: faker.date.recent(),
   updatedAt: faker.date.recent(),
   ...makeCreateInput(overrides),

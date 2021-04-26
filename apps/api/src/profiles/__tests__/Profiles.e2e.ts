@@ -464,7 +464,7 @@ describe('Profile', () => {
     it('returns an error if no existing profile was found', async () => {
       const {token} = credentials
       const variables = {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         input: {picture: faker.internet.avatar()},
       }
 
@@ -563,7 +563,7 @@ describe('Profile', () => {
 
     it('returns an error if no existing profile was found', async () => {
       const {token} = credentials
-      const variables = {id: faker.random.uuid()}
+      const variables = {id: faker.datatype.uuid()}
 
       const body = await graphql.mutation<Pick<Mutation, 'deleteProfile'>>(
         mutation,

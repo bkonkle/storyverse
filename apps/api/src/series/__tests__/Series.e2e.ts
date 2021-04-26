@@ -436,7 +436,7 @@ describe('Series', () => {
     it('returns an error if no existing series was found', async () => {
       const {token} = credentials
       const variables = {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         input: {name: faker.random.word()},
       }
 
@@ -598,7 +598,7 @@ describe('Series', () => {
 
     it('returns an error if no existing series was found', async () => {
       const {token} = credentials
-      const variables = {id: faker.random.uuid()}
+      const variables = {id: faker.datatype.uuid()}
 
       const body = await graphql.mutation<Pick<Mutation, 'deleteSeries'>>(
         mutation,

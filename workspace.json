@@ -82,8 +82,15 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/apps/api"],
           "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
+            "jestConfig": "apps/api/jest.config.js"
+          }
+        },
+        "e2e": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api-e2e"],
+          "options": {
+            "jestConfig": "apps/api/jest.e2e.config.js",
+            "runInBand": true
           }
         },
         "generate": {

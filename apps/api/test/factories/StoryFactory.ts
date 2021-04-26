@@ -8,11 +8,11 @@ export const makeCreateInput = (
 ): CreateStoryInput => {
   return {
     name: faker.name.findName(),
-    volume: faker.random.number(),
-    issue: faker.random.number(),
+    volume: faker.datatype.number(),
+    issue: faker.datatype.number(),
     summary: {text: faker.lorem.paragraph()},
     content: {text: faker.lorem.paragraph()},
-    seriesId: faker.random.uuid(),
+    seriesId: faker.datatype.uuid(),
     ...overrides,
   }
 }
@@ -23,7 +23,7 @@ export const make = (overrides?: Partial<Story> | null): Story => {
   const series = Series.make(overrides?.series)
 
   return {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     createdAt: faker.date.recent(),
     updatedAt: faker.date.recent(),
     ...makeCreateInput(overrides),

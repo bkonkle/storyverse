@@ -11,7 +11,7 @@ export const makeCreateInput = (
 })
 
 export const make = (overrides?: Partial<User> | null): User => ({
-  id: faker.random.uuid(),
+  id: faker.datatype.uuid(),
   createdAt: faker.date.recent(),
   updatedAt: faker.date.recent(),
   isActive: true,

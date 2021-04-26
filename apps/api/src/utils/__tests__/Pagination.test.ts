@@ -4,7 +4,7 @@ import {paginateResponse} from '../Pagination'
 describe('Pagination', () => {
   describe('paginateResponse()', () => {
     it('returns a ManyResponse with the first argument as the "data"', async () => {
-      const data = [faker.random.uuid(), faker.random.uuid()]
+      const data = [faker.datatype.uuid(), faker.datatype.uuid()]
       const result = paginateResponse(data)
 
       expect(result).toEqual({
@@ -17,7 +17,7 @@ describe('Pagination', () => {
     })
 
     it('handles page input', async () => {
-      const data = [faker.random.uuid()]
+      const data = [faker.datatype.uuid()]
       const result = paginateResponse(data, {page: 4})
 
       expect(result).toEqual({
@@ -30,7 +30,7 @@ describe('Pagination', () => {
     })
 
     it('handles pageSize input', async () => {
-      const data = [faker.random.uuid()]
+      const data = [faker.datatype.uuid()]
       const result = paginateResponse(data, {pageSize: 20})
 
       expect(result).toEqual({
@@ -43,7 +43,7 @@ describe('Pagination', () => {
     })
 
     it('handles total input', async () => {
-      const data = [faker.random.uuid()]
+      const data = [faker.datatype.uuid()]
       const result = paginateResponse(data, {total: 200})
 
       expect(result).toEqual({
@@ -56,7 +56,7 @@ describe('Pagination', () => {
     })
 
     it('handles page & pageSize input', async () => {
-      const data = [faker.random.uuid()]
+      const data = [faker.datatype.uuid()]
       const result = paginateResponse(data, {page: 4, pageSize: 20})
 
       expect(result).toEqual({
@@ -69,7 +69,7 @@ describe('Pagination', () => {
     })
 
     it('handles pageSize & total input', async () => {
-      const data = [faker.random.uuid()]
+      const data = [faker.datatype.uuid()]
       const result = paginateResponse(data, {pageSize: 20, total: 80})
 
       expect(result).toEqual({
@@ -82,7 +82,7 @@ describe('Pagination', () => {
     })
 
     it('handles page, pageSize, and total input', async () => {
-      const data = [faker.random.uuid()]
+      const data = [faker.datatype.uuid()]
       const result = paginateResponse(data, {
         page: 2,
         pageSize: 20,

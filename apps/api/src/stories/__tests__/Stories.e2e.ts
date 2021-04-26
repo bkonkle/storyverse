@@ -500,7 +500,7 @@ describe('Story', () => {
     it('returns an error if no existing story was found', async () => {
       const {token} = credentials
       const variables = {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         input: {name: faker.random.word()},
       }
 
@@ -661,7 +661,7 @@ describe('Story', () => {
 
     it('returns an error if no existing story was found', async () => {
       const {token} = credentials
-      const variables = {id: faker.random.uuid()}
+      const variables = {id: faker.datatype.uuid()}
 
       const body = await graphql.mutation<Pick<Mutation, 'deleteStory'>>(
         mutation,

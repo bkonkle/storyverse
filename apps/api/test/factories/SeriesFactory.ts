@@ -9,7 +9,7 @@ export const makeCreateInput = (
   return {
     name: faker.name.findName(),
     description: {text: faker.lorem.paragraph()},
-    universeId: faker.random.uuid(),
+    universeId: faker.datatype.uuid(),
     ...overrides,
   }
 }
@@ -20,7 +20,7 @@ export const make = (overrides?: Partial<Series> | null): Series => {
   const universe = Universes.make(overrides?.universe)
 
   return {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     createdAt: faker.date.recent(),
     updatedAt: faker.date.recent(),
     ...makeCreateInput(overrides),

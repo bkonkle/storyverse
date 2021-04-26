@@ -434,7 +434,7 @@ describe('Universes', () => {
     it('returns an error if no existing universe was found', async () => {
       const {token} = credentials
       const variables = {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         input: {name: faker.random.word()},
       }
 
@@ -575,7 +575,7 @@ describe('Universes', () => {
 
     it('returns an error if no existing universe was found', async () => {
       const {token} = credentials
-      const variables = {id: faker.random.uuid()}
+      const variables = {id: faker.datatype.uuid()}
 
       const body = await graphql.mutation<Pick<Mutation, 'deleteUniverse'>>(
         mutation,
