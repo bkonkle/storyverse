@@ -13,8 +13,6 @@ export const init = (options?: Prisma.PrismaClientOptions) => {
   return client
 }
 
-export const get = () => client
-
 export const disconnect = async () => {
   if (client) {
     await client.$disconnect()
@@ -82,4 +80,4 @@ export const includeFromSelections = (
   return _.get(include, prismaPath)
 }
 
-export default {init, get, disconnect}
+export default {init, disconnect}

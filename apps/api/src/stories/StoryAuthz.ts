@@ -1,7 +1,7 @@
 import {PrismaClient, Profile} from '@prisma/client'
 import {ForbiddenError} from 'apollo-server-core'
+import {injectable} from 'tsyringe'
 
-import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'
 import * as UniverseUtils from '../universes/UniverseUtils'
@@ -9,14 +9,12 @@ import {ManageSeries} from '../universes/UniverseRoles'
 import * as SeriesUtils from '../series/SeriesUtils'
 import {ManageStories} from '../series/SeriesRoles'
 
+@injectable()
 export default class StoryAuthz {
-  private readonly prisma: PrismaClient
-  private readonly authz: AuthzService
-
-  constructor(prisma?: PrismaClient, authz?: AuthzService) {
-    this.prisma = prisma || Prisma.init()
-    this.authz = authz || new AuthzService()
-  }
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly authz: AuthzService
+  ) {}
 
   create = async (username: string, seriesId: string): Promise<Profile> => {
     const profile = await this.getProfile(username)

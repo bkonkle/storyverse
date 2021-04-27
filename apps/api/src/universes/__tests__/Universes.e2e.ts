@@ -48,9 +48,9 @@ describe('Universes', () => {
   beforeAll(async () => {
     await dbCleaner(prisma, tables)
 
-    const app = await App.init()
+    const app = App.create()
 
-    graphql = new GraphQL(app)
+    graphql = new GraphQL(await app.init())
   })
 
   beforeAll(async () => {

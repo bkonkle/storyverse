@@ -3,7 +3,7 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
 import Admin from '@storyverse/components/layouts/Admin'
-import {api} from '@storyverse/graphql/ApiClient'
+import {getConfig} from '@storyverse/graphql'
 
 export function CreateUniversePage() {
   return (
@@ -19,4 +19,4 @@ export function CreateUniversePage() {
   )
 }
 
-export default withUrqlClient(api, {ssr: true})(CreateUniversePage)
+export default withUrqlClient(getConfig, {ssr: true})(CreateUniversePage)

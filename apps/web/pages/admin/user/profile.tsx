@@ -5,7 +5,7 @@ import {withUrqlClient} from 'next-urql'
 import Admin from '@storyverse/components/layouts/Admin'
 import ProfileForm from '@storyverse/components/admin/sections/user/ProfileForm'
 import ProfilePreview from '@storyverse/components/admin/sections/user/ProfilePreview'
-import {api} from '@storyverse/graphql/ApiClient'
+import {getConfig} from '@storyverse/graphql'
 
 export function UserProfilePage() {
   return (
@@ -25,4 +25,4 @@ export function UserProfilePage() {
   )
 }
 
-export default withUrqlClient(api, {ssr: true})(UserProfilePage)
+export default withUrqlClient(getConfig, {ssr: true})(UserProfilePage)

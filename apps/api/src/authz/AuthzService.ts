@@ -1,22 +1,81 @@
 import {PrismaClient, RoleGrant} from '@prisma/client'
 import {ForbiddenError} from 'apollo-server-core'
 import {uniqBy} from 'lodash'
+import {injectable, injectAll} from 'tsyringe'
 
-import Prisma from '../utils/Prisma'
-import defaultRegistry, {RolesRegistry, Permission, Role} from './RolesRegistry'
+import {Permission, Role} from './AuthzTypes'
 
 export interface Subject {
   table: string
   id: string
 }
 
+@injectable()
 export default class AuthzService {
-  private readonly prisma: PrismaClient
-  private readonly registry: RolesRegistry
+  private readonly roles: Record<string, Role>
+  private readonly permissions: Record<string, Permission>
 
-  constructor(prisma?: PrismaClient, registry?: RolesRegistry) {
-    this.prisma = prisma || Prisma.init()
-    this.registry = registry || defaultRegistry
+  constructor(
+    private readonly prisma: PrismaClient,
+    @injectAll(Permission) permissions: Permission[],
+    @injectAll(Role) roles: Role[]
+  ) {
+    this.permissions = permissions.reduce(
+      (memo: Record<string, Permission>, permission) => {
+        if (memo[permission.key]) {
+          throw new Error(
+            `A Permission with key ${permission.key} has already been registered.`
+          )
+        }
+
+        return {
+          ...memo,
+          [permission.key]: permission,
+        }
+      },
+      {}
+    )
+
+    this.roles = roles.reduce((memo: Record<string, Role>, role) => {
+      if (memo[role.key]) {
+        throw new Error(
+          `A Role with key ${role.key} has already been registered.`
+        )
+      }
+
+      return {
+        ...memo,
+        [role.key]: role,
+      }
+    }, {})
+  }
+
+  findPermission(key: string): Permission | undefined {
+    return this.permissions[key]
+  }
+
+  getPermission(key: string): Permission {
+    const permission = this.findPermission(key)
+
+    if (!permission) {
+      throw new Error(`Unable to find a registered Permission with key ${key}`)
+    }
+
+    return permission
+  }
+
+  findRole(key: string): Role | undefined {
+    return this.roles[key]
+  }
+
+  getRole(key: string): Role {
+    const role = this.findRole(key)
+
+    if (!role) {
+      throw new Error(`Unable to find a registered Role with key ${key}`)
+    }
+
+    return role
   }
 
   /**
@@ -133,7 +192,7 @@ export default class AuthzService {
     roleKeys: string[]
   ): Promise<void> {
     await Promise.all(
-      roleKeys.map(this.fromRoleKey).map((role) =>
+      roleKeys.map(this.getRole).map((role) =>
         this.prisma.roleGrant.create({
           data: {
             roleKey: role.key,
@@ -147,21 +206,7 @@ export default class AuthzService {
   }
 
   /**
-   * Map a Role key to a Role object.
-   */
-  private fromRoleKey = (roleKey: string): Role => {
-    const role = this.registry.findRole(roleKey)
-
-    if (!role) {
-      throw new Error(`Unable to find a registered Role with key ${roleKey}`)
-    }
-
-    return role
-  }
-
-  /**
    * Map a RoleGrants to a Role object.
    */
-  private fromGrant = (grant: RoleGrant): Role =>
-    this.fromRoleKey(grant.roleKey)
+  private fromGrant = (grant: RoleGrant): Role => this.getRole(grant.roleKey)
 }

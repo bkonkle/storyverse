@@ -1,4 +1,8 @@
-import Registry, {Permission, Role} from '../authz/RolesRegistry'
+import {Permission, Role} from '../authz'
+
+/**
+ * Permissions
+ */
 
 export const Update: Permission = {
   key: 'UNIVERSE_UPDATE',
@@ -24,7 +28,11 @@ export const ManageRoles: Permission = {
   description: 'Grant or revoke User Roles for a particular Universe',
 }
 
-Registry.registerPermissions([Update, Delete, ManageSeries, ManageRoles])
+export const permissions = [Update, Delete, ManageSeries, ManageRoles]
+
+/**
+ * Roles
+ */
 
 export const Manager: Role = {
   key: 'UNIVERSE_MANAGER',
@@ -41,4 +49,4 @@ export const Admin: Role = {
   permissions: [...Manager.permissions, Delete, ManageRoles],
 }
 
-Registry.registerRoles([Manager, Admin])
+export const roles = [Manager, Admin]

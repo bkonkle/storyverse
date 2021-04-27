@@ -1,4 +1,5 @@
-import {readFileSync} from 'fs'
+import 'reflect-metadata'
+import * as fs from 'fs'
 import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
 import gql from 'graphql-tag'
 import {merge} from 'lodash'
@@ -8,92 +9,103 @@ import express, {Application} from 'express'
 import morgan from 'morgan'
 import jwt from 'express-jwt'
 import jwks from 'jwks-rsa'
+import {DocumentNode} from 'graphql'
+import {container, injectable, inject, injectAll} from 'tsyringe'
 
-import {Resolvers} from '@storyverse/graphql/ApiSchema'
+import {Schema} from '@storyverse/graphql/api'
 
 import {Vars, getVars} from './config/Environment'
+import {Context, getContext} from './utils/Context'
+import {Resolvers, GraphQLResolvers} from './utils/GraphQL'
 import GraphQLDateTime from './utils/GraphQLDateTime'
-import UserResolvers from './users/UserResolvers'
-import ProfileResolvers from './profiles/ProfileResolvers'
-import UniverseResolvers from './universes/UniverseResolvers'
-import SeriesResolvers from './series/SeriesResolvers'
-import StoryResolvers from './stories/StoryResolvers'
-import {getContext} from './utils/Context'
+import {ProcessEnv, NodeFS} from './utils/Injection'
+import AppRegistry from './AppRegistry'
 
-const typeDefs = gql(
-  readFileSync(join(__dirname, '..', '..', '..', 'schema.graphql'), 'utf8')
-)
+@injectable()
+export default class App {
+  private readonly typeDefs: DocumentNode
 
-export const getResolvers = (): Resolvers => {
-  const users = new UserResolvers()
-  const profiles = new ProfileResolvers()
-  const universes = new UniverseResolvers()
-  const series = new SeriesResolvers()
-  const stories = new StoryResolvers()
+  constructor(
+    @inject(NodeFS) filesystem: typeof fs,
+    @inject(ProcessEnv) private readonly env: NodeJS.ProcessEnv,
+    @injectAll(GraphQLResolvers) private readonly resolvers: Resolvers[]
+  ) {
+    this.typeDefs = gql(
+      filesystem.readFileSync(
+        join(__dirname, '..', '..', '..', 'schema.graphql'),
+        'utf8'
+      )
+    )
+  }
 
-  return merge(
-    {
-      DateTime: GraphQLDateTime,
-      JSON: GraphQLJSON,
-      JSONObject: GraphQLJSONObject,
-    },
-    users.getResolvers(),
-    profiles.getResolvers(),
-    universes.getResolvers(),
-    series.getResolvers(),
-    stories.getResolvers()
-  )
-}
+  /**
+   * Create an App using the standard AppRegistry for use in Production-like environments.
+   */
+  static create(): App {
+    container.register(AppRegistry, {useClass: AppRegistry})
 
-export async function init(
-  resolvers: Resolvers = getResolvers(),
-  env = process.env
-): Promise<Application> {
-  const [
-    nodeEnv = 'production',
-    audience = 'production',
-    domain = 'storyverse.auth0.com',
-  ] = getVars([Vars.NodeEnv, Vars.OAuth2Audience, Vars.OAuth2Domain], env)
+    return container.resolve(App)
+  }
 
-  const isDev = nodeEnv === 'development'
+  private getResolvers(): Schema.Resolvers<Context> {
+    return merge(
+      {
+        DateTime: GraphQLDateTime,
+        JSON: GraphQLJSON,
+        JSONObject: GraphQLJSONObject,
+      },
+      ...this.resolvers.map((r) => r.getAll())
+    )
+  }
 
-  const app = express()
-    .disable('x-powered-by')
-    .use(morgan(isDev ? 'dev' : 'combined'))
+  async init(): Promise<Application> {
+    const [
+      nodeEnv = 'production',
+      audience = 'production',
+      domain = 'storyverse.auth0.com',
+    ] = getVars(
+      [Vars.NodeEnv, Vars.OAuth2Audience, Vars.OAuth2Domain],
+      this.env
+    )
 
-  app.use(
-    jwt({
-      algorithms: ['RS256'],
-      audience,
-      issuer: `https://${domain}/`,
-      credentialsRequired: false,
-      secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: `https://${domain}/.well-known/jwks.json`,
-      }),
+    const isDev = nodeEnv === 'development'
+
+    const app = express()
+      .disable('x-powered-by')
+      .use(morgan(isDev ? 'dev' : 'combined'))
+
+    app.use(
+      jwt({
+        algorithms: ['RS256'],
+        audience,
+        issuer: `https://${domain}/`,
+        credentialsRequired: false,
+        secret: jwks.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: `https://${domain}/.well-known/jwks.json`,
+        }),
+      })
+    )
+
+    const apollo = new ApolloServer({
+      introspection: isDev,
+      playground: isDev
+        ? {
+            settings: {
+              'request.credentials': 'same-origin',
+            },
+          }
+        : false,
+      tracing: true,
+      cacheControl: true,
+      typeDefs: this.typeDefs,
+      resolvers: this.getResolvers(),
+      context: getContext,
     })
-  )
+    apollo.applyMiddleware({app})
 
-  const apollo = new ApolloServer({
-    introspection: isDev,
-    playground: isDev
-      ? {
-          settings: {
-            'request.credentials': 'same-origin',
-          },
-        }
-      : false,
-    tracing: true,
-    cacheControl: true,
-    typeDefs,
-    resolvers,
-    context: getContext,
-  })
-  apollo.applyMiddleware({app})
-
-  return app
+    return app
+  }
 }
-
-export default {init}

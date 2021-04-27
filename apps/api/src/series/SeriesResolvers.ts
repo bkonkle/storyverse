@@ -1,14 +1,11 @@
 import {PrismaClient} from '@prisma/client'
+import {injectable} from 'tsyringe'
 
-import {
-  Resolvers,
-  QueryResolvers,
-  MutationResolvers,
-} from '@storyverse/graphql/ApiSchema'
+import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
 
 import {getUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
-import Prisma, {includeFromSelections} from '../utils/Prisma'
+import {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import SeriesAuthz from './SeriesAuthz'
 import {
@@ -17,17 +14,16 @@ import {
   fromSeriesCondition,
   fromSeriesInput,
 } from './SeriesUtils'
+import {Resolvers} from '../utils/GraphQL'
 
-export default class SeriesResolvers {
-  private readonly prisma: PrismaClient
-  private readonly authz: SeriesAuthz
+@injectable()
+export default class SeriesResolvers implements Resolvers {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly authz: SeriesAuthz
+  ) {}
 
-  constructor(prisma?: PrismaClient, authz?: SeriesAuthz) {
-    this.prisma = prisma || Prisma.init()
-    this.authz = authz || new SeriesAuthz()
-  }
-
-  getResolvers = (): Resolvers => ({
+  getAll = () => ({
     Query: {
       getSeries: this.getSeries,
       getManySeries: this.getManySeries,

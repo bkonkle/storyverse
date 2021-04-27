@@ -5,7 +5,7 @@ import {NextUrqlContext, SSRExchange} from 'next-urql'
 
 import schema from '../../../schema.json'
 
-export const api = (ssrExchange: SSRExchange, _ctx?: NextUrqlContext) => {
+export function getConfig(ssrExchange: SSRExchange, _ctx?: NextUrqlContext) {
   return {
     url: '/api/graphql',
     exchanges: [

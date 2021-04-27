@@ -1,8 +1,8 @@
 import {PrismaClient, Profile} from '@prisma/client'
+import {injectable} from 'tsyringe'
 
 import {SeriesRoles} from '@storyverse/graphql/ApiSchema'
 
-import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'
 import {ManageSeries} from '../universes/UniverseRoles'
@@ -10,14 +10,12 @@ import * as UniverseUtils from '../universes/UniverseUtils'
 import {Update, ManageRoles} from './SeriesRoles'
 import {getSubject} from './SeriesUtils'
 
+@injectable()
 export default class SeriesAuthz {
-  private readonly prisma: PrismaClient
-  private readonly authz: AuthzService
-
-  constructor(prisma?: PrismaClient, authz?: AuthzService) {
-    this.prisma = prisma || Prisma.init()
-    this.authz = authz || new AuthzService()
-  }
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly authz: AuthzService
+  ) {}
 
   create = async (username: string, universeId: string): Promise<Profile> => {
     const profile = await this.getProfile(username)

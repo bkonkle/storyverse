@@ -1,24 +1,18 @@
 import {PrismaClient} from '@prisma/client'
+import {injectable} from 'tsyringe'
 
-import {
-  Resolvers,
-  QueryResolvers,
-  MutationResolvers,
-} from '@storyverse/graphql/ApiSchema'
+import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
 
 import {Context} from '../utils/Context'
+import {Resolvers} from '../utils/GraphQL'
 import {NotFoundError} from '../utils/Errors'
-import Prisma from '../utils/Prisma'
 import {getUsername, requireMatchingUsername} from './UserUtils'
 
-export default class UserResolvers {
-  private readonly prisma: PrismaClient
+@injectable()
+export default class UserResolvers implements Resolvers {
+  constructor(private readonly prisma: PrismaClient) {}
 
-  constructor(prisma?: PrismaClient) {
-    this.prisma = prisma || Prisma.init()
-  }
-
-  getResolvers = (): Resolvers => ({
+  getAll = () => ({
     Query: {
       getCurrentUser: this.getCurrentUser,
     },

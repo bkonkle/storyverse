@@ -1,14 +1,11 @@
 import {PrismaClient} from '@prisma/client'
+import {injectable} from 'tsyringe'
 
-import {
-  Resolvers,
-  QueryResolvers,
-  MutationResolvers,
-} from '@storyverse/graphql/ApiSchema'
+import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
 
 import {getUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
-import Prisma, {includeFromSelections} from '../utils/Prisma'
+import {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import StoryAuthz from './StoryAuthz'
 import {
@@ -17,17 +14,16 @@ import {
   fromStoryCondition,
   fromStoryInput,
 } from './StoryUtils'
+import {Resolvers} from '../utils/GraphQL'
 
-export default class StoryResolvers {
-  private readonly prisma: PrismaClient
-  private readonly authz: StoryAuthz
+@injectable()
+export default class StoryResolvers implements Resolvers {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly authz: StoryAuthz
+  ) {}
 
-  constructor(prisma?: PrismaClient, authz?: StoryAuthz) {
-    this.prisma = prisma || Prisma.init()
-    this.authz = authz || new StoryAuthz()
-  }
-
-  getResolvers = (): Resolvers => ({
+  getAll = () => ({
     Query: {
       getStory: this.getStory,
       getManyStories: this.getManyStories,

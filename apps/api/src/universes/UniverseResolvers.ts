@@ -1,14 +1,11 @@
 import {PrismaClient} from '@prisma/client'
+import {injectable} from 'tsyringe'
 
-import {
-  Resolvers,
-  QueryResolvers,
-  MutationResolvers,
-} from '@storyverse/graphql/ApiSchema'
+import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
 
 import {getUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
-import Prisma, {includeFromSelections} from '../utils/Prisma'
+import {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import UniverseAuthz from './UniverseAuthz'
 import {
@@ -17,17 +14,16 @@ import {
   fromUniverseCondition,
   fromUniverseInput,
 } from './UniverseUtils'
+import {Resolvers} from '../utils/GraphQL'
 
-export default class UniverseResolvers {
-  private readonly prisma: PrismaClient
-  private readonly authz: UniverseAuthz
+@injectable()
+export default class UniverseResolvers implements Resolvers {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly authz: UniverseAuthz
+  ) {}
 
-  constructor(prisma?: PrismaClient, authz?: UniverseAuthz) {
-    this.prisma = prisma || Prisma.init()
-    this.authz = authz || new UniverseAuthz()
-  }
-
-  getResolvers = (): Resolvers => ({
+  getAll = () => ({
     Query: {
       getUniverse: this.getUniverse,
       getManyUniverses: this.getManyUniverses,

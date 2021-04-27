@@ -3,16 +3,13 @@ import {PrismaClient} from '@prisma/client'
 
 import {User} from '@storyverse/graphql/ApiSchema'
 
-import Prisma from '../utils/Prisma'
 import {NotFoundError} from '../utils/Errors'
 import {isOwner} from './ProfileUtils'
+import {injectable} from 'tsyringe'
 
+@injectable()
 export default class ProfileAuthz {
-  private readonly prisma: PrismaClient
-
-  constructor(prisma?: PrismaClient) {
-    this.prisma = prisma || Prisma.init()
-  }
+  constructor(private readonly prisma: PrismaClient) {}
 
   create = (username: string) => (user?: User | null) => {
     if (!user) {

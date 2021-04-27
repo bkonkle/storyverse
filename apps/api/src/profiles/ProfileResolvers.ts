@@ -1,14 +1,11 @@
 import {PrismaClient} from '@prisma/client'
+import {injectable} from 'tsyringe'
 
-import {
-  Resolvers,
-  QueryResolvers,
-  MutationResolvers,
-} from '@storyverse/graphql/ApiSchema'
+import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
 
 import {getUsername, maybeUsername} from '../users/UserUtils'
 import {Context} from '../utils/Context'
-import Prisma from '../utils/Prisma'
+import {Resolvers} from '../utils/GraphQL'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import ProfileAuthz from './ProfileAuthz'
 import {
@@ -18,16 +15,14 @@ import {
   fromProfileInput,
 } from './ProfileUtils'
 
-export default class ProfileResolvers {
-  private readonly prisma: PrismaClient
-  private readonly authz: ProfileAuthz
+@injectable()
+export default class ProfileResolvers implements Resolvers {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly authz: ProfileAuthz
+  ) {}
 
-  constructor(prisma?: PrismaClient, authz?: ProfileAuthz) {
-    this.prisma = prisma || Prisma.init()
-    this.authz = authz || new ProfileAuthz()
-  }
-
-  getResolvers = (): Resolvers => ({
+  getAll = () => ({
     Query: {
       getProfile: this.getProfile,
       getManyProfiles: this.getManyProfiles,

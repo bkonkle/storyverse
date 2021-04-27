@@ -1,5 +1,8 @@
-export * as ApiClient from './ApiClient'
-export * as ApiSchema from './ApiSchema'
+/**
+ * Default client-side exports.
+ */
+
+export * from './ApiClient'
 export * as Aws from './Aws'
 export * as Schema from './Schema'
 export * as Store from './Store'
