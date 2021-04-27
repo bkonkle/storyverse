@@ -1,10 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
-import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
-
-import {Context} from '../utils/Context'
-import {Resolvers} from '../utils/GraphQL'
+import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import {NotFoundError} from '../utils/Errors'
 import {getUsername, requireMatchingUsername} from './UserUtils'
 
@@ -23,7 +20,7 @@ export default class UserResolvers implements Resolvers {
     },
   })
 
-  getCurrentUser: QueryResolvers<Context>['getCurrentUser'] = async (
+  getCurrentUser: Query['getCurrentUser'] = async (
     _parent,
     _args,
     context,
@@ -37,7 +34,7 @@ export default class UserResolvers implements Resolvers {
     })
   }
 
-  createUser: MutationResolvers<Context>['createUser'] = async (
+  createUser: Mutation['createUser'] = async (
     _parent,
     {input},
     context,
@@ -60,7 +57,7 @@ export default class UserResolvers implements Resolvers {
     return {user}
   }
 
-  getOrCreateCurrentUser: MutationResolvers<Context>['getOrCreateCurrentUser'] = async (
+  getOrCreateCurrentUser: Mutation['getOrCreateCurrentUser'] = async (
     _parent,
     {input},
     context,
@@ -91,7 +88,7 @@ export default class UserResolvers implements Resolvers {
     return {user}
   }
 
-  updateCurrentUser: MutationResolvers<Context>['updateCurrentUser'] = async (
+  updateCurrentUser: Mutation['updateCurrentUser'] = async (
     _parent,
     {input},
     context,

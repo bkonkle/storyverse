@@ -21,3 +21,7 @@ export const useResolvers = <T>(
   token: GraphQLResolvers,
   useClass: resolversClass,
 })
+
+export type Query = Required<Schema.QueryResolvers<Context>>
+
+export type Mutation = Required<Schema.MutationResolvers<Context>>
