@@ -9,7 +9,7 @@ import {
 } from '@storyverse/graphql/Schema'
 
 import {zodResolver} from '../../../utils/zod'
-import FormCard from '../../cards/FormCard'
+import Card from '../../cards/Card'
 import TextInput from '../../forms/TextInput'
 import Forms from '../../forms/Forms'
 import Button from '../../buttons/Button'
@@ -20,7 +20,7 @@ const schema = z.object({
   picture: z.string().optional(),
 })
 
-export const ProfileForm = () => {
+export default function ProfileForm() {
   const [{data}] = useGetCurrentUserQuery()
   const [{fetching}, updateProfile] = useUpdateProfileMutation()
   const {register, handleSubmit, setValue, errors} = useForm({
@@ -50,52 +50,54 @@ export const ProfileForm = () => {
   }
 
   return (
-    <FormCard title="My Profile" onSubmit={handleSubmit(onSubmit)}>
-      <Forms.Group header="Contact Info">
-        <Forms.Field half>
-          <TextInput
-            name="displayName"
-            label="Display Name"
-            defaultValue={profile?.displayName || undefined}
-            ref={register}
-          />
-        </Forms.Field>
-
-        <Forms.Field half>
-          <TextInput
-            name="email"
-            label="Email Address"
-            defaultValue={profile?.email || undefined}
-            ref={register}
-          />
-        </Forms.Field>
-      </Forms.Group>
-
-      <Forms.Separator />
-
-      <Forms.Group header="Photo">
-        <Forms.Field full>
-          {user && (
-            <ReactS3Uploader
-              className={clsx('mt-1', 'block', 'w-full')}
-              signingUrl="/api/s3/sign"
-              signingUrlMethod="GET"
-              accept="image/*"
-              s3path={`${user.username}/`}
-              autoUpload={true}
-              onFinish={handleUpload}
+    <Card large title="My Profile">
+      <Forms.Form onSubmit={handleSubmit(onSubmit)}>
+        <Forms.Group header="Contact Info">
+          <Forms.Field half>
+            <TextInput
+              name="displayName"
+              label="Display Name"
+              defaultValue={profile?.displayName || undefined}
+              ref={register}
             />
-          )}
-        </Forms.Field>
-      </Forms.Group>
+          </Forms.Field>
 
-      <Forms.Actions>
-        <Button type="submit" disabled={fetching}>
-          Save
-        </Button>
-      </Forms.Actions>
-    </FormCard>
+          <Forms.Field half>
+            {/* Disabled for now */}
+            <TextInput
+              name="email"
+              label="Email Address"
+              defaultValue={profile?.email || undefined}
+              ref={register}
+              disabled
+            />
+          </Forms.Field>
+        </Forms.Group>
+
+        <Forms.Separator />
+
+        <Forms.Group header="Photo">
+          <Forms.Field full>
+            {user && (
+              <ReactS3Uploader
+                className={clsx('mt-1', 'block', 'w-full')}
+                signingUrl="/api/s3/sign"
+                signingUrlMethod="GET"
+                accept="image/*"
+                s3path={`${user.username}/`}
+                autoUpload={true}
+                onFinish={handleUpload}
+              />
+            )}
+          </Forms.Field>
+        </Forms.Group>
+
+        <Forms.Actions>
+          <Button type="submit" disabled={fetching}>
+            Save
+          </Button>
+        </Forms.Actions>
+      </Forms.Form>
+    </Card>
   )
 }
-
-export default ProfileForm

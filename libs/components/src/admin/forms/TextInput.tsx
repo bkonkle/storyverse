@@ -1,14 +1,16 @@
 import clsx from 'clsx'
-import {forwardRef} from 'react'
+import {DetailedHTMLProps, forwardRef, InputHTMLAttributes} from 'react'
 
-export interface TextInputProps {
-  name: string
+export interface TextInputProps
+  extends DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
   label: string
-  defaultValue?: string
 }
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({name, label, defaultValue}: TextInputProps, ref) => {
+  ({name, label, className, ...rest}: TextInputProps, ref) => {
     return (
       <div className="relative w-full mb-3">
         <label
@@ -20,6 +22,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         <input
           type="text"
           name={name}
+          {...rest}
           className={clsx(
             'border-0',
             'px-3',
@@ -35,9 +38,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             'w-full',
             'ease-linear',
             'transition-all',
-            'duration-150'
+            'duration-150',
+            className
           )}
-          defaultValue={defaultValue}
           ref={ref}
         />
       </div>

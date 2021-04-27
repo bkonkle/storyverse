@@ -1,5 +1,18 @@
 import clsx from 'clsx'
-import {ReactNode} from 'react'
+import {FormEventHandler, ReactNode} from 'react'
+
+export interface FormProps {
+  children: ReactNode
+  onSubmit: FormEventHandler<HTMLFormElement>
+}
+
+export function Form({children, onSubmit}: FormProps) {
+  return (
+    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
+      <form onSubmit={onSubmit}>{children}</form>
+    </div>
+  )
+}
 
 export interface HeaderProps {
   children: ReactNode
@@ -67,4 +80,4 @@ export function Field({full, half, third, children}: FieldProps) {
   )
 }
 
-export default {Header, Separator, Group, Actions, Field}
+export default {Form, Header, Separator, Group, Actions, Field}

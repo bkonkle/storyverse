@@ -1,16 +1,18 @@
-import {forwardRef} from 'react'
+import clsx from 'clsx'
+import {DetailedHTMLProps, forwardRef, TextareaHTMLAttributes} from 'react'
 
-export interface TextAreaInputProps {
-  name: string
+export interface TextAreaInputProps
+  extends DetailedHTMLProps<
+    TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+  > {
   label: string
-  rows?: number
-  defaultValue?: string
 }
 
 export const TextAreaInput = forwardRef<
   HTMLTextAreaElement,
   TextAreaInputProps
->(({name, label, rows = 4, defaultValue}: TextAreaInputProps, ref) => {
+>(({name, label, rows = 4, className, ...rest}: TextAreaInputProps, ref) => {
   return (
     <div className="relative w-full mb-3">
       <label
@@ -21,9 +23,26 @@ export const TextAreaInput = forwardRef<
       </label>
       <textarea
         name={name}
-        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+        {...rest}
+        className={clsx(
+          'border-0',
+          'px-3',
+          'py-3',
+          'placeholder-blueGray-300',
+          'text-blueGray-600',
+          'bg-white',
+          'rounded',
+          'text-sm',
+          'shadow',
+          'focus:outline-none',
+          'focus:ring',
+          'w-full',
+          'ease-linear',
+          'transition-all',
+          'duration-150',
+          className
+        )}
         rows={rows}
-        defaultValue={defaultValue}
         ref={ref}
       ></textarea>
     </div>

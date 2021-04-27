@@ -7,22 +7,34 @@ export interface ButtonProps
     HTMLButtonElement
   > {
   children?: ReactNode
+  dark?: boolean
+  small?: boolean
+  large?: boolean
 }
 
-export default function Button({children, className, ...rest}: ButtonProps) {
+export default function Button({
+  children,
+  className,
+  dark,
+  small,
+  large,
+  ...rest
+}: ButtonProps) {
   return (
     <button
       type="button"
       {...rest}
       className={clsx(
-        'bg-blueGray-700',
-        'active:bg-blueGray-600',
+        dark
+          ? ['bg-blueGray-700', 'active:bg-blueGray-600']
+          : ['bg-indigo-500', 'active:bg-indigo-600'],
         'text-white',
         'font-bold',
         'uppercase',
         'text-xs',
-        'px-4',
-        'py-2',
+        large && ['px-4', 'py-2'],
+        !large && ['px-3', 'py-1'],
+        small && ['mb-1'],
         'rounded',
         'shadow',
         'hover:shadow-md',
