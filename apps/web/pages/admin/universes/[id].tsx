@@ -1,30 +1,34 @@
 import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
+import {useRouter} from 'next/router'
 
 import Admin from '@storyverse/components/layouts/Admin'
 import {
-  ProfileForm,
-  ProfilePreview,
-} from '@storyverse/components/admin/sections/user'
+  UniverseUpdate,
+  UniversePreview,
+} from '@storyverse/components/admin/sections/universes'
 import {getConfig} from '@storyverse/graphql'
 
-export function UserProfilePage() {
+export function CreateUniversePage() {
+  const router = useRouter()
+  const {id} = router.query
+
   return (
     <Admin>
       <Head>
-        <title>Storyverse - User Profile</title>
+        <title>Storyverse - Create Universe</title>
       </Head>
       <div className={clsx('flex', 'flex-wrap')}>
         <div className={clsx('w-full', 'lg:w-8/12', 'px-4')}>
-          <ProfileForm />
+          <UniverseUpdate id={Array.isArray(id) ? id.join('') : id} />
         </div>
         <div className={clsx('w-full', 'lg:w-4/12', 'px-4')}>
-          <ProfilePreview />
+          <UniversePreview />
         </div>
       </div>
     </Admin>
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(UserProfilePage)
+export default withUrqlClient(getConfig, {ssr: true})(CreateUniversePage)

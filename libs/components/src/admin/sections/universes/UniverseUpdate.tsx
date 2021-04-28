@@ -1,47 +1,63 @@
 import * as z from 'zod'
-import clsx from 'clsx'
-import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
 import {useForm} from 'react-hook-form'
+import {zodResolver} from '@hookform/resolvers/zod'
 
 import {
   useGetCurrentUserQuery,
-  useUpdateProfileMutation,
+  useCreateUniverseMutation,
+  useUpdateUniverseMutation,
 } from '@storyverse/graphql/Schema'
 
-import {zodResolver} from '../../../utils/zod'
 import Card from '../../cards/Card'
-import TextInput from '../../forms/TextInput'
 import Forms from '../../forms/Forms'
+import TextInput from '../../forms/TextInput'
+import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
+import clsx from 'clsx'
 import Button from '../../buttons/Button'
 
+export interface UpdateUniverseProps {
+  id?: string
+}
+
 const schema = z.object({
-  displayName: z.string().optional(),
-  email: z.string().nonempty({message: 'An email address is required.'}),
+  name: z.string().nonempty('A name for the Universe is required.'),
   picture: z.string().optional(),
 })
 
-export default function ProfileForm() {
+export default function UpdateUniverse({id}: UpdateUniverseProps) {
   const [{data}] = useGetCurrentUserQuery()
-  const [{fetching}, updateProfile] = useUpdateProfileMutation()
+  const [createData, createUniverse] = useCreateUniverseMutation()
+  const [updateData, updateUniverse] = useUpdateUniverseMutation()
   const {register, handleSubmit, setValue, formState} = useForm({
     resolver: zodResolver(schema),
   })
 
   const user = data?.getCurrentUser
   const profile = user?.profile
+  const fetching = createData.fetching || updateData.fetching
+
+  const action = id ? 'Update' : 'Create'
 
   const handleUpload = (response: S3Response, _file: File) => {
     setValue('picture', `${process.env.BASE_URL}${response.publicUrl}`)
   }
 
   const onSubmit = (data: z.infer<typeof schema>) => {
-    if (!profile?.id) {
-      throw new Error('No Profile id found')
+    if (!profile) {
+      throw new Error('No Profile found for the current User')
     }
 
-    updateProfile({
-      id: profile.id,
-      input: data,
+    if (id) {
+      updateUniverse({id, input: data})
+
+      return
+    }
+
+    createUniverse({
+      input: {
+        ...data,
+        ownerProfileId: profile.id,
+      },
     })
   }
 
@@ -50,31 +66,19 @@ export default function ProfileForm() {
   }
 
   return (
-    <Card large title="My Profile">
+    <Card title={`${action} Universe`}>
       <Forms.Form onSubmit={handleSubmit(onSubmit)}>
-        <Forms.Group header="Contact Info">
-          <Forms.Field half>
+        <Forms.Group header="Details">
+          <Forms.Field>
             <TextInput
-              label="Display Name"
-              defaultValue={profile?.displayName || undefined}
-              {...register('displayName')}
-            />
-          </Forms.Field>
-
-          <Forms.Field half>
-            {/* Disabled for now */}
-            <TextInput
-              label="Email Address"
-              defaultValue={profile?.email || undefined}
-              disabled
-              {...register('email', {required: true})}
+              label="Name"
+              defaultValue="New Universe"
+              {...register('name', {required: true})}
             />
           </Forms.Field>
         </Forms.Group>
 
-        <Forms.Separator />
-
-        <Forms.Group header="Photo">
+        <Forms.Group header="Picture">
           <Forms.Field>
             {user && (
               <ReactS3Uploader

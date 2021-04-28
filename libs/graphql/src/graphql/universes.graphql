@@ -12,3 +12,11 @@ mutation createUniverse($input: CreateUniverseInput!) {
     }
   }
 }
+
+mutation updateUniverse($id: ID!, $input: UpdateUniverseInput!) {
+  updateUniverse(id: $id, input: $input) {
+    universe {
+      ...UniverseData
+    }
+  }
+}

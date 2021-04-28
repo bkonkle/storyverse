@@ -1,17 +1,17 @@
+import {useRouter} from 'next/router'
+
 import Card from '../../cards/Card'
 import {Table, Row, Column} from '../../tables/Tables'
 
 export default function UniversesTable() {
-  const handleCreate = () => {
-    // pass
-  }
+  const router = useRouter()
 
   return (
     <Card
       title="Universes"
       button={{
         title: 'Create',
-        onClick: handleCreate,
+        onClick: () => router.push('/admin/universes/create'),
       }}
     >
       <Table headers={['Name', 'Series', 'Stories', 'Created', 'Updated']}>

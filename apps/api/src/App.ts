@@ -69,10 +69,15 @@ export default class App {
     )
 
     const isDev = nodeEnv === 'development'
+    const isTest = nodeEnv === 'test'
 
-    const app = express()
-      .disable('x-powered-by')
-      .use(morgan(isDev ? 'dev' : 'combined'))
+    const app = express().disable('x-powered-by')
+
+    if (isDev) {
+      app.use(morgan('dev'))
+    } else if (!isTest) {
+      app.use(morgan('combined'))
+    }
 
     app.use(
       jwt({

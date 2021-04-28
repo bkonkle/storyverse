@@ -54,24 +54,22 @@ export function Actions({children}: ActionsProps) {
 }
 
 export interface FieldProps {
-  full?: boolean
   half?: boolean
   third?: boolean
   children?: ReactNode
 }
 
-export function Field({full, half, third, children}: FieldProps) {
+export function Field({half, third, children}: FieldProps) {
   return (
     <div
       className={clsx(
         'w-full',
-        full
-          ? 'lg:w-12/12'
-          : half
+        half
           ? 'lg:w-6/12'
           : third
           ? 'lg:w-4/12'
-          : undefined,
+          : // full
+            'lg:w-12/12',
         'px-4'
       )}
     >
