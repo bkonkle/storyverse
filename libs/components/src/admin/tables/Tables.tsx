@@ -31,8 +31,9 @@ export function Table({
       >
         <thead>
           <tr>
-            {headers.map((header) => (
+            {headers.map((header, i) => (
               <th
+                key={`${header}:${i}`}
                 className={clsx(
                   'px-6',
                   'align-middle',

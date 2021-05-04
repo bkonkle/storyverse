@@ -2,13 +2,13 @@ import * as z from 'zod'
 import clsx from 'clsx'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
 import {useForm} from 'react-hook-form'
+import {zodResolver} from '@hookform/resolvers/zod'
 
 import {
   useGetCurrentUserQuery,
   useUpdateProfileMutation,
 } from '@storyverse/graphql/Schema'
 
-import {zodResolver} from '../../../utils/zod'
 import Card from '../../cards/Card'
 import TextInput from '../../forms/TextInput'
 import Forms from '../../forms/Forms'
