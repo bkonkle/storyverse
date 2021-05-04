@@ -57,7 +57,7 @@ export default function ImageHeaderSidebar({
             <div className="flex justify-center py-4 lg:pt-4 pt-8">
               {stats?.length &&
                 stats.map((stat) => (
-                  <div className="mr-4 p-3 text-center">
+                  <div key={stat.name} className="mr-4 p-3 text-center">
                     <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                       {stat.value}
                     </span>

@@ -1,16 +1,16 @@
-import {useGetCurrentUserQuery} from '@storyverse/graphql/Schema'
+import {Schema} from '@storyverse/graphql'
 
 import {ImageHeaderSidebar} from '../../sidebars'
 
-export default function ProfilePreview() {
-  const [{data}] = useGetCurrentUserQuery()
+export interface ProfilePreviewProps {
+  profile: Schema.ProfileDataFragment
+}
 
-  const profile = data?.getCurrentUser?.profile
-
+export default function ProfilePreview({profile}: ProfilePreviewProps) {
   return (
     <ImageHeaderSidebar
-      alt={profile?.displayName || profile?.id || '...'}
-      src="https://demos.creative-tim.com/notus-nextjs/img/team-2-800x800.jpg"
+      alt={profile?.displayName || '...'}
+      src={profile?.picture || ''}
       stats={[
         {name: 'Stories', value: '10'},
         {name: 'Friends', value: '20'},

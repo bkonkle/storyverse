@@ -7,10 +7,12 @@ export interface TextInputProps
     HTMLInputElement
   > {
   label: string
+  error?: string
+  hint?: string
 }
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({name, label, className, ...rest}: TextInputProps, ref) => {
+  ({name, label, className, error, hint, ...rest}: TextInputProps, ref) => {
     return (
       <div className="relative w-full mb-3">
         <label
@@ -43,6 +45,10 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           )}
           ref={ref}
         />
+        {hint && <div className="text-gray-400 text-xs my-2">{hint}</div>}
+        {error && (
+          <div className="block text-red-600 text-sm my-2">{error}</div>
+        )}
       </div>
     )
   }
