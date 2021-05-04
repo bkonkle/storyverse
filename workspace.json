@@ -92,7 +92,7 @@
         "codegen": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "prisma generate --schema apps/api/prisma/schema.prisma"
+            "command": "npx prisma generate --schema apps/api/prisma/schema.prisma"
           }
         },
         "migrate": {
