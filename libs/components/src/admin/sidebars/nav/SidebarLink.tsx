@@ -5,7 +5,7 @@ import {MouseEventHandler, ReactNode} from 'react'
 
 export interface SidebarLinkProps {
   children: ReactNode
-  href?: string
+  href: string
   icon: string
   iconStyle?: string
   onClick?: MouseEventHandler<HTMLAnchorElement>
@@ -32,10 +32,9 @@ export default function SidebarLink({
         'py-3',
         'font-bold',
         'block',
-        href && router.pathname.indexOf(href) !== -1
+        href !== '/' && router.pathname.indexOf(href) !== -1
           ? ['text-lightBlue-500', 'hover:text-lightBlue-600']
-          : ['text-blueGray-700', 'hover:text-blueGray-500'],
-        href || 'cursor-pointer'
+          : ['text-blueGray-700', 'hover:text-blueGray-500']
       )}
     >
       <i
@@ -44,7 +43,7 @@ export default function SidebarLink({
           icon,
           NARROW_ICONS.includes(icon) ? 'mr-3' : 'mr-2',
           'text-sm',
-          href && router.pathname.indexOf(href) !== -1
+          href !== '/' && router.pathname.indexOf(href) !== -1
             ? 'opacity-75'
             : 'text-blueGray-300'
         )}
@@ -55,7 +54,7 @@ export default function SidebarLink({
 
   return (
     <li className="items-center">
-      {href ? <Link href={href}>{link}</Link> : link}
+      <Link href={href}>{link}</Link>
     </li>
   )
 }

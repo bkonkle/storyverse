@@ -1,15 +1,6 @@
-import {MouseEventHandler} from 'react'
-import {signOut} from 'next-auth/client'
-
+import {handleLogout} from '../../../utils/auth'
 import SidebarHeading from './SidebarHeading'
 import SidebarLink from './SidebarLink'
-
-export const handleLogout: MouseEventHandler<HTMLAnchorElement> = (event) => {
-  event.stopPropagation()
-  event.nativeEvent.stopImmediatePropagation()
-
-  signOut()
-}
 
 export default function SidebarHeader() {
   return (
@@ -45,7 +36,7 @@ export default function SidebarHeader() {
           Settings
         </SidebarLink>
 
-        <SidebarLink onClick={handleLogout} icon="fa-sign-out-alt">
+        <SidebarLink href="/" onClick={handleLogout} icon="fa-sign-out-alt">
           Log Out
         </SidebarLink>
       </ul>
