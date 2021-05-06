@@ -13,7 +13,7 @@ export default function ProfilePreview({profile}: ProfilePreviewProps) {
       src={profile?.picture || ''}
       stats={[
         {name: 'Stories', value: '10'},
-        {name: 'Friends', value: '20'},
+        {name: 'Followers', value: '20'},
         {name: 'Comments', value: '89'},
       ]}
       circle

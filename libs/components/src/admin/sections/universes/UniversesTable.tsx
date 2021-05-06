@@ -1,10 +1,24 @@
 import {useRouter} from 'next/router'
+import {format, formatDistanceToNow} from 'date-fns'
+
+import {Schema} from '@storyverse/graphql'
 
 import Card from '../../cards/Card'
 import {Table, Row, Column} from '../../tables/Tables'
+import Button from '../../buttons/Button'
 
 export default function UniversesTable() {
   const router = useRouter()
+
+  const [{data: userData}] = Schema.useGetCurrentUserQuery()
+  const user = userData?.getCurrentUser
+  const profile = user?.profile
+
+  const [{data: universeData}] = Schema.useGetMyUniversesQuery({
+    variables: {profileId: profile?.id || ''},
+    pause: !profile,
+  })
+  const universes = universeData?.getManyUniverses.data || []
 
   return (
     <Card
@@ -14,16 +28,29 @@ export default function UniversesTable() {
         onClick: () => router.push('/admin/universes/create'),
       }}
     >
-      <Table headers={['Name', 'Series', 'Stories', 'Created', 'Updated']}>
-        <Row>
-          <Column key="name" header className="text-left">
-            Test Universe
-          </Column>
-          <Column key="series">3</Column>
-          <Column key="stories">22</Column>
-          <Column key="created">Monday, April 20th, 2021</Column>
-          <Column key="updated">Tuesday, April 21st, 2021</Column>
-        </Row>
+      <Table headers={['Name', 'Series', 'Stories', 'Created', 'Updated', '']}>
+        {universes.map((universe) => (
+          <Row key={universe.id}>
+            <Column key="name" header className="text-left">
+              {universe.name}
+            </Column>
+            {/* TODO */}
+            <Column key="series">3</Column>
+            {/* TODO */}
+            <Column key="stories">22</Column>
+            <Column key="created">
+              {format(new Date(universe.createdAt), 'EEEE, MMMM do, yyyy')}
+            </Column>
+            <Column key="updated">
+              {formatDistanceToNow(new Date(universe.updatedAt), {
+                addSuffix: true,
+              })}
+            </Column>
+            <Column>
+              <Button dark>Edit</Button>
+            </Column>
+          </Row>
+        ))}
       </Table>
     </Card>
   )

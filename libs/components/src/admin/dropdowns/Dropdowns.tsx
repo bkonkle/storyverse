@@ -12,7 +12,6 @@ import {createPopper} from '@popperjs/core'
 
 export interface DropdownProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  icon?: boolean
   toggle: ReactNode
   toggleProps?: Omit<
     DetailedHTMLProps<
@@ -25,7 +24,6 @@ export interface DropdownProps
 
 export function Dropdown({
   className,
-  icon,
   toggle,
   toggleProps,
   children,
@@ -70,7 +68,8 @@ export function Dropdown({
               'inline-flex',
               'items-center',
               'justify-center',
-              'rounded-full'
+              'rounded-full',
+              toggleClassName
             )}
           >
             {toggle}

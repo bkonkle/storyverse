@@ -20,6 +20,7 @@ export interface ProfileFormProps {
 const schema = z.object({
   displayName: z.string().optional(),
   email: z.string().nonempty({message: 'An email address is required.'}),
+  location: z.string().optional(),
   picture: z.string().optional(),
 })
 
@@ -31,6 +32,7 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
     defaultValues: {
       email: profile.email || '',
       displayName: profile.displayName || '',
+      location: '',
       picture: profile.picture || '',
     },
   })
@@ -61,6 +63,14 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
           </Forms.Field>
 
           <Forms.Field half>
+            <TextInput
+              label="Location"
+              error={formState.errors.displayName?.message}
+              {...register('location')}
+            />
+          </Forms.Field>
+
+          <Forms.Field>
             <TextInput
               label="Email Address"
               error={formState.errors.email?.message}

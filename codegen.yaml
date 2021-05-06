@@ -19,7 +19,7 @@ generates:
       useIndexSignature: true
       noSchemaStitching: true
       scalars:
-        DateTime: Date
+        DateTime: string
         JSON: JSON
         JSONObject: {}
   libs/graphql/src/Schema.tsx:
@@ -37,6 +37,10 @@ generates:
       withHOC: false
       withHooks: true
       withMutationFn: false
+      scalars:
+        DateTime: string
+        JSON: JSON
+        JSONObject: {}
   schema.json:
     plugins:
       - introspection

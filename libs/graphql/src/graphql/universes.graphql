@@ -3,6 +3,16 @@ fragment UniverseData on Universe {
   name
   description
   picture
+  createdAt
+  updatedAt
+}
+
+query getMyUniverses($profileId: ID!) {
+  getManyUniverses(where: {ownerProfileId: $profileId}) {
+    data {
+      ...UniverseData
+    }
+  }
 }
 
 mutation createUniverse($input: CreateUniverseInput!) {

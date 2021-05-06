@@ -8,7 +8,7 @@ export default function UniversePreview() {
       stats={[
         {name: 'Series', value: '10'},
         {name: 'Stories', value: '20'},
-        {name: 'Authors', value: '89'},
+        {name: 'Authors', value: '3'},
       ]}
     >
       <div className="mb-2">TEST</div>
