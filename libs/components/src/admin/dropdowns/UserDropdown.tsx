@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 
 import {Schema} from '@storyverse/graphql'
+import Urls, {Admin} from '@storyverse/shared/config/urls'
 
 import {handleLogout} from '../../utils/auth'
 import {Dropdown, Link, Separator} from './Dropdowns'
@@ -31,10 +32,10 @@ export default function UserDropdown() {
 
   return (
     <Dropdown toggle={toggle}>
-      <Link href="/admin/user/profile">Profile</Link>
-      <Link href="/admin/user/settings">Settings</Link>
+      <Link href={Admin.User.profile()}>Profile</Link>
+      <Link href={Admin.User.settings()}>Settings</Link>
       <Separator />
-      <Link href="/" onClick={handleLogout}>
+      <Link href={Urls.home()} onClick={handleLogout}>
         Log Out
       </Link>
     </Dropdown>

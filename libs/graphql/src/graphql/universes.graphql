@@ -15,6 +15,12 @@ query getMyUniverses($profileId: ID!) {
   }
 }
 
+query getUniverse($id: ID!) {
+  getUniverse(id: $id) {
+    ...UniverseData
+  }
+}
+
 mutation createUniverse($input: CreateUniverseInput!) {
   createUniverse(input: $input) {
     universe {

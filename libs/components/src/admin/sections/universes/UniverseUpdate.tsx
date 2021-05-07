@@ -2,11 +2,7 @@ import * as z from 'zod'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 
-import {
-  useGetCurrentUserQuery,
-  useCreateUniverseMutation,
-  useUpdateUniverseMutation,
-} from '@storyverse/graphql/Schema'
+import {Schema} from '@storyverse/graphql'
 
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
@@ -16,27 +12,36 @@ import clsx from 'clsx'
 import Button from '../../buttons/Button'
 
 export interface UpdateUniverseProps {
-  id?: string
+  universe?: Schema.UniverseDataFragment
 }
 
 const schema = z.object({
   name: z.string().nonempty('A name for the Universe is required.'),
+  description: z.string().optional(),
   picture: z.string().optional(),
 })
 
-export default function UpdateUniverse({id}: UpdateUniverseProps) {
-  const [{data}] = useGetCurrentUserQuery()
-  const [createData, createUniverse] = useCreateUniverseMutation()
-  const [updateData, updateUniverse] = useUpdateUniverseMutation()
-  const {register, handleSubmit, setValue, formState} = useForm({
-    resolver: zodResolver(schema),
-  })
+export default function UpdateUniverse({universe}: UpdateUniverseProps) {
+  const id = universe?.id
+  const [userData] = Schema.useGetCurrentUserQuery()
+  const [createData, createUniverse] = Schema.useCreateUniverseMutation()
+  const [updateData, updateUniverse] = Schema.useUpdateUniverseMutation()
 
-  const user = data?.getCurrentUser
+  const user = userData.data?.getCurrentUser
   const profile = user?.profile
-  const fetching = createData.fetching || updateData.fetching
 
   const action = id ? 'Update' : 'Create'
+
+  const fetching = createData.fetching || updateData.fetching
+
+  const {register, handleSubmit, setValue, formState} = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: universe?.name || '',
+      description: universe?.description || '',
+      picture: universe?.picture || '',
+    },
+  })
 
   const handleUpload = (response: S3Response, _file: File) => {
     setValue('picture', `${process.env.BASE_URL}${response.publicUrl}`)
@@ -61,10 +66,6 @@ export default function UpdateUniverse({id}: UpdateUniverseProps) {
     })
   }
 
-  if (Object.keys(formState.errors).length) {
-    console.error(`>- formState.errors ->`, formState.errors)
-  }
-
   return (
     <Card title={`${action} Universe`}>
       <Forms.Form onSubmit={handleSubmit(onSubmit)}>
@@ -73,6 +74,7 @@ export default function UpdateUniverse({id}: UpdateUniverseProps) {
             <TextInput
               label="Name"
               defaultValue="New Universe"
+              error={formState.errors.name?.message}
               {...register('name', {required: true})}
             />
           </Forms.Field>

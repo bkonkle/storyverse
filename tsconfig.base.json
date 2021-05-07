@@ -30,7 +30,9 @@
       "@storyverse/graphql": ["libs/graphql/src/index.ts"],
       "@storyverse/graphql/*": ["libs/graphql/src/*"],
       "@storyverse/components": ["libs/components/src/index.ts"],
-      "@storyverse/components/*": ["libs/components/src/*"]
+      "@storyverse/components/*": ["libs/components/src/*"],
+      "@storyverse/shared/config": ["libs/shared/config/src/index.ts"],
+      "@storyverse/shared/config/*": ["libs/shared/config/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

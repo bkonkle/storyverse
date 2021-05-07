@@ -1,10 +1,19 @@
+import {Schema} from '@storyverse/graphql'
+
 import {ImageHeaderSidebar} from '../../sidebars'
 
-export default function UniversePreview() {
+export interface UniversePreviewProps {
+  universe?: Schema.UniverseDataFragment
+}
+
+export default function UniversePreview({universe}: UniversePreviewProps) {
   return (
     <ImageHeaderSidebar
-      alt="..."
-      src="https://cdn.mos.cms.futurecdn.net/rwow8CCG3C3GrqHGiK8qcJ-970-80.jpg.webp"
+      alt={universe?.name || '...'}
+      src={
+        universe?.picture ||
+        'https://cdn.mos.cms.futurecdn.net/rwow8CCG3C3GrqHGiK8qcJ-970-80.jpg.webp'
+      }
       stats={[
         {name: 'Series', value: '10'},
         {name: 'Stories', value: '20'},

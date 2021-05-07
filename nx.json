@@ -17,6 +17,7 @@
     "web": {"tags": []},
     "api": {"tags": []},
     "graphql": {"tags": []},
-    "components": {"tags": []}
+    "components": {"tags": []},
+    "shared-config": {"tags": []}
   }
 }

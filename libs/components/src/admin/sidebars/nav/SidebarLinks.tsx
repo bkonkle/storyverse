@@ -1,3 +1,5 @@
+import Urls, {Admin} from '@storyverse/shared/config/urls'
+
 import {handleLogout} from '../../../utils/auth'
 import SidebarHeading from './SidebarHeading'
 import SidebarLink from './SidebarLink'
@@ -8,19 +10,19 @@ export default function SidebarHeader() {
       <SidebarHeading>Story Management</SidebarHeading>
 
       <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-        <SidebarLink href="/admin/universes" icon="fa-sun">
+        <SidebarLink href={Admin.Universes.list()} icon="fa-sun">
           Universes
         </SidebarLink>
 
-        <SidebarLink href="/admin/series" icon="fa-book">
+        <SidebarLink href={Admin.Series.list()} icon="fa-book">
           Series
         </SidebarLink>
 
-        <SidebarLink href="/admin/stories" icon="fa-book-open">
+        <SidebarLink href={Admin.Stories.list()} icon="fa-book-open">
           Stories
         </SidebarLink>
 
-        <SidebarLink href="/admin/tables" icon="fa-user-edit">
+        <SidebarLink href={Admin.Authors.list()} icon="fa-user-edit">
           Authors
         </SidebarLink>
       </ul>
@@ -28,15 +30,19 @@ export default function SidebarHeader() {
       <SidebarHeading>User</SidebarHeading>
 
       <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-        <SidebarLink href="/admin/user/profile" icon="fa-user-circle">
+        <SidebarLink href={Admin.User.profile()} icon="fa-user-circle">
           Profile
         </SidebarLink>
 
-        <SidebarLink href="/admin/user/settings" icon="fa-tools">
+        <SidebarLink href={Admin.User.settings()} icon="fa-tools">
           Settings
         </SidebarLink>
 
-        <SidebarLink href="/" onClick={handleLogout} icon="fa-sign-out-alt">
+        <SidebarLink
+          href={Urls.home()}
+          onClick={handleLogout}
+          icon="fa-sign-out-alt"
+        >
           Log Out
         </SidebarLink>
       </ul>

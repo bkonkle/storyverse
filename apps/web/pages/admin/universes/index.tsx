@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import Admin from '@storyverse/components/layouts/Admin'
-import UniversesTable from '@storyverse/components/admin/sections/universes/UniversesTable'
+import {Admin} from '@storyverse/components/layouts'
+import {UniversesTable} from '@storyverse/components/admin/sections/universes'
 import {getConfig} from '@storyverse/graphql'
 
 export function UniversesPage() {

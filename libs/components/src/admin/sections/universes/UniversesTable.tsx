@@ -1,15 +1,13 @@
-import {useRouter} from 'next/router'
 import {format, formatDistanceToNow} from 'date-fns'
 
 import {Schema} from '@storyverse/graphql'
+import {Admin} from '@storyverse/shared/config/urls'
 
 import Card from '../../cards/Card'
 import {Table, Row, Column} from '../../tables/Tables'
 import Button from '../../buttons/Button'
 
 export default function UniversesTable() {
-  const router = useRouter()
-
   const [{data: userData}] = Schema.useGetCurrentUserQuery()
   const user = userData?.getCurrentUser
   const profile = user?.profile
@@ -25,7 +23,7 @@ export default function UniversesTable() {
       title="Universes"
       button={{
         title: 'Create',
-        onClick: () => router.push('/admin/universes/create'),
+        href: Admin.Universes.create(),
       }}
     >
       <Table headers={['Name', 'Series', 'Stories', 'Created', 'Updated', '']}>
@@ -47,7 +45,9 @@ export default function UniversesTable() {
               })}
             </Column>
             <Column>
-              <Button dark>Edit</Button>
+              <Button href={Admin.Universes.update(universe.id)} dark>
+                Edit
+              </Button>
             </Column>
           </Row>
         ))}
