@@ -12,6 +12,7 @@ export interface FormProps {
   button?: {
     title: string
     href?: string
+    dark?: boolean
     onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>
   }
 }
@@ -109,7 +110,7 @@ export default function Card({
               <Button
                 small={small}
                 large={large}
-                dark={large}
+                dark={button.dark || large}
                 onClick={button.onClick}
                 href={button.href}
                 type="button"

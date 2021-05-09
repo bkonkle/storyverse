@@ -40,9 +40,11 @@ export default function UniversesTable() {
               {format(new Date(universe.createdAt), 'EEEE, MMMM do, yyyy')}
             </Column>
             <Column key="updated">
-              {formatDistanceToNow(new Date(universe.updatedAt), {
-                addSuffix: true,
-              })}
+              <p title="Test">
+                {formatDistanceToNow(new Date(universe.updatedAt), {
+                  addSuffix: true,
+                })}
+              </p>
             </Column>
             <Column>
               <Button href={Admin.Universes.update(universe.id)} dark>

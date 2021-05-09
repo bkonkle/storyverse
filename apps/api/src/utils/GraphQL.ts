@@ -22,6 +22,6 @@ export const useResolvers = <T>(
   useClass: resolversClass,
 })
 
-export type Query = Required<Schema.QueryResolvers<Context>>
+export type Query = Schema.QueryResolvers<Context>
 
-export type Mutation = Required<Schema.MutationResolvers<Context>>
+export type Mutation = Schema.MutationResolvers<Context>

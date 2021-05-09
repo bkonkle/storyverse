@@ -10,6 +10,7 @@ import TextInput from '../../forms/TextInput'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
 import clsx from 'clsx'
 import Button from '../../buttons/Button'
+import {Admin} from '@storyverse/shared/config/urls'
 
 export interface UpdateUniverseProps {
   universe?: Schema.UniverseDataFragment
@@ -67,7 +68,10 @@ export default function UpdateUniverse({universe}: UpdateUniverseProps) {
   }
 
   return (
-    <Card title={`${action} Universe`}>
+    <Card
+      title={`${action} Universe`}
+      button={{title: 'Back', href: Admin.Universes.list(), dark: true}}
+    >
       <Forms.Form onSubmit={handleSubmit(onSubmit)}>
         <Forms.Group header="Details">
           <Forms.Field>
