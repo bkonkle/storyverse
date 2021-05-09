@@ -1,12 +1,10 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
-import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
-
 import {getUsername} from '../users/UserUtils'
-import {Context} from '../utils/Context'
 import {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
+import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import UniverseAuthz from './UniverseAuthz'
 import {
   IncludeAll,
@@ -14,7 +12,6 @@ import {
   fromUniverseCondition,
   fromUniverseInput,
 } from './UniverseUtils'
-import {Resolvers} from '../utils/GraphQL'
 
 @injectable()
 export default class UniverseResolvers implements Resolvers {
@@ -35,7 +32,7 @@ export default class UniverseResolvers implements Resolvers {
     },
   })
 
-  getUniverse: QueryResolvers<Context>['getUniverse'] = async (
+  getUniverse: Query<'getUniverse'> = async (
     _parent,
     {id},
     _context,
@@ -47,7 +44,7 @@ export default class UniverseResolvers implements Resolvers {
     })
   }
 
-  getManyUniverses: QueryResolvers<Context>['getManyUniverses'] = async (
+  getManyUniverses: Query<'getManyUniverses'> = async (
     _parent,
     args,
     _context,
@@ -73,7 +70,7 @@ export default class UniverseResolvers implements Resolvers {
     })
   }
 
-  createUniverse: MutationResolvers<Context>['createUniverse'] = async (
+  createUniverse: Mutation<'createUniverse'> = async (
     _parent,
     {input},
     context,
@@ -102,7 +99,7 @@ export default class UniverseResolvers implements Resolvers {
     return {universe}
   }
 
-  updateUniverse: MutationResolvers<Context>['updateUniverse'] = async (
+  updateUniverse: Mutation<'updateUniverse'> = async (
     _parent,
     {id, input},
     context,
@@ -125,7 +122,7 @@ export default class UniverseResolvers implements Resolvers {
     return {universe}
   }
 
-  deleteUniverse: MutationResolvers<Context>['deleteUniverse'] = async (
+  deleteUniverse: Mutation<'deleteUniverse'> = async (
     _parent,
     {id},
     context,
@@ -147,7 +144,7 @@ export default class UniverseResolvers implements Resolvers {
     return {universe}
   }
 
-  grantUniverseRoles: MutationResolvers<Context>['grantUniverseRoles'] = async (
+  grantUniverseRoles: Mutation<'grantUniverseRoles'> = async (
     _parent,
     {universeId, profileId, roles},
     context,

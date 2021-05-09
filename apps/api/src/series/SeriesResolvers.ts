@@ -1,12 +1,10 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
-import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
-
 import {getUsername} from '../users/UserUtils'
-import {Context} from '../utils/Context'
 import {includeFromSelections} from '../utils/Prisma'
 import {getOffset, paginateResponse} from '../utils/Pagination'
+import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import SeriesAuthz from './SeriesAuthz'
 import {
   IncludeAll,
@@ -14,7 +12,6 @@ import {
   fromSeriesCondition,
   fromSeriesInput,
 } from './SeriesUtils'
-import {Resolvers} from '../utils/GraphQL'
 
 @injectable()
 export default class SeriesResolvers implements Resolvers {
@@ -35,7 +32,7 @@ export default class SeriesResolvers implements Resolvers {
     },
   })
 
-  getSeries: QueryResolvers<Context>['getSeries'] = async (
+  getSeries: Query<'getSeries'> = async (
     _parent,
     {id},
     _context,
@@ -52,7 +49,7 @@ export default class SeriesResolvers implements Resolvers {
     })
   }
 
-  getManySeries: QueryResolvers<Context>['getManySeries'] = async (
+  getManySeries: Query<'getManySeries'> = async (
     _parent,
     args,
     _context,
@@ -84,7 +81,7 @@ export default class SeriesResolvers implements Resolvers {
     })
   }
 
-  createSeries: MutationResolvers<Context>['createSeries'] = async (
+  createSeries: Mutation<'createSeries'> = async (
     _parent,
     {input},
     context,
@@ -113,7 +110,7 @@ export default class SeriesResolvers implements Resolvers {
     return {series}
   }
 
-  updateSeries: MutationResolvers<Context>['updateSeries'] = async (
+  updateSeries: Mutation<'updateSeries'> = async (
     _parent,
     {id, input},
     context,
@@ -136,7 +133,7 @@ export default class SeriesResolvers implements Resolvers {
     return {series}
   }
 
-  deleteSeries: MutationResolvers<Context>['deleteSeries'] = async (
+  deleteSeries: Mutation<'deleteSeries'> = async (
     _parent,
     {id},
     context,

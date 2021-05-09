@@ -20,7 +20,7 @@ export default class UserResolvers implements Resolvers {
     },
   })
 
-  getCurrentUser: Query['getCurrentUser'] = async (
+  getCurrentUser: Query<'getCurrentUser'> = async (
     _parent,
     _args,
     context,
@@ -34,7 +34,7 @@ export default class UserResolvers implements Resolvers {
     })
   }
 
-  createUser: Mutation['createUser'] = async (
+  createUser: Mutation<'createUser'> = async (
     _parent,
     {input},
     context,
@@ -57,7 +57,7 @@ export default class UserResolvers implements Resolvers {
     return {user}
   }
 
-  getOrCreateCurrentUser: Mutation['getOrCreateCurrentUser'] = async (
+  getOrCreateCurrentUser: Mutation<'getOrCreateCurrentUser'> = async (
     _parent,
     {input},
     context,
@@ -88,7 +88,7 @@ export default class UserResolvers implements Resolvers {
     return {user}
   }
 
-  updateCurrentUser: Mutation['updateCurrentUser'] = async (
+  updateCurrentUser: Mutation<'updateCurrentUser'> = async (
     _parent,
     {input},
     context,

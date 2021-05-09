@@ -1,11 +1,8 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
-import {QueryResolvers, MutationResolvers} from '@storyverse/graphql/ApiSchema'
-
 import {getUsername, maybeUsername} from '../users/UserUtils'
-import {Context} from '../utils/Context'
-import {Resolvers} from '../utils/GraphQL'
+import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import {getOffset, paginateResponse} from '../utils/Pagination'
 import ProfileAuthz from './ProfileAuthz'
 import {
@@ -38,7 +35,7 @@ export default class ProfileResolvers implements Resolvers {
    * Retrieves a profile by id. Profiles are public, but if the username and token sub don't match,
    * censor the user and email address from the results.
    */
-  getProfile: QueryResolvers<Context>['getProfile'] = async (
+  getProfile: Query<'getProfile'> = async (
     _parent,
     {id},
     context,
@@ -62,7 +59,7 @@ export default class ProfileResolvers implements Resolvers {
    * Lists profiles by various criteria. Profiles are public, but if the username and token sub
    * don't match, censor the user and email address from the results.
    */
-  getManyProfiles: QueryResolvers<Context>['getManyProfiles'] = async (
+  getManyProfiles: Query<'getManyProfiles'> = async (
     _parent,
     args,
     context,
@@ -92,7 +89,7 @@ export default class ProfileResolvers implements Resolvers {
   /**
    * Create a new Profile for an authenticated user.
    */
-  createProfile: MutationResolvers<Context>['createProfile'] = async (
+  createProfile: Mutation<'createProfile'> = async (
     _parent,
     {input},
     context,
@@ -120,7 +117,7 @@ export default class ProfileResolvers implements Resolvers {
   /**
    * Update an existing Profile for an authorized user.
    */
-  updateProfile: MutationResolvers<Context>['updateProfile'] = async (
+  updateProfile: Mutation<'updateProfile'> = async (
     _parent,
     {id, input},
     context,
@@ -151,7 +148,7 @@ export default class ProfileResolvers implements Resolvers {
   /**
    * Delete an existing profile for an authorized user.
    */
-  deleteProfile: MutationResolvers<Context>['deleteProfile'] = async (
+  deleteProfile: Mutation<'deleteProfile'> = async (
     _parent,
     {id},
     context,

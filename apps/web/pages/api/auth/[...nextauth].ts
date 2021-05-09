@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 
-import {Auth0Token} from '../graphql'
-
 export default NextAuth({
   providers: [
     Providers.Auth0({
@@ -27,7 +25,7 @@ export default NextAuth({
       return token
     },
 
-    session: async (session, user: Auth0Token) => {
+    session: async (session, user) => {
       return {
         ...session,
         user: {

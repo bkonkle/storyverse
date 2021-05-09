@@ -15,11 +15,10 @@ generates:
       - typescript
       - typescript-resolvers
     config:
-      preResolveTypes: true
       useIndexSignature: true
       noSchemaStitching: true
       scalars:
-        DateTime: string
+        DateTime: Date
         JSON: JSON
         JSONObject: {}
   libs/graphql/src/Schema.tsx:
@@ -38,7 +37,7 @@ generates:
       withHooks: true
       withMutationFn: false
       scalars:
-        DateTime: string
+        DateTime: Date
         JSON: JSON
         JSONObject: {}
   schema.json:
