@@ -1,14 +1,17 @@
 import clsx from 'clsx'
 import {
   AnchorHTMLAttributes,
-  HTMLAttributes,
   DetailedHTMLProps,
+  FocusEvent,
+  HTMLAttributes,
+  MouseEventHandler,
   ReactNode,
   createRef,
   useState,
 } from 'react'
 import NextLink from 'next/link'
 import {createPopper} from '@popperjs/core'
+import {Admin} from '@storyverse/shared/config/urls'
 
 export interface DropdownProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
@@ -47,16 +50,38 @@ export function Dropdown({
     setDropdownPopoverShow(false)
   }
 
+  const onClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    e.nativeEvent.stopImmediatePropagation()
+
+    dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover()
+  }
+
+  const onBlur = (event: FocusEvent<HTMLAnchorElement>) => {
+    // Workaround an issue where links clicked on the menu don't activate because the
+    // element disappears too quickly.
+    if (
+      popoverDropdownRef.current &&
+      Array.from(popoverDropdownRef.current.querySelectorAll('*')).includes(
+        event.relatedTarget as HTMLElement
+      )
+    ) {
+      return setTimeout(closeDropdownPopover, 500)
+    }
+
+    closeDropdownPopover()
+  }
+
   return (
     <>
       <a
         className={clsx('text-blueGray-500', 'block', className)}
-        href="#pablo"
+        href={Admin.User.profile()}
         ref={btnDropdownRef}
-        onClick={(e) => {
-          e.preventDefault()
-          dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover()
-        }}
+        onClick={onClick}
+        onBlur={onBlur}
+        aria-expanded={dropdownPopoverShow ? 'true' : 'false'}
         {...toggleRest}
       >
         <div className={clsx('items-center', 'flex')}>

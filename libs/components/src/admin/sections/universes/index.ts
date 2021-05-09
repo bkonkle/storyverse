@@ -1,4 +1,3 @@
-export {default as UniverseUpdateSection} from './UniverseUpdateSection'
-export {default as UniverseUpdate} from './UniverseUpdate'
-export {default as UniversePreview} from './UniversePreview'
-export {default as UniversesTable} from './UniversesTable'
+export {default as UpdateForm} from './UpdateForm'
+export {default as Preview} from './Preview'
+export {default as List} from './List'

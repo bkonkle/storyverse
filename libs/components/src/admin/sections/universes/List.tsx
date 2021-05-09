@@ -1,23 +1,17 @@
 import {format, formatDistanceToNow} from 'date-fns'
 
-import {Schema} from '@storyverse/graphql'
 import {Admin} from '@storyverse/shared/config/urls'
+import {Schema} from '@storyverse/graphql'
 
 import Card from '../../cards/Card'
 import {Table, Row, Column} from '../../tables/Tables'
 import Button from '../../buttons/Button'
 
-export default function UniversesTable() {
-  const [{data: userData}] = Schema.useGetCurrentUserQuery()
-  const user = userData?.getCurrentUser
-  const profile = user?.profile
+export interface ListProps {
+  universes: Schema.UniverseDataFragment[]
+}
 
-  const [{data: universeData}] = Schema.useGetMyUniversesQuery({
-    variables: {profileId: profile?.id || ''},
-    pause: !profile,
-  })
-  const universes = universeData?.getManyUniverses.data || []
-
+export default function List({universes}: ListProps) {
   return (
     <Card
       title="Universes"

@@ -40,6 +40,7 @@ Input to update an existing Universe
 input UpdateUniverseInput {
   name: String
   description: JSONObject
+  picture: String
   ownerProfileId: ID
 }
 

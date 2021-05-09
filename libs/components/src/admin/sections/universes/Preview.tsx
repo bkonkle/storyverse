@@ -2,11 +2,11 @@ import {Schema} from '@storyverse/graphql'
 
 import {ImageHeaderSidebar} from '../../sidebars'
 
-export interface UniversePreviewProps {
+export interface PreviewProps {
   universe?: Schema.UniverseDataFragment
 }
 
-export default function UniversePreview({universe}: UniversePreviewProps) {
+export default function Preview({universe}: PreviewProps) {
   return (
     <ImageHeaderSidebar
       alt={universe?.name || '...'}

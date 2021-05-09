@@ -12,17 +12,17 @@ import clsx from 'clsx'
 import Button from '../../buttons/Button'
 import {Admin} from '@storyverse/shared/config/urls'
 
-export interface UpdateUniverseProps {
+export interface UpdateFormProps {
   universe?: Schema.UniverseDataFragment
 }
 
 const schema = z.object({
   name: z.string().nonempty('A name for the Universe is required.'),
-  description: z.string().optional(),
+  description: z.record(z.string()).optional(),
   picture: z.string().optional(),
 })
 
-export default function UpdateUniverse({universe}: UpdateUniverseProps) {
+export default function UpdateForm({universe}: UpdateFormProps) {
   const id = universe?.id
   const [userData] = Schema.useGetCurrentUserQuery()
   const [createData, createUniverse] = Schema.useCreateUniverseMutation()
@@ -39,7 +39,7 @@ export default function UpdateUniverse({universe}: UpdateUniverseProps) {
     resolver: zodResolver(schema),
     defaultValues: {
       name: universe?.name || '',
-      description: universe?.description || '',
+      description: universe?.description || {},
       picture: universe?.picture || '',
     },
   })
@@ -47,6 +47,8 @@ export default function UpdateUniverse({universe}: UpdateUniverseProps) {
   const handleUpload = (response: S3Response, _file: File) => {
     setValue('picture', `${process.env.BASE_URL}${response.publicUrl}`)
   }
+
+  console.log(`>- formState.errors ->`, formState.errors)
 
   const onSubmit = (data: z.infer<typeof schema>) => {
     if (!profile) {

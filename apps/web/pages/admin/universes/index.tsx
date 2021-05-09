@@ -3,10 +3,20 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
 import {Admin} from '@storyverse/components/layouts'
-import {UniversesTable} from '@storyverse/components/admin/sections/universes'
-import {getConfig} from '@storyverse/graphql'
+import {List} from '@storyverse/components/admin/sections/universes'
+import {Schema, getConfig} from '@storyverse/graphql'
 
 export function UniversesPage() {
+  const [{data: userData}] = Schema.useGetCurrentUserQuery()
+  const user = userData?.getCurrentUser
+  const profile = user?.profile
+
+  const [{data: universeData}] = Schema.useGetMyUniversesQuery({
+    variables: {profileId: profile?.id || ''},
+    pause: !profile,
+  })
+  const universes = universeData?.getManyUniverses.data || []
+
   return (
     <Admin>
       <Head>
@@ -14,7 +24,7 @@ export function UniversesPage() {
       </Head>
       <div className={clsx('flex', 'flex-wrap')}>
         <div className={clsx('w-full', 'lg:w-12/12', 'px-4')}>
-          <UniversesTable />
+          <List universes={universes} />
         </div>
       </div>
     </Admin>
