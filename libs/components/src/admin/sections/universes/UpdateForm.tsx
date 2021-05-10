@@ -3,14 +3,15 @@ import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 import {Schema} from '@storyverse/graphql'
+import {Admin} from '@storyverse/shared/config/urls'
 
+import * as v from '../../../utils/validation'
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
 import TextInput from '../../forms/TextInput'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
 import clsx from 'clsx'
 import Button from '../../buttons/Button'
-import {Admin} from '@storyverse/shared/config/urls'
 
 export interface UpdateFormProps {
   universe?: Schema.UniverseDataFragment
@@ -18,7 +19,7 @@ export interface UpdateFormProps {
 
 const schema = z.object({
   name: z.string().nonempty('A name for the Universe is required.'),
-  description: z.record(z.string()).optional(),
+  description: v.json().optional(),
   picture: z.string().optional(),
 })
 
@@ -39,7 +40,7 @@ export default function UpdateForm({universe}: UpdateFormProps) {
     resolver: zodResolver(schema),
     defaultValues: {
       name: universe?.name || '',
-      description: universe?.description || {},
+      description: (universe?.description as v.JsonValue) || {},
       picture: universe?.picture || '',
     },
   })
@@ -47,8 +48,6 @@ export default function UpdateForm({universe}: UpdateFormProps) {
   const handleUpload = (response: S3Response, _file: File) => {
     setValue('picture', `${process.env.BASE_URL}${response.publicUrl}`)
   }
-
-  console.log(`>- formState.errors ->`, formState.errors)
 
   const onSubmit = (data: z.infer<typeof schema>) => {
     if (!profile) {
