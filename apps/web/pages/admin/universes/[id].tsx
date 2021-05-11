@@ -8,7 +8,7 @@ import {
   UpdateForm,
   Preview,
 } from '@storyverse/components/admin/sections/universes'
-import {Schema, getConfig} from '@storyverse/graphql'
+import {Schema, Client} from '@storyverse/graphql'
 
 export function CreateUniversePage() {
   const {query} = useRouter()
@@ -42,4 +42,4 @@ export function CreateUniversePage() {
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(CreateUniversePage)
+export default withUrqlClient(Client.getConfig, {ssr: true})(CreateUniversePage)

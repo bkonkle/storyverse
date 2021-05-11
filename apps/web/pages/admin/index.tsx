@@ -3,7 +3,7 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
 import Admin from '@storyverse/components/layouts/Admin'
-import {getConfig} from '@storyverse/graphql'
+import {Client} from '@storyverse/graphql'
 
 export function AdminPage() {
   return (
@@ -19,4 +19,4 @@ export function AdminPage() {
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(AdminPage)
+export default withUrqlClient(Client.getConfig, {ssr: true})(AdminPage)

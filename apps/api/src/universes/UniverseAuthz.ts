@@ -2,7 +2,7 @@ import {PrismaClient, Profile} from '@prisma/client'
 import {ForbiddenError, UserInputError} from 'apollo-server-core'
 import {injectable} from 'tsyringe'
 
-import {UniverseRoles} from '@storyverse/graphql/ApiSchema'
+import {UniverseRoles} from '@storyverse/graphql/api/Schema'
 
 import {NotFoundError} from '../utils/Errors'
 import {AuthzService, Permission} from '../authz'

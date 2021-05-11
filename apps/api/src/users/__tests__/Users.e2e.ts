@@ -1,6 +1,6 @@
 import {Prisma} from '@prisma/client'
 
-import {Mutation, Query} from '@storyverse/graphql/ApiSchema'
+import {Mutation, Query} from '@storyverse/graphql/api/Schema'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'

@@ -1,8 +1,8 @@
 /* Inspired by https://github.com/stegano/next-http-proxy-middleware */
 import {NextApiRequest, NextApiResponse} from 'next'
-import httpProxy from 'http-proxy'
-import http from 'http'
+import {createProxyMiddleware} from 'http-proxy-middleware'
 import jwt from 'next-auth/jwt'
+import express from 'express'
 
 export interface Auth0Token {
   sub: string
@@ -14,72 +14,45 @@ export interface Auth0Token {
   exp: number
 }
 
-const proxy: httpProxy = httpProxy.createProxy()
+const proxy = createProxyMiddleware({
+  target: process.env.API_URL,
+  changeOrigin: true,
+  pathRewrite: {'^/api': ''},
+  onProxyReq: (proxyReq, req) => {
+    const request = (req as unknown) as NextApiRequest & {token?: Auth0Token}
+    const {body, token} = request
 
-/**
- * If a key pattern is found in `pathRewrite` that matches the url value,
- * replace matched string of url with the `pathRewrite` value.
- * @param req
- * @param pathRewrite
- */
-const rewritePath = (url: string, pathRewrite: {[key: string]: string}) => {
-  for (const str in pathRewrite) {
-    const pattern = RegExp(str)
-    const path = pathRewrite[str]
-    if (pattern.test(url as string)) {
-      return url.replace(pattern, path)
+    if (['POST', 'PUT'].indexOf(req.method as string) >= 0) {
+      token &&
+        proxyReq.setHeader('Authorization', `Bearer ${token.accessToken}`)
+
+      proxyReq.write(typeof body === 'string' ? body : JSON.stringify(body))
+      proxyReq.end()
     }
-  }
-  return url
-}
+  },
+})
 
-const handleReq = (
-  proxyReq: http.ClientRequest,
-  req: http.IncomingMessage
-): void => {
-  const body = (req as NextApiRequest).body
-
-  if (
-    ['POST', 'PUT'].indexOf(req.method as string) >= 0 &&
-    typeof body === 'string'
-  ) {
-    proxyReq.write(body)
-    proxyReq.end()
-  }
-}
-
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function (
+  req: NextApiRequest & {token?: Auth0Token},
+  res: NextApiResponse
+) {
   const response = await jwt.getToken({
     req,
     secret: process.env.OAUTH2_JWT_SECRET || '',
   })
-  const token = (response as unknown) as Auth0Token
+  req.token = (response as unknown) as Auth0Token
 
-  return new Promise((resolve, reject) => {
-    req.url = rewritePath(req.url as string, {
-      '^/api': '',
-    })
+  return await new Promise((resolve, reject) => {
+    proxy(
+      (req as unknown) as express.Request,
+      (res as unknown) as express.Response,
+      (result: any) => {
+        if (result instanceof Error) {
+          return reject(result)
+        }
 
-    if (
-      ['POST', 'PUT'].indexOf(req.method as string) >= 0 &&
-      typeof req.body === 'object'
-    ) {
-      req.body = JSON.stringify(req.body)
-    }
-
-    const headers: Record<string, string> = {}
-    if (token?.accessToken) {
-      headers.Authorization = `Bearer ${token.accessToken}`
-    }
-
-    proxy
-      .once('proxyReq', handleReq)
-      .once('proxyRes', resolve)
-      .once('error', reject)
-      .web(req, res, {
-        target: process.env.API_URL,
-        changeOrigin: true,
-        headers,
-      })
+        return resolve(result)
+      }
+    )
   })
 }

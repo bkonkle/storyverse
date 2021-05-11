@@ -29,7 +29,7 @@ Input to create a new Series
 """
 input CreateSeriesInput {
   name: String!
-  description: JSONObject
+  description: JSON
   picture: String
   universeId: ID!
 }
@@ -39,7 +39,7 @@ Input to update an existing Series
 """
 input UpdateSeriesInput {
   name: String
-  description: JSONObject
+  description: JSON
   universeId: ID
 }
 

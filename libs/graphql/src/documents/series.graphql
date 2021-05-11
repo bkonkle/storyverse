@@ -1,0 +1,68 @@
+fragment SeriesData on Series {
+  id
+  name
+  description
+  picture
+  universeId
+  createdAt
+  updatedAt
+}
+
+# TODO: Move away from `getManySeries` on the backend when `getMySeries` is implemented
+query getMySeries(
+  $where: SeriesCondition
+  $orderBy: [SeriesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getMySeries: getManySeries(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...SeriesData
+    }
+  }
+}
+
+query getManySeries(
+  $where: SeriesCondition
+  $orderBy: [SeriesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getManySeries(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...SeriesData
+    }
+  }
+}
+
+query getSeries($id: ID!) {
+  getSeries(id: $id) {
+    ...SeriesData
+  }
+}
+
+mutation createSeries($input: CreateSeriesInput!) {
+  createSeries(input: $input) {
+    series {
+      ...SeriesData
+    }
+  }
+}
+
+mutation updateSeries($id: ID!, $input: UpdateSeriesInput!) {
+  updateSeries(id: $id, input: $input) {
+    series {
+      ...SeriesData
+    }
+  }
+}

@@ -4,18 +4,11 @@ import {withUrqlClient} from 'next-urql'
 
 import {Admin} from '@storyverse/components/layouts'
 import {List} from '@storyverse/components/admin/sections/universes'
-import {Schema, getConfig} from '@storyverse/graphql'
+import {Schema, Client} from '@storyverse/graphql'
 
 export function UniversesPage() {
-  const [{data: userData}] = Schema.useGetCurrentUserQuery()
-  const user = userData?.getCurrentUser
-  const profile = user?.profile
-
-  const [{data: universeData}] = Schema.useGetMyUniversesQuery({
-    variables: {profileId: profile?.id || ''},
-    pause: !profile,
-  })
-  const universes = universeData?.getManyUniverses.data || []
+  const [{data: universeData}] = Schema.useGetMyUniversesQuery()
+  const universes = universeData?.getMyUniverses.data || []
 
   return (
     <Admin>
@@ -31,4 +24,4 @@ export function UniversesPage() {
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(UniversesPage)
+export default withUrqlClient(Client.getConfig, {ssr: true})(UniversesPage)

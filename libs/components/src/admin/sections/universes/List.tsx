@@ -4,8 +4,7 @@ import {Admin} from '@storyverse/shared/config/urls'
 import {Schema} from '@storyverse/graphql'
 
 import Card from '../../cards/Card'
-import {Table, Row, Column} from '../../tables/Tables'
-import Button from '../../buttons/Button'
+import {Table, Row, Column, Link} from '../../tables/Tables'
 
 export interface ListProps {
   universes: Schema.UniverseDataFragment[]
@@ -20,11 +19,13 @@ export default function List({universes}: ListProps) {
         href: Admin.Universes.create(),
       }}
     >
-      <Table headers={['Name', 'Series', 'Stories', 'Created', 'Updated', '']}>
+      <Table headers={['Name', 'Series', 'Stories', 'Created', 'Updated']}>
         {universes.map((universe) => (
           <Row key={universe.id}>
             <Column key="name" header className="text-left">
-              {universe.name}
+              <Link href={Admin.Universes.update(universe.id)}>
+                {universe.name}
+              </Link>
             </Column>
             {/* TODO */}
             <Column key="series">3</Column>
@@ -39,11 +40,6 @@ export default function List({universes}: ListProps) {
                   addSuffix: true,
                 })}
               </p>
-            </Column>
-            <Column>
-              <Button href={Admin.Universes.update(universe.id)} dark>
-                Edit
-              </Button>
             </Column>
           </Row>
         ))}

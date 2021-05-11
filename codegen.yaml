@@ -3,7 +3,7 @@ schema:
 documents:
   - libs/graphql/**/*.graphql
 generates:
-  libs/graphql/src/ApiSchema.ts:
+  libs/graphql/src/api/Schema.ts:
     hooks:
       afterOneFileWrite:
         - prettier --write
@@ -22,7 +22,6 @@ generates:
       scalars:
         DateTime: Date
         JSON: Prisma.JsonValue
-        JSONObject: Prisma.JsonValue
   libs/graphql/src/Schema.tsx:
     hooks:
       afterOneFileWrite:
@@ -43,7 +42,6 @@ generates:
       scalars:
         DateTime: Date
         JSON: Prisma.JsonValue
-        JSONObject: Prisma.JsonValue
   schema.json:
     plugins:
       - introspection

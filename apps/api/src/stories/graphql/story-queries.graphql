@@ -39,12 +39,12 @@ type Story {
   """
   Editor json content for the Story summary
   """
-  summary: JSONObject
+  summary: JSON
 
   """
   Editor json content for the Story content
   """
-  content: JSONObject
+  content: JSON
 
   """
   A cover image for the Universe

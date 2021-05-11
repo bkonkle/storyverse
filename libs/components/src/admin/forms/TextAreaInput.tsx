@@ -1,5 +1,13 @@
+import {
+  DetailedHTMLProps,
+  TextareaHTMLAttributes,
+  forwardRef,
+  useMemo,
+} from 'react'
 import clsx from 'clsx'
-import {DetailedHTMLProps, forwardRef, TextareaHTMLAttributes} from 'react'
+import {ulid} from 'ulid'
+
+import {Input, inputClasses} from './Forms'
 
 export interface TextAreaInputProps
   extends DetailedHTMLProps<
@@ -7,46 +15,41 @@ export interface TextAreaInputProps
     HTMLTextAreaElement
   > {
   label: string
+  error?: string
+  hint?: string
 }
 
 export const TextAreaInput = forwardRef<
   HTMLTextAreaElement,
   TextAreaInputProps
->(({name, label, rows = 4, className, ...rest}: TextAreaInputProps, ref) => {
-  return (
-    <div className="relative w-full mb-3">
-      <label
-        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-        htmlFor="grid-password"
-      >
-        {label}
-      </label>
-      <textarea
-        name={name}
-        {...rest}
-        className={clsx(
-          'border-0',
-          'px-3',
-          'py-3',
-          'placeholder-blueGray-300',
-          'text-blueGray-600',
-          'bg-white',
-          'rounded',
-          'text-sm',
-          'shadow',
-          'focus:outline-none',
-          'focus:ring',
-          'w-full',
-          'ease-linear',
-          'transition-all',
-          'duration-150',
-          className
-        )}
-        rows={rows}
-        ref={ref}
-      ></textarea>
-    </div>
-  )
-})
+>(
+  (
+    {
+      name,
+      label,
+      error,
+      hint,
+      rows = 4,
+      className,
+      ...rest
+    }: TextAreaInputProps,
+    ref
+  ) => {
+    const id = useMemo(() => ulid(), [])
+
+    return (
+      <Input id={id} label={label} error={error} hint={hint}>
+        <textarea
+          id={id}
+          name={name}
+          {...rest}
+          className={clsx(inputClasses, className)}
+          rows={rows}
+          ref={ref}
+        ></textarea>
+      </Input>
+    )
+  }
+)
 
 export default TextAreaInput

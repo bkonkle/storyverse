@@ -2,7 +2,7 @@ import {MouseEventHandler, useEffect} from 'react'
 import {withUrqlClient} from 'next-urql'
 import {signIn} from 'next-auth/client'
 
-import {getConfig} from '@storyverse/graphql'
+import {Client} from '@storyverse/graphql'
 import {Pages, useStore} from '@storyverse/graphql/Store'
 
 export const handleLogin: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -26,4 +26,4 @@ export const Index = () => {
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(Index)
+export default withUrqlClient(Client.getConfig, {ssr: true})(Index)

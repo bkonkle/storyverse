@@ -5,6 +5,24 @@ fragment ProfileData on Profile {
   picture
 }
 
+query getManyProfiles(
+  $where: ProfileCondition
+  $orderBy: [ProfilesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getManyProfiles(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...ProfileData
+    }
+  }
+}
+
 mutation createProfile($input: CreateProfileInput!) {
   createProfile(input: $input) {
     profile {

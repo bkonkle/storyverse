@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import * as fs from 'fs'
-import GraphQLJSON, {GraphQLJSONObject} from 'graphql-type-json'
+import {GraphQLJSONObject} from 'graphql-type-json'
 import gql from 'graphql-tag'
 import {merge} from 'lodash'
 import {join} from 'path'
@@ -51,8 +51,7 @@ export default class App {
     return merge(
       {
         DateTime: GraphQLDateTime,
-        JSON: GraphQLJSON,
-        JSONObject: GraphQLJSONObject,
+        JSON: GraphQLJSONObject,
       },
       ...this.resolvers.map((r) => r.getAll())
     )

@@ -22,8 +22,8 @@ input CreateStoryInput {
   name: String!
   volume: Int
   issue: Int
-  summary: JSONObject
-  content: JSONObject
+  summary: JSON
+  content: JSON
   picture: String
   seriesId: ID!
 }
@@ -35,8 +35,8 @@ input UpdateStoryInput {
   name: String
   volume: Int
   issue: Int
-  summary: JSONObject
-  content: JSONObject
+  summary: JSON
+  content: JSON
   seriesId: ID
 }
 

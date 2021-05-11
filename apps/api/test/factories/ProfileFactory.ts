@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateProfileInput, Profile} from '@storyverse/graphql/ApiSchema'
+import {CreateProfileInput, Profile} from '@storyverse/graphql/api/Schema'
 
 export const makeCreateInput = (
   overrides?: Partial<CreateProfileInput> | null

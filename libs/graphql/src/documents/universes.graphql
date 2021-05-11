@@ -1,0 +1,67 @@
+fragment UniverseData on Universe {
+  id
+  name
+  description
+  picture
+  createdAt
+  updatedAt
+}
+
+# TODO: Move away from `getManyUniverses` on the backend when `getMyUniverses` is implemented
+query getMyUniverses(
+  $where: UniverseCondition
+  $orderBy: [UniversesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getMyUniverses: getManyUniverses(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...UniverseData
+    }
+  }
+}
+
+query getManyUniverses(
+  $where: UniverseCondition
+  $orderBy: [UniversesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getManyUniverses(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...UniverseData
+    }
+  }
+}
+
+query getUniverse($id: ID!) {
+  getUniverse(id: $id) {
+    ...UniverseData
+  }
+}
+
+mutation createUniverse($input: CreateUniverseInput!) {
+  createUniverse(input: $input) {
+    universe {
+      ...UniverseData
+    }
+  }
+}
+
+mutation updateUniverse($id: ID!, $input: UpdateUniverseInput!) {
+  updateUniverse(id: $id, input: $input) {
+    universe {
+      ...UniverseData
+    }
+  }
+}

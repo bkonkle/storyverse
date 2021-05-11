@@ -27,7 +27,7 @@ input CreateUserProfileInput {
   email: String!
   displayName: String
   picture: String
-  content: JSONObject
+  content: JSON
 }
 
 """

@@ -5,7 +5,7 @@ import {
   SeriesCondition,
   SeriesOrderBy,
   UpdateSeriesInput,
-} from '@storyverse/graphql/ApiSchema'
+} from '@storyverse/graphql/api/Schema'
 
 import {Subject} from '../authz/AuthzService'
 import * as UniverseUtils from '../universes/UniverseUtils'

@@ -1,7 +1,7 @@
 import {PrismaClient, Profile} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
-import {SeriesRoles} from '@storyverse/graphql/ApiSchema'
+import {SeriesRoles} from '@storyverse/graphql/api/Schema'
 
 import {NotFoundError} from '../utils/Errors'
 import AuthzService from '../authz/AuthzService'

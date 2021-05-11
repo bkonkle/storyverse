@@ -78,4 +78,46 @@ export function Field({half, third, children}: FieldProps) {
   )
 }
 
-export default {Form, Header, Separator, Group, Actions, Field}
+export interface InputProps {
+  id: string
+  label: string
+  error?: string
+  hint?: string
+  children?: ReactNode
+}
+
+export function Input({id, label, error, hint, children}: InputProps) {
+  return (
+    <div className="relative w-full mb-3">
+      <label
+        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+        htmlFor={id}
+      >
+        {label}
+      </label>
+      {children}
+      {hint && <div className="text-gray-400 text-xs my-2">{hint}</div>}
+      {error && <div className="block text-red-600 text-sm my-2">{error}</div>}
+    </div>
+  )
+}
+
+export const inputClasses = clsx(
+  'border-0',
+  'px-3',
+  'py-3',
+  'placeholder-blueGray-300',
+  'text-blueGray-600',
+  'bg-white',
+  'rounded',
+  'text-sm',
+  'shadow',
+  'focus:outline-none',
+  'focus:ring',
+  'w-full',
+  'ease-linear',
+  'transition-all',
+  'duration-150',
+)
+
+export default {Form, Header, Separator, Group, Actions, Field, inputClasses}

@@ -7,7 +7,7 @@ import {
   UpdateForm,
   Preview,
 } from '@storyverse/components/admin/sections/universes'
-import {getConfig} from '@storyverse/graphql'
+import {Client} from '@storyverse/graphql'
 
 export function CreateUniversePage() {
   return (
@@ -27,4 +27,4 @@ export function CreateUniversePage() {
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(CreateUniversePage)
+export default withUrqlClient(Client.getConfig, {ssr: true})(CreateUniversePage)

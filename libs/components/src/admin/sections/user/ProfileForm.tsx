@@ -27,7 +27,12 @@ const schema = z.object({
 export default function ProfileForm({user, profile}: ProfileFormProps) {
   const [{fetching}, updateProfile] = useUpdateProfileMutation()
 
-  const {register, handleSubmit, setValue, formState} = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: {errors},
+  } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       email: profile.email || '',
@@ -48,8 +53,6 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
     })
   }
 
-  const pictureError = formState.errors.picture?.message
-
   return (
     <Card large title="My Profile">
       <Forms.Form onSubmit={handleSubmit(onSubmit)}>
@@ -57,7 +60,7 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
           <Forms.Field half>
             <TextInput
               label="Display Name"
-              error={formState.errors.displayName?.message}
+              error={errors.displayName?.message}
               {...register('displayName')}
             />
           </Forms.Field>
@@ -65,7 +68,7 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
           <Forms.Field half>
             <TextInput
               label="Location"
-              error={formState.errors.displayName?.message}
+              error={errors.displayName?.message}
               {...register('location')}
             />
           </Forms.Field>
@@ -73,7 +76,7 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
           <Forms.Field>
             <TextInput
               label="Email Address"
-              error={formState.errors.email?.message}
+              error={errors.email?.message}
               hint="Currently read-only."
               readOnly
               {...register('email')}
@@ -83,7 +86,7 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
 
         <Forms.Separator />
 
-        <Forms.Group header="Photo">
+        <Forms.Group header="Picture">
           <Forms.Field>
             <ReactS3Uploader
               className={clsx('mt-1', 'block', 'w-full')}
@@ -94,9 +97,9 @@ export default function ProfileForm({user, profile}: ProfileFormProps) {
               autoUpload={true}
               onFinish={handleUpload}
             />
-            {pictureError && (
+            {errors.picture?.message && (
               <div className="block text-red-600 text-sm my-2">
-                {pictureError}
+                {errors.picture.message}
               </div>
             )}
           </Forms.Field>

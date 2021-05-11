@@ -29,7 +29,7 @@ type Universe {
   """
   Editor json content for the Universe's description
   """
-  description: JSONObject
+  description: JSON
 
   """
   A cover image for the Universe

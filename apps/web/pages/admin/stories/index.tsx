@@ -3,20 +3,25 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
 import Admin from '@storyverse/components/layouts/Admin'
-import {getConfig} from '@storyverse/graphql'
+import {List} from '@storyverse/components/admin/sections/stories'
+import {Schema, Client} from '@storyverse/graphql'
 
 export function StoriesPage() {
+  const [{data: storiesData}] = Schema.useGetMyStoriesQuery()
+  const stories = storiesData?.getMyStories.data || []
+
   return (
     <Admin>
       <Head>
         <title>Storyverse - Stories</title>
       </Head>
       <div className={clsx('flex', 'flex-wrap')}>
-        <div className={clsx('w-full', 'lg:w-8/12', 'px-4')}></div>
-        <div className={clsx('w-full', 'lg:w-4/12', 'px-4')}></div>
+        <div className={clsx('w-full', 'lg:w-12/12', 'px-4')}>
+          <List stories={stories} />
+        </div>
       </div>
     </Admin>
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(StoriesPage)
+export default withUrqlClient(Client.getConfig, {ssr: true})(StoriesPage)

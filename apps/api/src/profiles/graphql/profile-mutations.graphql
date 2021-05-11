@@ -22,7 +22,7 @@ input CreateProfileInput {
   email: String!
   displayName: String
   picture: String
-  content: JSONObject
+  content: JSON
   userId: String!
 }
 
@@ -33,7 +33,7 @@ input UpdateProfileInput {
   email: String
   displayName: String
   picture: String
-  content: JSONObject
+  content: JSON
   userId: String
 }
 

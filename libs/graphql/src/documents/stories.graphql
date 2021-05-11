@@ -1,0 +1,71 @@
+fragment StoryData on Story {
+  id
+  name
+  volume
+  issue
+  summary
+  content
+  picture
+  seriesId
+  createdAt
+  updatedAt
+}
+
+# TODO: Move away from `getManyStories` on the backend when `getMyStories` is implemented
+query getMyStories(
+  $where: StoryCondition
+  $orderBy: [StoriesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getMyStories: getManyStories(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...StoryData
+    }
+  }
+}
+
+query getManyStories(
+  $where: StoryCondition
+  $orderBy: [StoriesOrderBy!]
+  $pageSize: Int
+  $page: Int
+) {
+  getManyStories(
+    where: $where
+    orderBy: $orderBy
+    pageSize: $pageSize
+    page: $page
+  ) {
+    data {
+      ...StoryData
+    }
+  }
+}
+
+query getStory($id: ID!) {
+  getStory(id: $id) {
+    ...StoryData
+  }
+}
+
+mutation createStory($input: CreateStoryInput!) {
+  createStory(input: $input) {
+    story {
+      ...StoryData
+    }
+  }
+}
+
+mutation updateStory($id: ID!, $input: UpdateStoryInput!) {
+  updateStory(id: $id, input: $input) {
+    story {
+      ...StoryData
+    }
+  }
+}

@@ -4646,6 +4646,56 @@
         "signature": "c1f750f07596ec0fae4b1ff89ff3199d6189d110e8f0da34f71c845bac2135ad",
         "affectsGlobalScope": false
       },
+      "../../node_modules/@prisma/client/runtime/index.d.ts": {
+        "version": "e1a6972f9872ebc145ee63c82b2976e048c77c5d7727631a20225a12e30da31c",
+        "signature": "e1a6972f9872ebc145ee63c82b2976e048c77c5d7727631a20225a12e30da31c",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/.prisma/client/index.d.ts": {
+        "version": "58fc57a36cf1e9c032bfa9e1977cb74d71e871c59a3c526b47bfc9ab598b75cc",
+        "signature": "58fc57a36cf1e9c032bfa9e1977cb74d71e871c59a3c526b47bfc9ab598b75cc",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/@prisma/client/index.d.ts": {
+        "version": "022d0e5b18aa33e48e53e2fc7a558ee448a29cba6fe163a36cd5ece60cd1f7ff",
+        "signature": "022d0e5b18aa33e48e53e2fc7a558ee448a29cba6fe163a36cd5ece60cd1f7ff",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/graphql-tag/lib/index.d.ts": {
+        "version": "5dcd41aeb5f7119177adab46147589a1618f2b35bd976e6c3a20ec328f58d1bd",
+        "signature": "5dcd41aeb5f7119177adab46147589a1618f2b35bd976e6c3a20ec328f58d1bd",
+        "affectsGlobalScope": false
+      },
+      "../../libs/graphql/src/Schema.tsx": {
+        "version": "220b11bdef3d15cb34ddc53f7ad8d565ec0cb577a2219175173b4d5ad893ce4f",
+        "signature": "f0112a28ddc2bda9153f287b5899bab7919b80aac09d41e4e1d7ae66fc783b49",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zustand/vanilla.d.ts": {
+        "version": "3dad3c811babcf6ea65e4823b568dec5511a1c088f2c170f8e1e4078d8c300b6",
+        "signature": "3dad3c811babcf6ea65e4823b568dec5511a1c088f2c170f8e1e4078d8c300b6",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zustand/index.d.ts": {
+        "version": "03da7e82f6dde8b92796ba5940d2837c54076c2bcc07e1e1712cc0154983f3e0",
+        "signature": "03da7e82f6dde8b92796ba5940d2837c54076c2bcc07e1e1712cc0154983f3e0",
+        "affectsGlobalScope": false
+      },
+      "../../libs/graphql/src/Store.ts": {
+        "version": "5df3868406375e349cd378ffff05f27675df4aa4138f5ef690161255f4723644",
+        "signature": "06c082024b61699734d29207c244bf747eab773a0314f84bef85ad70cb083f29",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/next/router.d.ts": {
+        "version": "2d7d2d542a30602ad869c89e497ffc1d45ebee0352f3806833bb1a73f88a26a7",
+        "signature": "2d7d2d542a30602ad869c89e497ffc1d45ebee0352f3806833bb1a73f88a26a7",
+        "affectsGlobalScope": false
+      },
+      "../../libs/graphql/src/User.ts": {
+        "version": "112a1b77cd336d66a9b479c7022b73317f92977f92ba9f4ef311bdda81767e9f",
+        "signature": "06e70077b39674d38e5decd317b552c6fb231fa269d10413c1d4b750d4857740",
+        "affectsGlobalScope": false
+      },
       "../../node_modules/@urql/exchange-graphcache/dist/types/ast/variables.d.ts": {
         "version": "5fed00f54fbfcd0329592ddd7f561ce6779ab0e241d47aaefff12681baad43b5",
         "signature": "5fed00f54fbfcd0329592ddd7f561ce6779ab0e241d47aaefff12681baad43b5",
@@ -4732,72 +4782,197 @@
         "affectsGlobalScope": false
       },
       "../../schema.json": {
-        "version": "a1705c6a102fecd3e65da7b7434ee02cc0ad819a580f205c91995cde3eac381f",
+        "version": "f4a3c9d239604f013144e93ada37617f13165153a8f02bfee35c9c58ae5c8146",
         "signature": "fd3aeaf2c9cc3ae79d41ab0986dcc18e4e5689c908a083531396478c50d077c6",
         "affectsGlobalScope": true
       },
-      "../../libs/graphql/src/ApiClient.ts": {
+      "../../libs/graphql/src/Client.ts": {
         "version": "4bc69ad342cb02a827c153410d303303dd125a1dd12cff843c13bdf26158f2e6",
         "signature": "33f4498363280f4b34a4d53c3cfacebb57cb9e0b1d17b34ae4a6dfceb6ec85a5",
         "affectsGlobalScope": false
       },
-      "../../node_modules/@prisma/client/runtime/index.d.ts": {
-        "version": "e1a6972f9872ebc145ee63c82b2976e048c77c5d7727631a20225a12e30da31c",
-        "signature": "e1a6972f9872ebc145ee63c82b2976e048c77c5d7727631a20225a12e30da31c",
+      "../../node_modules/zod/lib/src/ZodError.d.ts": {
+        "version": "7c16f63ada4a1cf3688d7f2b09cf67965fef5051094dddd103e947c4c57da913",
+        "signature": "7c16f63ada4a1cf3688d7f2b09cf67965fef5051094dddd103e947c4c57da913",
         "affectsGlobalScope": false
       },
-      "../../node_modules/.prisma/client/index.d.ts": {
-        "version": "58fc57a36cf1e9c032bfa9e1977cb74d71e871c59a3c526b47bfc9ab598b75cc",
-        "signature": "58fc57a36cf1e9c032bfa9e1977cb74d71e871c59a3c526b47bfc9ab598b75cc",
+      "../../node_modules/zod/lib/src/helpers/util.d.ts": {
+        "version": "fcde2d4f1978e8a9bce31e5a0c6d9f40574c8d7f385a3cad3fdd7b06f27dcbea",
+        "signature": "fcde2d4f1978e8a9bce31e5a0c6d9f40574c8d7f385a3cad3fdd7b06f27dcbea",
         "affectsGlobalScope": false
       },
-      "../../node_modules/@prisma/client/index.d.ts": {
-        "version": "022d0e5b18aa33e48e53e2fc7a558ee448a29cba6fe163a36cd5ece60cd1f7ff",
-        "signature": "022d0e5b18aa33e48e53e2fc7a558ee448a29cba6fe163a36cd5ece60cd1f7ff",
+      "../../node_modules/zod/lib/src/defaultErrorMap.d.ts": {
+        "version": "b26d4f1aa6c13c3fabee47799ca0e28be207d59f8e15866502587c3a7f1d8466",
+        "signature": "b26d4f1aa6c13c3fabee47799ca0e28be207d59f8e15866502587c3a7f1d8466",
         "affectsGlobalScope": false
       },
-      "../../node_modules/graphql-tag/lib/index.d.ts": {
-        "version": "5dcd41aeb5f7119177adab46147589a1618f2b35bd976e6c3a20ec328f58d1bd",
-        "signature": "5dcd41aeb5f7119177adab46147589a1618f2b35bd976e6c3a20ec328f58d1bd",
+      "../../node_modules/zod/lib/src/parser.d.ts": {
+        "version": "68bc13163433d05b13ba442c3f820ab4f52c87cd10e513fbc8a32dc31f74241c",
+        "signature": "68bc13163433d05b13ba442c3f820ab4f52c87cd10e513fbc8a32dc31f74241c",
         "affectsGlobalScope": false
       },
-      "../../libs/graphql/src/Schema.tsx": {
-        "version": "969beb074d94010cca75708b095ff75360baadba0b3888a5520f9d7f11b05885",
-        "signature": "bb39c30371222d28ce45b8b9dc6ff471eff3da2048407f56cdb311db162d0caf",
+      "../../node_modules/zod/lib/src/types/base.d.ts": {
+        "version": "1cc64f5c2eb30658a60d3c46cbd1ac12cbb8f2df1ea14adf773dba4bf2033caf",
+        "signature": "1cc64f5c2eb30658a60d3c46cbd1ac12cbb8f2df1ea14adf773dba4bf2033caf",
         "affectsGlobalScope": false
       },
-      "../../node_modules/zustand/vanilla.d.ts": {
-        "version": "3dad3c811babcf6ea65e4823b568dec5511a1c088f2c170f8e1e4078d8c300b6",
-        "signature": "3dad3c811babcf6ea65e4823b568dec5511a1c088f2c170f8e1e4078d8c300b6",
+      "../../node_modules/zod/lib/src/helpers/errorUtil.d.ts": {
+        "version": "780007d2876e93e4c144b174582cc4f8a53cd825c3a85f376bf3c80a5f8d4fa1",
+        "signature": "780007d2876e93e4c144b174582cc4f8a53cd825c3a85f376bf3c80a5f8d4fa1",
         "affectsGlobalScope": false
       },
-      "../../node_modules/zustand/index.d.ts": {
-        "version": "03da7e82f6dde8b92796ba5940d2837c54076c2bcc07e1e1712cc0154983f3e0",
-        "signature": "03da7e82f6dde8b92796ba5940d2837c54076c2bcc07e1e1712cc0154983f3e0",
+      "../../node_modules/zod/lib/src/types/string.d.ts": {
+        "version": "756fbf5e53298a77da77028160873311f0a6c2a9f37a6af803c01e0e69b5b5e8",
+        "signature": "756fbf5e53298a77da77028160873311f0a6c2a9f37a6af803c01e0e69b5b5e8",
         "affectsGlobalScope": false
       },
-      "../../libs/graphql/src/Store.ts": {
-        "version": "5df3868406375e349cd378ffff05f27675df4aa4138f5ef690161255f4723644",
-        "signature": "06c082024b61699734d29207c244bf747eab773a0314f84bef85ad70cb083f29",
+      "../../node_modules/zod/lib/src/types/number.d.ts": {
+        "version": "b0d001767ebefa958ce373318e0333aa971570545651ab9f63f43f5d903ad220",
+        "signature": "b0d001767ebefa958ce373318e0333aa971570545651ab9f63f43f5d903ad220",
         "affectsGlobalScope": false
       },
-      "../../node_modules/next/router.d.ts": {
-        "version": "2d7d2d542a30602ad869c89e497ffc1d45ebee0352f3806833bb1a73f88a26a7",
-        "signature": "2d7d2d542a30602ad869c89e497ffc1d45ebee0352f3806833bb1a73f88a26a7",
+      "../../node_modules/zod/lib/src/types/bigint.d.ts": {
+        "version": "a8c4864dbf94b7bb5b5814da9efb5e2270d6ce5c7dac2d8abb32650b9f5d90fc",
+        "signature": "a8c4864dbf94b7bb5b5814da9efb5e2270d6ce5c7dac2d8abb32650b9f5d90fc",
         "affectsGlobalScope": false
       },
-      "../../libs/graphql/src/User.ts": {
-        "version": "112a1b77cd336d66a9b479c7022b73317f92977f92ba9f4ef311bdda81767e9f",
-        "signature": "98fb49f5326ce00bacdf168fd43a2c543375989cdd5803d6080935162cd3a427",
+      "../../node_modules/zod/lib/src/types/boolean.d.ts": {
+        "version": "a44cd1b66fa8feffa07d51f783c32a0b019fd9ec3540ebd5e6336a81fbd0fd51",
+        "signature": "a44cd1b66fa8feffa07d51f783c32a0b019fd9ec3540ebd5e6336a81fbd0fd51",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/date.d.ts": {
+        "version": "e7f8080afd74e0ae3a06417099271d93d75328db0f44eba5272db2445127c0ca",
+        "signature": "e7f8080afd74e0ae3a06417099271d93d75328db0f44eba5272db2445127c0ca",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/undefined.d.ts": {
+        "version": "aeb70e1e4887e6183f76dd7f3bbbbaea5591e4bc5ba59a662f42625af522463c",
+        "signature": "aeb70e1e4887e6183f76dd7f3bbbbaea5591e4bc5ba59a662f42625af522463c",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/null.d.ts": {
+        "version": "3d61ecaa794b71eed9ea45d9adf7e4bc87bbd54857589abad4244f291f1cc4c1",
+        "signature": "3d61ecaa794b71eed9ea45d9adf7e4bc87bbd54857589abad4244f291f1cc4c1",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/any.d.ts": {
+        "version": "9e9eaca813a83f1c436fa622b4a5b9de488ccc4f021ad94e2ef7cc3e09312978",
+        "signature": "9e9eaca813a83f1c436fa622b4a5b9de488ccc4f021ad94e2ef7cc3e09312978",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/unknown.d.ts": {
+        "version": "b05f681d28e35d00e16efc53156893b96a97dd9a411a36218e207a7eccb57f5d",
+        "signature": "b05f681d28e35d00e16efc53156893b96a97dd9a411a36218e207a7eccb57f5d",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/void.d.ts": {
+        "version": "ed1ee610be97271fe2a6aa6a31ce66f7b361b4bf3aff089eca02b3ec90d37ead",
+        "signature": "ed1ee610be97271fe2a6aa6a31ce66f7b361b4bf3aff089eca02b3ec90d37ead",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/array.d.ts": {
+        "version": "0da5f8800cf0ed56c8acec7a2d0f8e5502ddaa9f03c508a93eb2cf10227f1249",
+        "signature": "0da5f8800cf0ed56c8acec7a2d0f8e5502ddaa9f03c508a93eb2cf10227f1249",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/union.d.ts": {
+        "version": "a138179344f9db2cf8deb644601d5ce0ff93cdf8dacf61be990fc29dae5e5a63",
+        "signature": "a138179344f9db2cf8deb644601d5ce0ff93cdf8dacf61be990fc29dae5e5a63",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/helpers/objectUtil.d.ts": {
+        "version": "0709ac2a9340c34f3ab1496a95684bd499fb40f512483d2aa06db18709f19d03",
+        "signature": "0709ac2a9340c34f3ab1496a95684bd499fb40f512483d2aa06db18709f19d03",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/helpers/partialUtil.d.ts": {
+        "version": "7e01c1cbeec6dfab685c5f31efd29f6a5145deb88f62640d48e4342fc58dc421",
+        "signature": "7e01c1cbeec6dfab685c5f31efd29f6a5145deb88f62640d48e4342fc58dc421",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/object.d.ts": {
+        "version": "0ebd0641b1a743d5ca99cbfe0e971aac440decd5ad32f0ca603b7db64558adbb",
+        "signature": "0ebd0641b1a743d5ca99cbfe0e971aac440decd5ad32f0ca603b7db64558adbb",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/intersection.d.ts": {
+        "version": "e4b1df4e9c41489f4986f506f1885c6e0c912ba06e5d282b1ced3f02762e5eb3",
+        "signature": "e4b1df4e9c41489f4986f506f1885c6e0c912ba06e5d282b1ced3f02762e5eb3",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/tuple.d.ts": {
+        "version": "d6867a5e205984e57a7b766b17f076066a38a5ed7c3cf0f6ac5ef431d7eb684c",
+        "signature": "d6867a5e205984e57a7b766b17f076066a38a5ed7c3cf0f6ac5ef431d7eb684c",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/record.d.ts": {
+        "version": "bfe577846211390e2e27ab039c0cf41845d74fc444c45967b19bbd1006a54f5d",
+        "signature": "bfe577846211390e2e27ab039c0cf41845d74fc444c45967b19bbd1006a54f5d",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/function.d.ts": {
+        "version": "7c2d63405629866291619d6a4200a8a099b51eb6a32464b37c47735596c74db9",
+        "signature": "7c2d63405629866291619d6a4200a8a099b51eb6a32464b37c47735596c74db9",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/lazy.d.ts": {
+        "version": "42edb4383be03119dcf4318acbc047d9144a2c5bccd42229dc0daec59db9ee2c",
+        "signature": "42edb4383be03119dcf4318acbc047d9144a2c5bccd42229dc0daec59db9ee2c",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/helpers/primitive.d.ts": {
+        "version": "2788ebc4203d5767a80cc2aa662737fb5c54e774b6fbf19827f59b7cfc17bcd6",
+        "signature": "2788ebc4203d5767a80cc2aa662737fb5c54e774b6fbf19827f59b7cfc17bcd6",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/literal.d.ts": {
+        "version": "a3254265854dde82b75ab9bf1b9b5009c126457c5791a8751f2d7a8ccabedfdf",
+        "signature": "a3254265854dde82b75ab9bf1b9b5009c126457c5791a8751f2d7a8ccabedfdf",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/enum.d.ts": {
+        "version": "03d8688f247dce52b0fb995fe180c4ff4aa3b017f3a80574b7c09ecdc4f8d31a",
+        "signature": "03d8688f247dce52b0fb995fe180c4ff4aa3b017f3a80574b7c09ecdc4f8d31a",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/nativeEnum.d.ts": {
+        "version": "e113c825becd5162b7d18815cec7c90d3a850175e830396bb1f41f26c235d790",
+        "signature": "e113c825becd5162b7d18815cec7c90d3a850175e830396bb1f41f26c235d790",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/keyof.d.ts": {
+        "version": "d886664878eb66f0514153596c58b83519c619a75d7daf9a6b20e77edd8e3a61",
+        "signature": "d886664878eb66f0514153596c58b83519c619a75d7daf9a6b20e77edd8e3a61",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/types/promise.d.ts": {
+        "version": "16f4bfcb4967b9e8fea2ba0a0151f4432013c4b570acb15de7cee41fce51ed70",
+        "signature": "16f4bfcb4967b9e8fea2ba0a0151f4432013c4b570acb15de7cee41fce51ed70",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/codegen.d.ts": {
+        "version": "a7355a0293c55f46ac304f3db0f5a19da91ad797c90c049f02832a555eb50594",
+        "signature": "a7355a0293c55f46ac304f3db0f5a19da91ad797c90c049f02832a555eb50594",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/zod/lib/src/index.d.ts": {
+        "version": "1c9832ae21ff8b21e64e00cffa02f49938e2700db59f6254ff2ee1d30a2d38b0",
+        "signature": "1c9832ae21ff8b21e64e00cffa02f49938e2700db59f6254ff2ee1d30a2d38b0",
+        "affectsGlobalScope": false
+      },
+      "../../libs/graphql/src/Types.ts": {
+        "version": "db8b5107ca00510772fce62efab0fb57a59ad98edce6212792df49b39b3f725c",
+        "signature": "80ff51f45ac36ad904f5c8b7cf4f3eb9dbeaf38bbe9a96a5fd7645475a6cb470",
         "affectsGlobalScope": false
       },
       "../../libs/graphql/src/index.ts": {
-        "version": "73d0943230a36c9dfd0e5677acab385787ee95fe9ba371cc0aa10b8778563ef8",
-        "signature": "036dd5f323a1722d7da9d8cbb13e37cae6f3ff992a014f394e81c7dceb7470a8",
+        "version": "55ec4fcda7b2e6ba44313b191ac77f85092dd0dcc787ab61765be4057f185901",
+        "signature": "a647ba765f6e42736e4fe4ec132c5a8fea12e615e3d978a122a40e9c2298d48a",
         "affectsGlobalScope": false
       },
       "./pages/index.tsx": {
-        "version": "569896f8099bca04646ea6b7e46c5d1840899fcd464f417863fa8a2bc1c397fb",
+        "version": "f35f9ee6a993da99ec5a4f57856579a139d25c070e058324a5550491fd769df6",
         "signature": "2b8a4f2b4b9fc118371318223e20eb6c20a569545aee484b4c2037e879ea996d",
         "affectsGlobalScope": false
       },
@@ -4982,188 +5157,13 @@
         "affectsGlobalScope": false
       },
       "./pages/admin/index.tsx": {
-        "version": "eb716a19a45972e8def10c7a6c11358f9e7b28cefda798cbde3d9e45da47d651",
+        "version": "f0082a75f597424faa329e8ce6307134ccf8d72e36eedd0be127d24fc3d71d15",
         "signature": "79795bfba34fdcab6c8bc02fb1028597d22e12045ecd05204bdfec7b69606038",
         "affectsGlobalScope": false
       },
-      "./pages/admin/series/index.tsx": {
-        "version": "ca1711bf5ee5df593ab3b96f2bd3f52d7069335105041ff3e906f5de6488aa06",
-        "signature": "6e457465223d59aac3ea4e711f434ac42e396f6e2d1ec4b8c6d3b20698832108",
-        "affectsGlobalScope": false
-      },
-      "./pages/admin/stories/index.tsx": {
-        "version": "e9b9409cba34579b56866ce2d93dd00e2debadcafcba6558409ccbb7f567c111",
-        "signature": "48659ba3e15480c0318b38736bde6240edfb901c40a4541adc7e3f96459e7c1e",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/ZodError.d.ts": {
-        "version": "7c16f63ada4a1cf3688d7f2b09cf67965fef5051094dddd103e947c4c57da913",
-        "signature": "7c16f63ada4a1cf3688d7f2b09cf67965fef5051094dddd103e947c4c57da913",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/helpers/util.d.ts": {
-        "version": "fcde2d4f1978e8a9bce31e5a0c6d9f40574c8d7f385a3cad3fdd7b06f27dcbea",
-        "signature": "fcde2d4f1978e8a9bce31e5a0c6d9f40574c8d7f385a3cad3fdd7b06f27dcbea",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/defaultErrorMap.d.ts": {
-        "version": "b26d4f1aa6c13c3fabee47799ca0e28be207d59f8e15866502587c3a7f1d8466",
-        "signature": "b26d4f1aa6c13c3fabee47799ca0e28be207d59f8e15866502587c3a7f1d8466",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/parser.d.ts": {
-        "version": "68bc13163433d05b13ba442c3f820ab4f52c87cd10e513fbc8a32dc31f74241c",
-        "signature": "68bc13163433d05b13ba442c3f820ab4f52c87cd10e513fbc8a32dc31f74241c",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/base.d.ts": {
-        "version": "1cc64f5c2eb30658a60d3c46cbd1ac12cbb8f2df1ea14adf773dba4bf2033caf",
-        "signature": "1cc64f5c2eb30658a60d3c46cbd1ac12cbb8f2df1ea14adf773dba4bf2033caf",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/helpers/errorUtil.d.ts": {
-        "version": "780007d2876e93e4c144b174582cc4f8a53cd825c3a85f376bf3c80a5f8d4fa1",
-        "signature": "780007d2876e93e4c144b174582cc4f8a53cd825c3a85f376bf3c80a5f8d4fa1",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/string.d.ts": {
-        "version": "756fbf5e53298a77da77028160873311f0a6c2a9f37a6af803c01e0e69b5b5e8",
-        "signature": "756fbf5e53298a77da77028160873311f0a6c2a9f37a6af803c01e0e69b5b5e8",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/number.d.ts": {
-        "version": "b0d001767ebefa958ce373318e0333aa971570545651ab9f63f43f5d903ad220",
-        "signature": "b0d001767ebefa958ce373318e0333aa971570545651ab9f63f43f5d903ad220",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/bigint.d.ts": {
-        "version": "a8c4864dbf94b7bb5b5814da9efb5e2270d6ce5c7dac2d8abb32650b9f5d90fc",
-        "signature": "a8c4864dbf94b7bb5b5814da9efb5e2270d6ce5c7dac2d8abb32650b9f5d90fc",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/boolean.d.ts": {
-        "version": "a44cd1b66fa8feffa07d51f783c32a0b019fd9ec3540ebd5e6336a81fbd0fd51",
-        "signature": "a44cd1b66fa8feffa07d51f783c32a0b019fd9ec3540ebd5e6336a81fbd0fd51",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/date.d.ts": {
-        "version": "e7f8080afd74e0ae3a06417099271d93d75328db0f44eba5272db2445127c0ca",
-        "signature": "e7f8080afd74e0ae3a06417099271d93d75328db0f44eba5272db2445127c0ca",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/undefined.d.ts": {
-        "version": "aeb70e1e4887e6183f76dd7f3bbbbaea5591e4bc5ba59a662f42625af522463c",
-        "signature": "aeb70e1e4887e6183f76dd7f3bbbbaea5591e4bc5ba59a662f42625af522463c",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/null.d.ts": {
-        "version": "3d61ecaa794b71eed9ea45d9adf7e4bc87bbd54857589abad4244f291f1cc4c1",
-        "signature": "3d61ecaa794b71eed9ea45d9adf7e4bc87bbd54857589abad4244f291f1cc4c1",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/any.d.ts": {
-        "version": "9e9eaca813a83f1c436fa622b4a5b9de488ccc4f021ad94e2ef7cc3e09312978",
-        "signature": "9e9eaca813a83f1c436fa622b4a5b9de488ccc4f021ad94e2ef7cc3e09312978",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/unknown.d.ts": {
-        "version": "b05f681d28e35d00e16efc53156893b96a97dd9a411a36218e207a7eccb57f5d",
-        "signature": "b05f681d28e35d00e16efc53156893b96a97dd9a411a36218e207a7eccb57f5d",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/void.d.ts": {
-        "version": "ed1ee610be97271fe2a6aa6a31ce66f7b361b4bf3aff089eca02b3ec90d37ead",
-        "signature": "ed1ee610be97271fe2a6aa6a31ce66f7b361b4bf3aff089eca02b3ec90d37ead",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/array.d.ts": {
-        "version": "0da5f8800cf0ed56c8acec7a2d0f8e5502ddaa9f03c508a93eb2cf10227f1249",
-        "signature": "0da5f8800cf0ed56c8acec7a2d0f8e5502ddaa9f03c508a93eb2cf10227f1249",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/union.d.ts": {
-        "version": "a138179344f9db2cf8deb644601d5ce0ff93cdf8dacf61be990fc29dae5e5a63",
-        "signature": "a138179344f9db2cf8deb644601d5ce0ff93cdf8dacf61be990fc29dae5e5a63",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/helpers/objectUtil.d.ts": {
-        "version": "0709ac2a9340c34f3ab1496a95684bd499fb40f512483d2aa06db18709f19d03",
-        "signature": "0709ac2a9340c34f3ab1496a95684bd499fb40f512483d2aa06db18709f19d03",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/helpers/partialUtil.d.ts": {
-        "version": "7e01c1cbeec6dfab685c5f31efd29f6a5145deb88f62640d48e4342fc58dc421",
-        "signature": "7e01c1cbeec6dfab685c5f31efd29f6a5145deb88f62640d48e4342fc58dc421",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/object.d.ts": {
-        "version": "0ebd0641b1a743d5ca99cbfe0e971aac440decd5ad32f0ca603b7db64558adbb",
-        "signature": "0ebd0641b1a743d5ca99cbfe0e971aac440decd5ad32f0ca603b7db64558adbb",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/intersection.d.ts": {
-        "version": "e4b1df4e9c41489f4986f506f1885c6e0c912ba06e5d282b1ced3f02762e5eb3",
-        "signature": "e4b1df4e9c41489f4986f506f1885c6e0c912ba06e5d282b1ced3f02762e5eb3",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/tuple.d.ts": {
-        "version": "d6867a5e205984e57a7b766b17f076066a38a5ed7c3cf0f6ac5ef431d7eb684c",
-        "signature": "d6867a5e205984e57a7b766b17f076066a38a5ed7c3cf0f6ac5ef431d7eb684c",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/record.d.ts": {
-        "version": "bfe577846211390e2e27ab039c0cf41845d74fc444c45967b19bbd1006a54f5d",
-        "signature": "bfe577846211390e2e27ab039c0cf41845d74fc444c45967b19bbd1006a54f5d",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/function.d.ts": {
-        "version": "7c2d63405629866291619d6a4200a8a099b51eb6a32464b37c47735596c74db9",
-        "signature": "7c2d63405629866291619d6a4200a8a099b51eb6a32464b37c47735596c74db9",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/lazy.d.ts": {
-        "version": "42edb4383be03119dcf4318acbc047d9144a2c5bccd42229dc0daec59db9ee2c",
-        "signature": "42edb4383be03119dcf4318acbc047d9144a2c5bccd42229dc0daec59db9ee2c",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/helpers/primitive.d.ts": {
-        "version": "2788ebc4203d5767a80cc2aa662737fb5c54e774b6fbf19827f59b7cfc17bcd6",
-        "signature": "2788ebc4203d5767a80cc2aa662737fb5c54e774b6fbf19827f59b7cfc17bcd6",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/literal.d.ts": {
-        "version": "a3254265854dde82b75ab9bf1b9b5009c126457c5791a8751f2d7a8ccabedfdf",
-        "signature": "a3254265854dde82b75ab9bf1b9b5009c126457c5791a8751f2d7a8ccabedfdf",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/enum.d.ts": {
-        "version": "03d8688f247dce52b0fb995fe180c4ff4aa3b017f3a80574b7c09ecdc4f8d31a",
-        "signature": "03d8688f247dce52b0fb995fe180c4ff4aa3b017f3a80574b7c09ecdc4f8d31a",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/nativeEnum.d.ts": {
-        "version": "e113c825becd5162b7d18815cec7c90d3a850175e830396bb1f41f26c235d790",
-        "signature": "e113c825becd5162b7d18815cec7c90d3a850175e830396bb1f41f26c235d790",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/keyof.d.ts": {
-        "version": "d886664878eb66f0514153596c58b83519c619a75d7daf9a6b20e77edd8e3a61",
-        "signature": "d886664878eb66f0514153596c58b83519c619a75d7daf9a6b20e77edd8e3a61",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/types/promise.d.ts": {
-        "version": "16f4bfcb4967b9e8fea2ba0a0151f4432013c4b570acb15de7cee41fce51ed70",
-        "signature": "16f4bfcb4967b9e8fea2ba0a0151f4432013c4b570acb15de7cee41fce51ed70",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/codegen.d.ts": {
-        "version": "a7355a0293c55f46ac304f3db0f5a19da91ad797c90c049f02832a555eb50594",
-        "signature": "a7355a0293c55f46ac304f3db0f5a19da91ad797c90c049f02832a555eb50594",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/zod/lib/src/index.d.ts": {
-        "version": "1c9832ae21ff8b21e64e00cffa02f49938e2700db59f6254ff2ee1d30a2d38b0",
-        "signature": "1c9832ae21ff8b21e64e00cffa02f49938e2700db59f6254ff2ee1d30a2d38b0",
+      "../../node_modules/react-s3-uploader/index.d.ts": {
+        "version": "7908e20aa085e8017154892a4517efb88addc3fa73c4081d2489cc96e6602e93",
+        "signature": "7908e20aa085e8017154892a4517efb88addc3fa73c4081d2489cc96e6602e93",
         "affectsGlobalScope": false
       },
       "../../node_modules/react-hook-form/dist/utils/Subject.d.ts": {
@@ -5299,11 +5299,6 @@
       "../../node_modules/@hookform/resolvers/zod/dist/index.d.ts": {
         "version": "8c076cf405ca66be2b5177147550abff08b0bbcda35bd4093caaf184beec1029",
         "signature": "8c076cf405ca66be2b5177147550abff08b0bbcda35bd4093caaf184beec1029",
-        "affectsGlobalScope": false
-      },
-      "../../libs/components/src/utils/validation.ts": {
-        "version": "5d9ff2b93c6790ab512a9122bbfd1b19ef6ef0dcebca81113d003f80be24b29d",
-        "signature": "e4abbe1cb7b94405fe98024a543cb0fb45a53923f55883aed79a0bbc14ef07ae",
         "affectsGlobalScope": false
       },
       "../../node_modules/type-fest/source/primitive.d.ts": {
@@ -5602,23 +5597,28 @@
         "affectsGlobalScope": false
       },
       "../../libs/components/src/admin/forms/Forms.tsx": {
-        "version": "b8c9f8c0da589a92cf5ce3dde5da2427a1e4edd8c727eefa4a1808ed29ca7556",
-        "signature": "ad4ba5e47b6ed07b1d5bb8786af0946049674f4600626e65ba123c9f074945df",
+        "version": "e3e840bbedaf9bcd5ad774951d3657fe142a0b75ac3234c5233438f217243701",
+        "signature": "11e18a46c746f1ce0a226408ccbe9335c32e2a17b72afd3b35052ee670caa02d",
         "affectsGlobalScope": false
       },
       "../../libs/components/src/admin/forms/TextInput.tsx": {
-        "version": "221f19923e28fa7c329bb28795e42b383fdd01b0e623e22dee8581fe0aa5432e",
+        "version": "7f873fe16ad9266b5aa0d5b1128916651fa8e14e6b7178d9e32e2e7e1e15a151",
         "signature": "05d579e83226baae3a7b3fe6c882e91129d0d212093168e328ccea386c29254a",
         "affectsGlobalScope": false
       },
-      "../../node_modules/react-s3-uploader/index.d.ts": {
-        "version": "7908e20aa085e8017154892a4517efb88addc3fa73c4081d2489cc96e6602e93",
-        "signature": "7908e20aa085e8017154892a4517efb88addc3fa73c4081d2489cc96e6602e93",
+      "../../libs/components/src/admin/forms/SelectInput.tsx": {
+        "version": "7b3385d69e711f4a51e9dc9ffe0ecc94001bee6f078ddbbe9f959fa177e419a9",
+        "signature": "5d619e27dd1706cae9924bab5f9133b87edf8f84566cb10721bbfa258196b121",
         "affectsGlobalScope": false
       },
-      "../../libs/components/src/admin/sections/universes/UpdateForm.tsx": {
-        "version": "2464690c53c050437e6da5482684f34dbf5259c95e2aa2c687fa13890fec2cb4",
-        "signature": "b9e23fa5724aa804858e33aeb0c8fb542ddd0c97862676d440e92058ef5d639a",
+      "../../libs/components/src/admin/sections/series/UniverseSelectInput.tsx": {
+        "version": "6e08e6114d381475ad37ba93c232f5fb5cc667b4d7c5deb3050e35cb371f4cd1",
+        "signature": "502dee4b5d09182ae6939f37a0e2726e93bd1429fec902b88f95ded3f09ab567",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/series/UpdateForm.tsx": {
+        "version": "b83fcf3fcdb281e6d697bde6c0feb0b1b3695f3025db2a2b1fb5fede6395b6a6",
+        "signature": "1e670864414361458cb8cdd616a452e09d435ad1eda0e46f2af31209d6c36c6d",
         "affectsGlobalScope": false
       },
       "../../libs/components/src/admin/sidebars/ImageHeaderSidebar.tsx": {
@@ -5631,9 +5631,9 @@
         "signature": "60ad60b4a4eedbf698c38317f6934f9b9560df631f0df574e69ddfe0e14b9570",
         "affectsGlobalScope": false
       },
-      "../../libs/components/src/admin/sections/universes/Preview.tsx": {
-        "version": "6862dbd50baeb955c9d42ac8c33e8f1c657ea54dbf1946bfee7669da246d2472",
-        "signature": "190ca95a0b4458fd2e58082dbf076c26de97359626708239d920c636c2a8be46",
+      "../../libs/components/src/admin/sections/series/Preview.tsx": {
+        "version": "8b12b36e430fd0501ae192994c885a68914735769714434d909ac803497a7f43",
+        "signature": "fcf5d717b88912291dd8450c53e000bd02b09ba7eafc6880e8a410ea3b32afa5",
         "affectsGlobalScope": false
       },
       "../../node_modules/date-fns/typings.d.ts": {
@@ -5642,12 +5642,97 @@
         "affectsGlobalScope": true
       },
       "../../libs/components/src/admin/tables/Tables.tsx": {
-        "version": "baca57fb811ba8bb6592042e3248172b27a77f5b2bc6a6352f2a316b5a8222e0",
-        "signature": "7142c245bb9d1c0d1e4b1fb4a8c31b561645dcb1512cc792be4dcd8eaa82b4c1",
+        "version": "026114a386e140d157c77d4df99bd3f795007c5d5f346b6f2d2d3a2727091ed2",
+        "signature": "60b9705378aa76bf94a716fa0506b8847c34b59c84f3ce41699c66c59622c2a4",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/series/List.tsx": {
+        "version": "e7fe1078d345ca239e3f24c7f41e8dff7924e8697614a5e9b8c2a55de6634566",
+        "signature": "3e582f3be015f404abccc3a5db5062aa98416fc89860aa5335b252569f769517",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/series/index.ts": {
+        "version": "3b8617c2525e4ba8dcf256286c3a8bfd0ffcd07ad30016d47418718faa5f8653",
+        "signature": "3d67522a41b3c7cccc7670bbe0b52339edf1debcb229f0cdcb2d65712a264837",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/series/[id].tsx": {
+        "version": "61f6e088f2d30624aa297f40da55d1cb3fcee0b6be2233370f3d4fc5476e08a0",
+        "signature": "a4bc5f5fc7c1d636107bcf4e841b830613dd2567ac2915ad8cbdc66273ec76e8",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/series/create.tsx": {
+        "version": "df3b171b59311d60eeb8fb06bc75fcd85ce20e30cedf70c3e7713dacfbaa507a",
+        "signature": "057a54bd8650a9d0c0cc3ae764f79bee3ed7ad20e1c3d105b4d56ae3f966bbdd",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/layouts/index.ts": {
+        "version": "54a31b227ee7706881e3e4938133c5ce4889c18074d8710b52f60cb3e3ea381c",
+        "signature": "878d63f11a3c9f9fdcf33c9428806c2290473e5bd4fc68260124570184e21cb8",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/series/index.tsx": {
+        "version": "2d6d14a5c403c7a4b0ac2629e00319593bbcee83542da8a29aec0d93150ecae4",
+        "signature": "6e457465223d59aac3ea4e711f434ac42e396f6e2d1ec4b8c6d3b20698832108",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/stories/SeriesSelectInput.tsx": {
+        "version": "889989767cab8b3bcbb3268a1b4ac046c0709b2859e901693c8f789dd3acc4f8",
+        "signature": "57b80202ebab0305058fd75d6611c08d6f99cee00ece1c85f7d23f6a0cdc5949",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/stories/UpdateForm.tsx": {
+        "version": "aa7b2d4f1f17155ed2a3ef68478b013b5ce35f525f2af086df16ecb83d952167",
+        "signature": "727d665c274fc3068489e2e5c016214569c8909d3af56faaece9771966a07d28",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/stories/Preview.tsx": {
+        "version": "7fd3f6088473429ed65ef436d589fa6dc6643d17991334dba3e0d1c7ebc88e7a",
+        "signature": "1c55ac724d6a5759f3a48258f5c78ff39756188e844c737fb7fc3f39c0aa0418",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/stories/List.tsx": {
+        "version": "e2cbb82efb2f035ac197dd7d779f0889b4b4e450e812728cde8b58a44ad667e4",
+        "signature": "bff4f2bd84ff6dd579a5cb938063a6e17ec5cc944696e46cf58cf5f9f565309b",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/stories/index.ts": {
+        "version": "3b8617c2525e4ba8dcf256286c3a8bfd0ffcd07ad30016d47418718faa5f8653",
+        "signature": "3d67522a41b3c7cccc7670bbe0b52339edf1debcb229f0cdcb2d65712a264837",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/stories/[id].tsx": {
+        "version": "a612427dec4837180d9d76caa57f48fd5d2178c73d48829bcf8ffd0b93dab978",
+        "signature": "f285bfca76b24d9233babcdc803344027bf7a7d5236235b68a5ed2723984b1b6",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/stories/create.tsx": {
+        "version": "ba162448455e675ebb6fd84cf5795cc6490a67013c3bec463fa9f897e09d5153",
+        "signature": "dc94083b2c8c858dc5a04d70741f4f752de0706ce69caaa0b884ed39e53cfa83",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/stories/index.tsx": {
+        "version": "3b04e4981b7a1ab8b53bf4b7273f929fbedec8d7bea68ead16085698d307aa22",
+        "signature": "48659ba3e15480c0318b38736bde6240edfb901c40a4541adc7e3f96459e7c1e",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/forms/TextAreaInput.tsx": {
+        "version": "7c4242b09627cbe9c7f24bedb346cf321d83879725d97c1280d3681f89665543",
+        "signature": "10bc57552cc41aee3ad7e00b2116ee3cfb4a9b61ec2dcc5f309d4b9ccbeb8b71",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/universes/UpdateForm.tsx": {
+        "version": "e78e6d68274d998ed91ca9fca4b0e3cbb23c448518e91a3c23f1066857bad86b",
+        "signature": "b9e23fa5724aa804858e33aeb0c8fb542ddd0c97862676d440e92058ef5d639a",
+        "affectsGlobalScope": false
+      },
+      "../../libs/components/src/admin/sections/universes/Preview.tsx": {
+        "version": "6862dbd50baeb955c9d42ac8c33e8f1c657ea54dbf1946bfee7669da246d2472",
+        "signature": "190ca95a0b4458fd2e58082dbf076c26de97359626708239d920c636c2a8be46",
         "affectsGlobalScope": false
       },
       "../../libs/components/src/admin/sections/universes/List.tsx": {
-        "version": "bc8f938fa33e1b2e833653abc716dc036e228a22388fe7865b77ef6ed07fbadd",
+        "version": "b7a074ef6c8f285b848482f57c31fe6111a43c022a12cc3dab653f67bebc4576",
         "signature": "b910ee519b2c83cc7832d172e3004199402bf0db5fa1794ecbe3f7b726bd400a",
         "affectsGlobalScope": false
       },
@@ -5657,27 +5742,22 @@
         "affectsGlobalScope": false
       },
       "./pages/admin/universes/[id].tsx": {
-        "version": "d91338b5450aaed48d7b22eaab522bd36d744cb127b15c4f3727416f346d426d",
+        "version": "9df61a5d91e60b9ed3999cc486fa8f101fed86e9a5df733ae71ae850303fd25a",
         "signature": "a00a96d2afa71f0379f654b4ed83c487b6d4bd0dd07ce86c4b1de2d1feb605e6",
         "affectsGlobalScope": false
       },
       "./pages/admin/universes/create.tsx": {
-        "version": "7bba3e947dc9804f719a9378aa6bd9c9235ae5571646e722f78bcf6af97fef2e",
+        "version": "a712bb0a1ab824bff86b93d4cf59a35975ae2670b33eee85faecb3731329a6be",
         "signature": "1c63f62542ec8d39b8531ae5d8f1b7268ca1f521f1ea8092e255d7b462d2f281",
         "affectsGlobalScope": false
       },
-      "../../libs/components/src/layouts/index.ts": {
-        "version": "54a31b227ee7706881e3e4938133c5ce4889c18074d8710b52f60cb3e3ea381c",
-        "signature": "878d63f11a3c9f9fdcf33c9428806c2290473e5bd4fc68260124570184e21cb8",
-        "affectsGlobalScope": false
-      },
       "./pages/admin/universes/index.tsx": {
-        "version": "7d58c158b85cf871748b2dc0a3c4b357b92979db0039f5473d64dbf6889bfa46",
+        "version": "e7ec51c4135700a69a5d3445f59b95084d8a820aaa4c71a13f7a2428ba36ae0f",
         "signature": "e25bc327f8955803655e91bcfbe72ef772f8cbc5c31e6013e5f7924881b8e56c",
         "affectsGlobalScope": false
       },
       "../../libs/components/src/admin/sections/user/ProfileForm.tsx": {
-        "version": "843840338214c5c11f92522ff78cd46a28b4799548edb6b3c7cf8b20f28f9a07",
+        "version": "e0c131f3313cc543d1680624f904aee1c51bb1848f85807caf1ec99be89ee977",
         "signature": "d6bdeb7d67772cbfa75d956bd8cadcb2927913dca059ba4674441adff14c248a",
         "affectsGlobalScope": false
       },
@@ -5697,8 +5777,13 @@
         "affectsGlobalScope": false
       },
       "./pages/admin/user/profile.tsx": {
-        "version": "7f837ab617f268cc765dbb15d64f476de64fcdd75ac1376552984b8e630ff01f",
+        "version": "1ef938e38f0cb3b0e0a0e690385be4ed81044c7afe0da1eed587e143c138356d",
         "signature": "6c66540192c1ab8a3142b2a50122f18cae5df4d8241b124267716e4c998786b8",
+        "affectsGlobalScope": false
+      },
+      "./pages/admin/user/settings.tsx": {
+        "version": "851dc30e0835d1048a65aefe907185d33dba535ad14609366546518cebc3004e",
+        "signature": "a2221a3bb0ca6648d601f5d5d2be411e1ddc59c6db6a4f6d5b7b36dd1336cff0",
         "affectsGlobalScope": false
       },
       "./jest.config.js": {
@@ -5877,7 +5962,50 @@
         "../../node_modules/next/head.d.ts",
         "../../node_modules/tslib/tslib.d.ts"
       ],
+      "./pages/admin/series/[id].tsx": [
+        "../../libs/components/src/admin/sections/series/index.ts",
+        "../../libs/components/src/layouts/Admin.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/next-urql/dist/types/index.d.ts",
+        "../../node_modules/next/head.d.ts",
+        "../../node_modules/next/router.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "./pages/admin/series/create.tsx": [
+        "../../libs/components/src/admin/sections/series/index.ts",
+        "../../libs/components/src/layouts/Admin.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/next-urql/dist/types/index.d.ts",
+        "../../node_modules/next/head.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
       "./pages/admin/series/index.tsx": [
+        "../../libs/components/src/admin/sections/series/index.ts",
+        "../../libs/components/src/layouts/index.ts",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/next-urql/dist/types/index.d.ts",
+        "../../node_modules/next/head.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "./pages/admin/stories/[id].tsx": [
+        "../../libs/components/src/admin/sections/stories/index.ts",
+        "../../libs/components/src/layouts/Admin.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/next-urql/dist/types/index.d.ts",
+        "../../node_modules/next/head.d.ts",
+        "../../node_modules/next/router.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "./pages/admin/stories/create.tsx": [
+        "../../libs/components/src/admin/sections/stories/index.ts",
         "../../libs/components/src/layouts/Admin.tsx",
         "../../libs/graphql/src/index.ts",
         "../../node_modules/clsx/clsx.d.ts",
@@ -5887,6 +6015,7 @@
         "../../node_modules/tslib/tslib.d.ts"
       ],
       "./pages/admin/stories/index.tsx": [
+        "../../libs/components/src/admin/sections/stories/index.ts",
         "../../libs/components/src/layouts/Admin.tsx",
         "../../libs/graphql/src/index.ts",
         "../../node_modules/clsx/clsx.d.ts",
@@ -5928,6 +6057,14 @@
       ],
       "./pages/admin/user/profile.tsx": [
         "../../libs/components/src/admin/sections/user/index.ts",
+        "../../libs/components/src/layouts/Admin.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/next-urql/dist/types/index.d.ts",
+        "../../node_modules/next/head.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "./pages/admin/user/settings.tsx": [
         "../../libs/components/src/layouts/Admin.tsx",
         "../../libs/graphql/src/index.ts",
         "../../node_modules/date-fns/typings.d.ts",
@@ -6024,11 +6161,29 @@
         "../../node_modules/date-fns/typings.d.ts",
         "../../node_modules/tslib/tslib.d.ts"
       ],
-      "../../libs/components/src/admin/forms/TextInput.tsx": [
+      "../../libs/components/src/admin/forms/SelectInput.tsx": [
+        "../../libs/components/src/admin/forms/Forms.tsx",
         "../../node_modules/@types/react/index.d.ts",
         "../../node_modules/clsx/clsx.d.ts",
         "../../node_modules/date-fns/typings.d.ts",
-        "../../node_modules/tslib/tslib.d.ts"
+        "../../node_modules/tslib/tslib.d.ts",
+        "../../node_modules/ulid/dist/index.d.ts"
+      ],
+      "../../libs/components/src/admin/forms/TextAreaInput.tsx": [
+        "../../libs/components/src/admin/forms/Forms.tsx",
+        "../../node_modules/@types/react/index.d.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts",
+        "../../node_modules/ulid/dist/index.d.ts"
+      ],
+      "../../libs/components/src/admin/forms/TextInput.tsx": [
+        "../../libs/components/src/admin/forms/Forms.tsx",
+        "../../node_modules/@types/react/index.d.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts",
+        "../../node_modules/ulid/dist/index.d.ts"
       ],
       "../../libs/components/src/admin/navbars/AdminNavbar.tsx": [
         "../../libs/components/src/admin/dropdowns/UserDropdown.tsx",
@@ -6036,8 +6191,95 @@
         "../../node_modules/date-fns/typings.d.ts",
         "../../node_modules/tslib/tslib.d.ts"
       ],
-      "../../libs/components/src/admin/sections/universes/List.tsx": [
+      "../../libs/components/src/admin/sections/series/List.tsx": [
+        "../../libs/components/src/admin/cards/Card.tsx",
+        "../../libs/components/src/admin/tables/Tables.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../libs/shared/config/src/urls.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/Preview.tsx": [
+        "../../libs/components/src/admin/sidebars/index.ts",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/UniverseSelectInput.tsx": [
+        "../../libs/components/src/admin/forms/SelectInput.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/@types/react/index.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/UpdateForm.tsx": [
         "../../libs/components/src/admin/buttons/Button.tsx",
+        "../../libs/components/src/admin/cards/Card.tsx",
+        "../../libs/components/src/admin/forms/Forms.tsx",
+        "../../libs/components/src/admin/forms/TextInput.tsx",
+        "../../libs/components/src/admin/sections/series/UniverseSelectInput.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../libs/shared/config/src/urls.ts",
+        "../../node_modules/@hookform/resolvers/zod/dist/index.d.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/react-hook-form/dist/index.d.ts",
+        "../../node_modules/react-s3-uploader/index.d.ts",
+        "../../node_modules/tslib/tslib.d.ts",
+        "../../node_modules/zod/lib/src/index.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/index.ts": [
+        "../../libs/components/src/admin/sections/series/List.tsx",
+        "../../libs/components/src/admin/sections/series/Preview.tsx",
+        "../../libs/components/src/admin/sections/series/UpdateForm.tsx",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/List.tsx": [
+        "../../libs/components/src/admin/cards/Card.tsx",
+        "../../libs/components/src/admin/tables/Tables.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../libs/shared/config/src/urls.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/Preview.tsx": [
+        "../../libs/components/src/admin/sidebars/index.ts",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/SeriesSelectInput.tsx": [
+        "../../libs/components/src/admin/forms/SelectInput.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../node_modules/@types/react/index.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/UpdateForm.tsx": [
+        "../../libs/components/src/admin/buttons/Button.tsx",
+        "../../libs/components/src/admin/cards/Card.tsx",
+        "../../libs/components/src/admin/forms/Forms.tsx",
+        "../../libs/components/src/admin/forms/TextInput.tsx",
+        "../../libs/components/src/admin/sections/stories/SeriesSelectInput.tsx",
+        "../../libs/graphql/src/index.ts",
+        "../../libs/shared/config/src/urls.ts",
+        "../../node_modules/@hookform/resolvers/zod/dist/index.d.ts",
+        "../../node_modules/clsx/clsx.d.ts",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/react-hook-form/dist/index.d.ts",
+        "../../node_modules/react-s3-uploader/index.d.ts",
+        "../../node_modules/tslib/tslib.d.ts",
+        "../../node_modules/zod/lib/src/index.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/index.ts": [
+        "../../libs/components/src/admin/sections/stories/List.tsx",
+        "../../libs/components/src/admin/sections/stories/Preview.tsx",
+        "../../libs/components/src/admin/sections/stories/UpdateForm.tsx",
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/universes/List.tsx": [
         "../../libs/components/src/admin/cards/Card.tsx",
         "../../libs/components/src/admin/tables/Tables.tsx",
         "../../libs/graphql/src/index.ts",
@@ -6055,8 +6297,8 @@
         "../../libs/components/src/admin/buttons/Button.tsx",
         "../../libs/components/src/admin/cards/Card.tsx",
         "../../libs/components/src/admin/forms/Forms.tsx",
+        "../../libs/components/src/admin/forms/TextAreaInput.tsx",
         "../../libs/components/src/admin/forms/TextInput.tsx",
-        "../../libs/components/src/utils/validation.ts",
         "../../libs/graphql/src/index.ts",
         "../../libs/shared/config/src/urls.ts",
         "../../node_modules/@hookform/resolvers/zod/dist/index.d.ts",
@@ -6174,6 +6416,7 @@
         "../../node_modules/@types/react/index.d.ts",
         "../../node_modules/clsx/clsx.d.ts",
         "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/next/link.d.ts",
         "../../node_modules/tslib/tslib.d.ts"
       ],
       "../../libs/components/src/layouts/Admin.tsx": [
@@ -6197,12 +6440,12 @@
         "../../node_modules/next-auth/client.d.ts",
         "../../node_modules/tslib/tslib.d.ts"
       ],
-      "../../libs/components/src/utils/validation.ts": [
+      "../../libs/graphql/src/Aws.ts": [
+        "../../node_modules/aws-sdk/index.d.ts",
         "../../node_modules/date-fns/typings.d.ts",
-        "../../node_modules/tslib/tslib.d.ts",
-        "../../node_modules/zod/lib/src/index.d.ts"
+        "../../node_modules/tslib/tslib.d.ts"
       ],
-      "../../libs/graphql/src/ApiClient.ts": [
+      "../../libs/graphql/src/Client.ts": [
         "../../node_modules/@urql/exchange-graphcache/dist/types/index.d.ts",
         "../../node_modules/date-fns/typings.d.ts",
         "../../node_modules/graphql/index.d.ts",
@@ -6210,11 +6453,6 @@
         "../../node_modules/tslib/tslib.d.ts",
         "../../node_modules/urql/dist/types/index.d.ts",
         "../../schema.json"
-      ],
-      "../../libs/graphql/src/Aws.ts": [
-        "../../node_modules/aws-sdk/index.d.ts",
-        "../../node_modules/date-fns/typings.d.ts",
-        "../../node_modules/tslib/tslib.d.ts"
       ],
       "../../libs/graphql/src/Schema.tsx": [
         "../../node_modules/@prisma/client/index.d.ts",
@@ -6228,6 +6466,11 @@
         "../../node_modules/tslib/tslib.d.ts",
         "../../node_modules/zustand/index.d.ts"
       ],
+      "../../libs/graphql/src/Types.ts": [
+        "../../node_modules/date-fns/typings.d.ts",
+        "../../node_modules/tslib/tslib.d.ts",
+        "../../node_modules/zod/lib/src/index.d.ts"
+      ],
       "../../libs/graphql/src/User.ts": [
         "../../libs/graphql/src/Schema.tsx",
         "../../node_modules/@types/react/index.d.ts",
@@ -6238,10 +6481,11 @@
         "../../node_modules/tslib/tslib.d.ts"
       ],
       "../../libs/graphql/src/index.ts": [
-        "../../libs/graphql/src/ApiClient.ts",
         "../../libs/graphql/src/Aws.ts",
+        "../../libs/graphql/src/Client.ts",
         "../../libs/graphql/src/Schema.tsx",
         "../../libs/graphql/src/Store.ts",
+        "../../libs/graphql/src/Types.ts",
         "../../libs/graphql/src/User.ts",
         "../../node_modules/date-fns/typings.d.ts",
         "../../node_modules/tslib/tslib.d.ts"
@@ -13172,7 +13416,19 @@
       "./pages/admin/index.tsx": [
         "../../node_modules/next-urql/dist/types/index.d.ts"
       ],
+      "./pages/admin/series/[id].tsx": [
+        "../../node_modules/next-urql/dist/types/index.d.ts"
+      ],
+      "./pages/admin/series/create.tsx": [
+        "../../node_modules/next-urql/dist/types/index.d.ts"
+      ],
       "./pages/admin/series/index.tsx": [
+        "../../node_modules/next-urql/dist/types/index.d.ts"
+      ],
+      "./pages/admin/stories/[id].tsx": [
+        "../../node_modules/next-urql/dist/types/index.d.ts"
+      ],
+      "./pages/admin/stories/create.tsx": [
         "../../node_modules/next-urql/dist/types/index.d.ts"
       ],
       "./pages/admin/stories/index.tsx": [
@@ -13188,6 +13444,9 @@
         "../../node_modules/next-urql/dist/types/index.d.ts"
       ],
       "./pages/admin/user/profile.tsx": [
+        "../../node_modules/next-urql/dist/types/index.d.ts"
+      ],
+      "./pages/admin/user/settings.tsx": [
         "../../node_modules/next-urql/dist/types/index.d.ts"
       ],
       "./pages/api/graphql.ts": [
@@ -13216,8 +13475,50 @@
       "../../libs/components/src/admin/forms/Forms.tsx": [
         "../../node_modules/@types/react/index.d.ts"
       ],
+      "../../libs/components/src/admin/forms/SelectInput.tsx": [
+        "../../node_modules/@types/react/index.d.ts"
+      ],
+      "../../libs/components/src/admin/forms/TextAreaInput.tsx": [
+        "../../node_modules/@types/react/index.d.ts"
+      ],
       "../../libs/components/src/admin/forms/TextInput.tsx": [
         "../../node_modules/@types/react/index.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/List.tsx": [
+        "../../libs/graphql/src/index.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/Preview.tsx": [
+        "../../libs/graphql/src/index.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/UniverseSelectInput.tsx": [
+        "../../libs/components/src/admin/forms/SelectInput.tsx",
+        "../../node_modules/@types/react/index.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/UpdateForm.tsx": [
+        "../../libs/graphql/src/index.ts"
+      ],
+      "../../libs/components/src/admin/sections/series/index.ts": [
+        "../../libs/components/src/admin/sections/series/List.tsx",
+        "../../libs/components/src/admin/sections/series/Preview.tsx",
+        "../../libs/components/src/admin/sections/series/UpdateForm.tsx"
+      ],
+      "../../libs/components/src/admin/sections/stories/List.tsx": [
+        "../../libs/graphql/src/index.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/Preview.tsx": [
+        "../../libs/graphql/src/index.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/SeriesSelectInput.tsx": [
+        "../../libs/components/src/admin/forms/SelectInput.tsx",
+        "../../node_modules/@types/react/index.d.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/UpdateForm.tsx": [
+        "../../libs/graphql/src/index.ts"
+      ],
+      "../../libs/components/src/admin/sections/stories/index.ts": [
+        "../../libs/components/src/admin/sections/stories/List.tsx",
+        "../../libs/components/src/admin/sections/stories/Preview.tsx",
+        "../../libs/components/src/admin/sections/stories/UpdateForm.tsx"
       ],
       "../../libs/components/src/admin/sections/universes/List.tsx": [
         "../../libs/graphql/src/index.ts"
@@ -13268,15 +13569,12 @@
       "../../libs/components/src/utils/auth.ts": [
         "../../node_modules/@types/react/index.d.ts"
       ],
-      "../../libs/components/src/utils/validation.ts": [
-        "../../node_modules/zod/lib/src/index.d.ts"
-      ],
-      "../../libs/graphql/src/ApiClient.ts": [
-        "../../node_modules/next-urql/dist/types/index.d.ts",
-        "../../node_modules/urql/dist/types/index.d.ts"
-      ],
       "../../libs/graphql/src/Aws.ts": [
         "../../node_modules/aws-sdk/index.d.ts"
+      ],
+      "../../libs/graphql/src/Client.ts": [
+        "../../node_modules/next-urql/dist/types/index.d.ts",
+        "../../node_modules/urql/dist/types/index.d.ts"
       ],
       "../../libs/graphql/src/Schema.tsx": [
         "../../node_modules/@prisma/client/index.d.ts",
@@ -13286,14 +13584,18 @@
       "../../libs/graphql/src/Store.ts": [
         "../../node_modules/zustand/index.d.ts"
       ],
+      "../../libs/graphql/src/Types.ts": [
+        "../../node_modules/zod/lib/src/index.d.ts"
+      ],
       "../../libs/graphql/src/User.ts": [
         "../../libs/graphql/src/Schema.tsx"
       ],
       "../../libs/graphql/src/index.ts": [
-        "../../libs/graphql/src/ApiClient.ts",
         "../../libs/graphql/src/Aws.ts",
+        "../../libs/graphql/src/Client.ts",
         "../../libs/graphql/src/Schema.tsx",
         "../../libs/graphql/src/Store.ts",
+        "../../libs/graphql/src/Types.ts",
         "../../libs/graphql/src/User.ts"
       ],
       "../../node_modules/.prisma/client/index.d.ts": [
@@ -20206,12 +20508,17 @@
       "./next.config.js",
       "./pages/_app.tsx",
       "./pages/admin/index.tsx",
+      "./pages/admin/series/[id].tsx",
+      "./pages/admin/series/create.tsx",
       "./pages/admin/series/index.tsx",
+      "./pages/admin/stories/[id].tsx",
+      "./pages/admin/stories/create.tsx",
       "./pages/admin/stories/index.tsx",
       "./pages/admin/universes/[id].tsx",
       "./pages/admin/universes/create.tsx",
       "./pages/admin/universes/index.tsx",
       "./pages/admin/user/profile.tsx",
+      "./pages/admin/user/settings.tsx",
       "./pages/api/auth/[...nextauth].ts",
       "./pages/api/graphql.ts",
       "./pages/api/s3/sign.ts",
@@ -20225,8 +20532,20 @@
       "../../libs/components/src/admin/dropdowns/UserDropdown.tsx",
       "../../libs/components/src/admin/footers/FooterAdmin.tsx",
       "../../libs/components/src/admin/forms/Forms.tsx",
+      "../../libs/components/src/admin/forms/SelectInput.tsx",
+      "../../libs/components/src/admin/forms/TextAreaInput.tsx",
       "../../libs/components/src/admin/forms/TextInput.tsx",
       "../../libs/components/src/admin/navbars/AdminNavbar.tsx",
+      "../../libs/components/src/admin/sections/series/List.tsx",
+      "../../libs/components/src/admin/sections/series/Preview.tsx",
+      "../../libs/components/src/admin/sections/series/UniverseSelectInput.tsx",
+      "../../libs/components/src/admin/sections/series/UpdateForm.tsx",
+      "../../libs/components/src/admin/sections/series/index.ts",
+      "../../libs/components/src/admin/sections/stories/List.tsx",
+      "../../libs/components/src/admin/sections/stories/Preview.tsx",
+      "../../libs/components/src/admin/sections/stories/SeriesSelectInput.tsx",
+      "../../libs/components/src/admin/sections/stories/UpdateForm.tsx",
+      "../../libs/components/src/admin/sections/stories/index.ts",
       "../../libs/components/src/admin/sections/universes/List.tsx",
       "../../libs/components/src/admin/sections/universes/Preview.tsx",
       "../../libs/components/src/admin/sections/universes/UpdateForm.tsx",
@@ -20248,11 +20567,11 @@
       "../../libs/components/src/layouts/Admin.tsx",
       "../../libs/components/src/layouts/index.ts",
       "../../libs/components/src/utils/auth.ts",
-      "../../libs/components/src/utils/validation.ts",
-      "../../libs/graphql/src/ApiClient.ts",
       "../../libs/graphql/src/Aws.ts",
+      "../../libs/graphql/src/Client.ts",
       "../../libs/graphql/src/Schema.tsx",
       "../../libs/graphql/src/Store.ts",
+      "../../libs/graphql/src/Types.ts",
       "../../libs/graphql/src/User.ts",
       "../../libs/graphql/src/index.ts",
       "../../libs/shared/config/src/urls.ts",
@@ -21382,7 +21701,23 @@
         1
       ],
       [
+        "./pages/admin/series/[id].tsx",
+        1
+      ],
+      [
+        "./pages/admin/series/create.tsx",
+        1
+      ],
+      [
         "./pages/admin/series/index.tsx",
+        1
+      ],
+      [
+        "./pages/admin/stories/[id].tsx",
+        1
+      ],
+      [
+        "./pages/admin/stories/create.tsx",
         1
       ],
       [
@@ -21403,6 +21738,10 @@
       ],
       [
         "./pages/admin/user/profile.tsx",
+        1
+      ],
+      [
+        "./pages/admin/user/settings.tsx",
         1
       ],
       [
@@ -21458,11 +21797,59 @@
         1
       ],
       [
+        "../../libs/components/src/admin/forms/SelectInput.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/forms/TextAreaInput.tsx",
+        1
+      ],
+      [
         "../../libs/components/src/admin/forms/TextInput.tsx",
         1
       ],
       [
         "../../libs/components/src/admin/navbars/AdminNavbar.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/series/List.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/series/Preview.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/series/UniverseSelectInput.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/series/UpdateForm.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/series/index.ts",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/stories/List.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/stories/Preview.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/stories/SeriesSelectInput.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/stories/UpdateForm.tsx",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/stories/index.ts",
         1
       ],
       [
@@ -21479,6 +21866,10 @@
       ],
       [
         "../../libs/components/src/admin/sections/universes/index.ts",
+        1
+      ],
+      [
+        "../../libs/components/src/admin/sections/universes/utils.ts",
         1
       ],
       [
@@ -21550,15 +21941,11 @@
         1
       ],
       [
-        "../../libs/components/src/utils/validation.ts",
-        1
-      ],
-      [
-        "../../libs/graphql/src/ApiClient.ts",
-        1
-      ],
-      [
         "../../libs/graphql/src/Aws.ts",
+        1
+      ],
+      [
+        "../../libs/graphql/src/Client.ts",
         1
       ],
       [
@@ -21567,6 +21954,10 @@
       ],
       [
         "../../libs/graphql/src/Store.ts",
+        1
+      ],
+      [
+        "../../libs/graphql/src/Types.ts",
         1
       ],
       [

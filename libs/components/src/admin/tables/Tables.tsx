@@ -1,5 +1,11 @@
 import clsx from 'clsx'
-import {DetailedHTMLProps, ReactNode, TableHTMLAttributes} from 'react'
+import {
+  AnchorHTMLAttributes,
+  DetailedHTMLProps,
+  ReactNode,
+  TableHTMLAttributes,
+} from 'react'
+import NextLink from 'next/link'
 
 export interface TableProps
   extends DetailedHTMLProps<
@@ -105,4 +111,31 @@ export function Column({children, className, header}: ColumnProps) {
   return <td className={classes}>{children}</td>
 }
 
-export default {Table, Row, Column}
+export interface LinkProps
+  extends DetailedHTMLProps<
+    AnchorHTMLAttributes<HTMLAnchorElement>,
+    HTMLAnchorElement
+  > {
+  href: string
+}
+
+export function Link({className, href, children, ...rest}: LinkProps) {
+  return (
+    <NextLink href={href}>
+      <a
+        className={clsx(
+          'w-full',
+          'whitespace-nowrap',
+          'text-lightBlue-500',
+          'hover:text-lightBlue-600',
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </a>
+    </NextLink>
+  )
+}
+
+export default {Table, Row, Column, Link}

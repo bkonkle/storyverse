@@ -63,7 +63,7 @@
     "graphql-tag": "^2.12.4",
     "graphql-type-json": "^0.3.2",
     "graphql-type-uuid": "^0.2.0",
-    "http-proxy": "^1.18.1",
+    "http-proxy-middleware": "^2.0.0",
     "jwks-rsa": "^2.0.3",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",

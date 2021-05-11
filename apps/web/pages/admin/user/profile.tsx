@@ -3,7 +3,7 @@ import {withUrqlClient} from 'next-urql'
 
 import Admin from '@storyverse/components/layouts/Admin'
 import {ProfileSection} from '@storyverse/components/admin/sections/user'
-import {getConfig} from '@storyverse/graphql'
+import {Client} from '@storyverse/graphql'
 
 export function UserProfilePage() {
   return (
@@ -16,4 +16,4 @@ export function UserProfilePage() {
   )
 }
 
-export default withUrqlClient(getConfig, {ssr: true})(UserProfilePage)
+export default withUrqlClient(Client.getConfig, {ssr: true})(UserProfilePage)

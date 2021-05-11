@@ -8,7 +8,7 @@ import {
   CreateProfileInput,
   Profile,
   User,
-} from '@storyverse/graphql/ApiSchema'
+} from '@storyverse/graphql/api/Schema'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'

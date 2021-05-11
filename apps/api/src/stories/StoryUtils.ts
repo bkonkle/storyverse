@@ -5,7 +5,7 @@ import {
   StoryCondition,
   StoriesOrderBy,
   UpdateStoryInput,
-} from '@storyverse/graphql/ApiSchema'
+} from '@storyverse/graphql/api/Schema'
 
 import {Subject} from '../authz/AuthzService'
 import * as SeriesUtils from '../series/SeriesUtils'

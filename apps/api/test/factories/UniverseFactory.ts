@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import faker from 'faker'
 
-import {CreateUniverseInput, Universe} from '@storyverse/graphql/ApiSchema'
+import {CreateUniverseInput, Universe} from '@storyverse/graphql/api/Schema'
 
 export const makeCreateInput = (
   overrides?: Partial<CreateUniverseInput> | null

@@ -5,7 +5,7 @@ import {
   UniverseCondition,
   UniversesOrderBy,
   UpdateUniverseInput,
-} from '@storyverse/graphql/ApiSchema'
+} from '@storyverse/graphql/api/Schema'
 
 import * as ProfileUtils from '../profiles/ProfileUtils'
 import {Subject} from '../authz/AuthzService'

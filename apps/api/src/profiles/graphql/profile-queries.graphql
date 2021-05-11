@@ -39,7 +39,7 @@ type Profile {
   """
   Editor json content for the Profile body
   """
-  content: JSONObject
+  content: JSON
 
   """
   The id of the User that created the Profile
@@ -63,7 +63,7 @@ input ProfileCondition {
   email: String
   displayName: String
   picture: String
-  content: JSONObject
+  content: JSON
   userId: ID
   createdAt: DateTime
   updatedAt: DateTime

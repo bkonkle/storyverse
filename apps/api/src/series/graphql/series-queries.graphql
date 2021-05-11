@@ -29,7 +29,7 @@ type Series {
   """
   Editor json content for the Series description
   """
-  description: JSONObject
+  description: JSON
 
   """
   A cover image for the Universe
