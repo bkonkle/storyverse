@@ -7,7 +7,7 @@ export namespace Universe {
   export interface Description {
     // For compatibility with Prisma.JsonValue
     [key: string]: string | undefined
-    text?: string
+    quill?: string
   }
 
   export const description = (): z.ZodSchema<Description> =>

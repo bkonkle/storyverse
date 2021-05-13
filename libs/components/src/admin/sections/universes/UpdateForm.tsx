@@ -1,7 +1,7 @@
 import * as z from 'zod'
 import clsx from 'clsx'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
-import {useForm} from 'react-hook-form'
+import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 import {Schema, Universe} from '@storyverse/graphql'
@@ -11,7 +11,7 @@ import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
 import TextInput from '../../forms/TextInput'
 import Button from '../../buttons/Button'
-import TextAreaInput from '../../forms/TextAreaInput'
+import TextEditorInput from '../../forms/TextEditorInput'
 
 export interface UpdateFormProps {
   universe?: Schema.UniverseDataFragment
@@ -37,16 +37,16 @@ export default function UpdateForm({universe}: UpdateFormProps) {
   const fetching = createData.fetching || updateData.fetching
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
     formState: {errors},
-    getValues,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name: universe?.name || 'New Universe',
-      description: (universe?.description as Universe.Description) || {},
+      description: (universe?.description as Universe.Description)?.quill || '',
       picture: universe?.picture || '',
     },
   })
@@ -59,6 +59,8 @@ export default function UpdateForm({universe}: UpdateFormProps) {
     if (!profile) {
       throw new Error('No Profile found for the current User')
     }
+
+    console.log(`>- data ->`, data)
 
     if (id) {
       updateUniverse({id, input: data})
@@ -91,13 +93,19 @@ export default function UpdateForm({universe}: UpdateFormProps) {
           </Forms.Field>
 
           <Forms.Field>
-            <TextAreaInput
-              label="Description"
-              error={(errors.description as any)?.message}
-              {...register('description', {
-                setValueAs: (value) => ({text: value.text}),
-              })}
-            />
+            <Controller
+              control={control}
+              name="description"
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextEditorInput
+                  label="Description"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={(errors.description as {message?: string})?.message}
+                />
+              )}
+            ></Controller>
           </Forms.Field>
         </Forms.Group>
 
