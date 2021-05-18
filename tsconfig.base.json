@@ -32,7 +32,6 @@
       "@storyverse/graphql/*": ["libs/graphql/src/*"],
       "@storyverse/components": ["libs/components/src/index.ts"],
       "@storyverse/components/*": ["libs/components/src/*"],
-      "@storyverse/shared/config/*": ["libs/shared/config/src/*"],
       "@storyverse/client/utils": ["libs/client/utils/src/index.ts"],
       "@storyverse/client/utils/*": ["libs/client/utils/src/*"],
       "@storyverse/server/utils": ["libs/server/utils/src/index.ts"],

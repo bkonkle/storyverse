@@ -15,7 +15,7 @@ import {container, injectable, inject, injectAll} from 'tsyringe'
 import {Schema} from '@storyverse/graphql/api'
 import {
   Context,
-  ConfigService,
+  Config,
   NodeFS,
   Resolvers,
   GraphQLDateTime,
@@ -31,7 +31,7 @@ export default class App {
 
   constructor(
     @inject(NodeFS) filesystem: typeof fs,
-    @inject(ConfigService) private readonly config: ConfigService,
+    @inject(Config) private readonly config: Config,
     @injectAll(GraphQLResolvers) private readonly resolvers: Resolvers[]
   ) {
     this.typeDefs = gql(
