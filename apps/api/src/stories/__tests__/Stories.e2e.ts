@@ -12,6 +12,7 @@ import {
   Series,
   Universe,
 } from '@storyverse/graphql/api/Schema'
+import {Prisma} from '@storyverse/server/utils'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'
@@ -20,7 +21,6 @@ import Validation from '../../../test/Validation'
 import {dbCleaner} from '../../../test/Prisma'
 import ProfileFactory from '../../../test/factories/ProfileFactory'
 import StoryFactory from '../../../test/factories/StoryFactory'
-import Prisma from '../../utils/Prisma'
 import TestData from '../../../test/TestData'
 import UniverseFactory from '../../../test/factories/UniverseFactory'
 import * as UniverseRoles from '../../universes/UniverseRoles'

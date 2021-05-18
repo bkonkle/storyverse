@@ -10,6 +10,7 @@ import {
   Universe,
   Query,
 } from '@storyverse/graphql/api/Schema'
+import {Prisma} from '@storyverse/server/utils'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'
@@ -18,7 +19,6 @@ import Validation from '../../../test/Validation'
 import {dbCleaner} from '../../../test/Prisma'
 import ProfileFactory from '../../../test/factories/ProfileFactory'
 import UniverseFactory from '../../../test/factories/UniverseFactory'
-import Prisma from '../../utils/Prisma'
 import TestData from '../../../test/TestData'
 import {Admin, Manager} from '../UniverseRoles'
 import {getSubject} from '../UniverseUtils'

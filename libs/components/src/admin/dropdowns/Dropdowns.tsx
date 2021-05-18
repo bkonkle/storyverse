@@ -11,7 +11,8 @@ import {
 } from 'react'
 import NextLink from 'next/link'
 import {createPopper} from '@popperjs/core'
-import {Admin} from '@storyverse/shared/config/urls'
+
+import {Admin} from '@storyverse/client/utils/urls'
 
 export interface DropdownProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {

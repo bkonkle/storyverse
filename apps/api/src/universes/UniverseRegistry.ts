@@ -1,8 +1,8 @@
 import {registry} from 'tsyringe'
 
+import {useClass, useRegistry, useResolvers} from '@storyverse/server/utils'
+
 import {AuthzRegistry, usePermissions, useRoles} from '../authz'
-import {useClass, useRegistry} from '../utils/Injection'
-import {useResolvers} from '../utils/GraphQL'
 import UniverseAuthz from './UniverseAuthz'
 import UniverseResolvers from './UniverseResolvers'
 import {permissions, roles} from './UniverseRoles'

@@ -1,4 +1,4 @@
-import Urls, {Admin} from '@storyverse/shared/config/urls'
+import Urls, {Admin} from '@storyverse/client/utils/urls'
 
 import {handleLogout} from '../../../utils/auth'
 import SidebarHeading from './SidebarHeading'

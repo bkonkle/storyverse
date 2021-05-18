@@ -1,9 +1,15 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
+import {
+  Query,
+  Mutation,
+  Resolvers,
+  getOffset,
+  paginateResponse,
+} from '@storyverse/server/utils'
+
 import {getUsername, maybeUsername} from '../users/UserUtils'
-import {Query, Mutation, Resolvers} from '../utils/GraphQL'
-import {getOffset, paginateResponse} from '../utils/Pagination'
 import ProfileAuthz from './ProfileAuthz'
 import {
   censor,

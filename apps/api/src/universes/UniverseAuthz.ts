@@ -3,8 +3,8 @@ import {ForbiddenError, UserInputError} from 'apollo-server-core'
 import {injectable} from 'tsyringe'
 
 import {UniverseRoles} from '@storyverse/graphql/api/Schema'
+import {NotFoundError} from '@storyverse/server/utils'
 
-import {NotFoundError} from '../utils/Errors'
 import {AuthzService, Permission} from '../authz'
 import {isOwner, getSubject} from './UniverseUtils'
 import {Update, Delete, ManageRoles} from './UniverseRoles'

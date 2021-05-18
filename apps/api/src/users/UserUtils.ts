@@ -1,5 +1,5 @@
 import {AuthenticationError, ForbiddenError} from 'apollo-server-core'
-import {Context, Token} from '../utils/Context'
+import {Context, Token} from '@storyverse/server/utils'
 
 export const maybeUser = (context: Context): Token | null => {
   const {

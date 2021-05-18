@@ -1,6 +1,6 @@
 import {registry} from 'tsyringe'
 
-import {useClass} from '../utils/Injection'
+import {useClass} from '@storyverse/server/utils'
 import AuthzService from './AuthzService'
 
 @registry([useClass(AuthzService)])

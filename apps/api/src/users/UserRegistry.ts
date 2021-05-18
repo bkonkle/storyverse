@@ -1,6 +1,7 @@
 import {registry} from 'tsyringe'
 
-import {useResolvers} from '../utils/GraphQL'
+import {useResolvers} from '@storyverse/server/utils'
+
 import UserResolvers from './UserResolvers'
 
 @registry([useResolvers(UserResolvers)])

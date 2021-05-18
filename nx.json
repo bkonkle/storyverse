@@ -1,9 +1,14 @@
 {
   "implicitDependencies": {
-    "package.json": {"dependencies": "*", "devDependencies": "*"},
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     ".eslintrc.json": "*"
   },
-  "affected": {"defaultBase": "develop"},
+  "affected": {
+    "defaultBase": "develop"
+  },
   "npmScope": "storyverse",
   "tasksRunnerOptions": {
     "default": {
@@ -14,10 +19,23 @@
     }
   },
   "projects": {
-    "web": {"tags": []},
-    "api": {"tags": []},
-    "graphql": {"tags": []},
-    "components": {"tags": []},
-    "shared-config": {"tags": []}
+    "web": {
+      "tags": []
+    },
+    "api": {
+      "tags": []
+    },
+    "graphql": {
+      "tags": []
+    },
+    "components": {
+      "tags": []
+    },
+    "client-utils": {
+      "tags": []
+    },
+    "server-utils": {
+      "tags": []
+    }
   }
 }

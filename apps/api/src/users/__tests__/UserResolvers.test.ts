@@ -3,8 +3,9 @@ import {container} from 'tsyringe'
 import {mockDeep} from 'jest-mock-extended'
 import {GraphQLResolveInfo} from 'graphql'
 
+import {Context} from '@storyverse/server/utils'
+
 import UserFactory from '../../../test/factories/UserFactory'
-import {Context} from '../../utils/Context'
 import UserResolvers from '../UserResolvers'
 
 describe('UserResolvers', () => {

@@ -1,10 +1,16 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
+import {
+  Prisma,
+  Query,
+  Mutation,
+  Resolvers,
+  getOffset,
+  paginateResponse,
+} from '@storyverse/server/utils'
+
 import {getUsername} from '../users/UserUtils'
-import {includeFromSelections} from '../utils/Prisma'
-import {getOffset, paginateResponse} from '../utils/Pagination'
-import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import SeriesAuthz from './SeriesAuthz'
 import {
   IncludeAll,
@@ -38,7 +44,7 @@ export default class SeriesResolvers implements Resolvers {
     _context,
     resolveInfo
   ) => {
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'getSeries'
     ) as IncludeAll
@@ -63,7 +69,7 @@ export default class SeriesResolvers implements Resolvers {
     }
     const total = await this.prisma.series.count(options)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'getManySeries.data'
     ) as IncludeAll
@@ -91,7 +97,7 @@ export default class SeriesResolvers implements Resolvers {
 
     await this.authz.create(username, input.universeId)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'createSeries.series'
     ) as IncludeAll
@@ -119,7 +125,7 @@ export default class SeriesResolvers implements Resolvers {
     const username = getUsername(context)
     await this.authz.update(username, id)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'updateSeries.series'
     ) as IncludeAll
@@ -142,7 +148,7 @@ export default class SeriesResolvers implements Resolvers {
     const username = getUsername(context)
     await this.authz.delete(username, id)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'deleteSeries.series'
     ) as IncludeAll

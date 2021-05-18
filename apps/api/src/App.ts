@@ -13,12 +13,16 @@ import {DocumentNode} from 'graphql'
 import {container, injectable, inject, injectAll} from 'tsyringe'
 
 import {Schema} from '@storyverse/graphql/api'
+import {
+  Context,
+  ConfigService,
+  NodeFS,
+  Resolvers,
+  GraphQLDateTime,
+  GraphQLResolvers,
+  getContext,
+} from '@storyverse/server/utils'
 
-import {Vars, getVars} from './config/Environment'
-import {Context, getContext} from './utils/Context'
-import {Resolvers, GraphQLResolvers} from './utils/GraphQL'
-import GraphQLDateTime from './utils/GraphQLDateTime'
-import {ProcessEnv, NodeFS} from './utils/Injection'
 import AppRegistry from './AppRegistry'
 
 @injectable()
@@ -27,7 +31,7 @@ export default class App {
 
   constructor(
     @inject(NodeFS) filesystem: typeof fs,
-    @inject(ProcessEnv) private readonly env: NodeJS.ProcessEnv,
+    @inject(ConfigService) private readonly config: ConfigService,
     @injectAll(GraphQLResolvers) private readonly resolvers: Resolvers[]
   ) {
     this.typeDefs = gql(
@@ -58,17 +62,13 @@ export default class App {
   }
 
   async init(): Promise<Application> {
-    const [
-      nodeEnv = 'production',
-      audience = 'production',
-      domain = 'storyverse.auth0.com',
-    ] = getVars(
-      [Vars.NodeEnv, Vars.OAuth2Audience, Vars.OAuth2Domain],
-      this.env
-    )
+    const {
+      env,
+      auth: {audience, domain},
+    } = this.config.getProperties()
 
-    const isDev = nodeEnv === 'development'
-    const isTest = nodeEnv === 'test'
+    const isDev = env === 'development'
+    const isTest = env === 'test'
 
     const app = express().disable('x-powered-by')
 

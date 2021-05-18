@@ -9,6 +9,7 @@ import {
   Profile,
   User,
 } from '@storyverse/graphql/api/Schema'
+import {Prisma} from '@storyverse/server/utils'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'
@@ -17,7 +18,6 @@ import Validation from '../../../test/Validation'
 import {dbCleaner} from '../../../test/Prisma'
 import ProfileFactory from '../../../test/factories/ProfileFactory'
 import TestData from '../../../test/TestData'
-import Prisma from '../../utils/Prisma'
 
 describe('Profile', () => {
   let graphql: GraphQL

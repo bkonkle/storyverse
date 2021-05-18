@@ -8,6 +8,6 @@
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
     "../../node_modules/@nrwl/react/typings/image.d.ts"
   ],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx"],
+  "exclude": ["**/__tests__/**/*", "**/*.test.ts", "**/*.test.tsx"],
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }

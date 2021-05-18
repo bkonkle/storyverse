@@ -1,7 +1,7 @@
 import {PrismaClient, Prisma} from '@prisma/client'
 import {SelectionSetNode} from 'graphql'
-import _ from 'lodash'
 import {JsonObject} from 'type-fest'
+import get from 'lodash/get'
 
 let client: PrismaClient | undefined
 
@@ -77,7 +77,5 @@ export const includeFromSelections = (
   // Translate the path to Prisma's "include" structure
   const prismaPath = `${path.split('.').join('.include.')}.include`
 
-  return _.get(include, prismaPath)
+  return get(include, prismaPath)
 }
-
-export default {init, disconnect}

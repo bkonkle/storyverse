@@ -5,7 +5,7 @@ import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 import {Schema, Universe} from '@storyverse/graphql'
-import {Admin} from '@storyverse/shared/config/urls'
+import {Admin} from '@storyverse/client/utils/urls'
 
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'

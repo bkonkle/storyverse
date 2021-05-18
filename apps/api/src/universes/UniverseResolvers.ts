@@ -1,10 +1,16 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
+import {
+  Prisma,
+  Query,
+  Mutation,
+  Resolvers,
+  getOffset,
+  paginateResponse,
+} from '@storyverse/server/utils'
+
 import {getUsername} from '../users/UserUtils'
-import {includeFromSelections} from '../utils/Prisma'
-import {getOffset, paginateResponse} from '../utils/Pagination'
-import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import UniverseAuthz from './UniverseAuthz'
 import {
   IncludeAll,
@@ -80,7 +86,7 @@ export default class UniverseResolvers implements Resolvers {
 
     await this.authz.create(username, input.ownerProfileId)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'createUniverse.universe'
     ) as IncludeAll
@@ -108,7 +114,7 @@ export default class UniverseResolvers implements Resolvers {
     const username = getUsername(context)
     await this.authz.update(username, id)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'updateUniverse.universe'
     ) as IncludeAll
@@ -131,7 +137,7 @@ export default class UniverseResolvers implements Resolvers {
     const username = getUsername(context)
     await this.authz.delete(username, id)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'deleteUniverse.universe'
     ) as IncludeAll

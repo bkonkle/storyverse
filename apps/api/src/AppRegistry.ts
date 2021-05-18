@@ -2,8 +2,14 @@ import * as fs from 'fs'
 import {registry} from 'tsyringe'
 import {PrismaClient} from '@prisma/client'
 
-import {ProcessEnv, NodeFS, useRegistry} from './utils/Injection'
-import Prisma from './utils/Prisma'
+import {
+  ConfigRegistry,
+  ProcessEnv,
+  Prisma,
+  NodeFS,
+  useRegistry,
+} from '@storyverse/server/utils'
+
 import UserRegistry from './users/UserRegistry'
 import ProfileRegistry from './profiles/ProfileRegistry'
 import UniverseRegistry from './universes/UniverseRegistry'
@@ -16,6 +22,7 @@ import StoryRegistry from './stories/StoryRegistry'
   useRegistry(UniverseRegistry),
   useRegistry(SeriesRegistry),
   useRegistry(StoryRegistry),
+  useRegistry(ConfigRegistry),
 
   {token: ProcessEnv, useValue: process.env},
   {token: NodeFS, useValue: fs},

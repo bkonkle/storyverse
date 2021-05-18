@@ -1,10 +1,16 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
+import {
+  Prisma,
+  Query,
+  Mutation,
+  Resolvers,
+  getOffset,
+  paginateResponse,
+} from '@storyverse/server/utils'
+
 import {getUsername} from '../users/UserUtils'
-import {includeFromSelections} from '../utils/Prisma'
-import {getOffset, paginateResponse} from '../utils/Pagination'
-import {Query, Mutation, Resolvers} from '../utils/GraphQL'
 import StoryAuthz from './StoryAuthz'
 import {
   IncludeAll,
@@ -38,7 +44,7 @@ export default class StoryResolvers implements Resolvers {
     _context,
     resolveInfo
   ) => {
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'getStory'
     ) as IncludeAll
@@ -63,7 +69,7 @@ export default class StoryResolvers implements Resolvers {
     }
     const total = await this.prisma.story.count(options)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'getManyStories.data'
     ) as IncludeAll
@@ -91,7 +97,7 @@ export default class StoryResolvers implements Resolvers {
 
     await this.authz.create(username, input.seriesId)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'createStory.story'
     ) as IncludeAll
@@ -119,7 +125,7 @@ export default class StoryResolvers implements Resolvers {
     const username = getUsername(context)
     await this.authz.update(username, id)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'updateStory.story'
     ) as IncludeAll
@@ -142,7 +148,7 @@ export default class StoryResolvers implements Resolvers {
     const username = getUsername(context)
     await this.authz.delete(username, id)
 
-    const include = includeFromSelections(
+    const include = Prisma.includeFromSelections(
       resolveInfo.operation.selectionSet,
       'deleteStory.story'
     ) as IncludeAll

@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 
 import {Schema} from '@storyverse/graphql'
-import Urls, {Admin} from '@storyverse/shared/config/urls'
+
+import Urls, {Admin} from '@storyverse/client/utils/urls'
 
 import {handleLogout} from '../../utils/auth'
 import {Dropdown, Link, Separator} from './Dropdowns'

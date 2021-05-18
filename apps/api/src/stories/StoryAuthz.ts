@@ -2,7 +2,8 @@ import {PrismaClient, Profile} from '@prisma/client'
 import {ForbiddenError} from 'apollo-server-core'
 import {injectable} from 'tsyringe'
 
-import {NotFoundError} from '../utils/Errors'
+import {NotFoundError} from '@storyverse/server/utils'
+
 import AuthzService from '../authz/AuthzService'
 import * as UniverseUtils from '../universes/UniverseUtils'
 import {ManageSeries} from '../universes/UniverseRoles'

@@ -1,7 +1,7 @@
 import {registry} from 'tsyringe'
 
-import {useClass} from '../utils/Injection'
-import {useResolvers} from '../utils/GraphQL'
+import {useClass, useResolvers} from '@storyverse/server/utils'
+
 import ProfileAuthz from './ProfileAuthz'
 import ProfileResolvers from './ProfileResolvers'
 

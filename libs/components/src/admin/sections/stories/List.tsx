@@ -1,7 +1,7 @@
 import {format, formatDistanceToNow} from 'date-fns'
 
-import {Admin} from '@storyverse/shared/config/urls'
 import {Schema} from '@storyverse/graphql'
+import {Admin} from '@storyverse/client/utils/urls'
 
 import Card from '../../cards/Card'
 import {Table, Row, Column, Link} from '../../tables/Tables'
