@@ -1,6 +1,6 @@
 import {injectable, inject} from 'tsyringe'
 
-import {Config} from './Config'
+import {Config} from './ConfigTypes'
 
 @injectable()
 export default class ConfigService {
