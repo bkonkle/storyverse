@@ -48,6 +48,7 @@ export default function TextEditorInput({
     <Input id={id} label={label} error={error} hint={hint}>
       <ReactQuill
         theme="snow"
+        className="bg-white"
         value={state.value}
         readOnly={readOnly}
         onChange={(newValue, _delta, _source, editor) => {

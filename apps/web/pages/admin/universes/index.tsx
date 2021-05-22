@@ -7,8 +7,8 @@ import {List} from '@storyverse/components/admin/sections/universes'
 import {Schema, Client} from '@storyverse/graphql'
 
 export function UniversesPage() {
-  const [{data: universeData}] = Schema.useGetMyUniversesQuery()
-  const universes = universeData?.getMyUniverses.data || []
+  const [{data: universeData}] = Schema.useGetManyUniversesQuery()
+  const universes = universeData?.getManyUniverses.data || []
 
   return (
     <Admin>

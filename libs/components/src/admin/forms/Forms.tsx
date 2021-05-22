@@ -1,5 +1,10 @@
 import clsx from 'clsx'
-import {FormEventHandler, ReactNode} from 'react'
+import {
+  FormEventHandler,
+  ReactNode,
+  DetailedHTMLProps,
+  HTMLAttributes,
+} from 'react'
 
 export interface FormProps {
   children: ReactNode
@@ -78,17 +83,23 @@ export function Field({half, third, children}: FieldProps) {
   )
 }
 
-export interface InputProps {
-  id: string
+export interface InputProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string
   error?: string
   hint?: string
-  children?: ReactNode
 }
 
-export function Input({id, label, error, hint, children}: InputProps) {
+export function Input({
+  id,
+  label,
+  error,
+  hint,
+  className,
+  children,
+}: InputProps) {
   return (
-    <div className="relative w-full mb-3">
+    <div className={clsx('relative', 'w-full', 'mb-3', className)}>
       <label
         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
         htmlFor={id}
@@ -117,7 +128,7 @@ export const inputClasses = clsx(
   'w-full',
   'ease-linear',
   'transition-all',
-  'duration-150',
+  'duration-150'
 )
 
 export default {Form, Header, Separator, Group, Actions, Field, inputClasses}

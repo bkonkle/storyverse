@@ -5,6 +5,7 @@ import {Provider} from 'next-auth/client'
 
 import 'tailwindcss/tailwind.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import '@storyverse/client/assets/styles/quill-editor.css'
 
 export default function NextApp({Component, pageProps}: AppProps) {
   return (

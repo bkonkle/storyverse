@@ -34,6 +34,7 @@
       "@storyverse/components/*": ["libs/components/src/*"],
       "@storyverse/client/utils": ["libs/client/utils/src/index.ts"],
       "@storyverse/client/utils/*": ["libs/client/utils/src/*"],
+      "@storyverse/client/assets/*": ["libs/client/assets/*"],
       "@storyverse/server/utils": ["libs/server/utils/src/index.ts"],
       "@storyverse/server/utils/*": ["libs/server/utils/src/*"]
     }

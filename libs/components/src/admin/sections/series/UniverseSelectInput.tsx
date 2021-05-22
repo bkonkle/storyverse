@@ -10,8 +10,8 @@ export const UniverseSelectInput = forwardRef<
   HTMLSelectElement,
   UniverseSelectInputProps
 >((props: UniverseSelectInputProps, ref) => {
-  const [{data: universeData}] = Schema.useGetMyUniversesQuery()
-  const universes = universeData?.getMyUniverses.data || []
+  const [{data: universeData}] = Schema.useGetManyUniversesQuery()
+  const universes = universeData?.getManyUniverses.data || []
 
   const options = [
     {value: '', label: '(select one)'},

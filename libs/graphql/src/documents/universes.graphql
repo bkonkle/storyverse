@@ -7,25 +7,6 @@ fragment UniverseData on Universe {
   updatedAt
 }
 
-# TODO: Move away from `getManyUniverses` on the backend when `getMyUniverses` is implemented
-query getMyUniverses(
-  $where: UniverseCondition
-  $orderBy: [UniversesOrderBy!]
-  $pageSize: Int
-  $page: Int
-) {
-  getMyUniverses: getManyUniverses(
-    where: $where
-    orderBy: $orderBy
-    pageSize: $pageSize
-    page: $page
-  ) {
-    data {
-      ...UniverseData
-    }
-  }
-}
-
 query getManyUniverses(
   $where: UniverseCondition
   $orderBy: [UniversesOrderBy!]
