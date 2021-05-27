@@ -1,16 +1,18 @@
 import * as z from 'zod'
 import clsx from 'clsx'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
-import {useForm} from 'react-hook-form'
+import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {Prisma} from '@prisma/client'
 
-import {Schema, Story} from '@storyverse/graphql'
+import {Schema} from '@storyverse/graphql'
 import {Admin} from '@storyverse/client/utils/urls'
 
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
 import TextInput from '../../forms/TextInput'
 import Button from '../../buttons/Button'
+import TextEditorInput, {EditorValue} from '../../forms/TextEditorInput'
 import SeriesSelectInput from './SeriesSelectInput'
 
 export interface UpdateFormProps {
@@ -21,8 +23,8 @@ const schema = z.object({
   name: z.string().nonempty('A name for the Story is required.'),
   volume: z.number().optional(),
   issue: z.number().optional(),
-  summary: Story.summary().optional(),
-  content: Story.content().optional(),
+  summary: z.string().or(z.record(z.unknown())).optional(),
+  content: z.string().or(z.record(z.unknown())).optional(),
   picture: z.string().optional(),
   seriesId: z.string().nonempty('Please select a Series for this Story'),
 })
@@ -40,6 +42,7 @@ export default function UpdateForm({story}: UpdateFormProps) {
   const fetching = createData.fetching || updateData.fetching
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -50,8 +53,8 @@ export default function UpdateForm({story}: UpdateFormProps) {
       name: story?.name || 'New Story',
       volume: story?.volume,
       issue: story?.issue,
-      summary: (story?.summary as Story.Summary) || {},
-      content: (story?.content as Story.Content) || {},
+      summary: story?.summary as EditorValue,
+      content: story?.content as EditorValue,
       picture: story?.picture || '',
       seriesId: story?.seriesId,
     },
@@ -63,13 +66,24 @@ export default function UpdateForm({story}: UpdateFormProps) {
 
   const onSubmit = (data: z.infer<typeof schema>) => {
     if (id) {
-      updateStory({id, input: data})
+      updateStory({
+        id,
+        input: {
+          ...data,
+          summary: data.summary as Prisma.JsonValue,
+          content: data.content as Prisma.JsonValue,
+        },
+      })
 
       return
     }
 
     createStory({
-      input: data,
+      input: {
+        ...data,
+        summary: data.summary as Prisma.JsonValue,
+        content: data.content as Prisma.JsonValue,
+      },
     })
   }
 
@@ -110,6 +124,42 @@ export default function UpdateForm({story}: UpdateFormProps) {
                 onFinish={handleUpload}
               />
             )}
+          </Forms.Field>
+        </Forms.Group>
+
+        <Forms.Separator />
+
+        <Forms.Group header="Content">
+          <Forms.Field>
+            <Controller
+              control={control}
+              name="summary"
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextEditorInput
+                  label="Summary"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={(errors.summary as {message?: string})?.message}
+                />
+              )}
+            ></Controller>
+          </Forms.Field>
+
+          <Forms.Field>
+            <Controller
+              control={control}
+              name="content"
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextEditorInput
+                  label="Content"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={(errors.content as {message?: string})?.message}
+                />
+              )}
+            ></Controller>
           </Forms.Field>
         </Forms.Group>
 

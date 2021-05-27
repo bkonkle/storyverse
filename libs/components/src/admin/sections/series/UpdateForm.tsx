@@ -1,16 +1,18 @@
 import * as z from 'zod'
 import clsx from 'clsx'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
-import {useForm} from 'react-hook-form'
+import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {Prisma} from '@prisma/client'
 
-import {Schema, Series} from '@storyverse/graphql'
+import {Schema} from '@storyverse/graphql'
 import {Admin} from '@storyverse/client/utils/urls'
 
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
 import TextInput from '../../forms/TextInput'
 import Button from '../../buttons/Button'
+import TextEditorInput, {EditorValue} from '../../forms/TextEditorInput'
 import UniverseSelectInput from './UniverseSelectInput'
 
 export interface UpdateFormProps {
@@ -19,7 +21,7 @@ export interface UpdateFormProps {
 
 const schema = z.object({
   name: z.string().nonempty('A name for the Series is required.'),
-  description: Series.description().optional(),
+  description: z.string().or(z.record(z.unknown())).optional(),
   picture: z.string().optional(),
   universeId: z.string().nonempty('Please select a Universe for this Series.'),
 })
@@ -37,6 +39,7 @@ export default function UpdateForm({series}: UpdateFormProps) {
   const fetching = createData.fetching || updateData.fetching
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -45,7 +48,7 @@ export default function UpdateForm({series}: UpdateFormProps) {
     resolver: zodResolver(schema),
     defaultValues: {
       name: series?.name || 'New Series',
-      description: (series?.description as Series.Description) || {},
+      description: series?.description as EditorValue,
       picture: series?.picture || '',
       universeId: series?.universeId,
     },
@@ -57,13 +60,19 @@ export default function UpdateForm({series}: UpdateFormProps) {
 
   const onSubmit = (data: z.infer<typeof schema>) => {
     if (id) {
-      updateSeries({id, input: data})
+      updateSeries({
+        id,
+        input: {...data, description: data.description as Prisma.JsonValue},
+      })
 
       return
     }
 
     createSeries({
-      input: data,
+      input: {
+        ...data,
+        description: data.description as Prisma.JsonValue,
+      },
     })
   }
 
@@ -104,6 +113,26 @@ export default function UpdateForm({series}: UpdateFormProps) {
                 onFinish={handleUpload}
               />
             )}
+          </Forms.Field>
+        </Forms.Group>
+
+        <Forms.Separator />
+
+        <Forms.Group header="Content">
+          <Forms.Field>
+            <Controller
+              control={control}
+              name="description"
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextEditorInput
+                  label="Description"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={(errors.description as {message?: string})?.message}
+                />
+              )}
+            ></Controller>
           </Forms.Field>
         </Forms.Group>
 

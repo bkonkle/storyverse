@@ -3,15 +3,16 @@ import clsx from 'clsx'
 import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
 import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {Prisma} from '@prisma/client'
 
-import {Schema, Universe} from '@storyverse/graphql'
+import {Schema} from '@storyverse/graphql'
 import {Admin} from '@storyverse/client/utils/urls'
 
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
 import TextInput from '../../forms/TextInput'
 import Button from '../../buttons/Button'
-import TextEditorInput from '../../forms/TextEditorInput'
+import TextEditorInput, {EditorValue} from '../../forms/TextEditorInput'
 
 export interface UpdateFormProps {
   universe?: Schema.UniverseDataFragment
@@ -19,7 +20,7 @@ export interface UpdateFormProps {
 
 const schema = z.object({
   name: z.string().nonempty('A name for the Universe is required.'),
-  description: Universe.description().optional(),
+  description: z.string().or(z.record(z.unknown())).optional(),
   picture: z.string().optional(),
 })
 
@@ -46,7 +47,7 @@ export default function UpdateForm({universe}: UpdateFormProps) {
     resolver: zodResolver(schema),
     defaultValues: {
       name: universe?.name || 'New Universe',
-      description: (universe?.description as Universe.Description)?.quill || '',
+      description: universe?.description as EditorValue,
       picture: universe?.picture || '',
     },
   })
@@ -60,10 +61,11 @@ export default function UpdateForm({universe}: UpdateFormProps) {
       throw new Error('No Profile found for the current User')
     }
 
-    console.log(`>- data ->`, data)
-
     if (id) {
-      updateUniverse({id, input: data})
+      updateUniverse({
+        id,
+        input: {...data, description: data.description as Prisma.JsonValue},
+      })
 
       return
     }
@@ -71,6 +73,7 @@ export default function UpdateForm({universe}: UpdateFormProps) {
     createUniverse({
       input: {
         ...data,
+        description: data.description as Prisma.JsonValue,
         ownerProfileId: profile.id,
       },
     })
@@ -91,25 +94,7 @@ export default function UpdateForm({universe}: UpdateFormProps) {
               {...register('name')}
             />
           </Forms.Field>
-
-          <Forms.Field>
-            <Controller
-              control={control}
-              name="description"
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextEditorInput
-                  label="Description"
-                  value={value}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  error={(errors.description as {message?: string})?.message}
-                />
-              )}
-            ></Controller>
-          </Forms.Field>
         </Forms.Group>
-
-        <Forms.Separator />
 
         <Forms.Group header="Picture">
           <Forms.Field>
@@ -124,6 +109,26 @@ export default function UpdateForm({universe}: UpdateFormProps) {
                 onFinish={handleUpload}
               />
             )}
+          </Forms.Field>
+        </Forms.Group>
+
+        <Forms.Separator />
+
+        <Forms.Group header="Content">
+          <Forms.Field>
+            <Controller
+              control={control}
+              name="description"
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextEditorInput
+                  label="Description"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={(errors.description as {message?: string})?.message}
+                />
+              )}
+            ></Controller>
           </Forms.Field>
         </Forms.Group>
 

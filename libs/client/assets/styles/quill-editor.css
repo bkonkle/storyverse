@@ -1,3 +1,7 @@
 .ql-container {
   min-height: 13rem; /* min-h-52 */
 }
+
+.ql-editor {
+  min-height: inherit;
+}

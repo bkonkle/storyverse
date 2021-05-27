@@ -5,18 +5,21 @@ import 'react-quill/dist/quill.snow.css'
 
 import {Input} from './Forms'
 
+export type EditorValue = Quill.Value
+export type EditorSelection = Quill.Range
+
 export interface TextEditorInputProps
   extends Omit<Quill.ReactQuillProps, 'onChange'> {
   readOnly?: boolean
   label: string
   error?: string
   hint?: string
-  onChange: (value: string) => void
+  onChange: (value: EditorValue) => void
 }
 
 export interface EditorState {
-  value?: Quill.Value
-  selection?: Quill.Range
+  value?: EditorValue
+  selection?: EditorSelection
 }
 
 export default function TextEditorInput({
@@ -51,12 +54,14 @@ export default function TextEditorInput({
         className="bg-white"
         value={state.value}
         readOnly={readOnly}
-        onChange={(newValue, _delta, _source, editor) => {
-          setState({value: editor.getContents()})
-          onChange(newValue)
+        onChange={(_html, _delta, _source, editor) => {
+          const value = editor.getContents()
+
+          setState((state) => ({...state, value}))
+          onChange(value)
         }}
         onChangeSelection={(range, _source) => {
-          setState({selection: range})
+          setState((state) => ({...state, selection: range}))
         }}
         {...rest}
       />
