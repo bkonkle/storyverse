@@ -1,6 +1,5 @@
 import * as z from 'zod'
-import clsx from 'clsx'
-import ReactS3Uploader, {S3Response} from 'react-s3-uploader'
+import {S3Response} from 'react-s3-uploader'
 import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {Prisma} from '@prisma/client'
@@ -11,6 +10,7 @@ import {Admin} from '@storyverse/client/utils/urls'
 import Card from '../../cards/Card'
 import Forms from '../../forms/Forms'
 import TextInput from '../../forms/TextInput'
+import ImageInput from '../../forms/ImageInput'
 import Button from '../../buttons/Button'
 import TextEditorInput, {EditorValue} from '../../forms/TextEditorInput'
 import UniverseSelectInput from './UniverseSelectInput'
@@ -98,18 +98,13 @@ export default function UpdateForm({series}: UpdateFormProps) {
               {...register('universeId')}
             />
           </Forms.Field>
-        </Forms.Group>
 
-        <Forms.Group header="Picture">
           <Forms.Field>
             {user && (
-              <ReactS3Uploader
-                className={clsx('mt-1', 'block', 'w-full')}
-                signingUrl="/api/s3/sign"
-                signingUrlMethod="GET"
-                accept="image/*"
+              <ImageInput
+                label="Picture"
+                name="picture"
                 s3path={`${user.username}/`}
-                autoUpload={true}
                 onFinish={handleUpload}
               />
             )}

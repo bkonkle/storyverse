@@ -131,4 +131,13 @@ export const inputClasses = clsx(
   'duration-150'
 )
 
-export default {Form, Header, Separator, Group, Actions, Field, inputClasses}
+export default {
+  Form,
+  Header,
+  Separator,
+  Group,
+  Actions,
+  Field,
+  Input,
+  inputClasses,
+}
