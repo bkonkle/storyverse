@@ -5,7 +5,7 @@ import {useSession, signOut} from 'next-auth/client'
 
 import {useGetOrCreateCurrentUserMutation} from './Schema'
 
-export const useInitUser = (options: {requireUser?: boolean}) => {
+export const useInitUser = (options: {requireUser?: boolean} = {}) => {
   const {requireUser} = options
   const [session, sessionLoading] = useSession()
   const [userData, getOrCreateCurrentUser] = useGetOrCreateCurrentUserMutation()

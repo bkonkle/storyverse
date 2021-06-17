@@ -8,7 +8,7 @@ export const makeCreateInput = (
 ): CreateStoryInput => {
   return {
     name: faker.name.findName(),
-    volume: faker.datatype.number(),
+    season: faker.datatype.number(),
     issue: faker.datatype.number(),
     summary: {text: faker.lorem.paragraph()},
     content: {text: faker.lorem.paragraph()},

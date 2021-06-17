@@ -2,6 +2,8 @@ import {useState} from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
 
+import Urls from '@storyverse/client/utils/urls'
+
 import SidebarBrand from './SidebarBrand'
 import SidebarUser from './SidebarUser'
 import SidebarSearch from './SidebarSearch'
@@ -123,7 +125,7 @@ export default function NavSidebar({title}: SidebarProps) {
               <div className="w-6/12">
                 <Link href="/">
                   <a
-                    href="#pablo"
+                    href={Urls.home()}
                     className={clsx(
                       'md:block',
                       'text-left',

@@ -20,7 +20,7 @@ Input to create a new Story
 """
 input CreateStoryInput {
   name: String!
-  volume: Int
+  season: Int
   issue: Int
   summary: JSON
   content: JSON
@@ -33,7 +33,7 @@ Input to update an existing Story
 """
 input UpdateStoryInput {
   name: String
-  volume: Int
+  season: Int
   issue: Int
   summary: JSON
   content: JSON

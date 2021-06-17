@@ -33,6 +33,7 @@ export default function UserDropdown() {
 
   return (
     <Dropdown toggle={toggle}>
+      <Link href={Admin.home()}>Manage</Link>
       <Link href={Admin.User.profile()}>Profile</Link>
       <Link href={Admin.User.settings()}>Settings</Link>
       <Separator />

@@ -21,7 +21,7 @@ export interface UpdateFormProps {
 
 const schema = z.object({
   name: z.string().nonempty('A name for the Story is required.'),
-  volume: z.number().optional(),
+  season: z.number().optional(),
   issue: z.number().optional(),
   summary: z.string().or(z.record(z.unknown())).optional(),
   content: z.string().or(z.record(z.unknown())).optional(),
@@ -51,7 +51,7 @@ export default function UpdateForm({story}: UpdateFormProps) {
     resolver: zodResolver(schema),
     defaultValues: {
       name: story?.name || 'New Story',
-      volume: story?.volume,
+      season: story?.season,
       issue: story?.issue,
       summary: story?.summary as EditorValue,
       content: story?.content as EditorValue,

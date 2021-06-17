@@ -27,12 +27,12 @@ type Story {
   name: String!
 
   """
-  The Story volume number
+  The Story season number
   """
-  volume: Int
+  season: Int
 
   """
-  The Story issue number within the volume
+  The Story issue number within the season
   """
   issue: Int
 

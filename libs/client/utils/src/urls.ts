@@ -1,5 +1,7 @@
 export namespace Admin {
-  const basePath = '/admin'
+  const basePath = '/manage'
+
+  export const home = () => basePath
 
   export namespace Universes {
     const path = `${basePath}/universes`

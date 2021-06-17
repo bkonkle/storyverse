@@ -1,11 +1,34 @@
-import React from 'react'
-import {AppProps} from 'next/app'
 import Head from 'next/head'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Router from 'next/router'
+import {AppProps} from 'next/app'
 import {Provider} from 'next-auth/client'
 
 import 'tailwindcss/tailwind.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import '@storyverse/client/assets/styles/base.css'
 import '@storyverse/client/assets/styles/quill-editor.css'
+
+import {PageChange} from '@storyverse/components'
+
+Router.events.on('routeChangeStart', (url: string) => {
+  console.log(`Loading: ${url}`)
+  document.body.classList.add('body-page-transition')
+  ReactDOM.render(<PageChange />, document.getElementById('page-transition'))
+})
+
+Router.events.on('routeChangeComplete', () => {
+  const element = document.getElementById('page-transition')
+  element && ReactDOM.unmountComponentAtNode(element)
+  document.body.classList.remove('body-page-transition')
+})
+
+Router.events.on('routeChangeError', () => {
+  const element = document.getElementById('page-transition')
+  element && ReactDOM.unmountComponentAtNode(element)
+  document.body.classList.remove('body-page-transition')
+})
 
 export default function NextApp({Component, pageProps}: AppProps) {
   return (

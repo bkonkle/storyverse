@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import clsx from 'clsx'
+import Urls from '@storyverse/client/utils/urls'
 
 export interface SidebarBrandProps {
   title: string
@@ -9,7 +10,7 @@ export default function SidebarBrand({title}: SidebarBrandProps) {
   return (
     <Link href="/">
       <a
-        href="#pablo"
+        href={Urls.home()}
         className={clsx(
           'md:block',
           'text-left',

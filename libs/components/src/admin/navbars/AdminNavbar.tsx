@@ -33,22 +33,6 @@ export default function Navbar() {
           'px-4'
         )}
       >
-        {/* Brand */}
-        <a
-          className={clsx(
-            'text-white',
-            'text-sm',
-            'uppercase',
-            'hidden',
-            'lg:inline-block',
-            'font-semibold'
-          )}
-          href="#pablo"
-          onClick={(e) => e.preventDefault()}
-        >
-          Dashboard
-        </a>
-        {/* Form */}
         <form
           className={clsx(
             'md:flex',
@@ -112,7 +96,7 @@ export default function Navbar() {
             />
           </div>
         </form>
-        {/* User */}
+
         <ul
           className={clsx(
             'flex-col',

@@ -1,8 +1,6 @@
 import {ReactNode} from 'react'
 import Head from 'next/head'
 
-import {useInitUser} from '@storyverse/graphql/User'
-
 import AdminNavbar from '../admin/navbars/AdminNavbar'
 import NavSidebar from '../admin/sidebars/nav/NavSidebar'
 import FooterAdmin from '../admin/footers/FooterAdmin'
@@ -13,7 +11,6 @@ export interface AdminProps {
 
 export const Admin = (props: AdminProps) => {
   const {children} = props
-  const {user, loading} = useInitUser({requireUser: true})
 
   return (
     <>
@@ -21,7 +18,7 @@ export const Admin = (props: AdminProps) => {
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="A collaborative storytelling app. Create a story universe, invite friends to contribute stories, and follow your favorites!"
+          content="A collaborative storytelling hub. Create a story universe, invite friends to contribute stories, and follow your favorites!"
         />
         <meta
           property="og:image"
@@ -41,7 +38,7 @@ export const Admin = (props: AdminProps) => {
         <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12"></div>
 
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
-          {loading || !user ? null : children}
+          {children}
           <FooterAdmin />
         </div>
       </div>
