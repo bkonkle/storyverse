@@ -15,7 +15,7 @@ export default class AppDocument extends Document {
             href="/img/brand/apple-icon.png"
           />
         </Head>
-        <body className="h-full text-blueGray-700 antialiased">
+        <body className="h-full bg-blueGray-100 text-blueGray-700 antialiased">
           <div id="page-transition"></div>
           <Main />
           <NextScript />
