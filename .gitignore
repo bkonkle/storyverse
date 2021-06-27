@@ -53,3 +53,15 @@ schema.graphql
 schema.json
 libs/graphql/src/api/Schema.ts
 libs/graphql/src/Schema.tsx
+
+# Expo/React Native
+.expo*
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+apps/mobile/node_modules

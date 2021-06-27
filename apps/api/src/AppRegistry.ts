@@ -8,7 +8,7 @@ import {
   Prisma,
   NodeFS,
   useRegistry,
-} from '@storyverse/server/utils'
+} from '@storyverse/api/utils'
 
 import UserRegistry from './users/UserRegistry'
 import ProfileRegistry from './profiles/ProfileRegistry'

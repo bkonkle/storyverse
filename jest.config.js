@@ -1,10 +1,11 @@
 module.exports = {
   projects: [
-    '<rootDir>/apps/web',
     '<rootDir>/apps/api',
+    '<rootDir>/apps/web',
+    '<rootDir>/apps/mobile',
+    '<rootDir>/libs/api/utils',
+    '<rootDir>/libs/web/components',
+    '<rootDir>/libs/web/utils',
     '<rootDir>/libs/graphql',
-    '<rootDir>/libs/components',
-    '<rootDir>/libs/client/utils',
-    '<rootDir>/libs/server/utils',
   ],
 }

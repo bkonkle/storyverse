@@ -3,7 +3,7 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 import {signIn} from 'next-auth/client'
 
-import {Admin} from '@storyverse/components/layouts'
+import {Admin} from '@storyverse/web/components/layouts'
 import {Client} from '@storyverse/graphql'
 import {useInitUser} from '@storyverse/graphql/User'
 import {Pages, useStore} from '@storyverse/graphql/Store'

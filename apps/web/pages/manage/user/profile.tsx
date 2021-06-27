@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import Admin from '@storyverse/components/layouts/Admin'
-import {ProfileSection} from '@storyverse/components/admin/sections/user'
+import Admin from '@storyverse/web/components/layouts/Admin'
+import {ProfileSection} from '@storyverse/web/components/admin/sections/user'
 import {Client} from '@storyverse/graphql'
 
 export function UserProfilePage() {

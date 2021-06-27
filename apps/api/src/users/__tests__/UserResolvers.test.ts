@@ -3,7 +3,7 @@ import {container} from 'tsyringe'
 import {mockDeep} from 'jest-mock-extended'
 import {GraphQLResolveInfo} from 'graphql'
 
-import {Context} from '@storyverse/server/utils'
+import {Context} from '@storyverse/api/utils'
 
 import UserFactory from '../../../test/factories/UserFactory'
 import UserResolvers from '../UserResolvers'

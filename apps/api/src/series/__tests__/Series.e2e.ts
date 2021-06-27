@@ -11,7 +11,7 @@ import {
   Query,
   Universe,
 } from '@storyverse/graphql/api/Schema'
-import {Prisma} from '@storyverse/server/utils'
+import {Prisma} from '@storyverse/api/utils'
 
 import App from '../../App'
 import OAuth2 from '../../../test/OAuth2'

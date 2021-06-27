@@ -8,7 +8,7 @@ import {
   Resolvers,
   getOffset,
   paginateResponse,
-} from '@storyverse/server/utils'
+} from '@storyverse/api/utils'
 
 import {getUsername} from '../users/UserUtils'
 import SeriesAuthz from './SeriesAuthz'

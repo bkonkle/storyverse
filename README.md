@@ -19,10 +19,10 @@ This project is packaged with [nx](https://nx.dev/). The following apps are avai
 
 A libs folder is also available for reusable modules available to use across multiple apps:
 
-- [client/assets](libs/client/assets) - Shared static assets for the front end.
-- [client/utils](libs/client/utils) - Utilities for the front end.
-- [server/utils](libs/server/utils) - Utilities for the back end.
-- [components](libs/components) - React components for the front end.
+- [web/assets](libs/web/assets) - Shared static assets for the web app.
+- [web/components](libs/web/components) - React components for the web app.
+- [web/utils](libs/web/utils) - Utilities for the web app.
+- [api/utils](libs/api/utils) - Utilities for the api server.
 - [graphql](libs/graphql) - GraphQL schema definitions, document definitions, and access.
 
 These are just stubs, and don't hold much yet.

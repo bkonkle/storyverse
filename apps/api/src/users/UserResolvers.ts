@@ -1,12 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
-import {
-  Query,
-  Mutation,
-  Resolvers,
-  NotFoundError,
-} from '@storyverse/server/utils'
+import {Query, Mutation, Resolvers, NotFoundError} from '@storyverse/api/utils'
 
 import {getUsername, requireMatchingUsername} from './UserUtils'
 

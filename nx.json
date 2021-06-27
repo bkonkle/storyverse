@@ -19,22 +19,25 @@
     }
   },
   "projects": {
-    "web": {
-      "tags": []
-    },
     "api": {
       "tags": []
     },
+    "web": {
+      "tags": []
+    },
+    "mobile": {
+      "tags": []
+    },
+    "api-utils": {
+      "tags": []
+    },
+    "web-utils": {
+      "tags": []
+    },
+    "web-components": {
+      "tags": []
+    },
     "graphql": {
-      "tags": []
-    },
-    "components": {
-      "tags": []
-    },
-    "client-utils": {
-      "tags": []
-    },
-    "server-utils": {
       "tags": []
     }
   }

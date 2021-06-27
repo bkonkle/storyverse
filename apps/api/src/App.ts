@@ -21,7 +21,7 @@ import {
   GraphQLDateTime,
   GraphQLResolvers,
   getContext,
-} from '@storyverse/server/utils'
+} from '@storyverse/api/utils'
 
 import AppRegistry from './AppRegistry'
 

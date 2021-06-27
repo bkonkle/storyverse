@@ -18,59 +18,6 @@
     }
   },
   "projects": {
-    "web": {
-      "root": "apps/web",
-      "sourceRoot": "apps/web",
-      "projectType": "application",
-      "prefix": "storyverse",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/next:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "root": "apps/web",
-            "outputPath": "dist/apps/web"
-          },
-          "configurations": {
-            "production": {}
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "web:build",
-            "dev": true,
-            "port": 3000
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "web:build:production",
-              "dev": false
-            }
-          }
-        },
-        "export": {
-          "executor": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "web:build:production"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/web"],
-          "options": {
-            "jestConfig": "apps/web/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
     "api": {
       "root": "apps/api",
       "sourceRoot": "apps/api/src",
@@ -135,6 +82,48 @@
         }
       }
     },
+    "web-utils": {
+      "root": "libs/web/utils",
+      "sourceRoot": "libs/web/utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/utils"],
+          "options": {
+            "jestConfig": "libs/web/utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-components": {
+      "root": "libs/web/components",
+      "sourceRoot": "libs/web/components/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/components/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/components"],
+          "options": {
+            "jestConfig": "libs/web/components/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "graphql": {
       "projectType": "library",
       "root": "libs/graphql",
@@ -163,65 +152,122 @@
         }
       }
     },
-    "components": {
-      "root": "libs/components",
-      "sourceRoot": "libs/components/src",
-      "projectType": "library",
+    "mobile": {
+      "root": "apps/mobile",
+      "sourceRoot": "apps/mobile/src",
+      "projectType": "application",
+      "generators": {},
       "targets": {
+        "bundle": {
+          "executor": "nx-react-native-expo:bundle",
+          "options": {}
+        },
+        "start": {
+          "executor": "nx-react-native-expo:start",
+          "options": {}
+        },
+        "run-ios": {
+          "executor": "nx-react-native-expo:run-ios",
+          "options": {}
+        },
+        "run-android": {
+          "executor": "nx-react-native-expo:run-android",
+          "options": {}
+        },
+        "run-web": {
+          "executor": "nx-react-native-expo:run-web",
+          "options": {}
+        },
+        "publish": {
+          "executor": "nx-react-native-expo:publish",
+          "options": {}
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/components/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["apps/mobile/**/*.{js,ts,tsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/components"],
+          "outputs": ["coverage/apps/mobile"],
           "options": {
-            "jestConfig": "libs/components/jest.config.js",
+            "jestConfig": "apps/mobile/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "client-utils": {
-      "root": "libs/client/utils",
-      "sourceRoot": "libs/client/utils/src",
+    "api-utils": {
+      "root": "libs/api/utils",
+      "sourceRoot": "libs/api/utils/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/client/utils/**/*.ts"]
+            "lintFilePatterns": ["libs/api/utils/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/client/utils"],
+          "outputs": ["coverage/libs/api/utils"],
           "options": {
-            "jestConfig": "libs/client/utils/jest.config.js",
+            "jestConfig": "libs/api/utils/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "server-utils": {
-      "root": "libs/server/utils",
-      "sourceRoot": "libs/server/utils/src",
-      "projectType": "library",
+    "web": {
+      "root": "apps/web",
+      "sourceRoot": "apps/web",
+      "projectType": "application",
+      "prefix": "storyverse",
       "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
           "options": {
-            "lintFilePatterns": ["libs/server/utils/**/*.ts"]
+            "root": "apps/web",
+            "outputPath": "dist/apps/web"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "web:build",
+            "dev": true,
+            "port": 3000
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "web:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "web:build:production"
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/server/utils"],
+          "outputs": ["coverage/apps/web"],
           "options": {
-            "jestConfig": "libs/server/utils/jest.config.js",
+            "jestConfig": "apps/web/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]
           }
         }
       }

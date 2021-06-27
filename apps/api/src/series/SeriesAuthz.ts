@@ -2,7 +2,7 @@ import {PrismaClient, Profile} from '@prisma/client'
 import {injectable} from 'tsyringe'
 
 import {SeriesRoles} from '@storyverse/graphql/api/Schema'
-import {NotFoundError} from '@storyverse/server/utils'
+import {NotFoundError} from '@storyverse/api/utils'
 
 import AuthzService from '../authz/AuthzService'
 import {ManageSeries} from '../universes/UniverseRoles'

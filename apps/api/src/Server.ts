@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import {Application} from 'express'
 import http from 'http'
 
-import {Prisma} from '@storyverse/server/utils'
+import {Prisma} from '@storyverse/api/utils'
 
 import App from './App'
 

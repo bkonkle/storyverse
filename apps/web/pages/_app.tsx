@@ -5,12 +5,12 @@ import Router from 'next/router'
 import {AppProps} from 'next/app'
 import {Provider} from 'next-auth/client'
 
+import {PageChange} from '@storyverse/web/components'
+
 import 'tailwindcss/tailwind.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import '@storyverse/client/assets/styles/base.css'
-import '@storyverse/client/assets/styles/quill-editor.css'
-
-import {PageChange} from '@storyverse/components'
+import '../public/assets/styles/base.css'
+import '../public/assets/styles/quill-editor.css'
 
 Router.events.on('routeChangeStart', (url: string) => {
   console.log(`Loading: ${url}`)

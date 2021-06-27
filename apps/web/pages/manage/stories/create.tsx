@@ -2,11 +2,11 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import Admin from '@storyverse/components/layouts/Admin'
+import Admin from '@storyverse/web/components/layouts/Admin'
 import {
   UpdateForm,
   Preview,
-} from '@storyverse/components/admin/sections/stories'
+} from '@storyverse/web/components/admin/sections/stories'
 import {Client} from '@storyverse/graphql'
 
 export function CreateStoryPage() {

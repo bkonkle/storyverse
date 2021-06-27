@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 
-import {Admin} from '@storyverse/components/layouts'
-import {List} from '@storyverse/components/admin/sections/series'
+import {Admin} from '@storyverse/web/components/layouts'
+import {List} from '@storyverse/web/components/admin/sections/series'
 import {Schema, Client} from '@storyverse/graphql'
 
 export function SeriesPage() {

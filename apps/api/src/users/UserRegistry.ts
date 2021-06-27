@@ -1,6 +1,6 @@
 import {registry} from 'tsyringe'
 
-import {useResolvers} from '@storyverse/server/utils'
+import {useResolvers} from '@storyverse/api/utils'
 
 import UserResolvers from './UserResolvers'
 

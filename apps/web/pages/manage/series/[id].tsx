@@ -3,8 +3,11 @@ import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 import {useRouter} from 'next/router'
 
-import Admin from '@storyverse/components/layouts/Admin'
-import {UpdateForm, Preview} from '@storyverse/components/admin/sections/series'
+import Admin from '@storyverse/web/components/layouts/Admin'
+import {
+  UpdateForm,
+  Preview,
+} from '@storyverse/web/components/admin/sections/series'
 import {Schema, Client} from '@storyverse/graphql'
 
 export function CreateSeriesPage() {
