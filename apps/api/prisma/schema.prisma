@@ -41,6 +41,7 @@ model Profile {
   userId        String?     @unique
   roleGrants    RoleGrant[]
   universes     Universe[]
+  messages      Message[]
 }
 
 model Universe {
@@ -68,15 +69,27 @@ model Series {
 }
 
 model Story {
-  id        String   @id @default(dbgenerated("ulid_generate()"))
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(dbgenerated("ulid_generate()"))
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   name      String
   season    Int?
   issue     Int?
   summary   Json?
   content   Json?
   picture   String?
-  series    Series   @relation(fields: [seriesId], references: [id])
+  series    Series    @relation(fields: [seriesId], references: [id])
   seriesId  String
+  messages  Message[]
+}
+
+model Message {
+  id        String   @id @default(dbgenerated("ulid_generate()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  text      String
+  story     Story    @relation(fields: [storyId], references: [id])
+  storyId   String
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
 }
