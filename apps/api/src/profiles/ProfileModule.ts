@@ -6,4 +6,4 @@ import ProfileAuthz from './ProfileAuthz'
 import ProfileResolvers from './ProfileResolvers'
 
 @registry([useClass(ProfileAuthz), useResolvers(ProfileResolvers)])
-export default class ProfileRegistry {}
+export default class ProfileModule {}

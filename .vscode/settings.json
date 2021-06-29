@@ -9,5 +9,7 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "terraform-ls.rootModules": ["config"]
+  "terraform-ls.rootModules": [
+    "config"
+  ]
 }

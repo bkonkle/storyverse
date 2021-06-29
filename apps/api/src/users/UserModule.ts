@@ -5,4 +5,4 @@ import {useResolvers} from '@storyverse/api/utils'
 import UserResolvers from './UserResolvers'
 
 @registry([useResolvers(UserResolvers)])
-export default class UserRegistry {}
+export default class UserModule {}

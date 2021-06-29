@@ -5,4 +5,4 @@ import Config from './Config'
 import {useConfig} from './ConfigTypes'
 
 @registry([useConfig(Config)])
-export default class ConfigRegistry {}
+export default class ConfigModule {}

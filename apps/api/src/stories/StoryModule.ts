@@ -2,13 +2,13 @@ import {registry} from 'tsyringe'
 
 import {useClass, useRegistry, useResolvers} from '@storyverse/api/utils'
 
-import {AuthzRegistry} from '../authz'
+import {AuthzModule} from '../authz'
 import StoryAuthz from './StoryAuthz'
 import StoryResolvers from './StoryResolvers'
 
 @registry([
-  useRegistry(AuthzRegistry),
+  useRegistry(AuthzModule),
   useClass(StoryAuthz),
   useResolvers(StoryResolvers),
 ])
-export default class StoryRegistry {}
+export default class StoryModule {}

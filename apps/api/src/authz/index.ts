@@ -1,5 +1,5 @@
 import AuthzService from './AuthzService'
-import AuthzRegistry from './AuthzRegistry'
+import AuthzModule from './AuthzModule'
 
 export * from './AuthzTypes'
-export {AuthzService, AuthzRegistry}
+export {AuthzService, AuthzModule}

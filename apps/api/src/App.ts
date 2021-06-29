@@ -23,7 +23,7 @@ import {
   getContext,
 } from '@storyverse/api/utils'
 
-import AppRegistry from './AppRegistry'
+import AppModule from './AppModule'
 
 @injectable()
 export default class App {
@@ -43,10 +43,10 @@ export default class App {
   }
 
   /**
-   * Create an App using the standard AppRegistry for use in Production-like environments.
+   * Create an App using the standard AppModule for use in Production-like environments.
    */
   static create(): App {
-    container.register(AppRegistry, {useClass: AppRegistry})
+    container.register(AppModule, {useClass: AppModule})
 
     return container.resolve(App)
   }

@@ -1,6 +1,7 @@
 import chalk from 'chalk'
 import {Application} from 'express'
 import http from 'http'
+import repeat from 'lodash/repeat'
 
 import {Prisma} from '@storyverse/api/utils'
 
@@ -12,7 +13,19 @@ export function run(label: string, app: Application, port: number): void {
   const server = http.createServer(app)
 
   server.listen(port, () => {
-    console.log(chalk.cyan(`> Started ${label} on port ${portStr}`))
+    const padding = label.length < 8 ? 0 : label.length - 9
+
+    console.log(
+      chalk.cyan(`> Started ${label} at:  http://localhost:${portStr}`)
+    )
+    console.log(
+      chalk.cyan(
+        `> GraphQL available at:  ${repeat(
+          ' ',
+          padding
+        )}http://localhost:${portStr}/graphql`
+      )
+    )
   })
 
   server.on('close', () => {

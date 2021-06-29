@@ -4,4 +4,4 @@ import {useClass} from '@storyverse/api/utils'
 import AuthzService from './AuthzService'
 
 @registry([useClass(AuthzService)])
-export default class AuthzRegistry {}
+export default class AuthzModule {}
