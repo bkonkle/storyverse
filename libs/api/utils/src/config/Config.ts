@@ -82,6 +82,15 @@ export const schema: convict.Schema<Schema> = {
       },
     },
   },
+  redis: {
+    url: {
+      doc: 'Redis url',
+      format: String,
+      default: 'localhost:6379',
+      env: 'REDIS_URL',
+      arg: 'redis-url',
+    },
+  },
   bastion: {
     key: {
       doc: 'Bastion host SSH key path',

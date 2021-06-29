@@ -24,12 +24,14 @@ import {
 } from '@storyverse/api/utils'
 
 import AppModule from './AppModule'
+import SocketService from './socket/SocketService'
 
 @injectable()
 export default class App {
   private readonly typeDefs: DocumentNode
 
   constructor(
+    private readonly socket: SocketService,
     @inject(NodeFS) filesystem: typeof fs,
     @inject(Config) private readonly config: Config,
     @injectAll(GraphQLResolvers) private readonly resolvers: Resolvers[]
@@ -61,7 +63,7 @@ export default class App {
     )
   }
 
-  async init(): Promise<Application> {
+  async init(port: number): Promise<Application> {
     const {
       env,
       auth: {audience, domain},
@@ -109,6 +111,9 @@ export default class App {
       context: getContext,
     })
     apollo.applyMiddleware({app})
+
+    // Start the WebSocket server on the port plus one.
+    this.socket.start(port + 1)
 
     return app
   }

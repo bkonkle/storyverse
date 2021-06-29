@@ -13,7 +13,7 @@ export function run(label: string, app: Application, port: number): void {
   const server = http.createServer(app)
 
   server.listen(port, () => {
-    const padding = label.length < 8 ? 0 : label.length - 9
+    const padding = label.length < 9 ? 0 : label.length - 9
 
     console.log(
       chalk.cyan(`> Started ${label} at:  http://localhost:${portStr}`)
@@ -40,7 +40,7 @@ export const start = async (): Promise<void> => {
 
   const app = App.create()
 
-  run('Storyverse', await app.init(), port)
+  run('Storyverse', await app.init(port), port)
 }
 
 start().catch(console.error)

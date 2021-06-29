@@ -17,6 +17,9 @@ export interface Schema {
       max: number | null
     }
   }
+  redis: {
+    url: string
+  }
   bastion: {
     key: string | null
     host: string | null

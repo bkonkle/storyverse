@@ -1,3 +1,6 @@
+import Debug from 'debug'
+import {Redis} from 'ioredis'
+
 /**
  * Dependency Injection Uitilities
  */
@@ -17,6 +20,16 @@ export const ProcessEnv: InjectionToken<NodeJS.ProcessEnv> = 'NODE_PROCESS_ENV'
  */
 
 export const NodeFS: InjectionToken<typeof fs> = 'NODE_FILE_SYSTEM'
+
+/**
+ * Node Debug
+ */
+export const NodeDebug: InjectionToken<Debug.IDebugger> = 'NPM_DEBUG'
+
+/**
+ * IORedis
+ */
+export const IORedis: InjectionToken<Redis> = 'HPM_IOREDIS'
 
 /**
  * Provide a particular class in a Registry.
