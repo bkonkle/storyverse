@@ -12,6 +12,8 @@ export interface StoryProps {
 
 const Colors = {
   bg: '#2b1f32',
+  primary: '#0aacc5',
+  bright: '#eeeeee',
 } as const
 
 const Styles = StyleSheet.create({
@@ -19,10 +21,10 @@ const Styles = StyleSheet.create({
   font: {
     fontFamily: 'monospace',
     fontSize: 16,
-    color: '#eeeeee',
+    color: Colors.bright,
   },
   prompt: {fontWeight: 'bold', paddingRight: 10},
-  cursor: {color: '#0aacc5'},
+  cursor: {color: Colors.primary},
 })
 
 export const Story = (_props: StoryProps) => {
