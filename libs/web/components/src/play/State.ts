@@ -1,3 +1,5 @@
+import {ReactNode} from 'react'
+
 /**
  * State
  */
@@ -5,11 +7,13 @@
 export interface State {
   blink: boolean
   command: string
+  output: ReactNode[]
 }
 
 export const initialState: State = {
   blink: false,
   command: '',
+  output: [],
 }
 
 /**
@@ -20,8 +24,8 @@ export interface Clear {
   type: 'clear'
 }
 
-export interface Set {
-  type: 'set'
+export interface Key {
+  type: 'key'
   key: string
 }
 
@@ -33,7 +37,12 @@ export interface Blink {
   type: 'blink'
 }
 
-export type Action = Clear | Set | Ignore | Blink
+export interface Output {
+  type: 'output'
+  output: ReactNode[]
+}
+
+export type Action = Clear | Key | Ignore | Blink | Output
 
 export const toAction = (event: KeyboardEvent): Action => {
   const {key, altKey, ctrlKey} = event
@@ -60,7 +69,7 @@ export const toAction = (event: KeyboardEvent): Action => {
     case 'CapsLock':
       return {type: 'ignore'}
     default:
-      return {type: 'set', key}
+      return {type: 'key', key}
   }
 }
 
@@ -70,16 +79,21 @@ export const toAction = (event: KeyboardEvent): Action => {
 
 export type Handler = (state: State, action: Action) => State
 
+/**
+ * Update state based on the latest action. Will throw an type error about `undefined` when the
+ * switch dosen't exhaustively handle all possible cases.
+ */
 export const handleAction: Handler = (state, action) => {
   switch (action.type) {
     case 'clear':
       return {...state, command: ''}
-    case 'set':
+    case 'key':
       return {...state, command: `${state.command}${action.key}`}
     case 'blink':
       return {...state, blink: !state.blink}
     case 'ignore':
-    default:
       return state
+    case 'output':
+      return {...state, output: [...state.output, ...action.output]}
   }
 }

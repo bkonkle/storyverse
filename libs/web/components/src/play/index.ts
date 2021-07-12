@@ -1,1 +1,1 @@
-export {default as PlayStory} from './PlayStory'
+export {default as Story} from './Story'

@@ -1,10 +1,9 @@
-import clsx from 'clsx'
 import Head from 'next/head'
 import {withUrqlClient} from 'next-urql'
 import {useRouter} from 'next/router'
 
 import Play from '@storyverse/web/components/layouts/Play'
-import {PlayStory} from '@storyverse/web/components/play'
+import {Story} from '@storyverse/web/components/play'
 import {Schema, Client} from '@storyverse/graphql'
 
 export function PlayStoryPage() {
@@ -22,7 +21,7 @@ export function PlayStoryPage() {
       <Head>
         <title>Play a Story</title>
       </Head>
-      {!fetching && <PlayStory story={story} />}
+      {!fetching && <Story story={story} />}
     </Play>
   )
 }
