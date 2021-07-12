@@ -1,8 +1,10 @@
 import chalk from 'chalk'
 import Debug from 'debug'
+import {Socket} from 'net'
+import {Server} from 'http'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
-import {NodeDebug} from '@storyverse/api/utils'
+import {AppRequest, NodeDebug} from '@storyverse/api/utils'
 
 import ChannelController from '../channels/ChannelController'
 import MessageController from '../messages/MessageController'
@@ -20,36 +22,29 @@ export default class SocketService {
     this.debug = debug || Debug(`storyverse:api:${SocketService.name}`)
   }
 
-  start = (port: number) => {
-    const server = new WebSocket.Server({port})
+  init = (server: Server) => {
+    const ws = new WebSocket.Server({noServer: true})
 
-    server.on('listening', this.onListen(port))
-    server.on('error', this.onError)
-    server.on('connection', this.onConnection)
-  }
+    ws.on('error', this.onError)
+    ws.on('connection', this.onConnection)
 
-  private onListen = (port: number) => (err?: Error) => {
-    if (err) {
-      this.debug(err.message)
-    } else {
-      console.log(
-        `${chalk.blue('WebSocket')} is listening on port ${chalk.green(
-          port.toString()
-        )}`
-      )
-    }
+    server.on('upgrade', (request: AppRequest, socket: Socket, head) => {
+      ws.handleUpgrade(request, socket, head, (ws) => {
+        ws.emit('connection', ws, request)
+      })
+    })
   }
 
   private onError = (err: Error) => {
     console.error(chalk.red('ws.Server listen error:'), err)
   }
 
-  private onConnection = (ws: WebSocket) => {
+  private onConnection = (ws: WebSocket, req: AppRequest) => {
     // Send periodic pings to keep the connection alive
     const ping = setInterval(() => ws.send(Actions.ping()), 4500)
 
     ws.on('message', (event) => {
-      this.route(ws, event).catch((err: Error) => {
+      this.route(ws, event, req).catch((err: Error) => {
         this.debug('Error while handling WebSocket event:', err)
       })
     })
@@ -63,7 +58,11 @@ export default class SocketService {
     })
   }
 
-  private route = async (ws: WebSocket, event: WebSocket.Data) => {
+  private route = async (
+    ws: WebSocket,
+    event: WebSocket.Data,
+    req?: AppRequest
+  ) => {
     const action: Action | undefined = JSON.parse(event.toString())
 
     if (!action) {
@@ -75,7 +74,7 @@ export default class SocketService {
     }
 
     if (action.type === ActionTypes.messageSend) {
-      return this.message.send(action.payload)
+      return this.message.send(action.payload, req)
     }
   }
 }

@@ -1,7 +1,7 @@
 import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
 import {PrismaClient} from '@prisma/client'
-import {NodeDebug} from '@storyverse/api/utils'
+import {AppRequest, NodeDebug} from '@storyverse/api/utils'
 
 import MessageService from './MessageService'
 
@@ -20,12 +20,17 @@ export default class MessageController {
   /**
    * Create a new message on the Redis pub/sub channel for a Story.
    */
-  async send(input: {
-    storyId: string
-    profileId: string
-    text: string
-  }): Promise<void> {
+  async send(
+    input: {
+      storyId: string
+      profileId: string
+      text: string
+    },
+    req?: AppRequest
+  ): Promise<void> {
     const {profileId, ...rest} = input
+
+    console.log(`>- MessageController.send() req?.user ->`, req?.user)
 
     // TODO: Figure out how to prevent one user from impersonating another.
     const profile = await this.prisma.profile.findFirst({

@@ -11,7 +11,11 @@ import jwt from 'express-jwt'
 import jwks from 'jwks-rsa'
 import {DocumentNode} from 'graphql'
 import {container, injectable, inject, injectAll} from 'tsyringe'
+import chalk from 'chalk'
+import http from 'http'
+import repeat from 'lodash/repeat'
 
+import {Prisma} from '@storyverse/api/utils'
 import {Schema} from '@storyverse/graphql/api'
 import {
   Context,
@@ -28,6 +32,8 @@ import SocketService from './socket/SocketService'
 
 @injectable()
 export default class App {
+  appName = 'Storyverse'
+
   private readonly typeDefs: DocumentNode
 
   constructor(
@@ -63,7 +69,7 @@ export default class App {
     )
   }
 
-  async init(port: number): Promise<Application> {
+  init(): Application {
     const {
       env,
       auth: {audience, domain},
@@ -112,9 +118,50 @@ export default class App {
     })
     apollo.applyMiddleware({app})
 
-    // Start the WebSocket server on the port plus one.
-    this.socket.start(port + 1)
-
     return app
+  }
+
+  async run(application?: Application): Promise<void> {
+    const app = application || this.init()
+
+    const port = this.config.get('port')
+    const portStr = chalk.yellow(port.toString())
+
+    const server = http.createServer(app)
+
+    // Handle upgrade events with `ws`
+    this.socket.init(server)
+
+    server.listen(port, () => {
+      const padding = this.appName.length < 9 ? 0 : this.appName.length - 9
+
+      console.log(
+        chalk.cyan(
+          `> Started ${chalk.blue(this.appName)} at:  ${chalk.green(
+            `http://localhost:${portStr}`
+          )}`
+        )
+      )
+      console.log(
+        chalk.cyan(
+          `> ${chalk.blue('GraphQL')} available at:  ${repeat(
+            ' ',
+            padding
+          )}${chalk.green(`http://localhost:${portStr}/graphql`)}`
+        )
+      )
+      console.log(
+        chalk.cyan(
+          `> ${chalk.blue('WebSocket')} is handling:  ${chalk.yellow(
+            'upgrade'
+          )}`
+        )
+      )
+    })
+
+    server.on('close', () => {
+      console.log(chalk.cyan(`> ${this.appName} shutting down`))
+      Prisma.disconnect()
+    })
   }
 }

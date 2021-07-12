@@ -1,18 +1,16 @@
 import {cacheExchange} from '@urql/exchange-graphcache'
-import {IntrospectionQuery} from 'graphql'
+import {IntrospectionData} from '@urql/exchange-graphcache/dist/types/ast'
 import {dedupExchange, fetchExchange} from 'urql'
-import {NextUrqlContext, SSRExchange} from 'next-urql'
+import {NextUrqlClientConfig} from 'next-urql'
 
 import schema from '../../../schema.json'
 
-export function getConfig(ssrExchange: SSRExchange, _ctx?: NextUrqlContext) {
-  return {
-    url: '/api/graphql',
-    exchanges: [
-      dedupExchange,
-      cacheExchange({schema: (schema as unknown) as IntrospectionQuery}),
-      ssrExchange,
-      fetchExchange,
-    ],
-  }
-}
+export const getConfig: NextUrqlClientConfig = (ssrExchange, _ctx) => ({
+  url: '/api/graphql',
+  exchanges: [
+    dedupExchange,
+    cacheExchange({schema: schema as IntrospectionData}),
+    ssrExchange,
+    fetchExchange,
+  ],
+})
