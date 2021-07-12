@@ -1,91 +1,32 @@
 import {Text, View} from 'react-native'
-import {useCallback, useEffect, useState} from 'react'
-import {fromEvent, map} from 'rxjs'
+import {useEffect, useState} from 'react'
+import {fromEvent, interval, map, merge, scan} from 'rxjs'
 import {StoryDataFragment} from '@storyverse/graphql/Schema'
+import {Action, initialState, toAction, handleAction} from './Actions'
 
 export interface PlayStoryProps {
   story?: StoryDataFragment
   disabled?: boolean
 }
 
-// export const Action = ['clear', 'set', 'ignore'] as const
-// export type Action = typeof Action[number]
-
-namespace Actions {
-  export interface Clear {
-    type: 'clear'
-  }
-
-  export interface Set {
-    type: 'set'
-    key: string
-  }
-
-  export interface Ignore {
-    type: 'ignore'
-  }
-
-  export type Action = Clear | Set | Ignore
-}
-
-const toAction = (event: KeyboardEvent): Actions.Action => {
-  const {key, altKey, ctrlKey} = event
-
-  if (altKey || ctrlKey) {
-    return {type: 'ignore'}
-  }
-
-  switch (key) {
-    case 'Enter':
-      return {type: 'clear'}
-    case 'Control':
-    case 'Alt':
-    case 'Shift':
-    case 'Backspace':
-    case 'Tab':
-    case 'PageDown':
-    case 'PageUp':
-    case 'ArrowUp':
-    case 'ArrowDown':
-    case 'ArrowLeft':
-    case 'ArrowRight':
-    case 'AltGraph':
-    case 'CapsLock':
-      return {type: 'ignore'}
-    default:
-      return {type: 'set', key}
-  }
-}
-
 export const PlayStory = (_props: PlayStoryProps) => {
-  const [blink, setBlink] = useState(false)
-  const [command, setCommand] = useState<string>('')
+  const [state, setState] = useState(initialState)
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setBlink(!blink)
-    }, 600)
+    const keyboard = fromEvent<KeyboardEvent>(document, 'keydown').pipe(
+      map(toAction)
+    )
 
-    return () => clearInterval(id)
-  }, [blink, setBlink])
+    const blinker = interval(600).pipe(map((): Action => ({type: 'blink'})))
 
-  useEffect(() => {
-    const sub = fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(map(toAction))
-      .subscribe((action) => {
-        switch (action.type) {
-          case 'set':
-            return setCommand(`${command}${action.key}`)
-          case 'clear':
-            return setCommand('')
-          case 'ignore':
-          default:
-          // pass
-        }
-      })
+    const sub = merge(keyboard, blinker)
+      .pipe(scan(handleAction, initialState))
+      .subscribe(setState)
 
     return () => sub.unsubscribe()
-  }, [command, setCommand])
+  }, [setState])
+
+  const {blink, command} = state
 
   const cursor = blink ? ' ' : '|'
 
