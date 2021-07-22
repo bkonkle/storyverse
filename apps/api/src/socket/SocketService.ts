@@ -4,11 +4,12 @@ import {Socket} from 'net'
 import {Server} from 'http'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
-import {AppRequest, NodeDebug} from '@storyverse/api/utils'
+import {AppRequest, Config, NodeDebug, Jwt} from '@storyverse/api/utils'
 
 import ChannelController from '../channels/ChannelController'
 import MessageController from '../messages/MessageController'
 import {Action, Actions, ActionTypes} from './SocketTypes'
+import {Request, Response} from 'express'
 
 @injectable()
 export default class SocketService {
@@ -17,22 +18,33 @@ export default class SocketService {
   constructor(
     private readonly channel: ChannelController,
     private readonly message: MessageController,
-    @inject(NodeDebug) debug?: Debug.IDebugger
+    @inject(Config) private readonly config: Config,
+    @inject(NodeDebug) debug = Debug
   ) {
-    this.debug = debug || Debug(`storyverse:api:${SocketService.name}`)
+    this.debug = debug(`storyverse:api:${SocketService.name}`)
   }
 
   init = (server: Server) => {
-    const ws = new WebSocket.Server({noServer: true})
+    const wsServer = new WebSocket.Server({noServer: true})
 
-    ws.on('error', this.onError)
-    ws.on('connection', this.onConnection)
+    wsServer.on('error', this.onError)
+    wsServer.on('connection', this.onConnection)
 
-    server.on('upgrade', (request: AppRequest, socket: Socket, head) => {
-      ws.handleUpgrade(request, socket, head, (ws) => {
-        ws.emit('connection', ws, request)
+    const {
+      auth: {audience, domain},
+    } = this.config.getProperties()
+
+    const jwt = Jwt.middleware({audience, domain})
+
+    server.on('upgrade', (request: Request, socket: Socket, head) => {
+      jwt(request, {} as Response, () => {
+        wsServer.handleUpgrade(request, socket, head, (ws) => {
+          wsServer.emit('connection', ws, request)
+        })
       })
     })
+
+    this.debug('Initialized!')
   }
 
   private onError = (err: Error) => {
@@ -40,10 +52,15 @@ export default class SocketService {
   }
 
   private onConnection = (ws: WebSocket, req: AppRequest) => {
+    this.debug('Connection:', req.user)
     // Send periodic pings to keep the connection alive
-    const ping = setInterval(() => ws.send(Actions.ping()), 4500)
+    const ping = setInterval(
+      () => ws.send(JSON.stringify(Actions.ping())),
+      4500
+    )
 
     ws.on('message', (event) => {
+      this.debug('Message:', event)
       this.route(ws, event, req).catch((err: Error) => {
         this.debug('Error while handling WebSocket event:', err)
       })
@@ -54,6 +71,7 @@ export default class SocketService {
     })
 
     ws.on('error', (err) => {
+      clearInterval(ping)
       this.debug('Websocket Error:', err)
     })
   }

@@ -1,5 +1,6 @@
 /**
  * Server-side exports.
  */
+import * as Schema from './Schema'
 
-export * as Schema from './Schema'
+export {Schema}

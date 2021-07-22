@@ -7,15 +7,13 @@ import {join} from 'path'
 import {ApolloServer} from 'apollo-server-express'
 import express, {Application} from 'express'
 import morgan from 'morgan'
-import jwt from 'express-jwt'
-import jwks from 'jwks-rsa'
 import {DocumentNode} from 'graphql'
 import {container, injectable, inject, injectAll} from 'tsyringe'
 import chalk from 'chalk'
 import http from 'http'
 import repeat from 'lodash/repeat'
 
-import {Prisma} from '@storyverse/api/utils'
+import {Prisma, Jwt} from '@storyverse/api/utils'
 import {Schema} from '@storyverse/graphql/api'
 import {
   Context,
@@ -27,8 +25,8 @@ import {
   getContext,
 } from '@storyverse/api/utils'
 
+import {SocketService} from './socket'
 import AppModule from './AppModule'
-import SocketService from './socket/SocketService'
 
 @injectable()
 export default class App {
@@ -86,20 +84,7 @@ export default class App {
       app.use(morgan('combined'))
     }
 
-    app.use(
-      jwt({
-        algorithms: ['RS256'],
-        audience,
-        issuer: `https://${domain}/`,
-        credentialsRequired: false,
-        secret: jwks.expressJwtSecret({
-          cache: true,
-          rateLimit: true,
-          jwksRequestsPerMinute: 5,
-          jwksUri: `https://${domain}/.well-known/jwks.json`,
-        }),
-      })
-    )
+    app.use(Jwt.middleware({audience, domain}))
 
     const apollo = new ApolloServer({
       introspection: isDev,

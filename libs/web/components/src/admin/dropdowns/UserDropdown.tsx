@@ -1,10 +1,11 @@
 import clsx from 'clsx'
+import {signIn} from 'next-auth/client'
 
 import {Schema} from '@storyverse/graphql'
-
 import Urls, {Admin} from '@storyverse/web/utils/urls'
 
 import {handleLogout} from '../../utils/auth'
+import Button from '../buttons/Button'
 import {Dropdown, Link, Separator} from './Dropdowns'
 
 export default function UserDropdown() {
@@ -14,7 +15,18 @@ export default function UserDropdown() {
   const profile = user?.profile
 
   if (fetching || !profile) {
-    return null
+    return (
+      <Button
+        onClick={(event) => {
+          event.stopPropagation()
+          event.nativeEvent.stopImmediatePropagation()
+
+          signIn('auth0')
+        }}
+      >
+        Login
+      </Button>
+    )
   }
 
   const toggle = profile.picture && (

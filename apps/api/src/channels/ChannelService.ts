@@ -10,8 +10,8 @@ import {MessageEvent} from '../messages/MessageTypes'
 export default class ChannelService {
   private readonly debug: Debug.IDebugger
 
-  constructor(@inject(NodeDebug) debug?: Debug.IDebugger) {
-    this.debug = debug || Debug(`storyverse:api:${ChannelService.name}`)
+  constructor(@inject(NodeDebug) debug = Debug) {
+    this.debug = debug(`storyverse:api:${ChannelService.name}`)
   }
 
   /**

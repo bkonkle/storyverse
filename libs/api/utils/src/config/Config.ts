@@ -1,5 +1,5 @@
 import convict from 'convict'
-import * as json from 'json5'
+import json from 'json5'
 
 import {Schema} from './ConfigTypes'
 

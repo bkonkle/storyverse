@@ -10,7 +10,7 @@ export function PlayStoryPage() {
   const {query} = useRouter()
   const id = Array.isArray(query.storyId) ? query.storyId[0] : query.storyId
 
-  const [{data, fetching}] = Schema.useGetStoryQuery({
+  const [{data}] = Schema.useGetStoryQuery({
     variables: {id: id ? id.toUpperCase() : ''},
     pause: !id,
   })
@@ -21,7 +21,7 @@ export function PlayStoryPage() {
       <Head>
         <title>Play a Story</title>
       </Head>
-      {!fetching && <Story story={story} />}
+      <Story story={story} />
     </Play>
   )
 }

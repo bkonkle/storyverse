@@ -1,20 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native'
-import {useEffect, useState} from 'react'
-import {delay, fromEvent, interval, map, merge, of, scan} from 'rxjs'
+import {useEffect, useRef} from 'react'
 import {StoryDataFragment} from '@storyverse/graphql/Schema'
 
-import {Action, initialState, toAction, handleAction} from './State'
+import {useStore} from './State'
+import {Colors} from './Styles'
 
 export interface StoryProps {
   story?: StoryDataFragment
   disabled?: boolean
 }
-
-const Colors = {
-  bg: '#2b1f32',
-  primary: '#0aacc5',
-  bright: '#eeeeee',
-} as const
 
 const Styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: Colors.bg, height: '100%', padding: 20},
@@ -28,39 +22,82 @@ const Styles = StyleSheet.create({
 })
 
 export const Story = (_props: StoryProps) => {
-  const [state, setState] = useState(initialState)
+  const init = useStore((state) => state.init)
+  const blink = useStore((state) => state.blink)
+  const command = useStore((state) => state.command)
+  const output = useStore((state) => state.output)
+  const {append} = output
 
   useEffect(() => {
-    const keyboard = fromEvent<KeyboardEvent>(document, 'keydown').pipe(
-      map(toAction)
-    )
+    let socket: WebSocket | undefined
 
-    const blinker = interval(600).pipe(map((): Action => ({type: 'blink'})))
+    const init = () => {
+      const ws = new WebSocket(`ws://${document.location.host}/api`)
 
-    const welcome = of<Action>({
-      type: 'output',
-      output: ['Welcome to Storyverse!', ' '],
-    }).pipe(delay(1000))
+      ws.addEventListener('open', () => {
+        append([
+          <>
+            <Text style={{color: Colors.secondary}}>Connected</Text> to the
+            server...
+          </>,
+        ])
+      })
 
-    const sub = merge(keyboard, blinker, welcome)
-      .pipe(scan(handleAction, initialState))
-      .subscribe(setState)
+      ws.addEventListener('message', (event) => {
+        console.log(`>- event ->`, JSON.parse(event.data))
+      })
 
-    return () => sub.unsubscribe()
-  }, [setState])
+      ws.addEventListener('error', () => {
+        ws.close()
+        setTimeout(() => {
+          socket = init()
+        }, 1000)
+      })
 
-  const {blink, command, output} = state
+      return ws
+    }
 
-  const cursor = blink ? ' ' : '|'
+    socket = init()
+
+    return () => {
+      socket?.close()
+    }
+  }, [append])
+
+  useEffect(() => {
+    document.addEventListener('keydown', command.key)
+
+    const blinker = setInterval(() => {
+      blink.toggle()
+    }, 600)
+
+    return () => {
+      document.removeEventListener('keydown', command.key)
+
+      clearInterval(blinker)
+    }
+  }, [command.key, blink.toggle]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const timeouts = init()
+
+    return () => {
+      timeouts.forEach(clearTimeout)
+    }
+  }, [init])
+
+  const cursor = blink.hide ? ' ' : '|'
 
   return (
     <View style={Styles.container}>
-      {output.map((row) => (
-        <Text style={Styles.font}>{row === '' ? ' ' : row}</Text>
+      {output.value.map((row, i) => (
+        <Text style={Styles.font} key={i}>
+          {row === '' ? ' ' : row}
+        </Text>
       ))}
       <Text style={Styles.font}>
         <Text style={Styles.prompt}>&gt;</Text>
-        <Text>{command}</Text>
+        <Text>{command.buffer}</Text>
         <Text style={Styles.cursor}>{cursor}</Text>
       </Text>
     </View>

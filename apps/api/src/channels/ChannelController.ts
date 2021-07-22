@@ -17,9 +17,9 @@ export default class ChannelController {
   constructor(
     private readonly service: ChannelService,
     @inject(IORedis) private readonly redis: Redis,
-    @inject(NodeDebug) debug?: Debug.IDebugger
+    @inject(NodeDebug) debug = Debug
   ) {
-    this.debug = debug || Debug(`storyverse:api:${ChannelController.name}`)
+    this.debug = debug(`storyverse:api:${ChannelController.name}`)
   }
 
   /**

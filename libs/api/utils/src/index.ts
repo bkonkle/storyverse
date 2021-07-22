@@ -8,5 +8,6 @@ export * from './Injection'
 export * from './Pagination'
 
 export * from './config'
+export * from './authn'
 
 export {Prisma}

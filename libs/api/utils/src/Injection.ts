@@ -24,7 +24,7 @@ export const NodeFS: InjectionToken<typeof fs> = 'NODE_FILE_SYSTEM'
 /**
  * Node Debug
  */
-export const NodeDebug: InjectionToken<Debug.IDebugger> = 'NPM_DEBUG'
+export const NodeDebug: InjectionToken<Debug.IDebug> = 'NPM_DEBUG'
 
 /**
  * IORedis

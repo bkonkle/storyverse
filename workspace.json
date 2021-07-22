@@ -30,7 +30,8 @@
           "options": {
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/Server.ts",
-            "tsConfig": "apps/api/tsconfig.app.json"
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "externalDependencies": "all"
           },
           "configurations": {
             "production": {

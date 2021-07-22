@@ -12,9 +12,9 @@ export default class MessageController {
   constructor(
     private readonly service: MessageService,
     private readonly prisma: PrismaClient,
-    @inject(NodeDebug) debug?: Debug.IDebugger
+    @inject(NodeDebug) debug = Debug
   ) {
-    this.debug = debug || Debug(`storyverse:api:${MessageController.name}`)
+    this.debug = debug(`storyverse:api:${MessageController.name}`)
   }
 
   /**
