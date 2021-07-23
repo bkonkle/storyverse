@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native'
-import {useEffect, useRef} from 'react'
+import {useEffect} from 'react'
 import {StoryDataFragment} from '@storyverse/graphql/Schema'
 
 import {useStore} from './State'
@@ -47,11 +47,14 @@ export const Story = (_props: StoryProps) => {
         console.log(`>- event ->`, JSON.parse(event.data))
       })
 
-      ws.addEventListener('error', () => {
-        ws.close()
+      ws.addEventListener('close', () => {
         setTimeout(() => {
           socket = init()
         }, 1000)
+      })
+
+      ws.addEventListener('error', () => {
+        ws.close()
       })
 
       return ws

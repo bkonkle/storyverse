@@ -3,6 +3,7 @@ import {createProxyMiddleware} from 'http-proxy-middleware'
 import jwt from 'next-auth/jwt'
 import {Request, Response} from 'express'
 import cookie from 'cookie'
+import {IncomingMessage} from 'http'
 
 export interface Auth0Token {
   sub: string
@@ -19,8 +20,17 @@ const proxy = createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: {'^/api': ''},
   ws: true,
-  logLevel: 'debug',
-  onProxyReqWs: (proxyReq, req) => {
+  onProxyReq: (proxyReq, req) => {
+    const request = req as unknown as NextApiRequest
+    const {body} = request
+
+    proxyReq.write(typeof body === 'string' ? body : JSON.stringify(body))
+    proxyReq.end()
+  },
+  onProxyReqWs: (
+    proxyReq,
+    req: IncomingMessage & {cookies?: Record<string, string>}
+  ) => {
     const end = proxyReq.end
 
     proxyReq.end = () => {
