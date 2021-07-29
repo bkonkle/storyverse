@@ -25,7 +25,7 @@ export default class ChannelController {
   /**
    * Register a WebSocket client with the Redis pub/sub channel for a Story.
    */
-  registerClient(storyId: string, ws: WebSocket) {
+  join(storyId: string, ws: WebSocket) {
     const channel = getChannel(storyId)
 
     this.redis.on('message', this.service.handleMessage(ws))

@@ -1,32 +1,25 @@
 import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
+import WebSocket from 'ws'
+import {NodeDebug} from '@storyverse/api/utils/Injection'
+import {AppRequest} from '@storyverse/api/utils'
 import {PrismaClient} from '@prisma/client'
-import {AppRequest, NodeDebug} from '@storyverse/api/utils'
 
-import MessageService from './MessageService'
+import CommandService from './CommandService'
 
 @injectable()
-export default class MessageController {
-  debug: Debug.IDebugger
+export default class CommandController {
+  private readonly debug: Debug.IDebugger
 
   constructor(
-    private readonly service: MessageService,
+    private readonly service: CommandService,
     private readonly prisma: PrismaClient,
     @inject(NodeDebug) debug = Debug
   ) {
-    this.debug = debug(`storyverse:api:${MessageController.name}`)
+    this.debug = debug(`storyverse:api:${CommandController.name}`)
   }
 
-  /**
-   * Create a new message on the Redis pub/sub channel for a Story.
-   */
-  async send(
-    req: AppRequest,
-    input: {
-      storyId: string
-      text: string
-    }
-  ): Promise<void> {
+  async handle(req: AppRequest, ws: WebSocket, {command}: {command: string}) {
     const sub = req.user?.sub
     if (!sub) {
       this.debug('Message received without user.sub')
@@ -45,6 +38,6 @@ export default class MessageController {
       return
     }
 
-    return this.service.send({...input, profile})
+    return this.service.handle(ws, {profile, command})
   }
 }

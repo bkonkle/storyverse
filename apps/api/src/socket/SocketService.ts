@@ -5,10 +5,11 @@ import {Server} from 'http'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
 import {AppRequest, Config, NodeDebug, Jwt} from '@storyverse/api/utils'
+import {Action, Actions, Ping} from '@storyverse/messaging/Messages'
 
 import ChannelController from '../channels/ChannelController'
 import MessageController from '../messages/MessageController'
-import {Action, Actions, ActionTypes} from './SocketTypes'
+import CommandController from '../commands/CommandController'
 import {Request, Response} from 'express'
 
 @injectable()
@@ -18,6 +19,7 @@ export default class SocketService {
   constructor(
     private readonly channel: ChannelController,
     private readonly message: MessageController,
+    private readonly command: CommandController,
     @inject(Config) private readonly config: Config,
     @inject(NodeDebug) debug = Debug
   ) {
@@ -53,11 +55,10 @@ export default class SocketService {
 
   private onConnection = (ws: WebSocket, req: AppRequest) => {
     this.debug('Connection:', req.user)
+
     // Send periodic pings to keep the connection alive
-    const ping = setInterval(
-      () => ws.send(JSON.stringify(Actions.ping())),
-      4500
-    )
+    const action: Ping = {type: Actions.ping}
+    const ping = setInterval(() => ws.send(JSON.stringify(action)), 4500)
 
     ws.on('message', (event) => {
       this.debug('Message:', event)
@@ -79,7 +80,7 @@ export default class SocketService {
   private route = async (
     ws: WebSocket,
     event: WebSocket.Data,
-    req?: AppRequest
+    req: AppRequest
   ) => {
     const action: Action | undefined = JSON.parse(event.toString())
 
@@ -87,12 +88,21 @@ export default class SocketService {
       return
     }
 
-    if (action.type === ActionTypes.clientRegister) {
-      return this.channel.registerClient(action.payload.storyId, ws)
+    if (action.type === Actions.joinStory) {
+      return this.channel.join(action.storyId, ws)
     }
 
-    if (action.type === ActionTypes.messageSend) {
-      return this.message.send(action.payload, req)
+    if (action.type === Actions.sendMessage) {
+      return this.message.send(req, {
+        storyId: action.storyId,
+        text: action.text,
+      })
     }
+
+    if (action.type === Actions.command) {
+      return this.command.handle(req, ws, {command: action.command})
+    }
+
+    this.debug(`Unknown action type: ${action.type}:`, action)
   }
 }

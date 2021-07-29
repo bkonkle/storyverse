@@ -2,9 +2,10 @@ import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
 import {NodeDebug} from '@storyverse/api/utils'
-import {Messages} from '@storyverse/messaging'
+import {Actions, ReceiveMessage} from '@storyverse/messaging'
 
 import {MessageEvent} from '../messages/MessageTypes'
+import {getStoryId} from './ChannelController'
 
 @injectable()
 export default class ChannelService {
@@ -30,25 +31,13 @@ export default class ChannelService {
         return
       }
 
-      const {id, displayName} = profile
+      const storyId = getStoryId(`${channel}`)
 
-      if (!displayName) {
-        this.debug(
-          `Error: Message received on channel "${channel}" with no displayName - ${message}`
-        )
-
-        return
+      const action: ReceiveMessage = {
+        type: Actions.receiveMessage,
+        storyId,
+        text: `${text}`,
       }
-
-      if (!text) {
-        this.debug(
-          `Error: Message received on channel "${channel}" with no text - ${message}`
-        )
-
-        return
-      }
-
-      // const action = Actions.receiveMessage(id, text)
 
       ws.send(JSON.stringify(action))
     }
