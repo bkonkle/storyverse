@@ -6,6 +6,10 @@ import {Colors} from './Styles'
 
 export interface State extends ZustandState {
   init: () => number[]
+  destroy: () => void
+
+  socket?: WebSocket
+  setSocket: (ws: WebSocket) => void
 
   blink: {
     hide: boolean
@@ -30,10 +34,22 @@ export interface State extends ZustandState {
 
 export async function handleCommand(
   _set: SetState<State>,
-  _get: GetState<State>,
+  get: GetState<State>,
   command: string
 ) {
+  const {socket, output} = get()
+
   console.log(`>- command ->`, command)
+
+  if (!socket) {
+    output.append([
+      <Text style={{color: Colors.tertiary}}>
+        Sorry, I'm not able to talk to the server right now. Try again later.
+      </Text>,
+    ])
+
+    return
+  }
 }
 
 export const handleKey =
@@ -105,7 +121,55 @@ export const welcome = (set: SetState<State>) => [
 ]
 
 export const useStore = create<State>((set, get) => ({
-  init: () => [...welcome(set)],
+  init: () => {
+    const run = () => {
+      const ws = new WebSocket(`ws://${document.location.host}/api`)
+
+      ws.addEventListener('open', () => {
+        const {
+          output: {append},
+        } = get()
+
+        append([
+          <>
+            <Text style={{color: Colors.secondary}}>Connected</Text> to the
+            server...
+          </>,
+        ])
+      })
+
+      ws.addEventListener('message', (event) => {
+        console.log(`>- event ->`, JSON.parse(event.data))
+      })
+
+      ws.addEventListener('close', () => {
+        setTimeout(() => {
+          get().setSocket(run())
+        }, 1000)
+      })
+
+      ws.addEventListener('error', () => {
+        ws.close()
+      })
+
+      return ws
+    }
+
+    get().setSocket(run())
+
+    const timeouts = welcome(set)
+
+    return timeouts
+  },
+  destroy: () => {
+    const {socket} = get()
+    socket?.close()
+
+    set((state) => ({...state, socket: undefined}))
+  },
+
+  socket: undefined,
+  setSocket: (ws) => set((state) => ({...state, socket: ws})),
 
   blink: {
     hide: false,

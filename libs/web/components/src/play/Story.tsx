@@ -23,49 +23,10 @@ const Styles = StyleSheet.create({
 
 export const Story = (_props: StoryProps) => {
   const init = useStore((state) => state.init)
+  const destroy = useStore((state) => state.destroy)
   const blink = useStore((state) => state.blink)
   const command = useStore((state) => state.command)
   const output = useStore((state) => state.output)
-  const {append} = output
-
-  useEffect(() => {
-    let socket: WebSocket | undefined
-
-    const init = () => {
-      const ws = new WebSocket(`ws://${document.location.host}/api`)
-
-      ws.addEventListener('open', () => {
-        append([
-          <>
-            <Text style={{color: Colors.secondary}}>Connected</Text> to the
-            server...
-          </>,
-        ])
-      })
-
-      ws.addEventListener('message', (event) => {
-        console.log(`>- event ->`, JSON.parse(event.data))
-      })
-
-      ws.addEventListener('close', () => {
-        setTimeout(() => {
-          socket = init()
-        }, 1000)
-      })
-
-      ws.addEventListener('error', () => {
-        ws.close()
-      })
-
-      return ws
-    }
-
-    socket = init()
-
-    return () => {
-      socket?.close()
-    }
-  }, [append])
 
   useEffect(() => {
     document.addEventListener('keydown', command.key)
@@ -86,8 +47,9 @@ export const Story = (_props: StoryProps) => {
 
     return () => {
       timeouts.forEach(clearTimeout)
+      destroy()
     }
-  }, [init])
+  }, [init, destroy])
 
   const cursor = blink.hide ? ' ' : '|'
 

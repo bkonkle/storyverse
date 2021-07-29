@@ -2,8 +2,8 @@ import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
 import {NodeDebug} from '@storyverse/api/utils'
+import {Messages} from '@storyverse/messaging'
 
-import {Actions} from '../socket/SocketTypes'
 import {MessageEvent} from '../messages/MessageTypes'
 
 @injectable()
@@ -48,7 +48,7 @@ export default class ChannelService {
         return
       }
 
-      const action = Actions.receiveMessage(id, text)
+      // const action = Actions.receiveMessage(id, text)
 
       ws.send(JSON.stringify(action))
     }

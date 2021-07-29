@@ -22,22 +22,25 @@
     "api": {
       "tags": []
     },
-    "web": {
+    "api-utils": {
+      "tags": []
+    },
+    "graphql": {
+      "tags": []
+    },
+    "messaging": {
       "tags": []
     },
     "mobile": {
       "tags": []
     },
-    "api-utils": {
-      "tags": []
-    },
-    "web-utils": {
+    "web": {
       "tags": []
     },
     "web-components": {
       "tags": []
     },
-    "graphql": {
+    "web-utils": {
       "tags": []
     }
   }

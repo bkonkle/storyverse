@@ -55,7 +55,7 @@ const proxy = createProxyMiddleware({
     }
 
     run().catch((err) => {
-      console.error('proxyReqWs Error:', err)
+      console.error('proxyReqWs error:', err)
     })
   },
 })

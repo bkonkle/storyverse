@@ -7,5 +7,6 @@ module.exports = {
     '<rootDir>/libs/web/components',
     '<rootDir>/libs/web/utils',
     '<rootDir>/libs/graphql',
+    '<rootDir>/libs/messaging',
   ],
 }

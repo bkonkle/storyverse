@@ -28,15 +28,17 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "paths": {
+      "@storyverse/api/utils": ["libs/api/utils/src/index.ts"],
+      "@storyverse/api/utils/*": ["libs/api/utils/src/*"],
+      "@storyverse/graphql": ["libs/graphql/src/index.ts"],
+      "@storyverse/graphql/*": ["libs/graphql/src/*"],
+      "@storyverse/messaging": ["libs/messaging/src/index.ts"],
+      "@storyverse/messaging/*": ["libs/messaging/src/*"],
       "@storyverse/web/assets/*": ["libs/web/assets/*"],
       "@storyverse/web/components": ["libs/web/components/src/index.ts"],
       "@storyverse/web/components/*": ["libs/web/components/src/*"],
       "@storyverse/web/utils": ["libs/web/utils/src/index.ts"],
-      "@storyverse/web/utils/*": ["libs/web/utils/src/*"],
-      "@storyverse/api/utils": ["libs/api/utils/src/index.ts"],
-      "@storyverse/api/utils/*": ["libs/api/utils/src/*"],
-      "@storyverse/graphql": ["libs/graphql/src/index.ts"],
-      "@storyverse/graphql/*": ["libs/graphql/src/*"]
+      "@storyverse/web/utils/*": ["libs/web/utils/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
