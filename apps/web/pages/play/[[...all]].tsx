@@ -8,13 +8,17 @@ import {Schema, Client} from '@storyverse/graphql'
 
 export function PlayStoryPage() {
   const {query} = useRouter()
-  const id = Array.isArray(query.storyId) ? query.storyId[0] : query.storyId
 
-  const [{data}] = Schema.useGetStoryQuery({
+  // Url formats: /play, /play/story/abc123def456
+  const [resource, id] = Array.isArray(query.all) ? query.all : [query.all]
+
+  const [_currentUser] = Schema.useGetCurrentUserQuery()
+
+  const [getStory] = Schema.useGetStoryQuery({
     variables: {id: id ? id.toUpperCase() : ''},
-    pause: !id,
+    pause: !(resource === 'story' && id),
   })
-  const story = data?.getStory || undefined
+  const story = getStory.data?.getStory || undefined
 
   return (
     <Play>

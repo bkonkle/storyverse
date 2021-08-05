@@ -67,7 +67,7 @@ export default class App {
     )
   }
 
-  init(): Application {
+  async init(): Promise<Application> {
     const {
       env,
       auth: {audience, domain},
@@ -79,35 +79,28 @@ export default class App {
     const app = express().disable('x-powered-by')
 
     if (isDev) {
-      app.use(morgan('dev'))
+      app.use(morgan('dev') as express.RequestHandler)
     } else if (!isTest) {
-      app.use(morgan('combined'))
+      app.use(morgan('combined') as express.RequestHandler)
     }
 
     app.use(Jwt.middleware({audience, domain}))
 
     const apollo = new ApolloServer({
       introspection: isDev,
-      playground: isDev
-        ? {
-            settings: {
-              'request.credentials': 'same-origin',
-            },
-          }
-        : false,
-      tracing: true,
-      cacheControl: true,
       typeDefs: this.typeDefs,
       resolvers: this.getResolvers(),
       context: getContext,
     })
+    await apollo.start()
+
     apollo.applyMiddleware({app})
 
     return app
   }
 
   async run(application?: Application): Promise<void> {
-    const app = application || this.init()
+    const app = application || (await this.init())
 
     const port = this.config.get('port')
     const portStr = chalk.yellow(port.toString())

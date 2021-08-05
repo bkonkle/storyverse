@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   purge: {
     enabled: process.env.NODE_ENV === 'production',
     content: [`${__dirname}/libs/web/components/src/**/*.{js,ts,jsx,tsx}`],

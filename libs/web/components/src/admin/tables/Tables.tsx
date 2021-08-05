@@ -126,8 +126,8 @@ export function Link({className, href, children, ...rest}: LinkProps) {
         className={clsx(
           'w-full',
           'whitespace-nowrap',
-          'text-lightBlue-500',
-          'hover:text-lightBlue-600',
+          'text-sky-500',
+          'hover:text-sky-600',
           className
         )}
         {...rest}

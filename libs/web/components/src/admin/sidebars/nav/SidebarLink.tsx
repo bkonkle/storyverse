@@ -33,7 +33,7 @@ export default function SidebarLink({
         'font-bold',
         'block',
         href !== '/' && router.pathname.indexOf(href) !== -1
-          ? ['text-lightBlue-500', 'hover:text-lightBlue-600']
+          ? ['text-sky-500', 'hover:text-sky-600']
           : ['text-blueGray-700', 'hover:text-blueGray-500']
       )}
     >

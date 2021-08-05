@@ -13,7 +13,7 @@ if (projectConfig && projectConfig.projectType === 'application') {
     ? `./${projectConfig.root}/tailwind.config.js`
     : './tailwind.config.js'
 
-  plugins['@tailwindcss/jit'] = {config: `${config}`}
+  plugins['tailwindcss'] = {config: `${config}`}
 }
 
 module.exports = {
