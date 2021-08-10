@@ -21,22 +21,11 @@ export default class CommandController {
 
   async handle(req: AppRequest, ws: WebSocket, {command}: {command: string}) {
     const sub = req.user?.sub
-    if (!sub) {
-      this.debug('Message received without user.sub')
-
-      return
-    }
 
     const profile = await this.prisma.profile.findFirst({
       include: {user: {select: {id: true, username: true}}},
       where: {user: {username: sub}},
     })
-
-    if (!profile) {
-      this.debug(`Unable to find a Profile associated with username: ${sub}`)
-
-      return
-    }
 
     return this.service.handle(ws, {profile, command})
   }

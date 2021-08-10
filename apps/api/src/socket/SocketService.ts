@@ -60,7 +60,9 @@ export default class SocketService {
     const action: Ping = {type: Actions.ping}
     const ping = setInterval(() => ws.send(JSON.stringify(action)), 4500)
 
-    ws.on('message', (event) => {
+    ws.on('message', (evt) => {
+      const event = evt.toString()
+
       this.debug('Message:', event)
       this.route(ws, event, req).catch((err: Error) => {
         this.debug('Error while handling WebSocket event:', err)
@@ -77,12 +79,8 @@ export default class SocketService {
     })
   }
 
-  private route = async (
-    ws: WebSocket,
-    event: WebSocket.Data,
-    req: AppRequest
-  ) => {
-    const action: Action | undefined = JSON.parse(event.toString())
+  private route = async (ws: WebSocket, event: string, req: AppRequest) => {
+    const action: Action | undefined = JSON.parse(event)
 
     if (!action) {
       return

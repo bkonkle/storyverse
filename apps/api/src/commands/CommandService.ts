@@ -12,15 +12,25 @@ export default class CommandService {
   constructor(@inject(NodeDebug) debug = Debug) {
     this.debug = debug(`storyverse:api:${CommandService.name}`)
   }
-
   /**
    * Handle Redist pub/sub events for the given WebSocket client.
    */
-  handle = (
+  handle = async (
     ws: WebSocket,
-    {profile, command}: {profile: Profile; command: string}
-  ): void => {
-    this.debug(`Profile: ${profile.id}, Command: ${command}`)
+    {profile, command}: {profile?: Profile | null; command: string}
+  ): Promise<void> => {
+    this.debug(`Profile: ${profile?.id || 'Unknown'}, Command: ${command}`)
+
+    if (!profile) {
+      const action: Output = {
+        type: Actions.output,
+        output: "Sorry, I'm not sure who you are.",
+      }
+
+      ws.send(JSON.stringify(action))
+
+      return
+    }
 
     const action: Output = {
       type: Actions.output,
