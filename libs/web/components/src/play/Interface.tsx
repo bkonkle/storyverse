@@ -15,7 +15,7 @@ export const handleKey =
     }
 
     const {
-      command: {send, pop, append},
+      command: {send, pop, append, search},
     } = get()
 
     switch (key) {
@@ -25,8 +25,6 @@ export const handleKey =
       case 'Tab':
       case 'PageDown':
       case 'PageUp':
-      case 'ArrowUp':
-      case 'ArrowDown':
       case 'ArrowLeft':
       case 'ArrowRight':
       case 'AltGraph':
@@ -38,6 +36,10 @@ export const handleKey =
         return send()
       case 'Backspace':
         return pop()
+      case 'ArrowUp':
+        return search()
+      case 'ArrowDown':
+        return search({down: true})
       default:
         return append(key)
     }

@@ -8809,6 +8809,13 @@ compression@^1.7.1, compression@^1.7.4:
     safe-buffer "5.1.2"
     vary "~1.1.2"
 
+compromise@^13.11.3:
+  version "13.11.3"
+  resolved "https://registry.yarnpkg.com/compromise/-/compromise-13.11.3.tgz#3f6b687fbefdbd1ef674f263f6e5c06b29c324d9"
+  integrity sha512-oKYButHtXcDyEe2et5XlniFWyFTpDOy3z7zB501EEgTN9xeZHIib1Xq4AOSJw6HCZmwGHh1nx3MGy/MbGHFtWQ==
+  dependencies:
+    efrt-unpack "2.2.0"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -10199,6 +10206,11 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
+
+efrt-unpack@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/efrt-unpack/-/efrt-unpack-2.2.0.tgz#b05dbec0fb8cb346a27840e00c969df9c72fee52"
+  integrity sha512-9xUSSj7qcUxz+0r4X3+bwUNttEfGfK5AH+LVa1aTpqdAfrN5VhROYCfcF+up4hp5OL7IUKcZJJrzAGipQRDoiQ==
 
 ejs@^2.6.1:
   version "2.7.4"
@@ -12944,6 +12956,11 @@ immer@8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
+
+immer@^9.0.5:
+  version "9.0.5"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.5.tgz#a7154f34fe7064f15f00554cc94c66cc0bf453ec"
+  integrity sha512-2WuIehr2y4lmYz9gaQzetPR2ECniCifk4ORaQbU3g5EalLt+0IVTosEPJ5BoYl/75ky2mivzdRzV8wWgQGOSYQ==
 
 immutable@~3.7.6:
   version "3.7.6"

@@ -4,6 +4,9 @@ import jwt from 'next-auth/jwt'
 import {Request, Response} from 'express'
 import cookie from 'cookie'
 import {IncomingMessage} from 'http'
+import Debug from 'debug'
+
+const debug = Debug('storyverse:web:api-proxy')
 
 export interface Auth0Token {
   sub: string
@@ -24,6 +27,10 @@ const proxy = createProxyMiddleware({
     const request = req as unknown as NextApiRequest
     const {body} = request
 
+    debug(
+      `[HPM] Proxying HTTP request to ${proxyReq.protocol}://${proxyReq.host}${proxyReq.path}`
+    )
+
     proxyReq.write(typeof body === 'string' ? body : JSON.stringify(body))
     proxyReq.end()
   },
@@ -36,6 +43,10 @@ const proxy = createProxyMiddleware({
     proxyReq.end = () => {
       // skip this, because we want to wait for the token below
     }
+
+    debug(
+      `[HPM] Proxying WebSocket request to ${proxyReq.protocol}://${proxyReq.host}${proxyReq.path}`
+    )
 
     const run = async () => {
       req.cookies = req.headers.cookie

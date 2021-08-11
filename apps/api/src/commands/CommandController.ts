@@ -9,14 +9,14 @@ import CommandService from './CommandService'
 
 @injectable()
 export default class CommandController {
-  private readonly debug: Debug.IDebugger
+  // private readonly debug: Debug.IDebugger
 
   constructor(
     private readonly service: CommandService,
     private readonly prisma: PrismaClient,
-    @inject(NodeDebug) debug = Debug
+    @inject(NodeDebug) _debug = Debug
   ) {
-    this.debug = debug(`storyverse:api:${CommandController.name}`)
+    // this.debug = debug(`storyverse:api:${CommandController.name}`)
   }
 
   async handle(req: AppRequest, ws: WebSocket, {command}: {command: string}) {

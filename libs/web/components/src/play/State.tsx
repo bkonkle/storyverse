@@ -1,11 +1,12 @@
 import {ReactNode} from 'react'
-import create, {State as ZustandState} from 'zustand'
+import create from 'zustand'
+import produce from 'immer'
 
 import {createSocket, sendCommand} from './Events'
 import {handleKey, welcome} from './Interface'
 
-export interface State extends ZustandState {
-  init: () => number[]
+export interface State {
+  init: () => NodeJS.Timeout[]
   destroy: () => void
 
   socket?: WebSocket
@@ -19,11 +20,15 @@ export interface State extends ZustandState {
   command: {
     interacted: boolean
     buffer: string
+    history: string[]
+    stash: string
+    searchIndex: number
     append: (key: string) => void
     pop: () => void
     key: (event: KeyboardEvent) => void
     clear: () => void
     send: () => void
+    search: (options?: {down?: boolean}) => void
   }
 
   output: {
@@ -42,20 +47,28 @@ export const useStore = create<State>((set, get) => ({
     const {socket} = get()
     socket?.close()
 
-    set((state) => ({...state, socket: undefined}))
+    set(
+      produce((state: State) => {
+        state.socket = undefined
+      })
+    )
   },
 
   socket: undefined,
-  setSocket: (ws) => set((state) => ({...state, socket: ws})),
+  setSocket: (ws) =>
+    set(
+      produce((state: State) => {
+        state.socket = ws
+      })
+    ),
 
   blink: {
     hide: false,
 
     toggle: () =>
       set(
-        (state): State => ({
-          ...state,
-          blink: {...state.blink, hide: !state.blink.hide},
+        produce(({blink}: State) => {
+          blink.hide = !blink.hide
         })
       ),
   },
@@ -63,25 +76,22 @@ export const useStore = create<State>((set, get) => ({
   command: {
     interacted: false,
     buffer: '',
+    history: [],
+    stash: '',
+    searchIndex: 0,
+
     append: (key: string) =>
       set(
-        (state): State => ({
-          ...state,
-          command: {
-            ...state.command,
-            buffer: `${state.command.buffer}${key}`,
-            interacted: true,
-          },
+        produce(({command}: State) => {
+          command.buffer = `${command.buffer}${key}`
+          command.interacted = true
         })
       ),
+
     pop: () =>
       set(
-        (state): State => ({
-          ...state,
-          command: {
-            ...state.command,
-            buffer: state.command.buffer.slice(0, -1),
-          },
+        produce(({command}: State) => {
+          command.buffer = command.buffer.slice(0, -1)
         })
       ),
 
@@ -89,31 +99,89 @@ export const useStore = create<State>((set, get) => ({
 
     clear: () =>
       set(
-        (state): State => ({
-          ...state,
-          command: {...state.command, buffer: ''},
+        produce(({command}: State) => {
+          command.buffer = ''
         })
       ),
 
     send: async () => {
       const {
-        command: {buffer, clear},
+        command: {buffer},
       } = get()
 
-      clear()
+      set(
+        produce(({command}: State) => {
+          command.buffer = ''
+          command.history.unshift(buffer)
+          command.searchIndex = 0
+        })
+      )
 
       await sendCommand(get, buffer)
+    },
+
+    search: async ({down} = {}) => {
+      const {
+        command: {buffer, stash, history, searchIndex},
+      } = get()
+
+      const initiate = !down && searchIndex === 0
+
+      if (initiate) {
+        set(
+          produce(({command}: State) => {
+            command.stash = buffer
+          })
+        )
+      }
+
+      const matches = (initiate ? buffer : stash)
+        ? history.filter((command) => command.startsWith(stash || buffer))
+        : history
+
+      if (down) {
+        if (searchIndex <= 1) {
+          set(
+            produce(({command}: State) => {
+              command.buffer = stash
+              command.stash = ''
+              command.searchIndex = 0
+            })
+          )
+
+          return
+        }
+
+        set(
+          produce(({command}: State) => {
+            command.searchIndex = searchIndex - 1
+            command.buffer = matches[searchIndex - 2]
+          })
+        )
+
+        return
+      }
+
+      if (searchIndex >= matches.length) {
+        return
+      }
+
+      set(
+        produce(({command}: State) => {
+          command.buffer = matches[searchIndex]
+          command.searchIndex = searchIndex + 1
+        })
+      )
     },
   },
 
   output: {
     value: [],
 
-    append: (output: ReactNode[]) =>
+    append: (lines: ReactNode[]) =>
       set(
-        (state): State => ({
-          ...state,
-          output: {...state.output, value: [...state.output.value, ...output]},
+        produce(({output}: State) => {
+          output.value = output.value.concat(lines)
         })
       ),
   },
