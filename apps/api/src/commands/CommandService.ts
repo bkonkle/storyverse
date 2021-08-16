@@ -3,9 +3,12 @@ import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
 import nlp from 'compromise'
 import without from 'lodash/without'
-import {NodeDebug} from '@storyverse/api/utils'
 import {Profile} from '@prisma/client'
+
+import {NodeDebug} from '@storyverse/api/utils'
 import {Actions, Output} from '@storyverse/messaging'
+
+import {General, selectFrom} from './CommandResponses'
 
 @injectable()
 export default class CommandService {
@@ -45,11 +48,11 @@ export default class CommandService {
       return this.route(ws, verbs[0], terms, profile)
     }
 
-    console.log(`>- terms ->`, phrase.terms())
+    this.debug('Unknown phrase:', phrase.terms())
 
     const action: Output = {
       type: Actions.output,
-      output: `Message received, ${profile.displayName}! Command: ${command}`,
+      output: selectFrom(General.unknown({profile})),
     }
 
     return ws.send(JSON.stringify(action))
