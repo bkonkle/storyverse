@@ -2,21 +2,28 @@ import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
 import nlp from 'compromise'
-import without from 'lodash/without'
 import {Profile} from '@prisma/client'
 
 import {NodeDebug} from '@storyverse/api/utils'
 import {Actions, Output} from '@storyverse/messaging'
 
-import {General, selectFrom} from './CommandResponses'
+import {General} from './CommandResponses'
+import {CommandContext, Terms} from './CommandUtils'
+import UnknownCommand from './handlers/UnknownCommand'
+import SayCommand from './handlers/SayCommand'
 
 @injectable()
 export default class CommandService {
   private readonly debug: Debug.IDebugger
 
-  constructor(@inject(NodeDebug) debug = Debug) {
+  constructor(
+    @inject(NodeDebug) debug = Debug,
+    private readonly unknown: UnknownCommand,
+    private readonly say: SayCommand
+  ) {
     this.debug = debug(`storyverse:api:${CommandService.name}`)
   }
+
   /**
    * Handle Redist pub/sub events for the given WebSocket client.
    */
@@ -45,14 +52,14 @@ export default class CommandService {
     const verbs = terms.filter((term) => term.tags.Verb)
 
     if (verbs[0]) {
-      return this.route(ws, verbs[0], terms, profile)
+      return this.route(ws, {verb: verbs[0], terms, profile})
     }
 
-    this.debug('Unknown phrase:', phrase.terms())
+    this.debug('Unknown phrase:', phrase.terms().map(Terms.toString))
 
     const action: Output = {
       type: Actions.output,
-      output: selectFrom(General.unknown({profile})),
+      output: General.unknown({profile}),
     }
 
     return ws.send(JSON.stringify(action))
@@ -60,42 +67,15 @@ export default class CommandService {
 
   private route = async (
     ws: WebSocket,
-    verb: nlp.Term,
-    terms: nlp.Term[],
-    profile: Profile
+    context: CommandContext
   ): Promise<void> => {
+    const {verb} = context
+
     switch (verb.reduced) {
       case 'say':
-        return this.handleSay(ws, without(terms, verb), profile)
+        return this.say.handle(ws, context)
       default:
-        return this.handleUnknown(ws, verb)
+        return this.unknown.handle(ws, context)
     }
-  }
-
-  private handleUnknown = async (
-    ws: WebSocket,
-    verb: nlp.Term
-  ): Promise<void> => {
-    const action: Output = {
-      type: Actions.output,
-      output: `I don't know how to ${verb.text}.`,
-    }
-
-    return ws.send(JSON.stringify(action))
-  }
-
-  private handleSay = async (
-    ws: WebSocket,
-    terms: nlp.Term[],
-    profile: Profile
-  ): Promise<void> => {
-    const action: Output = {
-      type: Actions.output,
-      output: `${profile.displayName} says: ${terms
-        .map((term) => `${term.pre || ''}${term.text}${term.post || ''}`)
-        .join('')}`,
-    }
-
-    return ws.send(JSON.stringify(action))
   }
 }
