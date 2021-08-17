@@ -1,13 +1,12 @@
 import nlp from 'compromise'
+import sample from 'lodash/sample'
 import {Profile} from '@prisma/client'
 
 export interface CommandContext {
-  verb: nlp.Term
-  terms: nlp.Term[]
+  parsed: nlp.DefaultDocument
   profile: Profile
+  storyId?: string
 }
 
-export namespace Terms {
-  export const toString = (term: nlp.Term): string =>
-    `${term.pre || ''}${term.text}${term.post || ''}`
-}
+export const selectFrom = (responses: string[]): string =>
+  sample(responses) || responses[0]

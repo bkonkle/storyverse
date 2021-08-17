@@ -1,16 +1,14 @@
 import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
 import WebSocket from 'ws'
-import nlp from 'compromise'
 import {Profile} from '@prisma/client'
 
 import {NodeDebug} from '@storyverse/api/utils'
 import {Actions, Output} from '@storyverse/messaging'
 
-import {General} from './CommandResponses'
-import {CommandContext, Terms} from './CommandUtils'
-import UnknownCommand from './handlers/UnknownCommand'
 import SayCommand from './handlers/SayCommand'
+import {parse} from './CommandNlp'
+import {selectFrom} from './CommandUtils'
 
 @injectable()
 export default class CommandService {
@@ -18,7 +16,6 @@ export default class CommandService {
 
   constructor(
     @inject(NodeDebug) debug = Debug,
-    private readonly unknown: UnknownCommand,
     private readonly say: SayCommand
   ) {
     this.debug = debug(`storyverse:api:${CommandService.name}`)
@@ -27,10 +24,10 @@ export default class CommandService {
   /**
    * Handle Redist pub/sub events for the given WebSocket client.
    */
-  handle = async (
+  async handle(
     ws: WebSocket,
     {profile, command}: {profile?: Profile | null; command: string}
-  ): Promise<void> => {
+  ): Promise<void> {
     this.debug(`Profile: ${profile?.id || 'Unknown'}, Command: ${command}`)
 
     if (!profile) {
@@ -44,38 +41,27 @@ export default class CommandService {
       return
     }
 
-    const parsed = nlp(command)
+    const parsed = parse(command)
 
-    // TODO: Handle more than one sentence.
-    const phrase = parsed.sentences().list[0]
-    const terms = phrase.terms()
-    const verbs = terms.filter((term) => term.tags.Verb)
+    if (parsed.has('#Command')) {
+      if (parsed.has('#Say')) {
+        return this.say.handle(ws, {parsed, profile})
+      }
 
-    if (verbs[0]) {
-      return this.route(ws, {verb: verbs[0], terms, profile})
+      // This has a #Command, but not one we recognize. Let it flow through, but log it.
+      this.debug('Unknown command:', parsed.text)
     }
 
-    this.debug('Unknown phrase:', phrase.terms().map(Terms.toString))
-
+    // This doesn't even have a verb, so go with a general unknown response.
     const action: Output = {
       type: Actions.output,
-      output: General.unknown({profile}),
+      output: selectFrom([
+        `I'm not sure what that means, ${profile.displayName}.`,
+        "I'm sorry, I didn't understand that.",
+        "I don't understand. Can you rephrase that?",
+      ]),
     }
 
     return ws.send(JSON.stringify(action))
-  }
-
-  private route = async (
-    ws: WebSocket,
-    context: CommandContext
-  ): Promise<void> => {
-    const {verb} = context
-
-    switch (verb.reduced) {
-      case 'say':
-        return this.say.handle(ws, context)
-      default:
-        return this.unknown.handle(ws, context)
-    }
   }
 }

@@ -1,23 +1,20 @@
 import WebSocket from 'ws'
-import without from 'lodash/without'
 import {injectable} from 'tsyringe'
 
 import {Actions, Output} from '@storyverse/messaging'
 
-import {CommandContext, Terms} from '../CommandUtils'
+import {CommandContext} from '../CommandUtils'
 
 @injectable()
 export default class SayCommand {
   async handle(ws: WebSocket, context: CommandContext): Promise<void> {
-    const {verb, terms, profile} = context
+    const {parsed, profile} = context
 
-    const quote = without(terms, verb)
+    const quote = parsed.splitAfter('#Say').out('array')[1]
 
     const action: Output = {
       type: Actions.output,
-      output: `${profile.displayName} says: ${quote
-        .map(Terms.toString)
-        .join('')}`,
+      output: `${profile.displayName} says, "${quote}"`,
     }
 
     return ws.send(JSON.stringify(action))
