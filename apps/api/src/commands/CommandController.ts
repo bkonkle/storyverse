@@ -1,10 +1,10 @@
 import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
-import WebSocket from 'ws'
 import {NodeDebug} from '@storyverse/api/utils/Injection'
 import {AppRequest} from '@storyverse/api/utils'
 import {PrismaClient} from '@prisma/client'
 
+import {Store} from '../socket/SocketState'
 import CommandService from './CommandService'
 
 @injectable()
@@ -19,7 +19,7 @@ export default class CommandController {
     // this.debug = debug(`storyverse:api:${CommandController.name}`)
   }
 
-  async handle(req: AppRequest, ws: WebSocket, {command}: {command: string}) {
+  async handle(req: AppRequest, state: Store, {command}: {command: string}) {
     const sub = req.user?.sub
 
     const profile = await this.prisma.profile.findFirst({
@@ -27,6 +27,6 @@ export default class CommandController {
       where: {user: {username: sub}},
     })
 
-    return this.service.handle(ws, {profile, command})
+    return this.service.handle(state, {profile, command})
   }
 }

@@ -1,22 +1,32 @@
-import WebSocket from 'ws'
 import {injectable} from 'tsyringe'
 
 import {Actions, Output} from '@storyverse/messaging'
 
+import {Store} from '../../socket/SocketState'
 import {CommandContext} from '../CommandUtils'
 
 @injectable()
 export default class SayCommand {
-  async handle(ws: WebSocket, context: CommandContext): Promise<void> {
-    const {parsed, profile} = context
+  async handle(state: Store, context: CommandContext): Promise<void> {
+    const {socket, story} = state.getState()
+    const {command, profile} = context
 
-    const quote = parsed.splitAfter('#Say').out('array')[1]
+    const quote = command.splitAfter('#Say').out('array')[1]
+
+    if (story.id) {
+      const action: Output = {
+        type: Actions.output,
+        output: `${profile.displayName} says, "${quote}"`,
+      }
+
+      return socket.send(JSON.stringify(action))
+    }
 
     const action: Output = {
       type: Actions.output,
-      output: `${profile.displayName} says, "${quote}"`,
+      output: `You haven't joined a story yet. Use "list stories" to see what stories are available for you to join.`,
     }
 
-    return ws.send(JSON.stringify(action))
+    return socket.send(action)
   }
 }

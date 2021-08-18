@@ -1,14 +1,4 @@
 import nlp from 'compromise'
-import fromPairs from 'lodash/fromPairs'
-
-export const toLexicon = (
-  lexicon: Record<string, string[]>
-): Record<string, string> =>
-  Object.keys(lexicon).reduce((memo, tag) => {
-    const words = fromPairs(lexicon[tag].map((word) => [word, tag]))
-
-    return {...memo, ...words}
-  }, {})
 
 export function clean(command: string): string {
   // Replace some phrases compromise has trouble with
@@ -32,28 +22,30 @@ export function clean(command: string): string {
   )
 }
 
-export const lexicon = toLexicon({
-  Say: ['say', 'speak', 'utter', 'declare', 'announce', 'remark', 'mention'],
-})
-
 export const storyverse: nlp.Plugin = (_doc, world) => {
   world.addTags({
     Command: {
       isA: 'Verb',
     },
-  })
-
-  // Add this in a subsequent call because it depends on the call above
-  world.addTags({
+    List: {
+      isA: 'List',
+    },
+    Join: {
+      isA: 'Command',
+    },
     Say: {
+      isA: 'Command',
+    },
+    Do: {
       isA: 'Command',
     },
   })
 
-  world.addWords(lexicon)
-
-  world.postProcess((_doc) => {
-    // pass
+  world.postProcess((doc) => {
+    doc.match('^list').tag('#List')
+    doc.match('^(join|start)').tag('#Join')
+    doc.match('^say').tag('#Say')
+    doc.match('^do').tag('#Do')
   })
 }
 

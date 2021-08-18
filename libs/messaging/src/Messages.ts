@@ -2,9 +2,6 @@ export const Actions = {
   ping: 'PING',
   command: 'COMMAND',
   output: 'OUTPUT',
-  joinStory: 'JOIN_STORY',
-  sendMessage: 'SEND_MESSAGE',
-  receiveMessage: 'RECEIVE_MESSAGE',
 } as const
 
 export interface Ping {
@@ -21,29 +18,6 @@ export interface Output {
   output: string
 }
 
-export interface JoinStory {
-  type: typeof Actions.joinStory
-  storyId: string
-}
-
-export interface SendMessage {
-  type: typeof Actions.sendMessage
-  storyId: string
-  text: string
-}
-
-export interface ReceiveMessage {
-  type: typeof Actions.receiveMessage
-  storyId: string
-  text: string
-}
-
-export type Action =
-  | Ping
-  | Command
-  | Output
-  | JoinStory
-  | SendMessage
-  | ReceiveMessage
+export type Action = Ping | Command | Output
 
 export const format = (action: Action) => JSON.stringify(action)

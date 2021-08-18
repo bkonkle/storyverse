@@ -3,7 +3,7 @@ import sample from 'lodash/sample'
 import {Profile} from '@prisma/client'
 
 export interface CommandContext {
-  parsed: nlp.DefaultDocument
+  command: nlp.DefaultDocument
   profile: Profile
   storyId?: string
 }

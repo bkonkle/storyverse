@@ -1,14 +1,15 @@
 import Debug from 'debug'
 import {inject, injectable} from 'tsyringe'
-import WebSocket from 'ws'
 import {Profile} from '@prisma/client'
 
 import {NodeDebug} from '@storyverse/api/utils'
 import {Actions, Output} from '@storyverse/messaging'
 
+import {Store} from '../socket/SocketState'
 import SayCommand from './handlers/SayCommand'
+import JoinCommand from './handlers/JoinCommand'
 import {parse} from './CommandNlp'
-import {selectFrom} from './CommandUtils'
+import {CommandContext, selectFrom} from './CommandUtils'
 
 @injectable()
 export default class CommandService {
@@ -16,7 +17,8 @@ export default class CommandService {
 
   constructor(
     @inject(NodeDebug) debug = Debug,
-    private readonly say: SayCommand
+    private readonly say: SayCommand,
+    private readonly join: JoinCommand
   ) {
     this.debug = debug(`storyverse:api:${CommandService.name}`)
   }
@@ -25,10 +27,12 @@ export default class CommandService {
    * Handle Redist pub/sub events for the given WebSocket client.
    */
   async handle(
-    ws: WebSocket,
+    state: Store,
     {profile, command}: {profile?: Profile | null; command: string}
   ): Promise<void> {
     this.debug(`Profile: ${profile?.id || 'Unknown'}, Command: ${command}`)
+
+    const {socket} = state.getState()
 
     if (!profile) {
       const action: Output = {
@@ -36,7 +40,7 @@ export default class CommandService {
         output: "Sorry, I'm not sure who you are.",
       }
 
-      ws.send(JSON.stringify(action))
+      socket.send(JSON.stringify(action))
 
       return
     }
@@ -44,15 +48,21 @@ export default class CommandService {
     const parsed = parse(command)
 
     if (parsed.has('#Command')) {
-      if (parsed.has('#Say')) {
-        return this.say.handle(ws, {parsed, profile})
+      const context: CommandContext = {command: parsed, profile}
+
+      if (parsed.has('#Join')) {
+        return this.join.handle(state, context)
       }
 
-      // This has a #Command, but not one we recognize. Let it flow through, but log it.
+      if (parsed.has('#Say')) {
+        return this.say.handle(state, context)
+      }
+
+      // This starts with a #Command, but not one we recognize. Let it flow through, but log it.
       this.debug('Unknown command:', parsed.text)
     }
 
-    // This doesn't even have a verb, so go with a general unknown response.
+    // This doesn't start with a command, so go with a general unknown response.
     const action: Output = {
       type: Actions.output,
       output: selectFrom([
@@ -62,6 +72,6 @@ export default class CommandService {
       ]),
     }
 
-    return ws.send(JSON.stringify(action))
+    return socket.send(JSON.stringify(action))
   }
 }
