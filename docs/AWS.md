@@ -90,7 +90,7 @@ echo "<password>" | base64 --decode | gpg -qd
 
 Replace `<password>` with the value from the "users" output for that user.
 
-Once the user and login profile are created, have the new user visit the AWS console login url for your AWS account with their username and decrypted password. For example: [https://534904279422.signin.aws.amazon.com/console](https://534904279422.signin.aws.amazon.com/console)
+Once the user and login profile are created, have the new user visit the AWS console login url for your AWS account with their username and decrypted password. For example: [https://123412341234.signin.aws.amazon.com/console](https://123412341234.signin.aws.amazon.com/console)
 
 The user will need to set a new password upon gaining access to the account.
 
