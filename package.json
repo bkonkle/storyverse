@@ -58,7 +58,7 @@
     "dotenv": "^10.0.0",
     "expo": "39.0.2",
     "expo-status-bar": "1.0.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-jwt": "^6.1.0",
     "faker": "^5.5.3",
     "fs-extra": "^10.0.0",
